@@ -129,7 +129,7 @@
         "component": "reference",
         "valueType": "string",
         "name": "bgImage",
-        "value": "/content/dam/exlm/content-at-scale.png",
+        "fileReference": "/content/dam/exlm/content-at-scale.png",
         "label": "Background image",
         "multi": false
       },
@@ -144,7 +144,7 @@
         "component": "reference",
         "valueType": "string",
         "name": "subImage",
-        "value": "/content/dam/exlm/content-at-scale.png",
+        "fileReference": "/content/dam/exlm/content-at-scale.png",
         "label": "Subject image",
         "multi": false
       },
@@ -276,6 +276,25 @@
         "value": "",
         "label": "Tab",
         "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "columns",
+    "fields": [
+      {
+        "component": "text-input",
+        "valueType": "number",
+        "name": "columns",
+        "value": "",
+        "label": "Columns"
+      },
+      {
+        "component": "text-input",
+        "valueType": "number",
+        "name": "rows",
+        "value": "",
+        "label": "Rows"
       }
     ]
   }
