@@ -121,5 +121,162 @@
         "valueType": "string"
       }
     ]
+  },
+  {
+    "id": "marquee",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "bgImage",
+        "value": "/content/dam/exlm/content-at-scale.png",
+        "label": "Background image",
+        "multi": false
+      },
+      {
+        "component": "text-input",
+        "name": "bgImageDesc",
+        "value": "",
+        "label": "Background image description",
+        "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "subImage",
+        "value": "/content/dam/exlm/content-at-scale.png",
+        "label": "Subject image",
+        "multi": false
+      },
+      {
+        "component": "text-input",
+        "name": "subImageDesc",
+        "value": "",
+        "label": "Subject image description",
+        "valueType": "string"
+      },
+      {
+        "component": "text-input",
+        "name": "eyebrow",
+        "value": "",
+        "label": "Eyebrow",
+        "valueType": "string"
+      },
+      {
+        "component": "text-input",
+        "name": "heading",
+        "value": "",
+        "label": "Heading",
+        "valueType": "string"
+      },
+      {
+        "component": "text-area",
+        "name": "description",
+        "value": "",
+        "label": "Description",
+        "valueType": "string"
+      },
+      {
+        "component": "text-input",
+        "valueType": "string",
+        "name": "firsthref",
+        "value": "",
+        "label": "Button 1 URL"
+      },
+      {
+        "component": "text-input",
+        "valueType": "string",
+        "name": "firsttext",
+        "value": "",
+        "label": "Button 1 Text"
+      },
+      {
+        "component": "select",
+        "name": "firsttype",
+        "value": "",
+        "label": "Button 1 Type",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "default",
+            "value": ""
+          },
+          {
+            "name": "primary",
+            "value": "primary"
+          },
+          {
+            "name": "secondary",
+            "value": "secondary"
+          }
+        ]
+      },
+      {
+        "component": "text-input",
+        "valueType": "string",
+        "name": "secondhref",
+        "value": "",
+        "label": "Button 2 URL"
+      },
+      {
+        "component": "text-input",
+        "valueType": "string",
+        "name": "secondtext",
+        "value": "",
+        "label": "Button 2 Text"
+      },
+      {
+        "component": "select",
+        "name": "secondtype",
+        "value": "",
+        "label": "Button 2 Type",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "default",
+            "value": ""
+          },
+          {
+            "name": "primary",
+            "value": "primary"
+          },
+          {
+            "name": "secondary",
+            "value": "secondary"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "teaser",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "text-area",
+        "name": "text",
+        "value": "",
+        "label": "Text",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "tab",
+    "fields": [
+      {
+        "component": "text-input",
+        "name": "tab",
+        "value": "",
+        "label": "Tab",
+        "valueType": "string"
+      }
+    ]
   }
 ]
