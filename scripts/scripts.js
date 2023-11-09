@@ -13,6 +13,7 @@ import {
   loadBlocks,
   loadCSS,
   decorateButtons,
+  getMetadata,
 } from './lib-franklin.js';
 
 const LCP_BLOCKS = []; // add your LCP blocks to the list
@@ -131,12 +132,10 @@ export function decorateExternalLinks(main) {
     const href = a.getAttribute('href');
     if (href.includes('#_blank')) {
       a.setAttribute('target', '_blank');
-    } else if (
-      href &&
-      !href.includes('experienceleague-dev.corp.adobe.com') &&
-      href !== '#'
-    ) {
-      a.target = '_blank';
+    } else if (href && !href.startsWith('#')) {
+      if (a.hostname !== window.location.hostname) {
+        a.setAttribute('target', '_blank');
+      }
       if (!href.startsWith('/') && !href.startsWith('http')) {
         a.href = `//${href}`;
       }
@@ -145,12 +144,27 @@ export function decorateExternalLinks(main) {
 }
 
 /**
+ * Check if current page is a MD Docs Page.
+ * theme = docs is set in bulk metadata for docs paths.
+ */
+export function isDocPage() {
+  const theme = getMetadata('theme');
+  return theme
+    .split(',')
+    .map((t) => t.toLowerCase())
+    .includes('docs');
+}
+
+/**
  * Decorates the main element.
  * @param {Element} main The main element
  */
 // eslint-disable-next-line import/prefer-default-export
 export function decorateMain(main) {
-  decorateButtons(main);
+  // docs pages do not use buttons, only links
+  if (!isDocPage()) {
+    decorateButtons(main);
+  }
   decorateIcons(main);
   decorateExternalLinks(main);
   buildAutoBlocks(main);
@@ -297,9 +311,25 @@ function loadDelayed() {
   // load anything that can be postponed to the latest here
 }
 
+/**
+ * Custom - Loads the right and left rails for doc pages only.
+ */
+function loadRails() {
+  requestIdleCallback(async () => {
+    if (isDocPage()) {
+      loadCSS(`${window.hlx.codeBasePath}/scripts/rails/rails.css`);
+      const mod = await import('./rails/rails.js');
+      if (mod.default) {
+        await mod.default();
+      }
+    }
+  });
+}
+
 async function loadPage() {
   await loadEager(document);
   await loadLazy(document);
+  loadRails();
   loadDelayed();
   loadPrevNextBtn();
 }

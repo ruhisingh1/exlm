@@ -6,5 +6,7 @@ mappings:
   # load fragments as resource from codebus in the editor (sw.js)
   - /content/exlm-ruhis.resource/fragments/:/fragments/
 
+  - /content/exlm/redirects:/redirects.json
+
 includes:
   - /content/exlm-ruhis/
