@@ -2,6 +2,7 @@ mappings:
   - /content/exlm-ruhis/global/:/
   - /content/exlm-ruhis/global/en:/
   - /content/exlm-ruhis/metadata:/metadata.json
+  - /content/exlm-ruhis/redirects:/redirects.json
   # load fragments as resource from codebus in the editor (sw.js)
   - /content/exlm-ruhis.resource/fragments/:/fragments/
 
