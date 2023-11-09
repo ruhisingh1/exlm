@@ -297,5 +297,67 @@
         "label": "Rows"
       }
     ]
+  },
+  {
+    "id": "icon-card",
+    "fields": [
+      {
+        "component": "select",
+        "name": "icon",
+        "label": "Icon",
+        "valueType": "string",
+        "multi": false,
+        "options": [
+          {
+            "name": "Icon 1",
+            "value": "icon 1"
+          },
+          {
+            "name": "Icon 2",
+            "value": "icon 2"
+          },
+          {
+            "name": "Icon 3",
+            "value": "icon 3"
+          },
+          {
+            "name": "Icon 4",
+            "value": "icon 4"
+          }
+        ]
+      },
+      {
+        "component": "text-input",
+        "valueType": "string",
+        "name": "heading",
+        "value": "Heading",
+        "label": "Heading",
+        "description" : "Sets the heading for Card."
+      },
+	  {
+        "component": "text-area",
+        "valueType": "string",
+        "name": "description",
+        "value": "Description",
+        "label": "Description",
+        "description" : "Sets the description for Card."
+      },
+      {
+        "component": "text-input",
+        "valueType": "string",
+        "name": "linkText",
+        "value": "Link Text",
+        "label": "Link Text",
+        "description" : "Sets the link text for Card."
+      },
+      {
+        "component": "text-input",
+        "valueType": "string",
+        "name": "linkURL",
+        "value": "#",
+        "label": "Link URL",
+        "description" : "Sets the link URL for Card."
+      }
+    ]
   }
 ]
