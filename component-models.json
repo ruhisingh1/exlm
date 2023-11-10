@@ -360,7 +360,7 @@
         "name": "cardLinkURL",
         "value": "",
         "label": "Link URL",
-	"placeholder": "www.google.com",
+	      "placeholder": "www.google.com",
         "description" : "Sets the link URL for Card."
       }
     ]
