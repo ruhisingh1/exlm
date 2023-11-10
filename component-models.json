@@ -310,19 +310,19 @@
         "options": [
           {
             "name": "Icon 1",
-            "value": "icon 1"
+            "value": "icon1"
           },
           {
             "name": "Icon 2",
-            "value": "icon 2"
+            "value": "icon2"
           },
           {
             "name": "Icon 3",
-            "value": "icon 3"
+            "value": "icon3"
           },
           {
             "name": "Icon 4",
-            "value": "icon 4"
+            "value": "icon4"
           }
         ]
       },
