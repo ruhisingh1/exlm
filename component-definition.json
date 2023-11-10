@@ -183,7 +183,8 @@
                   "cardHeading":"Default Heading",
                   "cardDescription":"Default description",
                   "cardLinkText":"Default Link Text",
-                  "cardLinkURL":"#"
+                  "cardLinkURL":"#",
+                  "classes": ["icon-card"]
                 }
               }
             }
