@@ -179,7 +179,7 @@
                 "template": {
                   "name": "Icon Card",
                   "model": "icon-card",
-                  "cardIcon":"icon1",
+                  "cardIcon":"documentation",
                   "cardHeading":"Default Heading",
                   "cardDescription":"Default description",
                   "cardLinkText":"Default Link Text",

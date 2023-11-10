@@ -309,20 +309,24 @@
         "valueType": "string",
         "options": [
           {
-            "name": "Icon 1",
-            "value": "icon1"
+            "name": "Documentation",
+            "value": "documentation"
           },
           {
-            "name": "Icon 2",
-            "value": "icon2"
+            "name": "Community",
+            "value": "community"
           },
           {
-            "name": "Icon 3",
-            "value": "icon3"
+            "name": "Instructor-led Training",
+            "value": "instructor-led-training"
           },
           {
-            "name": "Icon 4",
-            "value": "icon4"
+            "name": "Events",
+            "value": "events"
+          },
+          {
+            "name": "Courses",
+            "value": "courses"
           }
         ]
       },
