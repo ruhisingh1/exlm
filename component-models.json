@@ -208,7 +208,7 @@
         "name": "bgImage",
         "value": "/content/dam/exlm/content-at-scale.png",
         "label": "Background image",
-        "multi": false
+        "multi": true
       },
       {
         "component": "text-input",
@@ -223,7 +223,7 @@
         "name": "subImage",
         "value": "/content/dam/exlm/content-at-scale.png",
         "label": "Subject image",
-        "multi": false
+        "multi": true
       },
       {
         "component": "text-input",
