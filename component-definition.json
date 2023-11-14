@@ -90,15 +90,30 @@
                   "name": "Icon Block",
                   "item1":{
                     "name": "Icon Card",
-                    "model": "icon-card"
+                    "model": "icon-card",
+                    "cardIcon": "/content/dam/exlm/content-at-scale.png",
+                    "cardHeading": "Default Heading",
+                    "cardDescription": "Default description",
+                    "cardLinkText": "Default Link Text",
+                    "cardLink": "#"
                   },
                   "item2":{
                     "name": "Icon Card",
-                    "model": "icon-card"
+                    "model": "icon-card",
+                    "cardIcon": "/content/dam/exlm/content-at-scale.png",
+                    "cardHeading": "Default Heading",
+                    "cardDescription": "Default description",
+                    "cardLinkText": "Default Link Text",
+                    "cardLink": "#"
                   },
                   "item3":{
                     "name": "Icon Card",
-                    "model": "icon-card"
+                    "model": "icon-card",
+                    "cardIcon": "/content/dam/exlm/content-at-scale.png",
+                    "cardHeading": "Default Heading",
+                    "cardDescription": "Default description",
+                    "cardLinkText": "Default Link Text",
+                    "cardLink": "#"
                   }
                 }
               }
