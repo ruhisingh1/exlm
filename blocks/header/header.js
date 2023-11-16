@@ -61,6 +61,8 @@ const fetchFragment = async (rePath, lang = 'en') => {
 // Mobile Only (Until 1024px)
 const isMobile = () => window.matchMedia('(max-width: 1023px)').matches;
 
+const headerFragment = fetchFragment('header/header');
+const languageFragment = fetchFragment('languages/languages');
 const decoratorState = {};
 
 /**
@@ -103,8 +105,9 @@ const hamburgerButton = (navWrapper) => {
  */
 const buildNavItems = (ul, level = 0) => {
   if (level === 0) {
+    // add search link (visible on mobile only)
     ul.appendChild(htmlToElement(`<li class="nav-item-mobile">${decoratorState.searchLinkHtml}</li>`));
-
+    // add language select (visible on mobile only)
     ul.appendChild(
       htmlToElement(
         `<li class="nav-item-mobile">
@@ -121,23 +124,70 @@ const buildNavItems = (ul, level = 0) => {
     if (level === 0) navItemClasses.push('nav-item-root');
     navItem.classList.add(...navItemClasses);
     const controlName = `content-${level}-${randomId()}`; // unique id
-    const content = navItem.querySelector(':scope > ul');
+    const [content, secondaryContent] = navItem.querySelectorAll(':scope > ul');
     if (content) {
       const firstEl = navItem.firstElementChild;
       const toggleClass = level === 0 ? 'nav-item-toggle nav-item-toggle-root' : 'nav-item-toggle';
       const toggler = htmlToElement(
         `<button class="${toggleClass}" aria-controls="${controlName}" aria-expanded="false">${firstEl.textContent}</button>`,
       );
-      firstEl.replaceWith(toggler);
-      content.setAttribute('id', controlName);
-      content.classList.add('nav-item-content');
+      const navItemContent = document.createElement('div');
+      navItemContent.append(content);
+      navItemContent.setAttribute('id', controlName);
+      navItemContent.classList.add('nav-item-content');
+      if (secondaryContent) {
+        secondaryContent.classList.add('nav-items-secondary');
+        navItemContent.append(secondaryContent);
+      }
+      const children = [toggler, navItemContent];
+
+      navItem.replaceChildren(...children);
+      const currentActiveClass = 'nav-item-expanded-active';
+      const itemContentExpanded = 'nav-item-content-expanded';
+      const itemExpanded = 'nav-item-expanded';
+
+      const isNotAncestorOfToggler = (parent) =>
+        parent && !parent.contains(toggler) && !parent.parentElement.contains(toggler);
+      const getAllByClass = (className) => [...document.querySelectorAll(`.${className}`)];
+      const removeClassFromAll = (className) =>
+        getAllByClass(className).forEach((el) => el.classList.remove(className));
+      const removeClassFromNonAncestorAll = (className) => {
+        getAllByClass(className)
+          .filter(isNotAncestorOfToggler)
+          .forEach((el) => el.classList.remove(className));
+      };
+
+      const resetExpandedAttribute = () => {
+        const els = document.querySelectorAll(`header [aria-expanded="true"]`);
+        if (els && els.length)
+          [...els].filter(isNotAncestorOfToggler).forEach((el) => el.setAttribute('aria-expanded', false));
+      };
+
+      const setExpandedState = (toggleElement, containerElement, expanded) => {
+        // reset state
+
+        // set new state
+        resetExpandedAttribute();
+        toggleElement.setAttribute('aria-expanded', expanded);
+        // remove active class from all other expanded nav items
+        removeClassFromNonAncestorAll(itemExpanded);
+        removeClassFromNonAncestorAll(itemContentExpanded);
+        removeClassFromAll(currentActiveClass);
+        if (expanded) {
+          containerElement.classList.add(itemContentExpanded);
+          containerElement.parentElement.classList.add(itemExpanded);
+          containerElement.parentElement.classList.add(currentActiveClass);
+        } else {
+          containerElement.classList.remove(itemContentExpanded);
+          containerElement.parentElement.classList.remove(itemExpanded);
+          containerElement.parentElement.classList.remove(currentActiveClass);
+        }
+      };
 
       /** @param {Event} e */
       const toggleExpandContent = (e) => {
         const isExpanded = toggler.getAttribute('aria-expanded') === 'true';
-        toggler.setAttribute('aria-expanded', !isExpanded);
-        content.classList.toggle('nav-item-content-expanded');
-        content.parentElement.classList.toggle('nav-item-expanded');
+        setExpandedState(toggler, navItemContent, !isExpanded);
         if (e.type === 'mouseenter') {
           const childContents = e.target.querySelectorAll('.nav-item-content');
           childContents.forEach((childContent) => {
@@ -198,9 +248,7 @@ const navDecorator = (navBlock) => {
   buildNavItems(ul);
 
   navBlock.firstChild.id = hamburger.getAttribute('aria-controls');
-
   navBlock.prepend(hamburger);
-  return navBlock;
 };
 
 /**
@@ -261,8 +309,7 @@ const languageDecorator = async (languageBlock) => {
 
   const popoverId = 'language-picker-popover';
   const prependLanguagePopover = async (parent) => {
-    const languagesHtml = await fetchFragment('languages/languages');
-    let languagesEl = htmlToElement(languagesHtml);
+    let languagesEl = htmlToElement(await languageFragment);
     languagesEl = languagesEl.querySelector('ul');
 
     const languageOptions = languagesEl?.children || [];
@@ -348,8 +395,7 @@ const decorateLinks = (block) => {
 export default async function decorate(headerBlock) {
   headerBlock.style.display = 'none';
   // eslint-disable-next-line no-unused-vars
-  const headerFragment = await fetchFragment('header/header');
-  headerBlock.innerHTML = headerFragment;
+  headerBlock.innerHTML = await headerFragment;
 
   const headerBlockFirstRow = getBlockFirstRow(headerBlock);
   headerBlockFirstRow.outerHTML = `<nav>${headerBlockFirstRow.innerHTML}</nav>`;
