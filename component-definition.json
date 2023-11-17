@@ -185,7 +185,7 @@
           }
         },
         {
-          "title": "Embed",
+          "title": "Video",
           "id": "embed",
           "plugins": {
             "aem": {
