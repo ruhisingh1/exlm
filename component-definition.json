@@ -219,18 +219,18 @@
           }
         },
         {
-          "title": "Accordions",
-          "id": "accordions",
+          "title": "Accordion",
+          "id": "accordion",
           "plugins": {
             "aem": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
-                  "allowedComponents": "accordions",
-                  "name": "Accordions",
+                  "allowedComponents": "accordion",
+                  "name": "Accordion",
                   "item1": {
-                    "name": "Accordion",
-                    "model": "accordion",
+                    "name": "Accordion Item",
+                    "model": "accordion-item",
                     "details": "Lorem ipsum",
                     "summary": "<p>Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.</p>"
                   }
@@ -240,15 +240,15 @@
           }
         },
         {
-          "title": "Accordion",
-          "id": "accordion",
+          "title": "Accordion Item",
+          "id": "accordion-item",
           "plugins": {
             "aem": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
-                  "name": "Accordion",
-                  "model": "accordion"
+                  "name": "Accordion Item",
+                  "model": "accordion-item"
                 }
               }
             }
