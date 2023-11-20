@@ -219,15 +219,15 @@
           }
         },
         {
-          "title": "Accordion",
-          "id": "accordion",
+          "title": "Accordions",
+          "id": "accordions",
           "plugins": {
             "aem": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
-                  "allowedComponents": "accordion-item",
-                  "name": "Accordion",
+                  "allowedComponents": "accordions",
+                  "name": "Accordions",
                   "item": {
                     "name": "Accordion Item",
                     "model": "accordion-item",
