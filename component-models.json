@@ -440,6 +440,32 @@
     ]
   },
   {
+    "id": "carousel",
+    "fields": [
+      {
+        "component": "select",
+        "name": "classes",
+        "value": "center",
+        "label": "Vertical Alignment",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Top",
+            "value": "top"
+          },
+          {
+            "name": "Center",
+            "value": "center"
+          },
+          {
+            "name": "Bottom",
+            "value": "bottom"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "marquee",
     "fields": [
       {
@@ -578,27 +604,6 @@
         "value": "",
         "label": "MPC Video URL",
         "description": "Please provide a URL to an MPC video."
-      }
-    ]
-  },
-  {
-    "id": "accordion-item",
-    "fields": [
-      {
-        "component": "text-input",
-        "valueType": "string",
-        "name": "details",
-        "value": "",
-        "label": "Heading",
-        "description": "Please provide a heading for accordion."
-      },
-      {
-        "component": "text-area",
-        "valueType": "string",
-        "name": "summary",
-        "value": "",
-        "label": "Body",
-        "description": "The description text for accordion."
       }
     ]
   }
