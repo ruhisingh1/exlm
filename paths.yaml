@@ -1,12 +1,12 @@
 mappings:
-  - /content/exlm/global/:/
-  - /content/exlm/global/en:/
-  - /content/exlm/metadata:/metadata.json
+  - /content/exlm-mayukhs/global/:/
+  - /content/exlm-mayukhs/global/en:/
+  - /content/exlm-mayukhs/metadata:/metadata.json
   # load fragments as resource from codebus in the editor (sw.js)
-  - /content/exlm.resource/fragments/:/fragments/
+  - /content/exlm-mayukhs.resource/fragments/:/fragments/
 
-  - /content/exlm/redirects:/redirects.json
-  - /content/exlm/placeholders:/placeholders.json
+  - /content/exlm-mayukhs/redirects:/redirects.json
+  - /content/exlm-mayukhs/placeholders:/placeholders.json
 
 includes:
-  - /content/exlm/
+  - /content/exlm-mayukhs/
