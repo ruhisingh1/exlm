@@ -42,13 +42,8 @@ export default function decorate(block) {
       ${subjectPicture ? `<div class='marquee-subject'>${subjectPicture}</div>` : `<div class='marquee-spacer'></div>`}
       </div>
     </div>
-    <div class='marquee-background'">${bgColor}</div>
+    <div class='marquee-background'></div>
   `);
-
-  // set image description
-  // if (backgroundImageDescr) {
-  //   marqueeDOM.querySelector('.background picture img').setAttribute('alt', backgroundImageDescr);
-  // }
 
   if (subjectPicture && subjectImageDescr) {
     marqueeDOM.querySelector('.foreground .subject picture img').setAttribute('alt', subjectImageDescr);
