@@ -342,6 +342,13 @@
             "value": "--spectrum-gray-100"
           }
         ]
+      },
+      {
+        "component": "text-input",
+        "valueType": "string",
+        "name": "style",
+        "value": "",
+        "label": "Style"
       }
     ]
   },
