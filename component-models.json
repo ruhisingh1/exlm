@@ -334,12 +334,12 @@
         "valueType": "string",
         "options": [
           {
-            "name": "None",
+            "name": "none",
             "value": "none"
           },
           {
             "name": "highlight",
-            "value": "--spectrum-gray-100"
+            "value": "highlight"
           }
         ]
       }
