@@ -345,10 +345,10 @@
       },
       {
         "component": "text-input",
-        "valueType": "string",
         "name": "style",
         "value": "",
-        "label": "Style"
+        "label": "Style",
+        "valueType": "string"
       }
     ]
   },
