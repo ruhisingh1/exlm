@@ -327,7 +327,7 @@
     "fields": [
       {
         "component": "select",
-        "name": "classes",
+        "name": "style",
         "value": "",
         "label": "Style",
         "description": "The section hightlight color",
@@ -342,13 +342,6 @@
             "value": "--spectrum-gray-100"
           }
         ]
-      },
-      {
-        "component": "text-input",
-        "name": "style",
-        "value": "",
-        "label": "Style",
-        "valueType": "string"
       }
     ]
   },
