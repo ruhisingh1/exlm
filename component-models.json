@@ -326,11 +326,22 @@
     "id": "section",
     "fields": [
       {
-        "component": "text-input",
-        "name": "style",
+        "component": "select",
+        "name": "classes",
         "value": "",
         "label": "Style",
-        "valueType": "string"
+        "description": "The section hightlight color",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "None",
+            "value": "none"
+          },
+          {
+            "name": "Gray",
+            "value": "--spectrum-gray-100"
+          }
+        ]
       }
     ]
   },
