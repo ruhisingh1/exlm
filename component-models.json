@@ -338,7 +338,7 @@
             "value": "none"
           },
           {
-            "name": "Gray",
+            "name": "highlight",
             "value": "--spectrum-gray-100"
           }
         ]
