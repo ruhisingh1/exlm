@@ -327,7 +327,7 @@
     "fields": [
       {
         "component": "select",
-        "name": "style",
+        "name": "classes",
         "value": "",
         "label": "Style",
         "description": "The section hightlight color",
