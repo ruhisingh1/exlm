@@ -334,8 +334,8 @@
         "valueType": "string",
         "options": [
           {
-            "name": "none",
-            "value": ""
+            "name": "default",
+            "value": "default"
           },
           {
             "name": "highlight",
