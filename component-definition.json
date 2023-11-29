@@ -234,14 +234,14 @@
         },
         {
           "title": "Video Embed",
-          "id": "embed",
+          "id": "video-embed",
           "plugins": {
             "aem": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
                   "name": "Video Embed",
-                  "model": "embed"
+                  "model": "video-embed"
                 }
               }
             }
