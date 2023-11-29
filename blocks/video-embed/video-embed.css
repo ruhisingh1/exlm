@@ -7,10 +7,6 @@
   display: flex;
   justify-content: center;
 }
-.video-embed.embed-twitter .twitter-tweet-rendered {
-  margin-left: auto;
-  margin-right: auto;
-}
 .video-embed .embed-placeholder {
   width: 100%;
   aspect-ratio: 16/9;
