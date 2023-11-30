@@ -1,10 +1,10 @@
-.tab {
+.tab-group {
   background-color: var(--spectrum-gray-100);
   padding: 14px 21px 21px;
   border-radius: 7px;
   margin-bottom: 28px;
 }
-.tab::before {
+.tab-group::before {
   content: "";
   display: block;
   width: 100%;
@@ -13,11 +13,11 @@
   position: relative;
   top: 56px;
 }
-.tab .tab-list {
+.tab-group .tab-group-list {
   overflow-x: auto;
   white-space: nowrap;
 }
-.tab .tab-list button.tab-title {
+.tab-group .tab-group-list button.tab-group-title {
   background: none;
   color: var(--spectrum-gray-700);
   padding: 0;
@@ -32,25 +32,25 @@
   border-radius: 0;
   position: relative;
 }
-.tab .tab-list button.tab-title:not(:first-child) {
+.tab-group .tab-group-list button.tab-group-title:not(:first-child) {
   margin-left: 24px;
 }
-.tab .tab-list button.tab-title[aria-selected=true] {
+.tab-group .tab-group-list button.tab-group-title[aria-selected=true] {
   color: var(--text-color);
   border-bottom: 2px solid var(--text-color);
   border-radius: 0;
 }
-.tab .tab-content {
+.tab-group .tab-group-content {
   padding: 10.5px 0;
   color: var(--spectrum-gray-800);
   font-family: var(--body-font-family);
   font-size: var(--spectrum-body-size-m);
   font-weight: 400;
 }
-.tab .tab-content .tabpanel {
+.tab-group .tab-group-content .tab-grouppanel {
   display: none;
   margin-bottom: 12px;
 }
-.tab .tab-content .tabpanel.active {
+.tab-group .tab-group-content .tab-grouppanel.active {
   display: block;
 }

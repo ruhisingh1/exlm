@@ -672,7 +672,11 @@
     ]
   },
   {
-    "id": "tab",
+    "id": "accordion-group",
+    "fields": []
+  },
+  {
+    "id": "accordion",
     "fields": [
       {
         "component": "text-input",

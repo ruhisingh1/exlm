@@ -23,7 +23,7 @@ function initTabs(block) {
 }
 
 let initCount = 0;
-export function generateTabBlock(block) {
+export default function decorate(block) {
   const tabList = createTag('div', { class: 'tab-list' });
   const tabContent = createTag('div', { class: 'tab-content' });
 
@@ -84,12 +84,4 @@ export function generateTabBlock(block) {
 
   initTabs(block);
   initCount += 1;
-
-  return { tabList, tabContent };
-}
-
-export default function decorate(block) {
-  const dom = generateTabBlock(block);
-  block.textContent = '';
-  block.append(dom);
 }
