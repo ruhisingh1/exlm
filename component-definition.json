@@ -272,7 +272,7 @@
                 "template": {
                   "allowedComponents": "tab-group",
                   "name": "Tab Group",
-                  "item": {
+                  "item1": {
                     "name": "Tab",
                     "model": "tab",
                     "heading": "Tab",
