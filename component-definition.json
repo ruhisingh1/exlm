@@ -270,8 +270,9 @@
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
-                  "allowedComponents": "tab-group",
+                  "allowedComponents": "tab",
                   "name": "Tab Group",
+                  "model": "tab-group",
                   "item1": {
                     "name": "Tab",
                     "model": "tab",
