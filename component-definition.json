@@ -272,12 +272,11 @@
                 "template": {
                   "allowedComponents": "tab",
                   "name": "Tab Group",
-                  "model": "tab-group",
                   "item1": {
                     "name": "Tab",
                     "model": "tab",
                     "heading": "Tab",
-                    "body": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
+                    "body": "body"
                   }
                 }
               }
@@ -295,7 +294,7 @@
                   "name": "Tab",
                   "model": "tab",
                   "heading": "Tab",
-                  "body": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
+                  "body": "body"
                 }
               }
             }
