@@ -84,6 +84,8 @@ export function generateTabBlock(block) {
 
   initTabs(block);
   initCount += 1;
+
+  return { tabList, tabContent };
 }
 
 export default function decorate(block) {
