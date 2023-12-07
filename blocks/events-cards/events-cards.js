@@ -21,6 +21,7 @@ export default async function decorate(block) {
   const headerDiv = htmlToElement(`
     <div class="events-cards-header">
       <div class="events-cards-title">
+<h1>${contentType?.textContent.trim()}</h1>
           <h4>${headingElement?.textContent.trim()}</h4>
           <div class="tooltip">
             <span class="icon icon-info"></span><span class="tooltip-text">${toolTipElement?.textContent.trim()}</span>
