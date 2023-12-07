@@ -28,7 +28,7 @@ export default async function decorate(block) {
           </div>
       </div>
       <div class="events-cards-view">${linkTextElement?.outerHTML}</div>
-      <div>${allSolutions?.textContent.trim()}</div>
+      <div>${allSolutions?.false}</div>
     </div>
   `);
   // Appending header div to the block
