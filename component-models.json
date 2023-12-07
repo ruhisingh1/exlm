@@ -865,6 +865,14 @@
         "value": "",
         "label": "Link URL",
         "description": "Sets the text url."
+      },
+      {
+        "component": "checkbox",
+        "valueType": "boolean",
+        "name": "allSolutions",
+        "value": "",
+        "label": "All Solutions?",
+        "description": "Sets the text url."
       }
     ]
   }
