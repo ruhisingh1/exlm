@@ -869,7 +869,6 @@
       {
         "component": "boolean",
         "valueType": "boolean",
-        "value": false,
         "name": "allSolutions",
         "label": "All Solutions?"
       }
