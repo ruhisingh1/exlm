@@ -13,8 +13,9 @@ export default async function decorate(block) {
   const toolTipElement = block.querySelector('div:nth-child(2) > div');
   const linkTextElement = block.querySelector('div:nth-child(3) > div > a');
   const allSolutions = block.querySelector('div:nth-child(4) > div').textContent.trim();
+  const solutions = block.querySelector('div:nth-child(5) > div').textContent.trim();
   const noOfResults = 4;
-  const solutions = 'All';
+  const solutionsParam = ${allSolutions === 'true' ? 'All' : solutions};
 
   // Clearing the block's content
   block.innerHTML = '';
@@ -28,7 +29,9 @@ export default async function decorate(block) {
           </div>
       </div>
       <div class="events-cards-view">${linkTextElement?.outerHTML}</div>
-      <div>Solutions: ${allSolutions}</div>
+      <div>All Solutions: ${allSolutions}</div>
+      <div>Solutions: ${solutions}</div>
+      <div>Solutions Param: ${solutionsParam}</div>
     </div>
   `);
   // Appending header div to the block
@@ -42,7 +45,7 @@ export default async function decorate(block) {
   }
 
   const param = {
-    solutions,
+    solutionsParam,
     noOfResults,
   };
 
