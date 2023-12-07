@@ -869,10 +869,10 @@
       {
         "component": "boolean",
         "valueType": "boolean",
+        "value": true,
         "name": "allSolutions",
-        "label": "All Solutions?",
-        "description" : "If enabled a new Tab will be opened when clicked."
-      } 
+        "label": "All Solutions?"
+      }
     ]
   }
 ]

@@ -12,8 +12,9 @@ export default async function decorate(block) {
   const headingElement = block.querySelector('div:nth-child(1) > div');
   const toolTipElement = block.querySelector('div:nth-child(2) > div');
   const linkTextElement = block.querySelector('div:nth-child(3) > div > a');
-  const contentType = block.querySelector('div:nth-child(4) > div')?.textContent.trim();
+  const allSolutions = block.querySelector('div:nth-child(4) > div')?.textContent.trim();
   const noOfResults = 4;
+  const solutions = 'All';
 
   // Clearing the block's content
   block.innerHTML = '';
@@ -27,6 +28,7 @@ export default async function decorate(block) {
           </div>
       </div>
       <div class="events-cards-view">${linkTextElement?.outerHTML}</div>
+      <div>${allSolutions?.textContent.trim()}</div>
     </div>
   `);
   // Appending header div to the block
@@ -40,7 +42,7 @@ export default async function decorate(block) {
   }
 
   const param = {
-    contentType,
+    solutions,
     noOfResults,
   };
 
