@@ -869,7 +869,7 @@
       {
         "component": "boolean",
         "valueType": "boolean",
-        "value": true,
+        "value": "",
         "name": "allSolutions",
         "label": "All Solutions?"
       }
