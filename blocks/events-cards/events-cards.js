@@ -1,5 +1,5 @@
 import { decorateIcons } from '../../scripts/lib-franklin.js';
-import BrowseCardsLiveEventsAdaptor from '../../scripts/browse-card/browse-cards-delegate.js';
+import BrowseCardsDelegate from '../../scripts/browse-card/browse-cards-delegate.js';
 import { htmlToElement, loadIms } from '../../scripts/scripts.js';
 import buildCard from '../../scripts/browse-card/browse-card.js';
 /**
@@ -15,6 +15,7 @@ export default async function decorate(block) {
   const solutions = block.querySelector('div:nth-child(5) > div').textContent.trim();
   const noOfResults = 4;
   const solutionsParam = allSolutions === 'true' ? 'All' : solutions;
+  const contentType = 'event';
 
   // Clearing the block's content
   block.innerHTML = '';
@@ -46,9 +47,10 @@ export default async function decorate(block) {
   const param = {
     solutionsParam,
     noOfResults,
+    contentType,
   };
 
-  const browseCardsContent = BrowseCardsLiveEventsAdaptor.fetchCardData(param);
+  const browseCardsContent = BrowseCardsDelegate.getServiceForContentType(param);
   browseCardsContent.then((data) => {
     if (data?.length) {
       const contentDiv = document.createElement('div');
