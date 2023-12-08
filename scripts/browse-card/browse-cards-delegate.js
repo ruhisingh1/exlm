@@ -33,7 +33,7 @@ const BrowseCardsDelegate = (() => {
    */
   const constructLiveEventsSearchParams = () => {
     const urlSearchParams = new URLSearchParams();
-    urlSearchParams.append('product', 'WORKFRONT');
+    urlSearchParams.append('productFocus', 'WORKFRONT');
     return urlSearchParams;
   };
 
