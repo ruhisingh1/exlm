@@ -1,28 +1,20 @@
-import htmlToElement from '../../scripts/scripts.js';
-/**
- * Decorate function to process and log the mapped data.
- * @param {HTMLElement} block - The block of data to process.
- */
-export default async function decorate(block) {
-  // Extracting elements from the block
-  const headingElement = block.querySelector('div:nth-child(1) > div');
-  const toolTipElement = block.querySelector('div:nth-child(2) > div');
-  const linkTextElement = block.querySelector('div:nth-child(3) > div > a');
+import { createOptimizedPicture } from '../../scripts/lib-franklin.js';
 
-  // Clearing the block's content
-  block.innerHTML = '';
-
-  const headerDiv = htmlToElement(`
-    <div class="cards-header">
-      <div class="cards-title">
-          <h4>${headingElement?.textContent.trim()}</h4>
-          <div class="tooltip">
-            <span class="icon icon-info"></span><span class="tooltip-text">${toolTipElement?.textContent.trim()}</span>
-          </div>
-      </div>
-      <div class="cards-view">${linkTextElement?.outerHTML}</div>
-    </div>
-  `);
-  // Appending header div to the block
-  block.appendChild(headerDiv);
+export default function decorate(block) {
+  /* change to ul, li */
+  const ul = document.createElement('ul');
+  [...block.children].forEach((row) => {
+    const li = document.createElement('li');
+    while (row.firstElementChild) li.append(row.firstElementChild);
+    [...li.children].forEach((div) => {
+      if (div.children.length === 1 && div.querySelector('picture')) div.className = 'cards-card-image';
+      else div.className = 'cards-card-body';
+    });
+    ul.append(li);
+  });
+  ul.querySelectorAll('img').forEach((img) =>
+    img.closest('picture').replaceWith(createOptimizedPicture(img.src, img.alt, false, [{ width: '750' }])),
+  );
+  block.textContent = '';
+  block.append(ul);
 }
