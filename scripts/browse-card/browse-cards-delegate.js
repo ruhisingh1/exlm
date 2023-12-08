@@ -34,7 +34,7 @@ const BrowseCardsDelegate = (() => {
   const constructLiveEventsSearchParams = () => {
     const urlSearchParams = new URLSearchParams();
     urlSearchParams.append('product', 'All');
-    urlSearchParams.append('sortCriteria', 'date descending');
+    urlSearchParams.append('sort', 'date descending');
     return urlSearchParams;
   };
 
