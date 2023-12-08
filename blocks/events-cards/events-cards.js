@@ -15,7 +15,7 @@ export default async function decorate(block) {
   const solutions = block.querySelector('div:nth-child(5) > div').textContent.trim();
   const noOfResults = 4;
   const solutionsParam = allSolutions === 'true' ? 'All' : solutions;
-  const contentType = 'event';
+  const contentType = 'live-events';
 
   // Clearing the block's content
   block.innerHTML = '';
