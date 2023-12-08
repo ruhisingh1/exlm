@@ -50,7 +50,7 @@ export default async function decorate(block) {
     contentType,
   };
 
-  const browseCardsContent = BrowseCardsDelegate.getServiceForContentType(param);
+  const browseCardsContent = BrowseCardsDelegate.fetchCardData(param);
   browseCardsContent.then((data) => {
     if (data?.length) {
       const contentDiv = document.createElement('div');
