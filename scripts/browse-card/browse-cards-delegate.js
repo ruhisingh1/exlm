@@ -82,11 +82,11 @@ const BrowseCardsDelegate = (() => {
   const handleLiveEventsService = () =>
     /* eslint-disable-next-line no-async-promise-executor */
     new Promise(async (resolve, reject) => {
-      // const dataSource = {
-      //   url: liveEventsUrl,
-      //   param: constructLiveEventsSearchParams(),
-      // };
-      const liveEventsService = new LiveEventsDataService(liveEventsUrl + constructLiveEventsSearchParams());
+      const dataSource = {
+        url: liveEventsUrl,
+        param: constructLiveEventsSearchParams(),
+      };
+      const liveEventsService = new LiveEventsDataService(dataSource);
       const events = await liveEventsService.fetchDataFromSource();
       if (events?.length) {
         resolve(BrowseCardsLiveEventsAdaptor.mapResultsToCardsData(events));
