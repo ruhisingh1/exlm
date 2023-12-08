@@ -1,6 +1,5 @@
-// FIXME: This is a dummy component put up to show case the cards rendered via API
 import { decorateIcons } from '../../scripts/lib-franklin.js';
-import BrowseCardsDelegate from '../../scripts/browse-card/browse-cards-delegate.js';
+import BrowseCardsLiveEventsAdaptor from '../../scripts/browse-card/browse-cards-delegate.js';
 import { htmlToElement, loadIms } from '../../scripts/scripts.js';
 import buildCard from '../../scripts/browse-card/browse-card.js';
 /**
@@ -49,7 +48,7 @@ export default async function decorate(block) {
     noOfResults,
   };
 
-  const browseCardsContent = BrowseCardsDelegate.fetchCardData(param);
+  const browseCardsContent = BrowseCardsLiveEventsAdaptor.fetchCardData(param);
   browseCardsContent.then((data) => {
     if (data?.length) {
       const contentDiv = document.createElement('div');
