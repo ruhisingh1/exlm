@@ -462,6 +462,24 @@
         "value": "",
         "label": "Content type",
         "description": "Sets the content type."
+      },
+      {
+        "component": "checkbox-group",
+        "valueType": "string",
+        "name": "contentTypes",
+        "value": "",
+        "label": "Content type(s)",
+        "description": "Sets the content type.",
+        "options": [
+          {
+            "name": "All",
+            "value": "All"
+          },
+          {
+            "name": "None",
+            "value": "None"
+          }
+        ]
       }
     ]
   },
