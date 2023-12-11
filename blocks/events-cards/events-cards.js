@@ -54,14 +54,13 @@ export default async function decorate(block) {
   const browseCardsContent = BrowseCardsDelegate.fetchCardData(param);
   browseCardsContent.then((data) => {
     // eslint-disable-next-line no-use-before-define
-    const filteredData = fetchFilteredCardData(data);
-    if (filteredData?.length) {
+    const filteredLiveEventsData = fetchFilteredCardData(data, solutionsParam);
+    if (filteredLiveEventsData?.length) {
       const contentDiv = document.createElement('div');
       contentDiv.classList.add('events-cards-content');
-      // eslint-disable-next-line no-use-before-define, no-param-reassign
 
-      for (let i = 0; i < Math.min(noOfResults, filteredData.length); i += 1) {
-        const cardData = filteredData[i];
+      for (let i = 0; i < Math.min(noOfResults, filteredLiveEventsData.length); i += 1) {
+        const cardData = filteredLiveEventsData[i];
         const cardDiv = document.createElement('div');
         buildCard(cardDiv, cardData);
         contentDiv.appendChild(cardDiv);
@@ -72,26 +71,21 @@ export default async function decorate(block) {
     }
   });
 
-  const fetchFilteredCardData = async (data) => {
-    const eventData = {
-      eventList: {
-        events: {
-          data,
-        },
-      },
-    };
+  const fetchFilteredCardData = (data, params) => {
+    const eventData = { data };
     // Function to filter events based on product focus
     function filterEventsByProduct(product) {
-      // Check if eventList and events properties exist
-      if (eventData.eventList && eventData.eventList.events) {
-        return eventData.eventList.events.data.filter((event) => event.product.includes(product));
+      const paramArray = product.split(',');
+      // Check if data is not null
+      if (eventData.data) {
+        return eventData.data.filter((event) =>
+          // eslint-disable-next-line no-shadow
+          paramArray.some((param) => event.product.includes(param.trim())),
+        );
       }
       return []; // Return an empty array if the structure is not as expected
     }
-
-    // Example: Filtering events for "Workfront"
-    const workfrontEvents = filterEventsByProduct('Workfront');
-
-    return workfrontEvents;
+    const filteredLiveEvents = filterEventsByProduct(params);
+    return filteredLiveEvents;
   };
 }
