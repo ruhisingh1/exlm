@@ -53,6 +53,8 @@ export default async function decorate(block) {
 
   const browseCardsContent = BrowseCardsDelegate.fetchCardData(param);
   browseCardsContent.then((data) => {
+    // eslint-disable-next-line no-use-before-define
+    fetchFilteredCardData(data);
     if (data?.length) {
       const contentDiv = document.createElement('div');
       contentDiv.classList.add('events-cards-content');
@@ -68,4 +70,18 @@ export default async function decorate(block) {
       decorateIcons(block);
     }
   });
+
+  const fetchFilteredCardData = async (data) => {
+    const eventData = data; // (your JSON data)
+
+    // Function to filter events based on product focus
+    function filterEventsByProduct(product) {
+      return eventData.eventList.events.filter((event) => event.productFocus.includes(product));
+    }
+
+    // Example: Filtering events for "Workfront"
+    const workfrontEvents = filterEventsByProduct(solutionsParam);
+
+    return workfrontEvents;
+  };
 }
