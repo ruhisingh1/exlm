@@ -28,16 +28,6 @@ const BrowseCardsDelegate = (() => {
   };
 
   /**
-   * constructADLSSearchParams is a method that constructs search parameters for the data source.
-   * @returns {URLSearchParams} - The URLSearchParams object containing the constructed parameters
-   */
-  const constructLiveEventsSearchParams = () => {
-    const urlSearchParams = new URLSearchParams();
-    urlSearchParams.append('el_product', 'Workfront');
-    return urlSearchParams;
-  };
-
-  /**
    * handleCoveoService is a method that handles fetching browse cards content using CoveoDataService.
    * @returns {Promise<Array>} - A promise resolving to an array of browse cards data.
    */
@@ -82,11 +72,7 @@ const BrowseCardsDelegate = (() => {
   const handleLiveEventsService = () =>
     /* eslint-disable-next-line no-async-promise-executor */
     new Promise(async (resolve, reject) => {
-      const dataSource = {
-        url: liveEventsUrl,
-        param: constructLiveEventsSearchParams(),
-      };
-      const liveEventsService = new LiveEventsDataService(dataSource);
+      const liveEventsService = new LiveEventsDataService(liveEventsUrl);
       const events = await liveEventsService.fetchDataFromSource();
       if (events?.length) {
         resolve(BrowseCardsLiveEventsAdaptor.mapResultsToCardsData(events));

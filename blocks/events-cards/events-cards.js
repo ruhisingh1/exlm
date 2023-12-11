@@ -53,8 +53,6 @@ export default async function decorate(block) {
 
   const browseCardsContent = BrowseCardsDelegate.fetchCardData(param);
   browseCardsContent.then((data) => {
-    // eslint-disable-next-line no-use-before-define
-
     if (data?.length) {
       const contentDiv = document.createElement('div');
       contentDiv.classList.add('events-cards-content');

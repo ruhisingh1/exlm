@@ -8,8 +8,8 @@ export default class LiveEventsDataService {
    * Creates an instance of LiveEventsDataService.
    * @param {Object} dataSource - The data source configuration for Live Events Service.
    */
-  constructor(dataSource) {
-    this.dataSource = dataSource;
+  constructor(url) {
+    this.url = url;
   }
 
   /**
@@ -22,8 +22,7 @@ export default class LiveEventsDataService {
       if (LIVE_EVENTS in sessionStorage) {
         return JSON.parse(sessionStorage[LIVE_EVENTS]);
       }
-      const urlWithParams = `${this.dataSource.url}?${this.dataSource.param.toString()}`;
-      const response = await fetch(urlWithParams, {
+      const response = await fetch(this.url, {
         method: 'GET',
       });
       const data = await response.json();
