@@ -73,7 +73,11 @@ export default async function decorate(block) {
   });
 
   const fetchFilteredCardData = async (data) => {
-    const eventData = data; // (your JSON data)
+    const eventData = {
+      eventList: {
+        data,
+      },
+    };
 
     // Function to filter events based on product focus
     function filterEventsByProduct(product) {
