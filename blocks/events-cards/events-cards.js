@@ -51,6 +51,7 @@ export default async function decorate(block) {
   };
 
   const browseCardsContent = BrowseCardsDelegate.fetchCardData(param);
+  const cardDiv = document.createElement('div');
   browseCardsContent.then((data) => {
     if (data?.length) {
       const contentDiv = document.createElement('div');
@@ -58,7 +59,6 @@ export default async function decorate(block) {
 
       for (let i = 0; i < Math.min(noOfResults, data.length); i += 1) {
         const cardData = data[i];
-        const cardDiv = document.createElement('div');
         buildCard(cardDiv, cardData);
         contentDiv.appendChild(cardDiv);
       }
