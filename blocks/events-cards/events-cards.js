@@ -89,7 +89,7 @@ export default async function decorate(block) {
     }
 
     // Example: Filtering events for "Workfront"
-    const workfrontEvents = filterEventsByProduct(solutionsParam);
+    const workfrontEvents = filterEventsByProduct('Workfront');
 
     return workfrontEvents;
   };
