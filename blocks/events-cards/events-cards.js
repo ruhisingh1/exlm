@@ -54,14 +54,14 @@ export default async function decorate(block) {
   const browseCardsContent = BrowseCardsDelegate.fetchCardData(param);
   browseCardsContent.then((data) => {
     // eslint-disable-next-line no-use-before-define
-    fetchFilteredCardData(data);
-    if (data?.length) {
+    const filteredData = fetchFilteredCardData(data);
+    if (filteredData?.length) {
       const contentDiv = document.createElement('div');
       contentDiv.classList.add('events-cards-content');
       // eslint-disable-next-line no-use-before-define, no-param-reassign
 
-      for (let i = 0; i < Math.min(noOfResults, data.length); i += 1) {
-        const cardData = data[i];
+      for (let i = 0; i < Math.min(noOfResults, filteredData.length); i += 1) {
+        const cardData = filteredData[i];
         const cardDiv = document.createElement('div');
         buildCard(cardDiv, cardData);
         contentDiv.appendChild(cardDiv);
@@ -75,15 +75,16 @@ export default async function decorate(block) {
   const fetchFilteredCardData = async (data) => {
     const eventData = {
       eventList: {
-        data,
+        events: {
+          data,
+        },
       },
     };
-
     // Function to filter events based on product focus
     function filterEventsByProduct(product) {
       // Check if eventList and events properties exist
       if (eventData.eventList && eventData.eventList.events) {
-        return eventData.eventList.events.filter((event) => event.productFocus.includes(product));
+        return eventData.eventList.events.data.filter((event) => event.product.includes(product));
       }
       return []; // Return an empty array if the structure is not as expected
     }
