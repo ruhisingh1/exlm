@@ -14,9 +14,11 @@ export default async function decorate(block) {
   const linkTextElement = block.querySelector('div:nth-child(3) > div > a');
   const allSolutions = block.querySelector('div:nth-child(4) > div').textContent.trim();
   const solutions = block.querySelector('div:nth-child(5) > div').textContent.trim();
-  const noOfResults = 10;
-  const solutionsParam = allSolutions === 'true' ? '' : solutions;
   const contentType = CONTENT_TYPES.LIVE_EVENTS.MAPPING_KEY;
+  const noOfResults = 10;
+
+  const solutionsPara = solutions !== '' ? solutions.split('/')[1] : '';
+  const solutionsParam = allSolutions === 'true' ? '' : solutionsPara;
 
   // Clearing the block's content
   block.innerHTML = '';
