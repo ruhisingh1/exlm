@@ -1203,7 +1203,7 @@
         "label": "All Solutions?"
       },
       {
-        "component": "tag",
+        "component": "aem-tag",
         "valueType": "string",
         "name": "solution",
         "label": "Tagpicker"
