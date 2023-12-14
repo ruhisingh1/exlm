@@ -1203,7 +1203,7 @@
         "label": "All Solutions?"
       },
       {
-        "component": "tag-picker",
+        "component": "tag",
         "valueType": "string",
         "name": "solution",
         "label": "Tagpicker"
