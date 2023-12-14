@@ -1,6 +1,6 @@
 import { decorateIcons } from '../../scripts/lib-franklin.js';
 import BrowseCardsDelegate from '../../scripts/browse-card/browse-cards-delegate.js';
-import { htmlToElement, loadIms } from '../../scripts/scripts.js';
+import { htmlToElement } from '../../scripts/scripts.js';
 import buildCard from '../../scripts/browse-card/browse-card.js';
 import CONTENT_TYPES from '../../scripts/browse-card/browse-cards-constants.js';
 /**
@@ -15,10 +15,11 @@ export default async function decorate(block) {
   const allSolutions = block.querySelector('div:nth-child(4) > div').textContent.trim();
   const solutions = block.querySelector('div:nth-child(5) > div').textContent.trim();
   const contentType = CONTENT_TYPES.LIVE_EVENTS.MAPPING_KEY;
-  const noOfResults = 10;
-
-  const solutionsPara = solutions !== '' ? solutions.split('/')[1] : '';
-  const solutionsParam = allSolutions === 'true' ? '' : solutionsPara;
+  const noOfResults = 4;
+  // eslint-disable-next-line no-use-before-define
+  const solutionsTags = solutions !== '' ? formattedSolutionTags(solutions) : '';
+  // If All Solutions toggle is on, solution param will be empty, else use solutions tag as param
+  const solutionsParam = allSolutions === 'true' ? '' : solutionsTags;
 
   // Clearing the block's content
   block.innerHTML = '';
@@ -32,24 +33,12 @@ export default async function decorate(block) {
           </div>
       </div>
       <div class="events-cards-view">${linkTextElement?.outerHTML}</div>
-      <div>All Solutions: ${allSolutions}</div>
-      <div>Solutions: ${solutions}</div>
-      <div>Solutions Param: ${solutionsParam}</div>
     </div>
   `);
   // Appending header div to the block
   block.appendChild(headerDiv);
 
-  try {
-    await loadIms();
-  } catch {
-    // eslint-disable-next-line no-console
-    console.warn('Adobe IMS not available.');
-  }
-
   const param = {
-    solutionsParam,
-    noOfResults,
     contentType,
   };
 
@@ -73,22 +62,46 @@ export default async function decorate(block) {
     }
   });
 
+  /**
+   * fetchFilteredCardData filters the events data based on productFocus key in events JSON
+   * @param {string} data - The events json data.
+   * @param {string} params - The solutions tag parameter(s) from AEM UE.
+   * @returns The data for event cards associated with the specified solution tag in startTime ascending order.
+   */
   const fetchFilteredCardData = (data, params) => {
     const eventData = { data };
-    // Function to filter events based on product focus
-    function filterEventsByProduct(product) {
-      const paramArray = product.split(',');
-      // Check if data is not null
-      if (eventData.data) {
-        // eslint-disable-next-line no-use-before-define
-        return eventData.data.filter((event) =>
-          // eslint-disable-next-line no-shadow
-          paramArray.some((param) => event.product.includes(param.trim())),
-        );
+    if (eventData.data) {
+      const paramsArray = Array.isArray(params) ? params : [params];
+      if (paramsArray.length === 0 || paramsArray.some((p) => p === '')) {
+        return eventData.data;
       }
-      return []; // Return an empty array if the structure is not as expected
+
+      const lowercaseParams = paramsArray.map((parameter) => parameter.toLowerCase());
+
+      const filteredData = eventData.data.filter((event) => {
+        const productArray = Array.isArray(event.product) ? event.product : [event.product];
+        const lowercaseProduct = productArray.map((item) => item.toLowerCase().replaceAll(' ', '-'));
+        return lowercaseParams.some((parameter) => lowercaseProduct.includes(parameter.trim()));
+      });
+
+      // Sort events by startTime in ascending order
+      const sortedData = filteredData.sort(
+        (card1, card2) => new Date(card1.event.startTime) - new Date(card2.event.startTime),
+      );
+      return sortedData;
     }
-    const filteredLiveEvents = filterEventsByProduct(params);
-    return filteredLiveEvents;
+    return [];
   };
+}
+
+/**
+ * formattedSolutionTags returns the solution type by stripping off the exl:solution/ string
+ * @param {string} inputString - The solution tag. E.g. exl:solution/experience-cloud
+ * @returns the solution tag. E.g. experience-cloud
+ */
+function formattedSolutionTags(inputString) {
+  return inputString
+    .replace(/exl:solution\//g, '')
+    .split(',')
+    .map((part) => part.trim());
 }
