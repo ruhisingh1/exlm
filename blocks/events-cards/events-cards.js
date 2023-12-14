@@ -14,7 +14,7 @@ export default async function decorate(block) {
   const linkTextElement = block.querySelector('div:nth-child(3) > div > a');
   const allSolutions = block.querySelector('div:nth-child(4) > div').textContent.trim();
   const solutions = block.querySelector('div:nth-child(5) > div').textContent.trim();
-  const noOfResults = 4;
+  const noOfResults = 10;
   const solutionsParam = allSolutions === 'true' ? '' : solutions;
   const contentType = CONTENT_TYPES.LIVE_EVENTS.MAPPING_KEY;
 
@@ -78,6 +78,7 @@ export default async function decorate(block) {
       const paramArray = product.split(',');
       // Check if data is not null
       if (eventData.data) {
+        // eslint-disable-next-line no-use-before-define
         return eventData.data.filter((event) =>
           // eslint-disable-next-line no-shadow
           paramArray.some((param) => event.product.includes(param.trim())),
