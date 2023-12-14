@@ -1203,6 +1203,12 @@
         "label": "All Solutions?"
       },
       {
+        "component": "tag-picker",
+        "valueType": "string",
+        "name": "solution",
+        "label": "Tagpicker"
+      },
+      {
         "component": "multiselect",
         "name": "solutions",
         "label": "Solution(s)",
