@@ -15,7 +15,7 @@ export default async function decorate(block) {
   // const allSolutions = block.querySelector('div:nth-child(4) > div').textContent.trim();
   const solutions = block.querySelector('div:nth-child(4) > div').textContent.trim();
   const contentType = CONTENT_TYPES.LIVE_EVENTS.MAPPING_KEY;
-  const noOfResults = 20;
+  const noOfResults = 4;
   // eslint-disable-next-line no-use-before-define
   const solutionsParam = solutions !== '' ? formattedSolutionTags(solutions) : '';
   // If All Solutions toggle is on, solution param will be empty, else use solutions tag as param
@@ -33,7 +33,6 @@ export default async function decorate(block) {
           </div>
       </div>
       <div class="events-cards-view">${linkTextElement?.outerHTML}</div>
-      <div class="events-cards-view">${solutions}</div>
     </div>
   `);
   // Appending header div to the block
