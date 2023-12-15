@@ -12,14 +12,14 @@ export default async function decorate(block) {
   const headingElement = block.querySelector('div:nth-child(1) > div');
   const toolTipElement = block.querySelector('div:nth-child(2) > div');
   const linkTextElement = block.querySelector('div:nth-child(3) > div > a');
-  const allSolutions = block.querySelector('div:nth-child(4) > div').textContent.trim();
-  const solutions = block.querySelector('div:nth-child(5) > div').textContent.trim();
+  // const allSolutions = block.querySelector('div:nth-child(4) > div').textContent.trim();
+  const solutions = block.querySelector('div:nth-child(4) > div').textContent.trim();
   const contentType = CONTENT_TYPES.LIVE_EVENTS.MAPPING_KEY;
-  const noOfResults = 4;
+  const noOfResults = 11;
   // eslint-disable-next-line no-use-before-define
-  const solutionsTags = solutions !== '' ? formattedSolutionTags(solutions) : '';
+  const solutionsParam = solutions !== '' ? formattedSolutionTags(solutions) : '';
   // If All Solutions toggle is on, solution param will be empty, else use solutions tag as param
-  const solutionsParam = allSolutions === 'true' ? '' : solutionsTags;
+  // const solutionsParam = allSolutions === 'true' ? '' : solutionsTags;
 
   // Clearing the block's content
   block.innerHTML = '';

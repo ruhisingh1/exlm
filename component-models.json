@@ -1197,17 +1197,11 @@
         "description": "Sets the text url."
       },
       {
-        "component": "boolean",
-        "valueType": "boolean",
-        "name": "allSolutions",
-        "label": "All Solutions?"
-      },
-      {
         "component": "aem-tag",
         "name": "cq:tags",
         "label": "Solution(s)",
         "valueType": "string",
-        "description": "Ignored if All Solutions is active."
+        "description": "Optional - all are included if no selection is made."
       }
     ]
   }
