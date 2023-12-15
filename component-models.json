@@ -465,31 +465,31 @@
         "options": [
           {
             "name": "Certification",
-            "value": "certification"
+            "value": "Certification"
           },
           {
             "name": "Communities",
-            "value": "community"
+            "value": "Communities"
           },
           {
             "name": "Courses",
-            "value": "course"
+            "value": "Courses"
           },
           {
             "name": "Documentation",
-            "value": "documentation"
+            "value": "Documentation"
           },
           {
             "name": "On-Demand Event",
-            "value": "event"
+            "value": "On-Demand Event"
           },
           {
             "name": "Troubleshooting",
-            "value": "troubleshooting"
+            "value": "Troubleshooting"
           },
           {
             "name": "Tutorials",
-            "value": "tutorial"
+            "value": "Tutorials"
           }
         ]
       },

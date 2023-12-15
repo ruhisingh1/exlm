@@ -15,7 +15,7 @@ export default async function decorate(block) {
   // const allSolutions = block.querySelector('div:nth-child(4) > div').textContent.trim();
   const solutions = block.querySelector('div:nth-child(4) > div').textContent.trim();
   const contentType = CONTENT_TYPES.LIVE_EVENTS.MAPPING_KEY;
-  const noOfResults = 11;
+  const noOfResults = 20;
   // eslint-disable-next-line no-use-before-define
   const solutionsParam = solutions !== '' ? formattedSolutionTags(solutions) : '';
   // If All Solutions toggle is on, solution param will be empty, else use solutions tag as param
@@ -33,6 +33,7 @@ export default async function decorate(block) {
           </div>
       </div>
       <div class="events-cards-view">${linkTextElement?.outerHTML}</div>
+      <div class="events-cards-view">${solutions}</div>
     </div>
   `);
   // Appending header div to the block
@@ -73,7 +74,8 @@ export default async function decorate(block) {
     if (eventData.data) {
       const paramsArray = Array.isArray(params) ? params : [params];
       if (paramsArray.length === 0 || paramsArray.some((p) => p === '')) {
-        return eventData.data;
+        return eventData.data.sort((a, b) => new Date(a.event.startTime) - new Date(b.event.startTime));
+        
       }
 
       const lowercaseParams = paramsArray.map((parameter) => parameter.toLowerCase());
@@ -83,12 +85,11 @@ export default async function decorate(block) {
         const lowercaseProduct = productArray.map((item) => item.toLowerCase().replaceAll(' ', '-'));
         return lowercaseParams.some((parameter) => lowercaseProduct.includes(parameter.trim()));
       });
-
+       
       // Sort events by startTime in ascending order
-      const sortedData = filteredData.sort(
+      return filteredData.sort(
         (card1, card2) => new Date(card1.event.startTime) - new Date(card2.event.startTime),
       );
-      return sortedData;
     }
     return [];
   };
