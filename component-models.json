@@ -458,7 +458,7 @@
       {
         "component": "checkbox-group",
         "name": "contentTypes",
-        "label": "Filter by Content Type",
+        "label": "Filter by Content Type(s)",
         "description": "Select the content type(s).",
         "options": [
           {
