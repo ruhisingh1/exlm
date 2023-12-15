@@ -459,37 +459,36 @@
         "component": "checkbox-group",
         "valueType": "string",
         "name": "contentTypes",
-        "value": "",
         "label": "Filter by Content Type",
         "description": "Select the content type(s).",
         "options": [
           {
             "name": "Certification",
-            "value": "Certification"
+            "value": "certification"
           },
           {
             "name": "Communities",
-            "value": "Communities"
+            "value": "community"
           },
           {
             "name": "Courses",
-            "value": "Courses"
+            "value": "course"
           },
           {
             "name": "Documentation",
-            "value": "Documentation"
+            "value": "documentation"
           },
           {
             "name": "On-Demand Event",
-            "value": "On-Demand Event"
+            "value": "event"
           },
           {
             "name": "Troubleshooting",
-            "value": "Troubleshooting"
+            "value": "troubleshooting"
           },
           {
             "name": "Tutorials",
-            "value": "Tutorials"
+            "value": "tutorial"
           }
         ]
       },
