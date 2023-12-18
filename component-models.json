@@ -456,9 +456,16 @@
         "description": "Sets the text url."
       },
       {
+<<<<<<< HEAD
         "component": "checkbox-group",
         "name": "contentTypes",
         "label": "Filter by Content Type(s)",
+=======
+        "component": "multiselect",
+        "valueType": "string",
+        "name": "contentTypes",
+        "label": "Filter by Content Type",
+>>>>>>> b7c1fb19dd53a502a703cd88b46ffb6abed9f339
         "description": "Select the content type(s).",
         "options": [
           {
@@ -496,6 +503,7 @@
         "name": "cq:tags",
         "label": "Solution(s) or Feature(s)",
         "valueType": "string",
+        "rootPath": "/content/cq:tags/exl",
         "description": "Optional - all are included if no selection is made."
       },
       {
@@ -541,55 +549,6 @@
           {
             "name": "Advanced",
             "value": "Advanced"
-          }
-        ]
-      },
-      {
-        "component": "multiselect",
-        "name": "industries",
-        "label": "Industries",
-        "valueType": "string",
-        "description": "Sets the industries param.",
-        "options": [
-          {
-            "name": "Financial services",
-            "value": "Financial services"
-          },
-          {
-            "name": "High tech",
-            "value": "High tech"
-          },
-          {
-            "name": "Government",
-            "value": "Government"
-          },
-          {
-            "name": "Telecommunications",
-            "value": "Telecommunications"
-          },
-          {
-            "name": "Healthcare",
-            "value": "Healthcare"
-          },
-          {
-            "name": "Education",
-            "value": "Education"
-          },
-          {
-            "name": "Manufacturing",
-            "value": "Manufacturing"
-          },
-          {
-            "name": "Media and entertainment",
-            "value": "Media and entertainment"
-          },
-          {
-            "name": "Retail",
-            "value": "Retail"
-          },
-          {
-            "name": "Travel and hospitality",
-            "value": "Travel and hospitality"
           }
         ]
       },
@@ -1053,46 +1012,76 @@
     ]
   },
   {
-    "id": "events-cards",
+    "id": "featured-cards",
     "fields": [
       {
         "component": "text-input",
-        "valueType": "string",
         "name": "heading",
         "value": "",
         "label": "Heading",
+        "valueType": "string",
         "description": "Sets the heading."
       },
       {
-        "component": "text-input",
-        "valueType": "string",
-        "name": "tooltip",
+        "component": "text-area",
+        "name": "description",
         "value": "",
-        "label": "Tooltip",
-        "description": "Sets the tooltip."
+        "label": "Description",
+        "valueType": "string",
+        "description": "Sets the description."
+      },
+      {
+        "component": "multiselect",
+        "valueType": "string",
+        "name": "contentTypes",
+        "label": "Content type(s)",
+        "description": "Select the content type(s).",
+        "options": [
+          {
+            "name": "Certification",
+            "value": "certification"
+          },
+          {
+            "name": "Communities",
+            "value": "community"
+          },
+          {
+            "name": "Courses",
+            "value": "course"
+          },
+          {
+            "name": "Documentation",
+            "value": "documentation"
+          },
+          {
+            "name": "On-Demand Event",
+            "value": "event"
+          },
+          {
+            "name": "Troubleshooting",
+            "value": "troubleshooting"
+          },
+          {
+            "name": "Tutorials",
+            "value": "tutorial"
+          }
+        ]
       },
       {
         "component": "text-input",
-        "valueType": "string",
         "name": "linkText",
         "value": "",
-        "label": "Link text",
+        "label": "Link Text",
+        "valueType": "string",
         "description": "Sets the text for link."
       },
       {
         "component": "text-input",
-        "valueType": "string",
         "name": "link",
         "value": "",
         "label": "Link URL",
-        "description": "Sets the text url."
-      },
-      {
-        "component": "aem-tag",
-        "name": "cq:tags",
-        "label": "Solution(s)",
         "valueType": "string",
-        "description": "Optional - all are included if no selection is made."
+        "description": "Sets the text url."
       }
     ]
   }

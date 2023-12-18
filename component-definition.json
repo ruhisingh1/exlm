@@ -390,15 +390,19 @@
           }
         },
         {
-          "title": "Events Cards",
-          "id": "events-cards",
+          "title": "Featured Cards",
+          "id": "featured-cards",
           "plugins": {
             "aem": {
               "page": {
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
-                  "name": "Events Cards",
-                  "model": "events-cards"
+                  "name": "Featured Cards",
+                  "model": "featured-cards",
+                  "heading": "Heading text",
+                  "description": "Lorem ipsum dolor sit amet",
+                  "linkText": "Browse more learning content >",
+                  "link": "/content/exlm/global/en"
                 }
               }
             }
