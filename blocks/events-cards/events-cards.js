@@ -2,8 +2,8 @@ import { decorateIcons } from '../../scripts/lib-franklin.js';
 import BrowseCardsDelegate from '../../scripts/browse-card/browse-cards-delegate.js';
 import { htmlToElement } from '../../scripts/scripts.js';
 import buildCard from '../../scripts/browse-card/browse-card.js';
-import { CONTENT_TYPES } from '../../scripts/browse-card/browse-cards-constants.js';
 import buildPlaceholder from '../../scripts/browse-card/browse-card-placeholder.js';
+import { CONTENT_TYPES } from '../../scripts/browse-card/browse-cards-constants.js';
 
 /**
  * formattedSolutionTags returns the solution type by stripping off the exl:solution/ string
@@ -33,10 +33,11 @@ export default async function decorate(block) {
 
   // Clearing the block's content
   block.innerHTML = '';
+  block.classList.add('browse-cards-block');
 
   const headerDiv = htmlToElement(`
-    <div class="events-cards-header">
-      <div class="events-cards-title">
+    <div class="events-cards-header browse-cards-block-header">
+      <div class="events-cards-title browse-cards-block-title">
           <h4>${headingElement?.textContent.trim()}</h4>
           <div class="tooltip">
             <span class="icon icon-info"></span><span class="tooltip-text">${toolTipElement?.textContent.trim()}</span>
@@ -47,7 +48,8 @@ export default async function decorate(block) {
   `);
   // Appending header div to the block
   block.appendChild(headerDiv);
-  block.classList.add('browse-cards-block');
+  const contentDiv = document.createElement('div');
+  contentDiv.classList.add('events-cards-content', 'browse-cards-block-content');
 
   const parameters = {
     contentType,
@@ -63,9 +65,6 @@ export default async function decorate(block) {
         el.remove();
       });
       if (filteredLiveEventsData?.length) {
-        const contentDiv = document.createElement('div');
-        contentDiv.classList.add('events-cards-content');
-
         for (let i = 0; i < Math.min(noOfResults, filteredLiveEventsData.length); i += 1) {
           const cardData = filteredLiveEventsData[i];
           const cardDiv = document.createElement('div');
