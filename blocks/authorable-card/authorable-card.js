@@ -21,7 +21,7 @@ export default async function decorate(block) {
   links.push(block.querySelector('div:nth-child(7) > div').textContent);
 
   // Clearing the block's content
-  block.innerHTML = '';
+  // block.innerHTML = '';
   block.classList.add('browse-cards-block');
 
   const headerDiv = htmlToElement(`

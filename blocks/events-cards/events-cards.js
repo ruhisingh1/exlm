@@ -34,7 +34,7 @@ export default async function decorate(block) {
   // Clearing the block's content
   block.innerHTML = '';
   block.classList.add('browse-cards-block');
-
+  decorateIcons(block);
   const headerDiv = htmlToElement(`
     <div class="browse-cards-block-header">
       <div class="browse-cards-block-title">
