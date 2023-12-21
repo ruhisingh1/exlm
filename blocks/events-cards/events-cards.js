@@ -135,6 +135,7 @@ export default async function decorate(block) {
       const solutionsList = Array.isArray(params) ? params : [params];
       // If solutions param is empty or contains an empty value, return all the results in startTime ascending order
       if (solutionsList.length === 0 || solutionsList.some((param) => param === '')) {
+        console.log(eventData.data);
         return eventData.data
           .filter((card) => card.event.time)
           .sort((card1, card2) => convertTimeString(card1.event.time) - convertTimeString(card2.event.time));

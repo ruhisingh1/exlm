@@ -26,11 +26,9 @@ const BrowseCardsLiveEventsAdaptor = (() => {
     const { productFocus, eventTitle, eventDescription, startTime, endTime, time, cta } = result || {};
     const product = Array.isArray(productFocus) ? productFocus[0] : '';
     const { ctaLabel, ctaLink } = cta || {};
-
     const eventStartTime = new Date(`${startTime}Z`);
     const eventEndTime = new Date(`${endTime}Z`);
     const currentDate = new Date();
-
     if (currentDate >= eventStartTime && currentDate <= eventEndTime) {
       return {
         ...browseCardDataModel,

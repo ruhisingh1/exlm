@@ -279,6 +279,8 @@
   --spectrum-alias-text-color-hover: var(--spectrum-global-color-gray-900);
 
   /* Non-Spectrum custom colors */
+  --non-spectrum-grey-100: #f9f9f9;
+  --non-spectrum-grey-333: #333;
   --non-spectrum-eerie-black: #1e1e1e;
   --non-spectrum-custom-dark: #363636;
   --non-spectrum-dark-charcoal: #323232;
@@ -650,6 +652,38 @@ img {
 
   @include breakpoint(tablet) {
     padding: 30px 32px 32px;
+  }
+}
+
+/* the browse rail is hidden by default */
+main > div.browse-rail {
+  display: none;
+}
+
+/* browse rail breakpoint same as main hamburger menu */
+@media (width >= 1024px) {
+  body[class^='browse-'] > main {
+    display: grid;
+    grid-template:
+      'browse-rail main'
+      / 256px 1fr;
+
+    /* on pages with rails the max width must be on main */
+    max-width: var(--non-spectrum-max-width);
+    margin: auto;
+  }
+
+  main > div.section {
+    grid-column: 2;
+  }
+
+  main > div.section.browse-rail {
+    display: initial;
+    grid-column: 1;
+    grid-row: 1 / infinite;
+    width: 224px;
+    height: 100%;
+    padding: 0 0 0 32px;
   }
 }
 
