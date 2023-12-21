@@ -1006,6 +1006,10 @@
     ]
   },
   {
+    "id": "test-block",
+    "fields": []
+  },
+  {
     "id": "featured-cards",
     "fields": [
       {
