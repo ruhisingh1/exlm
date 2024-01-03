@@ -55,14 +55,18 @@ export default async function decorate(block) {
     contentType,
   };
 
-  block.appendChild(buildPlaceholder());
+  const shimmerCardParent = document.createElement('div');
+  shimmerCardParent.classList.add('browse-card-shimmer');
+  block.appendChild(shimmerCardParent);
+
+  shimmerCardParent.appendChild(buildPlaceholder());
   const browseCardsContent = BrowseCardsDelegate.fetchCardData(parameters);
   browseCardsContent
     .then((data) => {
       // eslint-disable-next-line no-use-before-define
       const filteredLiveEventsData = fetchFilteredCardData(data, solutionsParam);
       block.querySelectorAll('.shimmer-placeholder').forEach((el) => {
-        el.remove();
+        el.classList.add('hide-shimmer');
       });
       if (filteredLiveEventsData?.length) {
         for (let i = 0; i < Math.min(noOfResults, filteredLiveEventsData.length); i += 1) {
@@ -72,13 +76,13 @@ export default async function decorate(block) {
           contentDiv.appendChild(cardDiv);
         }
 
-        block.appendChild(contentDiv);
+        shimmerCardParent.appendChild(contentDiv);
         decorateIcons(contentDiv);
       }
     })
     .catch((err) => {
       block.querySelectorAll('.shimmer-placeholder').forEach((el) => {
-        el.remove();
+        el.classList.add('hide-shimmer');
       });
       // eslint-disable-next-line no-console
       console.error('Events Cards:', err);
