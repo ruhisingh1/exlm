@@ -1,16 +1,6 @@
 import { decorateIcons } from '../../scripts/lib-franklin.js';
 import { htmlToElement } from '../../scripts/scripts.js';
 
-function getTags(item) {
-  let actualTagBase64Encoded = '';
-  const lastIndex = item.lastIndexOf('/');
-  if (lastIndex !== -1) {
-    actualTagBase64Encoded = item.substring(lastIndex + 1);
-    return actualTagBase64Encoded;
-  }
-
-  return actualTagBase64Encoded;
-}
 
 /**
  * formattedTopicsTags returns the array of base64 encoded tags after extracting from the tags selected in dialog
@@ -18,17 +8,16 @@ function getTags(item) {
  * @returns the topic tag. E.g. QXBwIEJ1aWxkZXI=
  */
 function formattedTopicsTags(inputString) {
-  let base64EncodedTagsArray = [];
-  if (inputString.includes(',')) {
-    const splitArray = inputString.split(',');
-    // eslint-disable-next-line array-callback-return
-    base64EncodedTagsArray = splitArray.map((item) => {
-      getTags(item);
-    });
-    return base64EncodedTagsArray;
-  }
-
-  return [getTags(inputString)];
+  const splitArray = inputString.split(',');
+  // eslint-disable-next-line array-callback-return, consistent-return
+  const base64EncodedTagsArray = splitArray.map((item) => {
+    const lastIndex = item.lastIndexOf('/');
+    if (lastIndex !== -1) {
+      const actualTagBase64Encoded = item.substring(lastIndex + 1);
+      return actualTagBase64Encoded;
+    }
+  });
+  return base64EncodedTagsArray;
 }
 
 export default async function decorate(block) {
@@ -36,8 +25,7 @@ export default async function decorate(block) {
   const headingElement = block.querySelector('div:nth-child(1) > div');
   const topics = block.querySelector('div:nth-child(2) > div').textContent.trim();
   const allTopicsTags = topics !== '' ? formattedTopicsTags(topics) : '';
-  // console.log(allTopicsTags);
-
+  
   // Clearing the block's content
   block.innerHTML = '';
   block.classList.add('browse-topics-block');
