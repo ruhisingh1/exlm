@@ -1,3 +1,4 @@
+import { Buffer } from 'buffer';
 import { decorateIcons } from '../../scripts/lib-franklin.js';
 import { htmlToElement } from '../../scripts/scripts.js';
 
@@ -45,11 +46,12 @@ export default async function decorate(block) {
   contentDiv.classList.add('browse-topics-block-content');
 
   allTopicsTags.forEach((topicsButtonTitle) => {
+    console.log(Buffer.from(topicsButtonTitle, 'base64').toString('utf-8'));
     const topicsButtonDiv = document.createElement('div');
     topicsButtonDiv.classList.add('browse-topics');
     topicsButtonDiv.classList.add('topic');
     // decode tags here using atob
-    topicsButtonDiv.innerHTML = atob(topicsButtonTitle);
+    topicsButtonDiv.innerHTML = Buffer.from(topicsButtonTitle, 'base64').toString('utf-8');
     // click event goes here
     contentDiv.appendChild(topicsButtonDiv);
   });
