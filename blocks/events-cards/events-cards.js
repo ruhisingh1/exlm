@@ -11,10 +11,7 @@ import { CONTENT_TYPES } from '../../scripts/browse-card/browse-cards-constants.
  * @returns the solution tag. E.g. experience-cloud
  */
 function formattedSolutionTags(inputString) {
-  return inputString
-    .replace(/exl-encoded:solution\//g, '')
-    .split(',')
-    .map((part) => part.trim());
+  return inputString.split(',').map(entry => entry.split('/')[1].split(':')[1]);
 }
 
 /**
