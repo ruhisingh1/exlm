@@ -31,7 +31,8 @@ export default async function decorate(block) {
     for (let i = 0; i < items.length; i += 1) {
       const item = items[i];
       if (item.startsWith(prefix)) {
-        result.push(window.atob(item.substring(prefix.length)));
+        console.log(atob(item.substring(prefix.length), 'utf-8'));
+        result.push(atob(item.substring(prefix.length)));
       }
     }
     return result.length > 0 ? result : null;

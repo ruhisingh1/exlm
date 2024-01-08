@@ -1,7 +1,5 @@
-import { Buffer } from 'buffer';
 import { decorateIcons } from '../../scripts/lib-franklin.js';
 import { htmlToElement } from '../../scripts/scripts.js';
-
 
 /**
  * formattedTopicsTags returns the array of base64 encoded tags after extracting from the tags selected in dialog
@@ -26,7 +24,7 @@ export default async function decorate(block) {
   const headingElement = block.querySelector('div:nth-child(1) > div');
   const topics = block.querySelector('div:nth-child(2) > div').textContent.trim();
   const allTopicsTags = topics !== '' ? formattedTopicsTags(topics) : '';
-  
+
   // Clearing the block's content
   block.innerHTML = '';
   block.classList.add('browse-topics-block');
@@ -46,12 +44,11 @@ export default async function decorate(block) {
   contentDiv.classList.add('browse-topics-block-content');
 
   allTopicsTags.forEach((topicsButtonTitle) => {
-    console.log(Buffer.from(topicsButtonTitle, 'base64').toString('utf-8'));
     const topicsButtonDiv = document.createElement('div');
     topicsButtonDiv.classList.add('browse-topics');
     topicsButtonDiv.classList.add('topic');
     // decode tags here using atob
-    topicsButtonDiv.innerHTML = Buffer.from(topicsButtonTitle, 'base64').toString('utf-8');
+    topicsButtonDiv.innerHTML = atob(topicsButtonTitle);
     // click event goes here
     contentDiv.appendChild(topicsButtonDiv);
   });

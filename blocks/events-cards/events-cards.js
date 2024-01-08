@@ -11,7 +11,10 @@ import { CONTENT_TYPES } from '../../scripts/browse-card/browse-cards-constants.
  * @returns the solution tag. E.g. experience-cloud
  */
 function formattedSolutionTags(inputString) {
-  return inputString.split(',').map(entry => entry.split('/')[1].split(':')[1]);
+  return inputString
+    .replace(/exl-encoded:solution\//g, '')
+    .split(',')
+    .map((part) => part.trim());
 }
 
 /**
@@ -25,7 +28,7 @@ export default async function decorate(block) {
   const linkTextElement = block.querySelector('div:nth-child(3) > div > a');
   const solutions = block.querySelector('div:nth-child(4) > div').textContent.trim();
   const contentType = CONTENT_TYPES.LIVE_EVENTS.MAPPING_KEY;
-  const noOfResults = 10;
+  const noOfResults = 4;
   const solutionsParam = solutions !== '' ? formattedSolutionTags(solutions) : '';
 
   // Clearing the block's content
@@ -46,8 +49,10 @@ export default async function decorate(block) {
   // Appending header div to the block
   block.appendChild(headerDiv);
   await decorateIcons(headerDiv);
+
   const contentDiv = document.createElement('div');
   contentDiv.classList.add('browse-cards-block-content');
+
   const parameters = {
     contentType,
   };
@@ -136,18 +141,15 @@ export default async function decorate(block) {
       const solutionsList = Array.isArray(params) ? params : [params];
       // If solutions param is empty or contains an empty value, return all the results in startTime ascending order
       if (solutionsList.length === 0 || solutionsList.some((param) => param === '')) {
-        console.log(eventData.data);
         return eventData.data
           .filter((card) => card.event.time)
           .sort((card1, card2) => convertTimeString(card1.event.time) - convertTimeString(card2.event.time));
       }
-
-      const decodedParams = solutionsList.map((parameter) => atob(parameter));
-      // const regex = /[^a-zA-Z0-9().]+/g;
+      const solutionParam = solutionsList.map((parameter) => window.atob(parameter));
       const filteredData = eventData.data.filter((event) => {
         const productArray = Array.isArray(event.product) ? event.product : [event.product];
-        const product = productArray.map((item) => item);
-        return decodedParams.some((parameter) => product.includes(parameter.trim()));
+        const productKey = productArray.map((item) => item);
+        return solutionParam.some((parameter) => productKey.includes(parameter.trim()));
       });
 
       // Sort events by startTime in ascending order
