@@ -24,7 +24,7 @@ indices:
           parseTimestamp(headers['last-modified'], 'ddd, DD MMM YYYY hh:mm:ss GMT')
     browse:
     include:
-      - /global/en/browse/**
+      - /en/browse/**
     target: /browse-all-index.json
     properties:
       title:
