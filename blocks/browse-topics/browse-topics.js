@@ -3,7 +3,11 @@ import { htmlToElement } from '../../scripts/scripts.js';
 
 /**
  * formattedTopicsTags returns the array of base64 encoded tags after extracting from the tags selected in dialog
+<<<<<<< HEAD
  * @param {string} inputString - The topics tag. E.g. exl-encoded:topic/QXBwIEJ1aWxkZXI=
+=======
+ * @param {string} inputString - The topics tag. E.g. exl:topic/QXBwIEJ1aWxkZXI=
+>>>>>>> bb451f8afbded7274514f343d175aeb6db828f34
  * @returns the topic tag. E.g. QXBwIEJ1aWxkZXI=
  */
 function formattedTopicsTags(inputString) {
