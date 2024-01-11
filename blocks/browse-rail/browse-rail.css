@@ -1,15 +1,14 @@
 .browse-rail .browse-more-products a {
-    background-color: var(--background-color);
     color: var(--non-spectrum-dark-navy-blue);
-    margin: 0;
+    margin: 20px 0 24px 0;
     display: flex;
     align-items: center;
     gap: 4px;
-    top: 4px;
     position: relative;
-    font-weight: var(--font-weight-600);
+    font-weight: normal;
     font-size: var(--spectrum-font-size-100);
     line-height: 17px;
+    padding-left: 5px;
 }
 
 .browse-rail ul {
@@ -37,8 +36,10 @@
     position: relative;
 }
 
+
 .browse-rail ul.topics>li>a::after,
-.browse-rail ul.products>li>a::after {
+.browse-rail ul.products>li>a::after,
+.browse-rail ul.subPages>li.hasSubPages>a::after {
     content: url("../../icons/chevron_down.svg");
     position: absolute;
     right: 0;
@@ -62,11 +63,36 @@
     width: 100%;
     margin: 0;
     border-radius: 4px;
-    padding: 5px 12px;
-    color: var(--non-spectrum-grey-updated, var(--spectrum-alias-text-color-hover));
-    padding-left: 24px;
+    padding: 5px 0 5px 12px;
+    color: var(--spectrum-gray-700);
 }
 
 .hidden {
     display: none;
+}
+
+.browse-rail > ul > li >ul a:hover, 
+.browse-rail > ul > li >ul a.is-active{
+    background-color: var(--spectrum-gray-200);
+    border-radius: 4px;
+}
+.browse-rail .browse-by {
+    border-bottom: 1px solid var(--spectrum-gray-200);
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+}
+.browse-rail >ul >li>a,
+.browse-rail >ul >li >a {
+    font-size: var(--spectrum-font-size-75);
+    font-weight: bold;
+}
+.browse-rail .browse-by >li >ul {
+    margin-left: 12px;
+}
+.browse-rail ul li .left-rail-view-more a,
+.browse-rail ul li .left-rail-view-less a {
+    font-size: var(--spectrum-font-size-100);
+    color: var(--non-spectrum-link);
+    cursor: pointer;
+    text-transform: none;
 }
