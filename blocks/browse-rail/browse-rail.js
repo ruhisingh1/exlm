@@ -1,7 +1,13 @@
 import ffetch from '../../scripts/ffetch.js';
 import { getMetadata, fetchPlaceholders } from '../../scripts/lib-franklin.js';
 
-const placeholders = await fetchPlaceholders();
+let placeholders = {};
+try {
+  placeholders = await fetchPlaceholders();
+} catch (err) {
+  // eslint-disable-next-line no-console
+  console.error('Error fetching placeholders:', err);
+}
 
 // Utility function to check if the element is visible on the page.
 function isVisible(element) {
@@ -147,7 +153,7 @@ export default async function decorate(block) {
   const theme = getMetadata('theme');
   const label = getMetadata('og:title');
 
-  const results = await ffetch('/browse-all-index.json').all();
+  const results = await ffetch('/browse-index.json').all();
   const currentPagePath = window.location.pathname;
   // Find the parent page for product sub-pages
   const parentPage = results.find((page) => page.path === getPathUntilLevel(currentPagePath, 3));
@@ -199,7 +205,8 @@ export default async function decorate(block) {
       block.append(productsUL);
 
       // Check if there are less than 12 items, and hide the "View More" link accordingly
-      if (ul.children.length <= 12) {
+      const liElements = ul.getElementsByTagName('li');
+      if (liElements && liElements.length <= 12) {
         document.getElementById('viewMoreLink').style.display = 'none';
       }
 

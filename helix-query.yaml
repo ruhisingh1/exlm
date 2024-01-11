@@ -22,17 +22,10 @@ indices:
         select: none
         value: |
           parseTimestamp(headers['last-modified'], 'ddd, DD MMM YYYY hh:mm:ss GMT')
-<<<<<<< HEAD
-    browse:
-    include:
-      - /en/browse/**
-    target: /browse-all-index.json
-=======
   browse:
     include:
       - /en/browse/**
     target: /browse-index.json
->>>>>>> bb451f8afbded7274514f343d175aeb6db828f34
     properties:
       title:
         select: head > meta[property="og:title"]
