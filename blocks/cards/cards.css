@@ -32,6 +32,7 @@
   width: 256px;
 }
 
+<<<<<<< HEAD
 .cards .tooltip {
   position: relative;
   margin: 4px 0 0 9px;
@@ -118,3 +119,10 @@
       margin-top: 7px;
   }
 }
+=======
+.cards > ul > li img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+}
+>>>>>>> 5f5d71ee296884b483aa2bff2de87d6e22cd71ff
