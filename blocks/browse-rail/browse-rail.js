@@ -1,6 +1,7 @@
 import ffetch from '../../scripts/ffetch.js';
 import { getMetadata, fetchPlaceholders } from '../../scripts/lib-franklin.js';
 import { filterSubPages, convertToMultiMap, convertToULList, sortFirstLevelList } from './browse-rail-utils.js';
+import { getEDSLink, getLink } from '../../scripts/scripts.js';
 
 // Utility function to toggle visibility of items
 function toggleItemVisibility(itemList, startIndex, show) {
@@ -59,7 +60,7 @@ export default async function decorate(block) {
   const label = getMetadata('og:title');
 
   const results = await ffetch('/browse-index.json').all();
-  const currentPagePath = window.location.pathname;
+  const currentPagePath = getEDSLink(window.location.pathname);
   // Find the parent page for product sub-pages
   const parentPage = results.find((page) => page.path === getPathUntilLevel(currentPagePath, 3));
   let parentPageTitle = '';
@@ -86,7 +87,7 @@ export default async function decorate(block) {
     viewMore = placeholders.viewMore;
     viewLess = placeholders.viewLess;
     browseMoreProducts = placeholders.browseMoreProducts;
-    browseMoreProductsLink = placeholders.browseMoreProductsLink;
+    browseMoreProductsLink = getLink(placeholders.browseMoreProductsLink);
     topics = placeholders.topics;
     products = placeholders.products;
     all = placeholders.all;
@@ -127,7 +128,7 @@ export default async function decorate(block) {
 
       sortedResults.forEach((item) => {
         const li = document.createElement('li');
-        li.innerHTML = `<a href="${item.path}">${item.title}</a>`;
+        li.innerHTML = `<a href="${getLink(item.path)}">${item.title}</a>`;
         ul.appendChild(li);
       });
 
