@@ -12,8 +12,8 @@ function toggleItemVisibility(itemList, startIndex, show) {
 }
 
 // Utility function to set link visibility
-function setLinkVisibility(linkClass, show) {
-  const linkElement = document.querySelector(linkClass);
+function setLinkVisibility(block, linkClass, show) {
+  const linkElement = block.querySelector(linkClass);
   if (linkElement) {
     linkElement.style.display = show ? 'block' : 'none';
   }
@@ -39,19 +39,19 @@ function getPathUntilLevel(originalUrl, levels) {
 }
 
 // Function to handle "View More" click
-function handleViewMoreClick() {
-  const itemList = document.querySelectorAll('.products > li > ul > li');
+function handleViewMoreClick(block) {
+  const itemList = block.querySelectorAll('.products > li > ul > li');
   toggleItemVisibility(itemList, 12, true);
-  setLinkVisibility('.viewMoreLink', false);
-  setLinkVisibility('.viewLessLink', true);
+  setLinkVisibility(block, '.viewMoreLink', false);
+  setLinkVisibility(block, '.viewLessLink', true);
 }
 
 // Function to handle "View Less" click
-function handleViewLessClick() {
-  const itemList = document.querySelectorAll('.products > li > ul > li');
+function handleViewLessClick(block) {
+  const itemList = block.querySelectorAll('.products > li > ul > li');
   toggleItemVisibility(itemList, 12, false);
-  setLinkVisibility('.viewMoreLink', true);
-  setLinkVisibility('.viewLessLink', false);
+  setLinkVisibility(block, '.viewMoreLink', true);
+  setLinkVisibility(block, '.viewLessLink', false);
 }
 
 // Main function to decorate the block
@@ -60,7 +60,12 @@ export default async function decorate(block) {
   const label = getMetadata('og:title');
 
   const results = await ffetch('/browse-index.json').all();
-  const currentPagePath = getEDSLink(window.location.pathname);
+  let currentPagePath = getEDSLink(window.location.pathname);
+  // For browse-rail in AEM Author
+  if (currentPagePath.includes('/content')) {
+    const index = currentPagePath.indexOf('/global');
+    currentPagePath = currentPagePath.substring(0, index) + currentPagePath.substring(index + '/global'.length);
+  }
   // Find the parent page for product sub-pages
   const parentPage = results.find((page) => page.path === getPathUntilLevel(currentPagePath, 3));
   let parentPageTitle = '';
@@ -69,29 +74,9 @@ export default async function decorate(block) {
     parentPageTitle = parentPage.title;
   }
 
-  let browseBy = 'Browse By';
-  let browseAllContent = 'Browse all content';
-  let viewMore = 'View more';
-  let viewLess = 'View Less';
-  let browseMoreProducts = 'Browse more products >';
-  let browseMoreProductsLink = '/en/browse';
-  let topics = 'TOPICS';
-  let products = 'PRODUCTS';
-  let all = 'All';
-  let content = 'content';
   let placeholders = {};
   try {
     placeholders = await fetchPlaceholders();
-    browseBy = placeholders.browseBy;
-    browseAllContent = placeholders.browseAllContent;
-    viewMore = placeholders.viewMore;
-    viewLess = placeholders.viewLess;
-    browseMoreProducts = placeholders.browseMoreProducts;
-    browseMoreProductsLink = getLink(placeholders.browseMoreProductsLink);
-    topics = placeholders.topics;
-    products = placeholders.products;
-    all = placeholders.all;
-    content = placeholders.content;
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error('Error fetching placeholders:', err);
@@ -103,7 +88,7 @@ export default async function decorate(block) {
     const browseByUL = document.createElement('ul');
     browseByUL.classList.add('browse-by');
     const browseByLI = document.createElement('li');
-    browseByLI.innerHTML = `<a href="javascript:void(0)">${browseBy}</a><ul><li><a href="javascript:void(0)" class="is-active">${browseAllContent}</a></li></ul>`;
+    browseByLI.innerHTML = `<a href="javascript:void(0)">${placeholders.browseBy}</a><ul><li><a href="javascript:void(0)" class="is-active">${placeholders.browseAllContent}</a></li></ul>`;
     browseByUL.append(browseByLI);
     block.append(browseByUL);
 
@@ -117,7 +102,7 @@ export default async function decorate(block) {
       const productsUL = document.createElement('ul');
       productsUL.classList.add('products');
       const productsLI = document.createElement('li');
-      productsLI.innerHTML = `<a href="javascript:void(0)">${products}</a><span class="js-toggle"></span>`;
+      productsLI.innerHTML = `<a href="javascript:void(0)">${placeholders.products}</a><span class="js-toggle"></span>`;
 
       const ul = document.createElement('ul');
       const sortedResults = directChildNodes.sort((a, b) => {
@@ -141,12 +126,12 @@ export default async function decorate(block) {
       // "View More" and "View Less" links
       const viewMoreDiv = document.createElement('div');
       viewMoreDiv.classList.add('left-rail-view-more');
-      viewMoreDiv.innerHTML = `<a class="viewMoreLink"> + ${viewMore}</a>`;
+      viewMoreDiv.innerHTML = `<a class="viewMoreLink"> + ${placeholders.viewMore}</a>`;
       ul.append(viewMoreDiv);
 
       const viewLessDiv = document.createElement('div');
       viewLessDiv.classList.add('left-rail-view-less');
-      viewLessDiv.innerHTML = `<a class="viewLessLink" style="display: none;"> - ${viewLess}</a>`;
+      viewLessDiv.innerHTML = `<a class="viewLessLink" style="display: none;"> - ${placeholders.viewLess}</a>`;
       ul.append(viewLessDiv);
 
       // Check if there are less than 12 items, and hide the "View More" link accordingly
@@ -156,25 +141,25 @@ export default async function decorate(block) {
       }
 
       // Event listeners for "View More" and "View Less" links
-      block.querySelector('.viewMoreLink').addEventListener('click', handleViewMoreClick);
-      block.querySelector('.viewLessLink').addEventListener('click', handleViewLessClick);
+      block.querySelector('.viewMoreLink').addEventListener('click', () => handleViewMoreClick(block));
+      block.querySelector('.viewLessLink').addEventListener('click', () => handleViewLessClick(block));
     }
   }
 
   // For Browse Product Pages
   if (theme !== 'browse-all') {
     // Add "Browse more products" link
-    const browseMoreProductsDiv = document.createElement('div');
-    browseMoreProductsDiv.classList.add('browse-more-products');
-    browseMoreProductsDiv.innerHTML = `<a href="${browseMoreProductsLink}">${browseMoreProducts}</a>`;
-    block.append(browseMoreProductsDiv);
+    const browseMoreProducts = document.createElement('div');
+    browseMoreProducts.classList.add('browse-more-products');
+    browseMoreProducts.innerHTML = `<a href="${placeholders.browseMoreProductsLink}">${placeholders.browseMoreProducts}</a>`;
+    block.append(browseMoreProducts);
 
     // Browse By
     const browseByUL = document.createElement('ul');
     browseByUL.classList.add('browse-by');
     const browseByLI = document.createElement('li');
-    const browseByLinkText = `${all} ${label} ${content}`;
-    browseByLI.innerHTML = `<a href="javascript:void(0)">${browseBy}</a><ul><li><a href="javascript:void(0)" class="is-active">${browseByLinkText}</a></li></ul>`;
+    const browseByLinkText = `${placeholders.all} ${label} ${placeholders.content}`;
+    browseByLI.innerHTML = `<a href="javascript:void(0)">${placeholders.browseBy}</a><ul><li><a href="javascript:void(0)" class="is-active">${browseByLinkText}</a></li></ul>`;
     browseByUL.append(browseByLI);
     block.append(browseByUL);
 
@@ -188,10 +173,10 @@ export default async function decorate(block) {
       const htmlList = convertToULList(resultMultiMap);
       block.appendChild(htmlList);
       sortFirstLevelList('.subPages');
-      const subPagesBrowseByLinkText = `${all} ${parentPageTitle} ${content}`;
+      const subPagesBrowseByLinkText = `${placeholders.all} ${parentPageTitle} ${placeholders.content}`;
       block.querySelector(
         '.browse-by > li',
-      ).innerHTML = `<a href="javascript:void(0)">${browseBy}</a><ul><li><a href="javascript:void(0)">${subPagesBrowseByLinkText}</a></li></ul>`;
+      ).innerHTML = `<a href="javascript:void(0)">${placeholders.browseBy}</a><ul><li><a href="javascript:void(0)">${subPagesBrowseByLinkText}</a></li></ul>`;
 
       // Hightlight the current page title in the left rail
       const targetElement = block.querySelector(`[href="${currentPagePath}"]`);
@@ -216,7 +201,8 @@ export default async function decorate(block) {
     if (browseTopicsContainer !== null) {
       const ulElement = document.createElement('ul');
       // Get all the topic elements inside the container
-      const topicElements = browseTopicsContainer.querySelectorAll('.browse-topics.topic');
+      const browseTopicsContent = document.querySelector('.browse-topics-block-content');
+      const topicElements = browseTopicsContent.querySelectorAll('.browse-topics.browse-topics-item');
       if (topicElements.length > 0) {
         topicElements.forEach((topicElement) => {
           const style = getComputedStyle(topicElement);
@@ -232,9 +218,9 @@ export default async function decorate(block) {
         const topicsLI = document.createElement('li');
         // Topics heading for product sub-pages
         if (parts.length >= 5 && parts[3] === currentPagePath.split('/')[3]) {
-          topicsLI.innerHTML = `<a href="javascript:void(0)">${parentPageTitle} ${topics}</a><span class="js-toggle"></span>`;
+          topicsLI.innerHTML = `<a href="javascript:void(0)">${parentPageTitle} ${placeholders.topics}</a><span class="js-toggle"></span>`;
         } else {
-          topicsLI.innerHTML = `<a href="javascript:void(0)">${label} ${topics}</a><span class="js-toggle"></span>`;
+          topicsLI.innerHTML = `<a href="javascript:void(0)">${label} ${placeholders.topics}</a><span class="js-toggle"></span>`;
         }
         topicsLI.append(ulElement);
         topicsUL.append(topicsLI);
