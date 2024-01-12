@@ -497,7 +497,7 @@
         "name": "cq:tags",
         "label": "Solution(s) or Feature(s)",
         "valueType": "string",
-        "rootPath": "/content/cq:tags/exl-encoded",
+        "rootPath": "/content/cq:tags/exl",
         "description": "Optional - all are included if no selection is made."
       },
       {
@@ -987,11 +987,24 @@
   },
   {
     "id": "browse-filters",
-    "fields": []
-  },
-  {
-    "id": "test-block",
-    "fields": []
+    "fields": [
+      {
+        "component": "text-input",
+        "valueType": "string",
+        "name": "heading",
+        "value": "",
+        "label": "Heading",
+        "description": "Sets the heading for topics."
+      },
+      {
+        "component": "aem-tag",
+        "name": "cq:tags",
+        "label": "Topics & Features",
+        "valueType": "string",
+        "rootPath": "/content/cq:tags/exl",
+        "description": "Select up to 15 topics."
+      }
+    ]
   },
   {
     "id": "featured-cards",
@@ -1107,7 +1120,7 @@
         "name": "cq:tags",
         "label": "Solution(s)",
         "valueType": "string",
-        "rootPath": "/content/cq:tags/exl-encoded/solution",
+        "rootPath": "/content/cq:tags/exl/solution",
         "description": "Optional - all are included if no selection is made."
       }
     ]
@@ -1262,27 +1275,6 @@
             "value": "descending"
           }
         ]
-      }
-    ]
-  },
-  {
-    "id": "browse-topics",
-    "fields": [
-      {
-        "component": "text-input",
-        "valueType": "string",
-        "name": "heading",
-        "value": "",
-        "label": "Heading",
-        "description": "Sets the heading."
-      },
-      {
-        "component": "aem-tag",
-        "name": "cq:tags",
-        "label": "Topics & Features",
-        "valueType": "string",
-        "rootPath": "/content/cq:tags/exl",
-        "description": "Select up to 15 topics."
       }
     ]
   },

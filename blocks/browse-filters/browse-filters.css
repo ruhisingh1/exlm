@@ -1,23 +1,6 @@
 @import "../../scripts/browse-card/browse-cards-block.css";
 @import "../../scripts/browse-card/browse-card.css";
-
-.browse-filters-title {
-  font-weight: bold;
-  font-size: 45px;
-  line-height: 67.5px;
-  text-align: left;
-  color: var(--spectrum-gray-800);
-  margin-bottom: 8px;
-}
-
-.browse-filters-description {
-  font-weight: normal;
-  font-size: 18px;
-  line-height: 23.4px;
-  text-align: left;
-  color: var(--spectrum-gray-800);
-  margin-bottom: 32px;
-}
+@import "../browse-topics/browse-topics.css";
 
 .browse-filters-form {
   display: flex;

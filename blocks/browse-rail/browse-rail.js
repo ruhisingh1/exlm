@@ -197,13 +197,13 @@ export default async function decorate(block) {
     }
 
     // Topics
-    const browseTopicsContainer = document.querySelector('.browse-topics-container');
+    const browseTopicsContainer = document.querySelector('.browse-filters-container');
     if (browseTopicsContainer !== null) {
       const ulElement = document.createElement('ul');
       // Get all the topic elements inside the container
       const browseTopicsContent = document.querySelector('.browse-topics-block-content');
       const topicElements = browseTopicsContent.querySelectorAll('.browse-topics.browse-topics-item');
-      if (topicElements.length > 0) {
+      if (topicElements && topicElements.length > 0) {
         topicElements.forEach((topicElement) => {
           const style = getComputedStyle(topicElement);
           if (style.display !== 'none' && style.visibility !== 'hidden') {
