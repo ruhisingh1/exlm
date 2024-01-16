@@ -196,7 +196,7 @@ export default async function decorate(block) {
       }
     }
   }
-  // Toggle functionality for products/sub-pages/topics
+  // Toggle functionality for products/sub-pages
   const toggleElements = block.querySelectorAll('.js-toggle');
   if (toggleElements) {
     toggleElements.forEach((toggleElement) => {
