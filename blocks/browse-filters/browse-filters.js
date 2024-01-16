@@ -12,7 +12,7 @@ import initiateCoveoHeadlessSearch, { fragment } from '../../scripts/coveo-headl
 import BrowseCardsCoveoDataAdaptor from '../../scripts/browse-card/browse-cards-coveo-data-adaptor.js';
 import buildCard from '../../scripts/browse-card/browse-card.js';
 import BuildPlaceholder from '../../scripts/browse-card/browse-card-placeholder.js';
-import { formattedTopicsTags, handleTopicSelection} from '../browse-topics/browse-topics.js';
+import { formattedTopicsTags, handleTopicSelection } from '../browse-topics/browse-topics.js';
 
 const coveoFacetMap = {
   Role: 'headlessRoleFacet',
@@ -677,15 +677,14 @@ function renderSortContainer(block) {
     });
   }
 }
-async function decorateBrowseTopics(block) {
-  // Extracting elements from the block
+function decorateBrowseTopics(block) {
+  const firstChild = block.querySelector('div:first-child');
+  const secondChild = block.querySelector('div:nth-child(2)');
   const headingElement = block.querySelector('div:nth-child(1) > div');
   const topics = block.querySelector('div:nth-child(2) > div').textContent.trim();
   const allTopicsTags = topics !== '' ? formattedTopicsTags(topics) : '';
-
-  // Clearing the block's content
-  block.innerHTML = '';
-  block.classList.add('browse-topics-block');
+  const div = document.createElement('div');
+  div.classList.add('browse-topics');
 
   const headerDiv = htmlToElement(`
     <div class="browse-topics-block-header">
@@ -694,62 +693,65 @@ async function decorateBrowseTopics(block) {
       </div>
     </div>
   `);
-  // Appending header div to the block
-  block.appendChild(headerDiv);
-  await decorateIcons(headerDiv);
+  
 
   const contentDiv = document.createElement('div');
   contentDiv.classList.add('browse-topics-block-content');
-
-  allTopicsTags.forEach((topicsButtonTitle) => {
-    const topicName = atob(topicsButtonTitle);
-    const topicsButtonDiv = createTag('button', { class: 'browse-topics browse-topics-item' });
-    topicsButtonDiv.dataset.topicname = topicName;
-    // decode tags here using atob
-    topicsButtonDiv.innerHTML = topicName;
-    // click event goes here
-    contentDiv.appendChild(topicsButtonDiv);
-  });
-
-  contentDiv.addEventListener('click', (e) => {
-    if (e.target?.classList?.contains('browse-topics-item')) {
-      if (e.target.classList.contains('browse-topics-item-active')) {
-        e.target.classList.remove('browse-topics-item-active');
-      } else {
-        e.target.classList.add('browse-topics-item-active');
-      }
-      handleTopicSelection(contentDiv);
-    }
-  });
-  const decodedHash = decodeURIComponent(window.location.hash);
-  const filtersInfo = decodedHash.split('&').find((s) => s.includes('@el_features'));
-  if (filtersInfo) {
-    let selectedTopics;
-    const [, multipleFeaturesCheck] = filtersInfo.match(/@el_features==\(([^)]+)/) || [];
-    let topicsString = multipleFeaturesCheck;
-    if (!topicsString) {
-      const [, singleFeatureCheck] = filtersInfo.match(/@el_features=("[^"]*")/) || [];
-      topicsString = singleFeatureCheck;
-    }
-    if (topicsString) {
-      selectedTopics = topicsString.split(',').map((s) => s.trim().replace(/"/g, ''));
-    }
-    selectedTopics.forEach((topic) => {
-      const element = contentDiv.querySelector(`.browse-topics-item[data-topicname="${topic}"]`);
-      element.classList.add('browse-topics-item-active');
+  if (allTopicsTags.length > 0) {
+    console.log('yes');
+    allTopicsTags.filter((value) => value !== undefined).forEach((topicsButtonTitle) => {
+      const topicName = atob(topicsButtonTitle);
+      const topicsButtonDiv = createTag('button', { class: 'browse-topics browse-topics-item' });
+      topicsButtonDiv.dataset.topicname = topicName;
+      topicsButtonDiv.innerHTML = topicName;
+      contentDiv.appendChild(topicsButtonDiv);
     });
-    handleTopicSelection(contentDiv);
-  }
-  block.appendChild(contentDiv);
 
+    contentDiv.addEventListener('click', (e) => {
+      if (e.target?.classList?.contains('browse-topics-item')) {
+        if (e.target.classList.contains('browse-topics-item-active')) {
+          e.target.classList.remove('browse-topics-item-active');
+        } else {
+          e.target.classList.add('browse-topics-item-active');
+        }
+        handleTopicSelection(contentDiv);
+      }
+    });
+    const decodedHash = decodeURIComponent(window.location.hash);
+    const filtersInfo = decodedHash.split('&').find((s) => s.includes('@el_features'));
+    if (filtersInfo) {
+      let selectedTopics;
+      const [, multipleFeaturesCheck] = filtersInfo.match(/@el_features==\(([^)]+)/) || [];
+      let topicsString = multipleFeaturesCheck;
+      if (!topicsString) {
+        const [, singleFeatureCheck] = filtersInfo.match(/@el_features=("[^"]*")/) || [];
+        topicsString = singleFeatureCheck;
+      }
+      if (topicsString) {
+        selectedTopics = topicsString.split(',').map((s) => s.trim().replace(/"/g, ''));
+      }
+      if (selectedTopics && selectedTopics.length > 0) {
+        selectedTopics.forEach((topic) => {
+          const element = contentDiv.querySelector(`.browse-topics-item[data-topicname="${topic}"]`);
+          element.classList.add('browse-topics-item-active');
+        });
+        handleTopicSelection(contentDiv);
+      }
+    }
+  }
+  
+  firstChild.parentNode.replaceChild(headerDiv, firstChild);
+  secondChild.parentNode.replaceChild(contentDiv, secondChild);
+  div.append(headerDiv);
+  div.append(contentDiv);
   /* Append browse topics right above the filters section */
   const filtersFormEl = document.querySelector('.browse-filters-form');
-  filtersFormEl.insertBefore(block, filtersFormEl.children[3]);
+  filtersFormEl.insertBefore(div, filtersFormEl.children[4]);
 }
 
 export default async function decorate(block) {
+ 
   enableTagsAsProxy(block);
-  decorateBrowseTopics(block);
   appendFormEl(block);
   constructFilterInputContainer(block);
   addLabel(block);
@@ -758,8 +760,10 @@ export default async function decorate(block) {
   });
   constructKeywordSearchEl(block);
   constructClearFilterBtn(block);
+
   appendToForm(block, renderTags());
   appendToForm(block, renderFilterResultsHeader());
+  decorateBrowseTopics(block);
   buildCardsShimmer = new BuildPlaceholder(getBrowseFiltersResultCount(), block.querySelector('.browse-filters-form'));
   initiateCoveoHeadlessSearch({
     handleSearchEngineSubscription,
