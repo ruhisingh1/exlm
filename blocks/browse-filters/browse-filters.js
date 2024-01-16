@@ -677,6 +677,7 @@ function renderSortContainer(block) {
     });
   }
 }
+
 function decorateBrowseTopics(block) {
   const firstChild = block.querySelector('div:first-child');
   const secondChild = block.querySelector('div:nth-child(2)');
@@ -693,19 +694,20 @@ function decorateBrowseTopics(block) {
       </div>
     </div>
   `);
-  
 
   const contentDiv = document.createElement('div');
   contentDiv.classList.add('browse-topics-block-content');
+
   if (allTopicsTags.length > 0) {
-    console.log('yes');
-    allTopicsTags.filter((value) => value !== undefined).forEach((topicsButtonTitle) => {
-      const topicName = atob(topicsButtonTitle);
-      const topicsButtonDiv = createTag('button', { class: 'browse-topics browse-topics-item' });
-      topicsButtonDiv.dataset.topicname = topicName;
-      topicsButtonDiv.innerHTML = topicName;
-      contentDiv.appendChild(topicsButtonDiv);
-    });
+    allTopicsTags
+      .filter((value) => value !== undefined)
+      .forEach((topicsButtonTitle) => {
+        const topicName = atob(topicsButtonTitle);
+        const topicsButtonDiv = createTag('button', { class: 'browse-topics browse-topics-item' });
+        topicsButtonDiv.dataset.topicname = topicName;
+        topicsButtonDiv.innerHTML = topicName;
+        contentDiv.appendChild(topicsButtonDiv);
+      });
 
     contentDiv.addEventListener('click', (e) => {
       if (e.target?.classList?.contains('browse-topics-item')) {
@@ -739,7 +741,7 @@ function decorateBrowseTopics(block) {
       }
     }
   }
-  
+
   firstChild.parentNode.replaceChild(headerDiv, firstChild);
   secondChild.parentNode.replaceChild(contentDiv, secondChild);
   div.append(headerDiv);
@@ -750,7 +752,6 @@ function decorateBrowseTopics(block) {
 }
 
 export default async function decorate(block) {
- 
   enableTagsAsProxy(block);
   appendFormEl(block);
   constructFilterInputContainer(block);
@@ -760,7 +761,6 @@ export default async function decorate(block) {
   });
   constructKeywordSearchEl(block);
   constructClearFilterBtn(block);
-
   appendToForm(block, renderTags());
   appendToForm(block, renderFilterResultsHeader());
   decorateBrowseTopics(block);
