@@ -58,8 +58,10 @@ function handleViewLessClick(block) {
 export default async function decorate(block) {
   const theme = getMetadata('theme');
   const label = getMetadata('og:title');
-
+  const featuredProducts = await ffetch('/browse-all.json').all();
+  console.log(featuredProducts);
   const results = await ffetch('/browse-index.json').all();
+  console.log(results);
   let currentPagePath = getEDSLink(window.location.pathname);
   // For browse-rail in AEM Author
   if (currentPagePath.includes('/content')) {
@@ -110,11 +112,17 @@ export default async function decorate(block) {
         const titleB = b.title.toLowerCase();
         return titleA.localeCompare(titleB);
       });
-
-      sortedResults.forEach((item) => {
+      featuredProducts.forEach((item) => {
         const li = document.createElement('li');
         li.innerHTML = `<a href="${getLink(item.path)}">${item.title}</a>`;
         ul.appendChild(li);
+      });
+      sortedResults.forEach((item) => {
+        if (!featuredProducts.some(product => product.path === item.path)) {
+        const li = document.createElement('li');
+        li.innerHTML = `<a href="${getLink(item.path)}">${item.title}</a>`;
+        ul.appendChild(li);
+        }
       });
 
       productsLI.append(ul);

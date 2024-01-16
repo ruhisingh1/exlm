@@ -740,7 +740,7 @@ function decorateBrowseTopics(block) {
         handleTopicSelection(contentDiv);
       }
     }
-  }
+  
 
   firstChild.parentNode.replaceChild(headerDiv, firstChild);
   secondChild.parentNode.replaceChild(contentDiv, secondChild);
@@ -749,6 +749,7 @@ function decorateBrowseTopics(block) {
   /* Append browse topics right above the filters section */
   const filtersFormEl = document.querySelector('.browse-filters-form');
   filtersFormEl.insertBefore(div, filtersFormEl.children[4]);
+  }
 }
 
 export default async function decorate(block) {
