@@ -9,6 +9,7 @@ mappings:
 
   - /content/exlm-ruhis/redirects:/redirects.json
   - /content/exlm-ruhis/placeholders:/placeholders.json
+  - /content/exlm-ruhis/browse-all:/browse-all.json
 
 includes:
   - /content/exlm-ruhis/
