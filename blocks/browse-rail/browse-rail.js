@@ -118,7 +118,7 @@ export default async function decorate(block) {
         ul.appendChild(li);
       });
       sortedResults.forEach((item) => {
-        if (!featuredProducts.some(product => product.path === item.path)) {
+        if (!featuredProducts.some(product => getLink(product.path) === getLink(item.path))) {
         const li = document.createElement('li');
         li.innerHTML = `<a href="${getLink(item.path)}">${item.title}</a>`;
         ul.appendChild(li);
