@@ -171,9 +171,9 @@
                 "template": {
                   "name": "Curated Cards",
                   "model": "curated-cards",
-                  "contentTypes": [],
-                  "roles": [],
-                  "experienceLevels": []
+                  "contentTypes": [""],
+                  "roles": [""],
+                  "experienceLevels": [""]
                 }
               }
             }
