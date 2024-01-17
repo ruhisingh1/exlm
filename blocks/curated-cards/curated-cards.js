@@ -22,6 +22,7 @@ export default async function decorate(block) {
   const noOfResults = 4;
   const productKey = 'exl-encoded:solution/';
   const featureKey = 'exl-encoded:feature/';
+  console.log(contentType);
   const extractCapability = (input, prefix) => {
     if (!input) {
       return null;
