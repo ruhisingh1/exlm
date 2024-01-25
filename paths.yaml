@@ -10,7 +10,6 @@ mappings:
   - /content/exlm-ruhis/redirects:/redirects.json
   - /content/exlm-ruhis/placeholders:/placeholders.json
   - /content/exlm-ruhis/browse-all:/browse-all.json
-  - /content/exlm-ruhis/en/placeholders.json:/en/placeholders.json
 
 includes:
   - /content/exlm-ruhis/
