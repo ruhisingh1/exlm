@@ -7,7 +7,9 @@ import { getEDSLink, getLink } from '../../scripts/scripts.js';
 function toggleItemVisibility(itemList, startIndex, show) {
   // eslint-disable-next-line no-plusplus
   for (let i = startIndex; i < itemList.length; i++) {
-    itemList[i].classList.toggle('hidden', !show);
+    if (!itemList[i].classList.contains('view-more-less')) {
+      itemList[i].classList.toggle('hidden', !show);
+    }
   }
 }
 
@@ -58,8 +60,8 @@ function handleViewLessClick(block) {
 export default async function decorate(block) {
   const theme = getMetadata('theme');
   const label = getMetadata('og:title');
-  const featuredProducts = await ffetch('/browse-all.json').all();
-  // console.log(featuredProducts);
+  const MAX_VISIBLE_ITEMS = 12;
+
   const results = await ffetch('/browse-index.json').all();
   // console.log(results);
   let currentPagePath = getEDSLink(window.location.pathname);
@@ -112,17 +114,17 @@ export default async function decorate(block) {
         const titleB = b.title.toLowerCase();
         return titleA.localeCompare(titleB);
       });
-      featuredProducts.forEach((item) => {
-        const li = document.createElement('li');
-        li.innerHTML = `<a href="${getLink(item.path)}">${item.title}</a>`;
-        ul.appendChild(li);
-      });
+      // featuredProducts.forEach((item) => {
+      //   const li = document.createElement('li');
+      //   li.innerHTML = `<a href="${getLink(item.path)}">${item.title}</a>`;
+      //   ul.appendChild(li);
+      // });
       sortedResults.forEach((item) => {
-        if (!featuredProducts.some(product => getLink(product.path) === getLink(item.path))) {
+        // if (!featuredProducts.some(product => getLink(product.path) === getLink(item.path))) {
         const li = document.createElement('li');
         li.innerHTML = `<a href="${getLink(item.path)}">${item.title}</a>`;
         ul.appendChild(li);
-        }
+       // }
       });
 
       productsLI.append(ul);
@@ -132,25 +134,21 @@ export default async function decorate(block) {
       toggleItemVisibility(ul.children, 12, false);
 
       // "View More" and "View Less" links
-      const viewMoreDiv = document.createElement('div');
-      viewMoreDiv.classList.add('left-rail-view-more');
-      viewMoreDiv.innerHTML = `<span class="viewMoreLink"> + ${placeholders.viewMore}</span>`;
-      ul.append(viewMoreDiv);
+      if (ul.children.length > MAX_VISIBLE_ITEMS) {
+        const viewMoreLI = document.createElement('li');
+        viewMoreLI.classList.add('left-rail-view-more', 'view-more-less');
+        viewMoreLI.innerHTML = `<span class="viewMoreLink"> + ${placeholders.viewMore}</span>`;
+        ul.append(viewMoreLI);
 
-      const viewLessDiv = document.createElement('div');
-      viewLessDiv.classList.add('left-rail-view-less');
-      viewLessDiv.innerHTML = `<span class="viewLessLink" style="display: none;"> - ${placeholders.viewLess}</span>`;
-      ul.append(viewLessDiv);
+        const viewLessLI = document.createElement('li');
+        viewLessLI.classList.add('left-rail-view-less', 'view-more-less');
+        viewLessLI.innerHTML = `<span class="viewLessLink" style="display: none;"> - ${placeholders.viewLess}</span>`;
+        ul.append(viewLessLI);
 
-      // Check if there are less than 12 items, and hide the "View More" link accordingly
-      const liElements = ul.getElementsByTagName('li');
-      if (liElements && liElements.length <= 12) {
-        block.querySelector('.viewMoreLink').style.display = 'none';
+        // Event listeners for "View More" and "View Less" links
+        block.querySelector('.viewMoreLink').addEventListener('click', () => handleViewMoreClick(block));
+        block.querySelector('.viewLessLink').addEventListener('click', () => handleViewLessClick(block));
       }
-
-      // Event listeners for "View More" and "View Less" links
-      block.querySelector('.viewMoreLink').addEventListener('click', () => handleViewMoreClick(block));
-      block.querySelector('.viewLessLink').addEventListener('click', () => handleViewLessClick(block));
     }
   }
 

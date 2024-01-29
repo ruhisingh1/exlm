@@ -2,14 +2,12 @@ mappings:
   - /content/exlm-ruhis/global/:/
   - /content/exlm-ruhis/global/en:/
   - /content/exlm-ruhis/metadata:/metadata.json
-  - /content/exlm-ruhis/redirects:/redirects.json
-  # load fragments as resource from codebus in the editor (sw.js)
-  - /content/exlm-ruhis.resource/fragments/:/fragments/
-  - /content/exlm-ruhis.resource/browse-index.json:/browse-index.json
-
+  # spreadsheets
   - /content/exlm-ruhis/redirects:/redirects.json
   - /content/exlm-ruhis/placeholders:/placeholders.json
-  - /content/exlm-ruhis/browse-all:/browse-all.json
-
+  # force load some paths as resource from codebus in the editor (sw.js)
+  - /content/exlm-ruhis.resource/fragments/:/fragments/
+  - /content/exlm-ruhis.resource/docs/:/docs/
+  - /content/exlm-ruhis.resource/browse-index.json:/browse-index.json
 includes:
-  - /content/exlm-ruhis/
+  - /content/exlm-ruhis-ruhis/
