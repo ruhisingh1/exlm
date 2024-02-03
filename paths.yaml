@@ -5,6 +5,7 @@ mappings:
   # spreadsheets
   - /content/exlm-ruhis/redirects:/redirects.json
   - /content/exlm-ruhis/placeholders:/placeholders.json
+  - /content/exlm-ruhis/languages:/languages.json
   - /content/exlm-ruhis/global/en/top-products:/en/top-products.json
   # force load some paths as resource from codebus in the editor (sw.js)
   - /content/exlm-ruhis.resource/fragments/:/fragments/
