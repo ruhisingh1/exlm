@@ -4,12 +4,27 @@ mappings:
   - /content/exlm-ruhis/metadata:/metadata.json
   # spreadsheets
   - /content/exlm-ruhis/redirects:/redirects.json
-  - /content/exlm-ruhis/placeholders:/placeholders.json
   - /content/exlm-ruhis/languages:/languages.json
   - /content/exlm-ruhis/global/en/top-products:/en/top-products.json
+  - /content/dam/exlm-ruhis/franklin/config.json:/.helix/config.json
   # force load some paths as resource from codebus in the editor (sw.js)
   - /content/exlm-ruhis.resource/fragments/:/fragments/
   - /content/exlm-ruhis.resource/docs/:/docs/
+
+  # placeholders
+  - /content/exlm-ruhis/global/en/placeholders:/placeholders.json
+  - /content/exlm-ruhis/global/en/placeholders:/en/placeholders.json
+  - /content/exlm-ruhis/global/fr/placeholders:/fr/placeholders.json
+  - /content/exlm-ruhis/global/de/placeholders:/de/placeholders.json
+  - /content/exlm-ruhis/global/es/placeholders:/es/placeholders.json
+  - /content/exlm-ruhis/global/it/placeholders:/it/placeholders.json
+  - /content/exlm-ruhis/global/nl/placeholders:/nl/placeholders.json
+  - /content/exlm-ruhis/global/pt-br/placeholders:/pt-br/placeholders.json
+  - /content/exlm-ruhis/global/ko/placeholders:/ko/placeholders.json
+  - /content/exlm-ruhis/global/ja/placeholders:/ja/placeholders.json
+  - /content/exlm-ruhis/global/sv/placeholders:/sv/placeholders.json
+  - /content/exlm-ruhis/global/zh-hans/placeholders:/zh-hans/placeholders.json
+  - /content/exlm-ruhis/global/zh-hant/placeholders:/zh-hant/placeholders.json
 
   # browse inidices
   - /content/exlm-ruhis.resource/en/browse-index.json:/en/browse-index.json
