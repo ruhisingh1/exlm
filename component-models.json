@@ -1389,7 +1389,7 @@
       },
       {
         "component": "aem-tag",
-        "name": "cq:tags",
+        "name": "solutions",
         "label": "Solution(s)",
         "valueType": "string",
         "rootPath": "/content/cq:tags/exl/solution",
