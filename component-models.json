@@ -557,8 +557,7 @@
         "description": "Sets the text url."
       },
       {
-        "component": "multiselect",
-        "valueType": "string",
+        "component": "checkbox-group",
         "name": "contentTypes",
         "label": "Filter by Content Type",
         "description": "Select the content type(s).",
@@ -602,10 +601,9 @@
         "description": "Optional - all are included if no selection is made."
       },
       {
-        "component": "multiselect",
+        "component": "checkbox-group",
         "name": "roles",
         "label": "Role(s)",
-        "valueType": "string",
         "description": "Sets the Role(s).",
         "options": [
           {
@@ -627,10 +625,9 @@
         ]
       },
       {
-        "component": "multiselect",
+        "component": "checkbox-group",
         "name": "experienceLevels",
         "label": "Experience Level(s)",
-        "valueType": "string",
         "description": "Sets the Experience Level(s).",
         "options": [
           {
@@ -1375,14 +1372,6 @@
     "id": "browse-filters",
     "fields": [
       {
-        "component": "aem-tag",
-        "name": "cq:tags",
-        "label": "Solution(s)",
-        "valueType": "string",
-        "rootPath": "/content/cq:tags/exl/solution",
-        "description": "Optional - all are included if no selection is made."
-      },
-      {
         "component": "text-input",
         "valueType": "string",
         "name": "heading",
@@ -1453,8 +1442,7 @@
         "description": "Sets the description."
       },
       {
-        "component": "multiselect",
-        "valueType": "string",
+        "component": "checkbox-group",
         "name": "contentTypes",
         "label": "Content type(s)",
         "description": "Select the content type(s).",
@@ -1654,8 +1642,7 @@
         "description": "Sets the text url."
       },
       {
-        "component": "multiselect",
-        "valueType": "string",
+        "component": "checkbox-group",
         "name": "solutions",
         "label": "Solution(s)",
         "description": "All are included if no selection is made",
@@ -1719,8 +1706,7 @@
         ]
       },
       {
-        "component": "multiselect",
-        "valueType": "string",
+        "component": "checkbox-group",
         "name": "roles",
         "label": "Role(s)",
         "description": "All are included if no selection is made",
@@ -1824,8 +1810,7 @@
         "description": "Sets the tooltip."
       },
       {
-        "component": "multiselect",
-        "valueType": "string",
+        "component": "checkbox-group",
         "name": "contentTypes",
         "label": "Filter by Content Type",
         "description": "Select the content type(s).",
