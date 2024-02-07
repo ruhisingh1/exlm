@@ -15,6 +15,87 @@ import { buildCard } from '../../scripts/browse-card/browse-card.js';
 import BuildPlaceholder from '../../scripts/browse-card/browse-card-placeholder.js';
 import { formattedTags, handleTopicSelection } from './browse-topics.js';
 
+let solution;
+function decorateBrowseFilters(block) {
+  const firstChild = block.querySelector('div:first-child');
+  const secondChild = block.querySelector('div:nth-child(2)');
+  const thirdChild = block.querySelector('div:nth-child(3)');
+  const headingElement = block.querySelector('div:nth-child(1) > div');
+  const topics = block.querySelector('div:nth-child(2) > div').textContent.trim();
+  const solutions = block.querySelector('div:nth-child(3) > div').textContent.trim();
+  const allTopicsTags = topics !== '' ? formattedTags(topics) : '';
+  const allSolutionsTags = solutions !== '' ? formattedTags(solutions) : '';
+  if (allSolutionsTags.length > 0) {
+    allSolutionsTags
+      .filter((value) => value !== undefined)
+      .forEach((solutionsTag) => {
+        solution = atob(solutionsTag);
+      });
+    }
+      
+  const div = document.createElement('div');
+  div.classList.add('browse-topics');
+
+  const headerDiv = htmlToElement(`
+    <div class="browse-topics-block-header">
+      <div class="browse-topics-block-title">
+          <h2>${headingElement?.textContent.trim()}</h2>
+      </div>
+    </div>
+  `);
+
+  const contentDiv = document.createElement('div');
+  contentDiv.classList.add('browse-topics-block-content');
+  const browseFiltersSection = document.querySelector('.browse-filters-form');
+
+  if (allTopicsTags.length > 0) {
+    allTopicsTags
+      .filter((value) => value !== undefined)
+      .forEach((topicsButtonTitle) => {
+        const topicName = atob(topicsButtonTitle);
+        const topicsButtonDiv = createTag('button', { class: 'browse-topics browse-topics-item' });
+        topicsButtonDiv.dataset.topicname = topicName;
+        topicsButtonDiv.innerHTML = topicName;
+        contentDiv.appendChild(topicsButtonDiv);
+      });
+
+    contentDiv.addEventListener('click', (e) => {
+      if (e.target?.classList?.contains('browse-topics-item')) {
+        if (e.target.classList.contains('browse-topics-item-active')) {
+          e.target.classList.remove('browse-topics-item-active');
+        } else {
+          e.target.classList.add('browse-topics-item-active');
+        }
+        // eslint-disable-next-line no-use-before-define
+        updateClearFilterStatus(browseFiltersSection);
+        handleTopicSelection(contentDiv);
+      }
+    });
+    const decodedHash = decodeURIComponent(window.location.hash);
+    const filtersInfo = decodedHash.split('&').find((s) => s.includes('@el_features'));
+
+    if (filtersInfo) {
+      const selectedTopics = getSelectedTopics(filtersInfo);
+      if (selectedTopics && selectedTopics.length > 0) {
+        selectedTopics.forEach((topic) => {
+          const element = contentDiv.querySelector(`.browse-topics-item[data-topicname="${topic}"]`);
+          element.classList.add('browse-topics-item-active');
+        });
+        handleTopicSelection(contentDiv);
+      }
+    }
+
+    firstChild.parentNode.replaceChild(headerDiv, firstChild);
+    secondChild.parentNode.replaceChild(contentDiv, secondChild);
+    div.append(headerDiv);
+    div.append(contentDiv);
+    /* Append browse topics right above the filters section */
+    const filtersFormEl = document.querySelector('.browse-filters-form');
+    filtersFormEl.insertBefore(div, filtersFormEl.children[4]);
+  }
+  thirdChild.parentNode.replaceChild(headerDiv, thirdChild);
+}
+
 const coveoFacetMap = {
   Role: 'headlessRoleFacet',
   'Content Type': 'headlessTypeFacet',
@@ -25,6 +106,7 @@ const coveoFacetFilterNameMap = {
   el_type: 'Content Type',
   el_role: 'Role',
   el_level: 'Experience Level',
+  el_solution: solution,
 };
 const CLASS_BROWSE_FILTER_FORM = '.browse-filters-form';
 
@@ -751,75 +833,6 @@ function renderSortContainer(block) {
         );
       });
     });
-  }
-}
-
-function decorateBrowseFilters(block) {
-  const firstChild = block.querySelector('div:first-child');
-  const secondChild = block.querySelector('div:nth-child(2)');
-  const headingElement = block.querySelector('div:nth-child(1) > div');
-  const topics = block.querySelector('div:nth-child(2) > div').textContent.trim();
-  const solutions = block.querySelector('div:nth-child(3) > div').textContent.trim();
-  const allTopicsTags = topics !== '' ? formattedTags(topics) : '';
-  const allSolutionsTags = topics !== '' ? formattedTags(solutions) : '';
-  const div = document.createElement('div');
-  div.classList.add('browse-topics');
-
-  const headerDiv = htmlToElement(`
-    <div class="browse-topics-block-header">
-      <div class="browse-topics-block-title">
-          <h2>${headingElement?.textContent.trim()}</h2>
-      </div>
-    </div>
-  `);
-
-  const contentDiv = document.createElement('div');
-  contentDiv.classList.add('browse-topics-block-content');
-  const browseFiltersSection = document.querySelector('.browse-filters-form');
-
-  if (allTopicsTags.length > 0) {
-    allTopicsTags
-      .filter((value) => value !== undefined)
-      .forEach((topicsButtonTitle) => {
-        const topicName = atob(topicsButtonTitle);
-        const topicsButtonDiv = createTag('button', { class: 'browse-topics browse-topics-item' });
-        topicsButtonDiv.dataset.topicname = topicName;
-        topicsButtonDiv.innerHTML = topicName;
-        contentDiv.appendChild(topicsButtonDiv);
-      });
-
-    contentDiv.addEventListener('click', (e) => {
-      if (e.target?.classList?.contains('browse-topics-item')) {
-        if (e.target.classList.contains('browse-topics-item-active')) {
-          e.target.classList.remove('browse-topics-item-active');
-        } else {
-          e.target.classList.add('browse-topics-item-active');
-        }
-        updateClearFilterStatus(browseFiltersSection);
-        handleTopicSelection(contentDiv);
-      }
-    });
-    const decodedHash = decodeURIComponent(window.location.hash);
-    const filtersInfo = decodedHash.split('&').find((s) => s.includes('@el_features'));
-
-    if (filtersInfo) {
-      const selectedTopics = getSelectedTopics(filtersInfo);
-      if (selectedTopics && selectedTopics.length > 0) {
-        selectedTopics.forEach((topic) => {
-          const element = contentDiv.querySelector(`.browse-topics-item[data-topicname="${topic}"]`);
-          element.classList.add('browse-topics-item-active');
-        });
-        handleTopicSelection(contentDiv);
-      }
-    }
-
-    firstChild.parentNode.replaceChild(headerDiv, firstChild);
-    secondChild.parentNode.replaceChild(contentDiv, secondChild);
-    div.append(headerDiv);
-    div.append(contentDiv);
-    /* Append browse topics right above the filters section */
-    const filtersFormEl = document.querySelector('.browse-filters-form');
-    filtersFormEl.insertBefore(div, filtersFormEl.children[4]);
   }
 }
 
