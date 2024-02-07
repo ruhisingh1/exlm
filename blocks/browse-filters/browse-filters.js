@@ -13,7 +13,7 @@ import initiateCoveoHeadlessSearch, { fragment } from '../../scripts/coveo-headl
 import BrowseCardsCoveoDataAdaptor from '../../scripts/browse-card/browse-cards-coveo-data-adaptor.js';
 import { buildCard } from '../../scripts/browse-card/browse-card.js';
 import BuildPlaceholder from '../../scripts/browse-card/browse-card-placeholder.js';
-import { formattedTopicsTags, handleTopicSelection } from './browse-topics.js';
+import { formattedTags, handleTopicSelection } from './browse-topics.js';
 
 const coveoFacetMap = {
   Role: 'headlessRoleFacet',
@@ -754,12 +754,14 @@ function renderSortContainer(block) {
   }
 }
 
-function decorateBrowseTopics(block) {
+function decorateBrowseFilters(block) {
   const firstChild = block.querySelector('div:first-child');
   const secondChild = block.querySelector('div:nth-child(2)');
   const headingElement = block.querySelector('div:nth-child(1) > div');
   const topics = block.querySelector('div:nth-child(2) > div').textContent.trim();
-  const allTopicsTags = topics !== '' ? formattedTopicsTags(topics) : '';
+  const solutions = block.querySelector('div:nth-child(3) > div').textContent.trim();
+  const allTopicsTags = topics !== '' ? formattedTags(topics) : '';
+  const allSolutionsTags = topics !== '' ? formattedTags(solutions) : '';
   const div = document.createElement('div');
   div.classList.add('browse-topics');
 
@@ -833,7 +835,7 @@ export default async function decorate(block) {
   constructClearFilterBtn(block);
   appendToForm(block, renderTags());
   appendToForm(block, renderFilterResultsHeader());
-  decorateBrowseTopics(block);
+  decorateBrowseFilters(block);
   initiateCoveoHeadlessSearch({
     handleSearchEngineSubscription,
     renderPageNumbers,
