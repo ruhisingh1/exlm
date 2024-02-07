@@ -93,7 +93,7 @@ function decorateBrowseFilters(block) {
     const filtersFormEl = document.querySelector('.browse-filters-form');
     filtersFormEl.insertBefore(div, filtersFormEl.children[4]);
   }
-  thirdChild.parentNode.replaceChild(headerDiv, thirdChild);
+  thirdChild.parentNode.replaceChild('', thirdChild);
 }
 
 const coveoFacetMap = {
