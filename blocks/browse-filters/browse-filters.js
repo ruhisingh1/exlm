@@ -15,7 +15,6 @@ import { buildCard } from '../../scripts/browse-card/browse-card.js';
 import BuildPlaceholder from '../../scripts/browse-card/browse-card-placeholder.js';
 import { formattedTags, handleTopicSelection } from './browse-topics.js';
 
-let solution;
 function decorateBrowseFilters(block) {
   const firstChild = block.querySelector('div:first-child');
   const secondChild = block.querySelector('div:nth-child(2)');
@@ -25,6 +24,7 @@ function decorateBrowseFilters(block) {
   const solutions = block.querySelector('div:nth-child(3) > div').textContent.trim();
   const allTopicsTags = topics !== '' ? formattedTags(topics) : '';
   const allSolutionsTags = solutions !== '' ? formattedTags(solutions) : '';
+  let solution;
   if (allSolutionsTags.length > 0) {
     allSolutionsTags
       .filter((value) => value !== undefined)
@@ -32,7 +32,7 @@ function decorateBrowseFilters(block) {
         solution = atob(solutionsTag);
       });
     }
-      
+   console.log(solution);   
   const div = document.createElement('div');
   div.classList.add('browse-topics');
 
@@ -93,7 +93,7 @@ function decorateBrowseFilters(block) {
     const filtersFormEl = document.querySelector('.browse-filters-form');
     filtersFormEl.insertBefore(div, filtersFormEl.children[4]);
   }
-  thirdChild.parentNode.replaceChild('', thirdChild);
+    thirdChild.innerHTML = '';
 }
 
 const coveoFacetMap = {
