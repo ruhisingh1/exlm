@@ -836,7 +836,7 @@ export default async function decorate(block) {
   constructClearFilterBtn(block);
   appendToForm(block, renderTags());
   appendToForm(block, renderFilterResultsHeader());
-  decorateBrowseFilters(block);
+  // decorateBrowseFilters(block);
   initiateCoveoHeadlessSearch({
     handleSearchEngineSubscription,
     renderPageNumbers,
