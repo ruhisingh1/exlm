@@ -814,8 +814,8 @@ function decorateBrowseFilters(block) {
       }
     }
 
-    secondChild.parentNode.replaceChild(headerDiv, secondChild);
-    thirdChild.parentNode.replaceChild(contentDiv, thirdChild);
+   // secondChild.parentNode.replaceChild(headerDiv, secondChild);
+    //thirdChild.parentNode.replaceChild(contentDiv, thirdChild);
     div.append(headerDiv);
     div.append(contentDiv);
     /* Append browse topics right above the filters section */
