@@ -106,7 +106,6 @@ const coveoFacetFilterNameMap = {
   el_type: 'Content Type',
   el_role: 'Role',
   el_level: 'Experience Level',
-  el_solution: solution,
 };
 const CLASS_BROWSE_FILTER_FORM = '.browse-filters-form';
 
