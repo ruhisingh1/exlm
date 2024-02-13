@@ -5,6 +5,7 @@
  */
 export function formattedTags(inputString) {
   const splitArray = inputString.split(',');
+  
   // eslint-disable-next-line array-callback-return, consistent-return
   const base64EncodedTagsArray = splitArray.map((item) => {
     const lastIndex = item.lastIndexOf('/');
