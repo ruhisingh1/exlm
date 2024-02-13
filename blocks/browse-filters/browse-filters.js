@@ -24,15 +24,7 @@ function decorateBrowseFilters(block) {
   const topics = block.querySelector('div:nth-child(3) > div').textContent.trim();
   const allTopicsTags = topics !== '' ? formattedTags(topics) : '';
   const allSolutionsTags = solutions !== '' ? formattedTags(solutions) : '';
-  let solution;
-  if (allSolutionsTags.length > 0) {
-    allSolutionsTags
-      .filter((value) => value !== undefined)
-      .forEach((solutionsTag) => {
-        solution = atob(solutionsTag);
-      });
-    }
-   console.log(solution);   
+
   const div = document.createElement('div');
   div.classList.add('browse-topics');
 
@@ -43,7 +35,7 @@ function decorateBrowseFilters(block) {
       </div>
     </div>
   `);
-
+  const solutionsDiv = document.createElement('div');
   const contentDiv = document.createElement('div');
   contentDiv.classList.add('browse-topics-block-content');
   const browseFiltersSection = document.querySelector('.browse-filters-form');
@@ -71,9 +63,17 @@ function decorateBrowseFilters(block) {
         handleTopicSelection(contentDiv);
       }
     });
+
+  let solution;
+  if (allSolutionsTags.length > 0) {
+    allSolutionsTags
+      .filter((value) => value !== undefined)
+      .forEach((solutionsTag) => {
+        solution = atob(solutionsTag);
+      });
+  }
     const decodedHash = decodeURIComponent(window.location.hash);
     const filtersInfo = decodedHash.split('&').find((s) => s.includes('@el_features'));
-
     if (filtersInfo) {
       const selectedTopics = getSelectedTopics(filtersInfo);
       if (selectedTopics && selectedTopics.length > 0) {
@@ -86,14 +86,17 @@ function decorateBrowseFilters(block) {
     }
 
     firstChild.parentNode.replaceChild(headerDiv, firstChild);
+    secondChild.parentNode.replaceChild(solutionsDiv, secondChild);
     thirdChild.parentNode.replaceChild(contentDiv, thirdChild);
     div.append(headerDiv);
     div.append(contentDiv);
     /* Append browse topics right above the filters section */
     const filtersFormEl = document.querySelector('.browse-filters-form');
     filtersFormEl.insertBefore(div, filtersFormEl.children[4]);
+  } else {
+    firstChild.innerHTML = '';
+    secondChild.innerHTML = '';
   }
-  
 }
 
 const coveoFacetMap = {
