@@ -20,8 +20,8 @@ function decorateBrowseFilters(block) {
   const secondChild = block.querySelector('div:nth-child(2)');
   const thirdChild = block.querySelector('div:nth-child(3)');
   const headingElement = block.querySelector('div:nth-child(1) > div');
-  const topics = block.querySelector('div:nth-child(2) > div').textContent.trim();
-  const solutions = block.querySelector('div:nth-child(3) > div').textContent.trim();
+  const solutions = block.querySelector('div:nth-child(2) > div').textContent.trim();
+  const topics = block.querySelector('div:nth-child(3) > div').textContent.trim();
   const allTopicsTags = topics !== '' ? formattedTags(topics) : '';
   const allSolutionsTags = solutions !== '' ? formattedTags(solutions) : '';
   let solution;
@@ -86,14 +86,14 @@ function decorateBrowseFilters(block) {
     }
 
     firstChild.parentNode.replaceChild(headerDiv, firstChild);
-    secondChild.parentNode.replaceChild(contentDiv, secondChild);
+    thirdChild.parentNode.replaceChild(contentDiv, thirdChild);
     div.append(headerDiv);
     div.append(contentDiv);
     /* Append browse topics right above the filters section */
     const filtersFormEl = document.querySelector('.browse-filters-form');
     filtersFormEl.insertBefore(div, filtersFormEl.children[4]);
   }
-    thirdChild.innerHTML = '';
+  
 }
 
 const coveoFacetMap = {
