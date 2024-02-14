@@ -1,5 +1,5 @@
 import { decorateIcons } from '../../scripts/lib-franklin.js';
-import { loadIms } from '../../scripts/scripts.js';
+import { loadIms, getPathDetails } from '../../scripts/scripts.js';
 
 function decorateButtons(...buttons) {
   return buttons
@@ -42,8 +42,8 @@ export default async function decorate(block) {
   }
 
   const isUserSignedIn = window.adobeIMS?.isSignedInUser();
-
-  if (!isUserSignedIn) {
+  const { isContentPath } = getPathDetails();
+  if (!isContentPath && !isUserSignedIn) {
     block.style.display = 'block';
     // Extract properties
     // always same order as in model, empty string if not set
