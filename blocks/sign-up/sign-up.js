@@ -44,7 +44,7 @@ export default async function decorate(block) {
   const isUserSignedIn = window.adobeIMS?.isSignedInUser();
   const { isContentPath } = getPathDetails();
   console.log(isContentPath);
-  if (!isContentPath && !isUserSignedIn) {
+  if (!isUserSignedIn) {
     block.style.display = 'block';
     // Extract properties
     // always same order as in model, empty string if not set
@@ -98,6 +98,9 @@ export default async function decorate(block) {
       });
     }
   } else {
+    // eslint-disable-next-line no-lonely-if
+    if(!isContentPath) {
     block.parentElement.style.display = 'none';
+    }
   }
 }
