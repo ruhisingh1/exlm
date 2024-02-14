@@ -43,6 +43,7 @@ export default async function decorate(block) {
 
   const isUserSignedIn = window.adobeIMS?.isSignedInUser();
   const { isContentPath } = getPathDetails();
+  console.log(isContentPath);
   if (!isContentPath && !isUserSignedIn) {
     block.style.display = 'block';
     // Extract properties
@@ -97,6 +98,6 @@ export default async function decorate(block) {
       });
     }
   } else {
-    block.parentElement.hide();
+    block.parentElement.style.display = 'none';
   }
 }
