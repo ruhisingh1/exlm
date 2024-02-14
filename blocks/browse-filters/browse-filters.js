@@ -758,19 +758,13 @@ function decorateBrowseTopics(block) {
   const firstChild = block.querySelector('div:first-child');
   const secondChild = block.querySelector('div:nth-child(2)');
   const thirdChild = block.querySelector('div:nth-child(3)');
-  const headingElement = block.querySelector('div:nth-child(1) > div');
-  const solutions = block.querySelector('div:nth-child(2) > div').textContent.trim();
+  const solutions = block.querySelector('div:nth-child(1) > div').textContent.trim();
+  const headingElement = block.querySelector('div:nth-child(2) > div');
   const topics = block.querySelector('div:nth-child(3) > div').textContent.trim();
   const allSolutionsTags = solutions !== '' ? formattedTags(solutions) : '';
   const allTopicsTags = topics !== '' ? formattedTags(topics) : '';
-  let solution;
-  if (allSolutionsTags.length > 0) {
-    allSolutionsTags
-      .filter((value) => value !== undefined)
-      .forEach((solutionsTag) => {
-        solution = atob(solutionsTag);
-      });
-  }
+  // eslint-disable-next-line no-console
+  console.log(allSolutionsTags);
   const div = document.createElement('div');
   div.classList.add('browse-topics');
 
@@ -790,7 +784,8 @@ function decorateBrowseTopics(block) {
     allTopicsTags
       .filter((value) => value !== undefined)
       .forEach((topicsButtonTitle) => {
-        const topicName = atob(topicsButtonTitle);
+        const parts = topicsButtonTitle.split('/');
+        const topicName = parts[parts.length - 1];
         const topicsButtonDiv = createTag('button', { class: 'browse-topics browse-topics-item' });
         topicsButtonDiv.dataset.topicname = topicName;
         topicsButtonDiv.innerHTML = topicName;
@@ -822,8 +817,8 @@ function decorateBrowseTopics(block) {
       }
     }
 
-    firstChild.parentNode.replaceChild(headerDiv, firstChild);
-    secondChild.parentNode.replaceChild(solutionsDiv, secondChild);
+    firstChild.parentNode.replaceChild(solutionsDiv, firstChild);
+    secondChild.parentNode.replaceChild(headerDiv, secondChild);
     thirdChild.parentNode.replaceChild(contentDiv, thirdChild);
     div.append(headerDiv);
     div.append(contentDiv);
