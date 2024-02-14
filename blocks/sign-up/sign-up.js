@@ -97,6 +97,6 @@ export default async function decorate(block) {
       });
     }
   } else {
-    block.parentElement.remove();
+    block.parentElement.hide();
   }
 }
