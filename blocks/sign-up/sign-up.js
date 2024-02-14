@@ -32,8 +32,12 @@ function getSignInButton(signInText) {
 }
 
 export default async function decorate(block) {
+  const { isContentPath } = getPathDetails();
+  console.log(isContentPath);
+  if(!isContentPath) {
   block.style.display = 'none';
-
+  }
+  
   try {
     await loadIms();
   } catch {
@@ -42,8 +46,7 @@ export default async function decorate(block) {
   }
 
   const isUserSignedIn = window.adobeIMS?.isSignedInUser();
-  const { isContentPath } = getPathDetails();
-  console.log(isContentPath);
+  
   if (!isUserSignedIn) {
     block.style.display = 'block';
     // Extract properties
