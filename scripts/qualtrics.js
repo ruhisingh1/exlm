@@ -7,6 +7,7 @@ export default async function loadQualtrics() {
       throw new Error(`${resp.status}: ${resp.statusText}`);
     })
     .then((json) => {
+      console.log(json.data);
       json.data.forEach((item) => {
         const interceptId = item['Intercept Id'];
         const interceptURL = item['Intercept URL'];
