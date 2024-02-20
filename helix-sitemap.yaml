@@ -54,12 +54,12 @@ sitemaps:
         hreflang: sv
         alternate: /sv/{path}
       zh-hans:
-        source: /zh-hans/query-index.json
-        destination: /zh-hans/sitemap.xml
-        hreflang: zh-hans
-        alternate: /zh-hans/{path}
+        source: /zh-cn/query-index.json
+        destination: /zh-cn/sitemap.xml
+        hreflang: zh-cn
+        alternate: /zh-cn/{path}
       zh-hant:
-        source: /zh-hant/query-index.json
-        destination: /zh-hant/sitemap.xml
-        hreflang: zh-hant
-        alternate: /zh-hant/{path}
+        source: /zh-tw/query-index.json
+        destination: /zh-tw/sitemap.xml
+        hreflang: zh-tw
+        alternate: /zh-tw/{path}
