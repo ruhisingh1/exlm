@@ -53,13 +53,4 @@ sitemaps:
         destination: /sv/sitemap.xml
         hreflang: sv
         alternate: /sv/{path}
-      zh-hans:
-        source: /zh-cn/query-index.json
-        destination: /zh-cn/sitemap.xml
-        hreflang: zh-cn
-        alternate: /zh-cn/{path}
-      zh-hant:
-        source: /zh-tw/query-index.json
-        destination: /zh-tw/sitemap.xml
-        hreflang: zh-tw
-        alternate: /zh-tw/{path}
+      
