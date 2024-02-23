@@ -99,7 +99,7 @@ header {
 }
 .header > nav {
   display: grid;
-  grid-template-areas: "nav adobe-logo brand product-grid sign-in";
+  grid-template-areas: "nav adobe-logo brand product-grid search sign-in";
   justify-content: space-between;
   height: 100%;
 }
@@ -227,7 +227,7 @@ header {
 }
 @media (min-width: 600px) {
   .header .nav-wrapper {
-    min-height: calc(100vh - var(--nav-height));
+    height: calc(100vh - var(--nav-height));
     max-width: 360px;
   }
 }
@@ -271,6 +271,8 @@ header {
   z-index: 10;
   left: 0;
   right: 0;
+  max-height: calc(100vh - var(--nav-height));
+  overflow-y: auto;
 }
 @media (min-width: 1024px) {
   .header .nav-wrapper-expanded {
@@ -644,7 +646,7 @@ header {
   display: var(--search-display);
   justify-content: flex-end;
   align-items: center;
-  padding: var(--nav-root-item-padding-x);
+  padding-right: 15px;
   container-type: inline-size;
   container-name: searchs;
   z-index: 1;
@@ -679,9 +681,7 @@ header {
 }
 @container headersection (max-width: 1024px) {
   .header .search {
-    position: absolute;
-    right: 80px;
-    top: 23px;
+    padding-right: 0;
   }
 }
 .header .search-short {
@@ -969,21 +969,37 @@ header {
   align-items: flex-start;
   right: 0;
   width: 100%;
+  max-height: calc(100vh - var(--nav-height));
   box-sizing: border-box;
   top: 100%;
   background-color: var(--color-white);
   z-index: 20000;
   padding: 1.5em;
   box-shadow: 0 8px 16px rgba(10, 10, 10, 0.1);
+  overflow-x: hidden;
+  overflow-y: auto;
 }
+
+@media (min-width: 600px) {
+    .header .profile-menu.profile-menu-expanded,
+    .header .product-dropdown.product-dropdown-expanded {
+      width: 360px;
+      height: calc(100vh - var(--nav-height));
+  }
+}
+
 @media (min-width: 1024px) {
+  .header .profile-menu.profile-menu-expanded,
+  .header .product-dropdown.product-dropdown-expanded {
+    height: auto;
+  }
+
   .header .profile-menu.profile-menu-expanded {
     background: var(--spectrum-gray-100);
     right: 0;
     width: 200px;
   }
-}
-@media (min-width: 1024px) {
+
   .header .product-dropdown.product-dropdown-expanded {
     width: fit-content;
   }
