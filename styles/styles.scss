@@ -997,41 +997,6 @@ body[class^='browse-'] .browse-filters-full-container {
       }
     }
 
-    .default-content-wrapper h2 {
-      font-size: 24px;
-      border-bottom: 3px solid var(--non-spectrum-grey);
-      margin-bottom: 8px;
-    }
-
-    .default-content-wrapper h3 {
-      font-size: 14px;
-      margin-top: 40px;
-      margin-bottom: 16px;
-    }
-
-    .default-content-wrapper ul {
-      display: flex;
-      flex-direction: column;
-      margin: 0;
-      width: 100%;
-    }
-
-    .default-content-wrapper ul li {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      font-size: var(--spectrum-font-size-200);
-      color: var(--spectrum-gray-800);
-    }
-
-    .default-content-wrapper ul li a {
-      color: var(--non-spectrum-link-blue);
-    }
-
-    .default-content-wrapper ul li a:hover {
-      color: var(--non-spectrum-custom-dark);
-    }
-
     .section > div.default-content-wrapper {
       max-width: 100%;
     }
