@@ -19,11 +19,6 @@ import {
 } from './lib-franklin.js';
 // eslint-disable-next-line import/no-cycle
 
-const ffetchModulePromise = import('./ffetch.js');
-
-// eslint-disable-next-line import/no-cycle
-const libAnalyticsModulePromise = import('./analytics/lib-analytics.js');
-
 const LCP_BLOCKS = ['marquee']; // add your LCP blocks to the list
 
 export const timers = new Map();
@@ -261,6 +256,33 @@ export function decorateExternalLinks(main) {
 }
 
 /**
+ * Links that have urls with JSON the hash, the JSON will be translated to attributes
+ * eg <a href="https://example.com#{"target":"_blank", "auth-only": "true"}">link</a>
+ * will be translated to <a href="https://example.com" target="_blank" auth-only="true">link</a>
+ * @param {HTMLElement} block
+ */
+export const decorateLinks = (block) => {
+  const links = block.querySelectorAll('a');
+  links.forEach((link) => {
+    const decodedHref = decodeURIComponent(link.getAttribute('href'));
+    const firstCurlyIndex = decodedHref.indexOf('{');
+    const lastCurlyIndex = decodedHref.lastIndexOf('}');
+    if (firstCurlyIndex > -1 && lastCurlyIndex > -1) {
+      // everything between curly braces is treated as JSON string.
+      const optionsJsonStr = decodedHref.substring(firstCurlyIndex, lastCurlyIndex + 1);
+      const fixedJsonString = optionsJsonStr.replace(/'/g, '"'); // JSON.parse function expects JSON strings to be formatted with double quotes
+      const parsedJSON = JSON.parse(fixedJsonString);
+      Object.entries(parsedJSON).forEach(([key, value]) => {
+        link.setAttribute(key.trim(), value);
+      });
+      // remove the JSON string from the hash, if JSON string is the only thing in the hash, remove the hash as well.
+      const endIndex = decodedHref.charAt(firstCurlyIndex - 1) === '#' ? firstCurlyIndex - 1 : firstCurlyIndex;
+      link.href = decodedHref.substring(0, endIndex);
+    }
+  });
+};
+
+/**
  * Check if current page is a MD Docs Page.
  * theme = docs is set in bulk metadata for docs paths.
  * @param {string} type The type of doc page - example: docs-solution-landing,
@@ -310,7 +332,7 @@ export function decorateAnchors(main) {
   const anchorIcons = [...main.querySelectorAll(`.icon-headding-anchor`)];
   anchorIcons.forEach((icon) => {
     const slugNode = icon.nextSibling;
-    const slug = slugNode.textContent;
+    const slug = slugNode?.textContent?.trim();
     if (slug) {
       icon.parentElement.id = slug;
       icon.remove();
@@ -374,8 +396,11 @@ export const locales = new Map([
   ['it', 'it_IT'],
   ['ja', 'ja_JP'],
   ['ko', 'ko_KO'],
-  ['pt-BR', 'pt_BR'],
-  ['zh-Hans', 'zh_HANS'],
+  ['pt-br', 'pt_BR'],
+  ['zh-hans', 'zh_HANS'],
+  ['zh-hant', 'zh_HANT'],
+  ['nl', 'nl_NL'],
+  ['sv', 'sv_SE'],
 ]);
 
 export async function loadIms() {
@@ -402,22 +427,7 @@ export async function loadIms() {
   return window.imsLoaded;
 }
 
-/**
- * Loads everything that doesn't need to be delayed.
- * @param {Element} doc The container element
- */
-async function loadLazy(doc) {
-  const main = doc.querySelector('main');
-  await loadBlocks(main);
-  loadIms(); // start it early, asyncronously
-
-  const { hash } = window.location;
-  const element = hash ? doc.getElementById(hash.substring(1)) : false;
-  const { lang } = getPathDetails();
-  if (hash && element) element.scrollIntoView();
-  const headerPromise = loadHeader(doc.querySelector('header'));
-  const footerPromise = loadFooter(doc.querySelector('footer'));
-
+const loadMartech = async (headerPromise, footerPromise) => {
   let launchScriptSrc = '';
   if (window.location.host === 'eds-stage.experienceleague.adobe.com') {
     launchScriptSrc = 'https://assets.adobedtm.com/a7d65461e54e/6e9802a06173/launch-dbb3f007358e-staging.min.js';
@@ -426,8 +436,9 @@ async function loadLazy(doc) {
   } else {
     launchScriptSrc = 'https://assets.adobedtm.com/a7d65461e54e/6e9802a06173/launch-e6bd665acc0a-development.min.js';
   }
+  oneTrust();
 
-  const oneTrustPromise = loadScript(`/scripts/analytics/privacy-standalone.js`, {
+  const oneTrustPromise = loadScript('/etc.clientlibs/globalnav/clientlibs/base/privacy-standalone.js', {
     async: true,
     defer: true,
   });
@@ -436,11 +447,14 @@ async function loadLazy(doc) {
     async: true,
   });
 
-  Promise.all([launchPromise, libAnalyticsModulePromise, headerPromise, footerPromise, oneTrustPromise]).then(
+  // eslint-disable-next-line import/no-cycle
+  const libAnalyticsPromise = import('./analytics/lib-analytics.js');
+
+  Promise.all([launchPromise, libAnalyticsPromise, headerPromise, footerPromise, oneTrustPromise]).then(
     // eslint-disable-next-line no-unused-vars
     ([launch, libAnalyticsModule, headPr, footPr]) => {
+      const { lang } = getPathDetails();
       const { pageLoadModel, linkClickModel, pageName } = libAnalyticsModule;
-      oneTrust();
       document.querySelector('[href="#onetrust"]').addEventListener('click', (e) => {
         e.preventDefault();
         window.adobePrivacy.showConsentPopup();
@@ -464,10 +478,26 @@ async function loadLazy(doc) {
       });
     },
   );
+};
 
+/**
+ * Loads everything that doesn't need to be delayed.
+ * @param {Element} doc The container element
+ */
+async function loadLazy(doc) {
+  const main = doc.querySelector('main');
+  await loadBlocks(main);
+  loadIms(); // start it early, asyncronously
+
+  const { hash } = window.location;
+  const element = hash ? doc.getElementById(hash.substring(1)) : false;
+  if (hash && element) element.scrollIntoView();
+  const headerPromise = loadHeader(doc.querySelector('header'));
+  const footerPromise = loadFooter(doc.querySelector('footer'));
+  // disable martech if martech=off is in the query string, this is used for testing ONLY
+  if (window.location.search?.indexOf('martech=off') === -1) loadMartech(headerPromise, footerPromise);
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();
-
   sampleRUM('lazy');
 }
 
@@ -622,7 +652,7 @@ export async function fetchLanguagePlaceholders() {
 
 export async function getLanguageCode() {
   const { lang } = getPathDetails();
-  const ffetch = (await ffetchModulePromise).default;
+  const { default: ffetch } = await import('./ffetch.js');
   const langMap = await ffetch(`/languages.json`).all();
   const langObj = langMap.find((item) => item.key === lang);
   const langCode = langObj ? langObj.value : lang;
