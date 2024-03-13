@@ -2140,6 +2140,30 @@
             "value": "most_popular"
           }
         ]
+      },
+      {
+        "component": "checkbox-group",
+        "name": "sortByDate",
+        "value": "within-one-month",
+        "label": "Sort by Date",
+        "options": [
+          {
+            "name": "Within one month",
+            "value": "within-one-month"
+          },
+          {
+            "name": "Within six months",
+            "value": "within-six-months"
+          },
+          {
+            "name": "Within one year",
+            "value": "within-one-year"
+          },
+          {
+            "name": "More than one year ago",
+            "value": "more-than-one-year-ago"
+          }
+        ]
       }
     ]
   },
