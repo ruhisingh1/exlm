@@ -2149,19 +2149,19 @@
         "options": [
           {
             "name": "Within one month",
-            "value": "within-one-month"
+            "value": "within_one_month"
           },
           {
             "name": "Within six months",
-            "value": "within-six-months"
+            "value": "within_six_months"
           },
           {
             "name": "Within one year",
-            "value": "within-one-year"
+            "value": "within_one_year"
           },
           {
             "name": "More than one year ago",
-            "value": "more-than-one-year-ago"
+            "value": "more_than_one_year_ago"
           }
         ]
       }
