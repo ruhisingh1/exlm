@@ -2146,6 +2146,7 @@
         "name": "sortByDate",
         "value": "within-one-month",
         "label": "Sort by Date",
+        "valueType": "string",
         "options": [
           {
             "name": "Within one month",
