@@ -2142,9 +2142,8 @@
         ]
       },
       {
-        "component": "checkbox-group",
+        "component": "multiselect",
         "name": "sortByDate",
-        "value": "within-one-month",
         "label": "Sort by Date",
         "valueType": "string",
         "options": [
