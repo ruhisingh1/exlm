@@ -590,6 +590,21 @@
     ]
   },
   {
+    "id": "browse-rail-section",
+    "fields": [
+      {
+        "component": "select",
+        "name": "style",
+        "value": "",
+        "label": "Style",
+        "description": "The section style",
+        "valueType": "string",
+        "hidden": true,
+        "options": []
+      }
+    ]
+  },
+  {
     "id": "icon-card",
     "fields": [
       {
@@ -2125,26 +2140,9 @@
         ]
       },
       {
-        "component": "radio-group",
-        "name": "sortBy",
-        "value": "most_recent",
-        "label": "Sort by",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Most Recent",
-            "value": "most_recent"
-          },
-          {
-            "name": "Most Popular",
-            "value": "most_popular"
-          }
-        ]
-      },
-      {
         "component": "multiselect",
         "name": "sortByDate",
-        "label": "Sort by Date",
+        "label": "Filter by Date",
         "valueType": "string",
         "options": [
           {
@@ -2162,6 +2160,23 @@
           {
             "name": "More than one year ago",
             "value": "more_than_one_year_ago"
+          }
+        ]
+      },
+      {
+        "component": "radio-group",
+        "name": "sortBy",
+        "value": "most_recent",
+        "label": "Sort by",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Most Recent",
+            "value": "most_recent"
+          },
+          {
+            "name": "Most Popular",
+            "value": "most_popular"
           }
         ]
       }
@@ -2257,6 +2272,19 @@
         "value": "",
         "label": "Link URL",
         "description": "Sets the text url."
+      }
+    ]
+  },
+  {
+    "id": "browse-rail",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "navigation",
+        "value": "",
+        "label": "Product Navigation",
+        "description": "Override default behaviour with custom Navigation"
       }
     ]
   }

@@ -1,13 +1,41 @@
 import { isSignedInUser } from '../../scripts/data-service/profile-service.js';
-import { decorateIcons } from '../../scripts/lib-franklin.js';
-import { htmlToElement, getPathDetails, fetchLanguagePlaceholders, decorateLinks } from '../../scripts/scripts.js';
+import { decorateIcons, loadCSS, getMetadata } from '../../scripts/lib-franklin.js';
+import {
+  htmlToElement,
+  getPathDetails,
+  fetchLanguagePlaceholders,
+  decorateLinks,
+  getConfig,
+} from '../../scripts/scripts.js';
 
 const languageModule = import('../../scripts/language.js');
 const authOperationsModule = import('../../scripts/auth/auth-operations.js');
-const searchModule = import('../../scripts/search/search.js');
+
 // Khoros Proxy URL (Determine the environment based on the host name)
 const environment = window.location.hostname === 'experienceleague.adobe.com' ? '' : '-dev';
 export const khorosProxyProfileAPI = `https://51837-exlmconverter${environment}.adobeioruntime.net/api/v1/web/main/khoros/plugins/custom/adobe/adobedx/profile-menu-list`;
+
+let searchElementPromise = null;
+
+export async function loadSearchElement() {
+  searchElementPromise =
+    searchElementPromise ??
+    new Promise((resolve, reject) => {
+      // eslint-disable-next-line
+      Promise.all([
+        import('../../scripts/search/search.js'),
+        loadCSS(`${window.hlx.codeBasePath}/scripts/search/search.css`),
+      ])
+        .then((results) => {
+          const [mod] = results;
+          resolve(mod.default ?? mod);
+        })
+        .catch((e) => {
+          reject(e);
+        });
+    });
+  return searchElementPromise;
+}
 
 class Deferred {
   constructor() {
@@ -470,18 +498,17 @@ const searchDecorator = async (searchBlock) => {
     </div>
   `,
   );
-  searchBlock.append(searchWrapper);
-  await decorateIcons(searchBlock);
 
-  const prepareSearch = async () => {
-    const Search = (await searchModule).default;
-    const searchItem = new Search({ searchBlock });
-    searchItem.configureAutoComplete({
-      searchOptions: options,
-      showSearchSuggestions: false,
-    });
-  };
-  prepareSearch();
+  const Search = await loadSearchElement();
+  searchBlock.append(searchWrapper);
+
+  const searchItem = new Search({ searchBlock });
+  searchItem.configureAutoComplete({
+    searchOptions: options,
+    showSearchSuggestions: true,
+  });
+
+  await decorateIcons(searchBlock);
 
   return searchBlock;
 };
@@ -515,6 +542,18 @@ const languageDecorator = async (languageBlock) => {
   return languageBlock;
 };
 
+async function getPPSProfile(accessToken, accountId) {
+  const { ppsOrigin, ims } = getConfig();
+  const res = await fetch(`${ppsOrigin}/api/profile`, {
+    headers: {
+      'X-Api-Key': ims.client_id,
+      'X-Account-Id': accountId,
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return res.json();
+}
+
 /**
  * Decorates the sign-in block
  * @param {HTMLElement} signInBlock
@@ -525,17 +564,33 @@ const signInDecorator = async (signInBlock) => {
   const isSignedIn = await isSignedInUser();
   if (isSignedIn) {
     signInBlock.classList.add('signed-in');
-    signInBlock.replaceChildren(
-      htmlToElement(
-        `<div class="profile">
-          <button class="profile-toggle" aria-controls="profile-menu">
-            <span class="icon icon-profile"></span>
-          </button>
-          <div class="profile-menu" id="profile-menu">
-          </div>
-        </div>`,
-      ),
+    const profile = htmlToElement(
+      `<div class="profile">
+        <button class="profile-toggle" aria-controls="profile-menu">
+          <span class="icon icon-profile"></span>
+        </button>
+        <div class="profile-menu" id="profile-menu">
+        </div>
+      </div>`,
     );
+
+    signInBlock.replaceChildren(profile);
+    const { token } = window.adobeIMS.getAccessToken();
+    const accountId = (await window.adobeIMS.getProfile()).userId;
+    getPPSProfile(token, accountId)
+      .then((ppsProfile) => {
+        const profilePicture = ppsProfile?.images['50'];
+        if (profilePicture) {
+          const profileToggle = profile.querySelector('.profile-toggle');
+          profileToggle.replaceChildren(
+            htmlToElement(`<img class="profile-picture" src="${profilePicture}" alt="profile picture" />`),
+          );
+        }
+      })
+      .catch((err) => {
+        // eslint-disable-next-line no-console
+        console.error(err);
+      });
 
     const toggler = signInBlock.querySelector('.profile-toggle');
     const navOverlay = document.querySelector('.nav-overlay');
@@ -731,6 +786,12 @@ const decorateNewTabLinks = (block) => {
  */
 export default async function decorate(headerBlock) {
   headerBlock.style.display = 'none';
+  loadSearchElement();
+  const [solutionTag] = getMetadata('solution').trim().split(',');
+  if (solutionTag) {
+    window.headlessSolutionProductKey = solutionTag;
+  }
+
   // eslint-disable-next-line no-unused-vars
   headerBlock.innerHTML = await headerFragment;
 
