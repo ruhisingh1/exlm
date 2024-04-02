@@ -121,6 +121,7 @@
         "name": "eyebrow",
         "value": "",
         "label": "Eyebrow",
+        "required": true,
         "description": "Sets the small pre-title above the title."
       },
       {
