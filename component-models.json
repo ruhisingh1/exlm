@@ -2468,6 +2468,7 @@
         "component": "aem-tag",
         "name": "coveo-solution",
         "label": "Coveo Solution",
+        "valueType": "string",
         "rootPath": "/content/cq:tags/exl/solution"
       },
       {
@@ -2497,12 +2498,14 @@
         "component": "aem-tag",
         "name": "role",
         "label": "Role(s)",
+        "valueType": "string",
         "rootPath": "/content/cq:tags/exl/role"
       },
       {
         "component": "aem-tag",
         "name": "level",
         "label": "Experience Level(s)",
+        "valueType": "string",
         "rootPath": "/content/cq:tags/exl/experience-level"
       }
     ]
