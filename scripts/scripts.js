@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable no-bitwise */
 import {
   sampleRUM,
@@ -17,11 +18,11 @@ import {
   loadScript,
   fetchPlaceholders,
   readBlockConfig,
+  createOptimizedPicture,
 } from './lib-franklin.js';
 // eslint-disable-next-line import/no-cycle
 
-const LCP_BLOCKS = ['marquee']; // add your LCP blocks to the list
-
+const LCP_BLOCKS = ['marquee', 'article-marquee']; // add your LCP blocks to the list
 export const timers = new Map();
 
 // eslint-disable-next-line
@@ -51,18 +52,6 @@ async function loadFonts() {
   } catch (e) {
     // do nothing
   }
-}
-
-/**
- * one trust configuration setup
- */
-function oneTrust() {
-  window.fedsConfig = window.fedsConfig || {};
-  window.fedsConfig.privacy = window.fedsConfig.privacy || {};
-  window.fedsConfig.privacy.otDomainId = `7a5eb705-95ed-4cc4-a11d-0cc5760e93db${
-    window.location.host.split('.').length === 3 ? '' : '-test'
-  }`;
-  window.fedsConfig.privacy.footerLinkSelector = '.footer [href="#onetrust"]';
 }
 
 /**
@@ -189,6 +178,25 @@ function addBrowseBreadCrumb(main) {
   }
 }
 
+export function isArticleLandingPage() {
+  const theme = getMetadata('theme');
+  return theme.split(',').find((t) => t.toLowerCase().startsWith('article-'));
+}
+
+function addArticleLandingRail(main) {
+  // if there is already editable browse rail stored
+  const articleRailSectionFound = [...main.querySelectorAll('.section-metadata')].find((sMeta) =>
+    readBlockConfig(sMeta)?.style.split(',').includes('article-rail-section'),
+  );
+  if (articleRailSectionFound) return;
+
+  // default: create a dynamic uneditable article rail
+  const leftRailSection = document.createElement('div');
+  leftRailSection.classList.add('articles-rail-section', isArticleLandingPage());
+  leftRailSection.append(buildBlock('articles-rail', []));
+  main.append(leftRailSection);
+}
+
 /**
  * Builds all synthetic blocks in a container element.
  * @param {Element} main The container element
@@ -201,6 +209,11 @@ function buildAutoBlocks(main) {
       addBrowseBreadCrumb(main);
       addBrowseRail(main);
     }
+    if (isArticleLandingPage()) {
+      addArticleLandingRail(main);
+    }
+    // eslint-disable-next-line no-use-before-define
+    addMiniTocForArticlesPage(main);
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Auto Blocking failed', error);
@@ -290,6 +303,14 @@ export const decorateLinks = (block) => {
   });
 };
 
+export function isPageOfType(type) {
+  const theme = getMetadata('theme');
+  return theme
+    .split(',')
+    .map((t) => t.toLowerCase().trim())
+    .includes(type);
+}
+
 /**
  * Check if current page is a MD Docs Page.
  * theme = docs is set in bulk metadata for docs paths.
@@ -297,11 +318,11 @@ export const decorateLinks = (block) => {
  *                      docs-landing, docs (optional, default value is docs)
  */
 export function isDocPage(type = 'docs') {
-  const theme = getMetadata('theme');
-  return theme
-    .split(',')
-    .map((t) => t.toLowerCase().trim())
-    .includes(type);
+  return isPageOfType(type);
+}
+
+export function isArticlePage(type = 'articles') {
+  return isPageOfType(type);
 }
 
 /**
@@ -349,8 +370,35 @@ export function decorateAnchors(main) {
   });
 }
 
+/**
+ * creates an element from html string
+ * @param {string} html
+ * @returns {HTMLElement}
+ */
+export function htmlToElement(html) {
+  const template = document.createElement('template');
+  const trimmedHtml = html.trim(); // Never return a text node of whitespace as the result
+  template.innerHTML = trimmedHtml;
+  return template.content.firstElementChild;
+}
+
 const encodeHTML = (str) => str.replace(/[\u00A0-\u9999<>&]/g, (i) => `&#${i.charCodeAt(0)};`);
 
+/**
+ * Parse attribute strings like: {color="red" class="highlight"} to object {color: "red", class: "highlight"}
+ * @param {string} attrs
+ * @returns
+ */
+const parseInlineAttributes = (attrs) => {
+  const result = {};
+  attrs
+    .split(/\s+(?=(?:[^"]*"[^"]*")*[^"]*$)/g) // match spaces only if not within quotes
+    .map((attr) => attr.split('='))
+    .forEach(([key, value]) => {
+      result[key] = value === undefined ? undefined : encodeHTML(value?.replace(/"/g, '') || '');
+    });
+  return result;
+};
 /**
  * converts text with attributes to <span> elements with given attributes.
  * eg: [text]{color="red" class="highlight"} => <span color="red" class="highlight">text</span>
@@ -359,15 +407,14 @@ const encodeHTML = (str) => str.replace(/[\u00A0-\u9999<>&]/g, (i) => `&#${i.cha
  */
 export const getDecoratedInlineHtml = (inputStr) => {
   if (!inputStr) return inputStr;
-  const regex = /\[([^[\]]*)\]\{(.*?)\}/g;
+  const regex = /\[([^[\]]*)\]{([^}]+)}/g;
   return inputStr.replace(regex, (match, text, attrs) => {
     const encodedText = encodeHTML(text);
-    const newAttrs = attrs
-      .split(/\s+(?=(?:[^"]*"[^"]*")*[^"]*$)/g) // match spaces only if not within quotes
-      .map((attr) => {
-        const [key, value] = attr.split('=');
-        return `${key}="${encodeHTML(value.replace(/"/g, ''))}"`;
-      })
+    const attrsObj = parseInlineAttributes(attrs);
+    const validAttrs = Object.values(attrsObj).every((v) => v !== undefined);
+    if (!validAttrs) return match; // ignore expresssion that have attributes with undefined values
+    const newAttrs = Object.entries(attrsObj)
+      .map(([key, value]) => `${key}="${value}"`)
       .join(' ');
     return `<span ${newAttrs}>${encodedText}</span>`;
   });
@@ -375,20 +422,81 @@ export const getDecoratedInlineHtml = (inputStr) => {
 
 /**
  *
+ * @param {Node} textNode
+ */
+export function decorateInlineText(textNode) {
+  const { textContent } = textNode;
+  if (textContent.includes('[') && textContent.includes(']{')) {
+    const span = document.createElement('span');
+    span.innerHTML = getDecoratedInlineHtml(textContent);
+    window.requestAnimationFrame(() => {
+      textNode.replaceWith(...span.childNodes);
+    });
+  }
+}
+
+/**
+ * decorates the previous image element with attributes defined in the textNode
+ * @param {Node} textNode
+ */
+export function decoratePreviousImage(textNode) {
+  // if previous element is image, and textNode contains { and }, decorate the image
+  const { previousSibling, textContent } = textNode;
+  if (textContent.startsWith('{') && textContent.includes('}')) {
+    const isPrecededByPicture = previousSibling?.tagName.toLowerCase() === 'picture';
+    const isPrecededByImg = previousSibling?.tagName.toLowerCase() === 'img';
+    let picture;
+    let img;
+    if (isPrecededByPicture) {
+      picture = previousSibling;
+      img = picture.querySelector('img');
+    } else if (isPrecededByImg) {
+      img = previousSibling;
+    } else return; // only decorate if preceded by picture or img
+
+    const attrsStr = textContent.substring(1, textContent.indexOf('}'));
+    textNode.textContent = textContent.substring(textContent.indexOf('}') + 1);
+    if (img.src === 'about:error') return; // do not decorate broken images
+    const attrsObj = parseInlineAttributes(attrsStr);
+    let newPicture = picture;
+    if (attrsObj.width) {
+      // author defined width
+      const { width } = attrsObj;
+      const isNumberWithNoUnit = /^\d+$/.test(width);
+      if (isNumberWithNoUnit) {
+        newPicture = createOptimizedPicture(img.src, img.alt, false, [
+          { media: '(min-width: 400px)', width },
+          { width },
+        ]);
+      }
+      // set width, if digits only, add px, else set as is
+      newPicture.style.width = isNumberWithNoUnit ? `${width}px` : width;
+      picture.replaceWith(newPicture);
+    }
+    if (attrsObj.modal) {
+      // modal
+      newPicture.addEventListener('click', () => {
+        // eslint-disable-next-line import/no-cycle
+        const promises = [loadCSS(`${window.hlx.codeBasePath}/styles/image-modal.css`), import('./image-modal.js')];
+        Promise.all(promises).then(([, mod]) => mod.default(newPicture.querySelector('img')));
+      });
+    }
+    if (img.hasAttribute('data-title')) {
+      newPicture?.querySelector('img')?.setAttribute('title', img?.getAttribute('data-title'));
+    }
+    Object.entries(attrsObj).forEach(([key, value]) => newPicture.setAttribute(key, value));
+  }
+}
+
+/**
  * @param {HTMLElement} element
  */
 export function decorateInlineAttributes(element) {
   const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
   while (walker.nextNode()) {
     const { currentNode } = walker;
-    const { textContent } = currentNode;
-    if (textContent.includes('[') && textContent.includes(']{')) {
-      const span = document.createElement('span');
-      span.innerHTML = getDecoratedInlineHtml(textContent);
-      window.requestAnimationFrame(() => {
-        currentNode.replaceWith(...span.childNodes);
-      });
-    }
+    decorateInlineText(currentNode);
+    decoratePreviousImage(currentNode);
   }
 }
 
@@ -477,17 +585,17 @@ export function getConfig() {
   const lang = document.querySelector('html').lang || 'en';
   const prodAssetsCdnOrigin = 'https://cdn.experienceleague.adobe.com';
   const isProd = currentEnv?.env === 'PROD';
+  const isStage = currentEnv?.env === 'STAGE';
   const ppsOrigin = isProd ? 'https://pps.adobe.io' : 'https://pps-stage.adobe.io';
   const ims = {
     client_id: 'ExperienceLeague',
     environment: isProd ? 'prod' : 'stg1',
-    debug: currentEnv !== 'PROD',
+    debug: !isProd,
   };
 
   let launchScriptSrc;
-  if (currentEnv === 'PROD')
-    launchScriptSrc = 'https://assets.adobedtm.com/a7d65461e54e/6e9802a06173/launch-43baf8381f4b.min.js';
-  else if (currentEnv === 'STAGE')
+  if (isProd) launchScriptSrc = 'https://assets.adobedtm.com/a7d65461e54e/6e9802a06173/launch-43baf8381f4b.min.js';
+  else if (isStage)
     launchScriptSrc = 'https://assets.adobedtm.com/a7d65461e54e/6e9802a06173/launch-dbb3f007358e-staging.min.js';
   else launchScriptSrc = 'https://assets.adobedtm.com/d4d114c60e50/9f881954c8dc/launch-caabfb728852-development.js';
 
@@ -500,6 +608,7 @@ export function getConfig() {
     prodAssetsCdnOrigin,
     ppsOrigin,
     launchScriptSrc,
+    khorosProfileUrl: `${cdnOrigin}/api/action/khoros/profile-menu-list`,
     privacyScript: `${cdnOrigin}/etc.clientlibs/globalnav/clientlibs/base/privacy-standalone.js`,
     profileUrl: `${cdnOrigin}/api/profile?lang=${lang}`,
     JWTTokenUrl: `${cdnOrigin}/api/token?lang=${lang}`,
@@ -519,6 +628,23 @@ export function getConfig() {
     recommendedCoursesUrl: `${cdnOrigin}/home?lang=${lang}#dashboard/learning`,
   };
   return window.exlm.config;
+}
+
+/**
+ * one trust configuration setup
+ */
+function loadOneTrust() {
+  window.fedsConfig = window.fedsConfig || {};
+  window.fedsConfig.privacy = window.fedsConfig.privacy || {};
+  window.fedsConfig.privacy.otDomainId = `7a5eb705-95ed-4cc4-a11d-0cc5760e93db${
+    window.location.host.split('.').length === 3 ? '' : '-test'
+  }`;
+  window.fedsConfig.privacy.footerLinkSelector = '.footer [href="#onetrust"]';
+  const { privacyScript } = getConfig();
+  return loadScript(privacyScript, {
+    async: true,
+    defer: true,
+  });
 }
 
 export const locales = new Map([
@@ -561,47 +687,61 @@ export async function loadIms() {
 }
 
 const loadMartech = async (headerPromise, footerPromise) => {
-  const { privacyScript, launchScriptSrc } = getConfig();
-  oneTrust();
-
-  const oneTrustPromise = loadScript(privacyScript, {
-    async: true,
-    defer: true,
-  });
-
-  const launchPromise = loadScript(launchScriptSrc, {
-    async: true,
-  });
-
+  console.time('martech');
+  console.timeLog('martech', `start loading lib-analytics.js ${Date.now()}`);
+  // start datalayer work early
   // eslint-disable-next-line import/no-cycle
   const libAnalyticsPromise = import('./analytics/lib-analytics.js');
+  libAnalyticsPromise.then((libAnalyticsModule) => {
+    console.timeLog('martech', `finished loading lib-analytics.js ${Date.now()}`);
+    const { pushPageDataLayer, pushLinkClick, pageName } = libAnalyticsModule;
+    const { lang } = getPathDetails();
+    pushPageDataLayer(lang)
+      // eslint-disable-next-line no-console
+      .catch((e) => console.error('Error getting pageLoadModel:', e));
+    localStorage.setItem('prevPage', pageName(lang));
 
-  Promise.all([launchPromise, libAnalyticsPromise, headerPromise, footerPromise, oneTrustPromise]).then(
-    // eslint-disable-next-line no-unused-vars
-    ([launch, libAnalyticsModule, headPr, footPr]) => {
-      const { lang } = getPathDetails();
-      const { pageLoadModel, linkClickModel, pageName } = libAnalyticsModule;
-      document.querySelector('[href="#onetrust"]').addEventListener('click', (e) => {
-        e.preventDefault();
-        window.adobePrivacy.showConsentPopup();
-      });
-      pageLoadModel(lang)
-        .then((data) => {
-          window.adobeDataLayer.push(data);
-        })
-        .catch((e) => {
-          // eslint-disable-next-line no-console
-          console.error('Error getting pageLoadModel:', e);
-        });
-      localStorage.setItem('prevPage', pageName(lang));
+    Promise.allSettled([headerPromise, footerPromise]).then(() => {
+      console.timeLog('martech', `add click event tracking ${Date.now()}`);
       const linkClicked = document.querySelectorAll('a,.view-more-less span, .language-selector-popover span');
-      linkClicked.forEach((linkElement) => {
-        linkElement.addEventListener('click', (e) => {
-          if (e.target.tagName === 'A' || e.target.tagName === 'SPAN') {
-            linkClickModel(e);
-          }
-        });
-      });
+      const clickHandler = (e) => {
+        if (e.target.tagName === 'A' || e.target.tagName === 'SPAN') pushLinkClick(e);
+      };
+      linkClicked.forEach((e) => e.addEventListener('click', clickHandler));
+    });
+  });
+
+  // load one trust
+  console.timeLog('martech', `onetrust: start load onetrust script ${Date.now()}`);
+  const oneTrustPromise = loadOneTrust().then(() => {
+    console.timeLog('martech', `onetrust: loaded one trust script ${Date.now()}`);
+  });
+
+  // load launch
+  console.timeLog('martech', `launch: start load launch script ${Date.now()}`);
+  const { launchScriptSrc } = getConfig();
+  const launchScriptPromise = loadScript(launchScriptSrc, {
+    async: true,
+  });
+  launchScriptPromise.then(() => {
+    console.timeLog('martech', `launch: loaded launch script ${Date.now()}`);
+  });
+
+  // footer and one trust loaded, add event listener to open one trust popup,
+  Promise.all([footerPromise, oneTrustPromise]).then(() => {
+    console.timeLog('martech', `onetrust: set event listeners ${Date.now()}`);
+    document.querySelector('[href="#onetrust"]').addEventListener('click', (e) => {
+      e.preventDefault();
+      window.adobePrivacy.showConsentPopup();
+    });
+  });
+
+  Promise.allSettled([headerPromise, footerPromise, oneTrustPromise, launchScriptPromise, libAnalyticsPromise]).then(
+    () => {
+      setTimeout(() => {
+        console.timeLog('martech', `all done. ${Date.now()}`);
+        console.timeEnd('martech');
+      }, 0);
     },
   );
 };
@@ -650,18 +790,6 @@ export function createTag(tag, attributes, html) {
 }
 
 /**
- * creates an element from html string
- * @param {string} html
- * @returns {HTMLElement}
- */
-export function htmlToElement(html) {
-  const template = document.createElement('template');
-  const trimmedHtml = html.trim(); // Never return a text node of whitespace as the result
-  template.innerHTML = trimmedHtml;
-  return template.content.firstElementChild;
-}
-
-/**
  * Copies all meta tags to window.EXL_META
  * These are consumed by Qualtrics to pass additional data along with the feedback survey.
  */
@@ -703,6 +831,36 @@ async function loadRails() {
     const mod = await import('./rails/rails.js');
     if (mod.default) {
       await mod.default();
+    }
+  }
+}
+
+/**
+ * Custom - Loads and builds layout for articles page
+ */
+async function loadArticles() {
+  if (isArticlePage()) {
+    loadCSS(`${window.hlx.codeBasePath}/scripts/articles/articles.css`);
+    const mod = await import('./articles/articles.js');
+    if (mod.default) {
+      await mod.default();
+    }
+  }
+}
+
+function addMiniTocForArticlesPage(main) {
+  if (isArticlePage()) {
+    const [, articleBody] = main.children;
+    if (articleBody && !articleBody.querySelector('.mini-toc')) {
+      // Dynamically add mini-toc section for articles page
+      const miniTocWrapper = htmlToElement(`
+      <div class="mini-toc">
+        <div>
+          <div></div>
+        </div>
+      </div>
+      `);
+      articleBody.appendChild(miniTocWrapper);
     }
   }
 }
@@ -755,6 +913,19 @@ export function rewriteDocsPath(docsPath) {
   return url.toString().replace(PROD_BASE, ''); // always remove PROD_BASE if exists
 }
 
+export async function fetchWithFallback(path, fallbackPath) {
+  const response = await fetch(path);
+  if (response.ok) return response;
+  return fetch(fallbackPath);
+}
+
+export async function fetchFragment(rePath, lang = 'en') {
+  const path = `/fragments/${lang}/${rePath}.plain.html`;
+  const fallback = `/fragments/en/${rePath}.plain.html`;
+  const response = await fetchWithFallback(path, fallback);
+  return response.text();
+}
+
 export async function fetchLanguagePlaceholders() {
   const { lang } = getPathDetails();
   try {
@@ -775,12 +946,25 @@ export async function fetchLanguagePlaceholders() {
 }
 
 export async function getLanguageCode() {
-  const { lang } = getPathDetails();
-  const { default: ffetch } = await import('./ffetch.js');
-  const langMap = await ffetch(`/languages.json`).all();
-  const langObj = langMap.find((item) => item.key === lang);
-  const langCode = langObj ? langObj.value : lang;
-  return langCode;
+  if (window.languageCode) return window.languageCode;
+  window.languageCode = new Promise((resolve, reject) => {
+    const { lang } = getPathDetails();
+    fetch('/languages.json')
+      .then((response) => response.json())
+      .then((languages) => {
+        const langMap = languages.data;
+        const langObj = langMap.find((item) => item.key === lang);
+        const langCode = langObj ? langObj.value : lang;
+        window.languageCode = langCode;
+        resolve(langCode);
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error('Error fetching language code:', error);
+        reject(error);
+      });
+  });
+  return window.languageCode;
 }
 
 async function loadDefaultModule(jsPath) {
@@ -808,12 +992,37 @@ function handleHomePageHashes() {
   return false;
 }
 
+/**
+ * @param {string} placeholderKey
+ * @param {string} fallbackText
+ * @returns
+ */
+export function createPlaceholderSpan(placeholderKey, fallbackText, onResolved) {
+  const span = document.createElement('span');
+  span.setAttribute('data-placeholder', placeholderKey);
+  span.setAttribute('data-placeholder-fallback', fallbackText);
+  span.style.setProperty('--placeholder-width', `${fallbackText.length}ch`);
+  fetchLanguagePlaceholders()
+    .then((placeholders) => {
+      span.textContent = placeholders[placeholderKey] || fallbackText;
+      span.removeAttribute('data-placeholder');
+      span.removeAttribute('data-placeholder-fallback');
+      span.style.removeProperty('--placeholder-width');
+      if (onResolved) onResolved(span);
+    })
+    .catch(() => {
+      span.textContent = fallbackText;
+    });
+  return span;
+}
+
 async function loadPage() {
   // THIS IS TEMPORARY FOR SUMMIT.
   if (handleHomePageHashes()) return;
   // END OF TEMPORARY FOR SUMMIT.
   await loadEager(document);
   await loadLazy(document);
+  loadArticles();
   loadRails();
   loadDelayed();
   showBrowseBackgroundGraphic();

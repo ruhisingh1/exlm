@@ -587,11 +587,48 @@
             "value": "highlight"
           }
         ]
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "always-show",
+        "label": "Do NOT hide on browse filter results?",
+        "description": "When browse-filter block is used, on browse-filter results, all sections below the browse-filter is hidden. Above toggle makes an exception to show this section even if the browse filter results are displayed."
       }
     ]
   },
   {
     "id": "browse-rail-section",
+    "fields": [
+      {
+        "component": "select",
+        "name": "style",
+        "value": "",
+        "label": "Style",
+        "description": "The section style",
+        "valueType": "string",
+        "hidden": true,
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "article-header-section",
+    "fields": [
+      {
+        "component": "select",
+        "name": "style",
+        "value": "",
+        "label": "Style",
+        "description": "The section style",
+        "valueType": "string",
+        "hidden": true,
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "article-content-section",
     "fields": [
       {
         "component": "select",
@@ -1078,6 +1115,84 @@
         "value": "",
         "label": "Sign up CTA Text",
         "description": "Text to be shown inside button."
+      }
+    ]
+  },
+  {
+    "id": "article-marquee",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "fileReference",
+        "label": "Author Image",
+        "description": "Sets the author image.",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "fileReferenceAlt",
+        "value": "",
+        "label": "Author image alt text",
+        "description": "Alternate text for the image."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "authorName",
+        "value": "",
+        "label": "Author name",
+        "description": "Sets the Author name."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "authorRole",
+        "value": "",
+        "label": "Author title / role",
+        "description": "Sets the Author title / role"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "articleReadingTime",
+        "value": "",
+        "label": "Reading time",
+        "description": "Sets the reading time for the article."
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "titleType",
+        "value": "h3",
+        "label": "Heading Type",
+        "options": [
+          {
+            "name": "H1",
+            "value": "h1"
+          },
+          {
+            "name": "H2",
+            "value": "h2"
+          },
+          {
+            "name": "H3",
+            "value": "h3"
+          },
+          {
+            "name": "H4",
+            "value": "h4"
+          },
+          {
+            "name": "H5",
+            "value": "h5"
+          },
+          {
+            "name": "H6",
+            "value": "h6"
+          }
+        ]
       }
     ]
   },
@@ -1628,6 +1743,39 @@
         "value": "",
         "label": "Topics heading",
         "description": "Sets the headings for topics."
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "headingType",
+        "value": "h2",
+        "label": "Heading Type",
+        "options": [
+          {
+            "name": "H1",
+            "value": "h1"
+          },
+          {
+            "name": "H2",
+            "value": "h2"
+          },
+          {
+            "name": "H3",
+            "value": "h3"
+          },
+          {
+            "name": "H4",
+            "value": "h4"
+          },
+          {
+            "name": "H5",
+            "value": "h5"
+          },
+          {
+            "name": "H6",
+            "value": "h6"
+          }
+        ]
       },
       {
         "component": "aem-tag",
@@ -2286,6 +2434,96 @@
         "value": "",
         "label": "Product Navigation",
         "description": "Override default behaviour with custom Navigation"
+      }
+    ]
+  },
+  {
+    "id": "page-metadata",
+    "fields": [
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "article-theme",
+        "label": "Article Theme",
+        "value": "Adobe",
+        "options": [
+          {
+            "name": "Adobe",
+            "value": "adobe"
+          },
+          {
+            "name": "External",
+            "value": "external"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "block-quote",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "block-quote",
+        "value": "",
+        "label": "Block quote",
+        "description": "Sets the text"
+      }
+    ]
+  },
+  {
+    "id": "callout",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "first-callout-text",
+        "value": "",
+        "label": "First Callout Text",
+        "description": "Sets the text for first callout block"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "first-callout-source",
+        "value": "",
+        "label": "First Callout Source",
+        "options": [
+          {
+            "name": "Adobe",
+            "value": "adobe"
+          },
+          {
+            "name": "External",
+            "value": "external"
+          }
+        ]
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "second-callout-text",
+        "value": "",
+        "label": "Second Callout Text",
+        "description": "Sets the text for second callout block"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "second-callout-source",
+        "value": "",
+        "label": "Second Callout Source",
+        "options": [
+          {
+            "name": "Adobe",
+            "value": "adobe"
+          },
+          {
+            "name": "External",
+            "value": "external"
+          }
+        ]
       }
     ]
   }

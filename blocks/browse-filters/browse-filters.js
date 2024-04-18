@@ -28,6 +28,7 @@ import BuildPlaceholder from '../../scripts/browse-card/browse-card-placeholder.
 import { formattedTags, handleTopicSelection, dispatchCoveoAdvancedQuery } from './browse-topics.js';
 import { BASE_COVEO_ADVANCED_QUERY } from '../../scripts/browse-card/browse-cards-constants.js';
 import { assetInteractionModel } from '../../scripts/analytics/lib-analytics.js';
+import { COVEO_SEARCH_CUSTOM_EVENTS } from '../../scripts/search/search-utils.js';
 
 const coveoFacetMap = {
   el_role: 'headlessRoleFacet',
@@ -50,7 +51,7 @@ const isBrowseProdPage = theme === 'browse-product';
 const dropdownOptions = [roleOptions, contentTypeOptions];
 const tags = [];
 let tagsProxy;
-const buildCardsShimmer = new BuildPlaceholder();
+const buildCardsShimmer = new BuildPlaceholder(getBrowseFiltersResultCount());
 
 function enableTagsAsProxy(block) {
   tagsProxy = new Proxy(tags, {
@@ -75,17 +76,18 @@ function hideSectionsBelowFilter(block, show) {
   if (parent) {
     const siblings = Array.from(parent.parentNode.children);
     const clickedIndex = siblings.indexOf(parent);
-    // eslint-disable-next-line no-plusplus
-    for (let i = clickedIndex + 1; i < siblings.length; i++) {
-      if (!siblings[i].classList.contains('browse-rail')) {
-        const classOp = show ? 'remove' : 'add';
-        siblings[i].classList?.[classOp]('browse-hide-section');
+    for (let index = clickedIndex + 1; index < siblings.length; index += 1) {
+      const alwaysShowAttribute = siblings[index].dataset.alwaysShow;
+      const alwaysShow = alwaysShowAttribute && alwaysShowAttribute.toLowerCase() === 'true';
+      if (!siblings[index].classList.contains('browse-rail') && !alwaysShow) {
+        const classOperation = show ? 'remove' : 'add';
+        siblings[index].classList?.[classOperation]('browse-hide-section');
       }
     }
   }
 }
 
-function hildeSectionsWithinFilter(block, show) {
+function hideSectionsWithinFilter(block, show) {
   const siblings = Array.from(block.children);
 
   // eslint-disable-next-line no-plusplus
@@ -122,14 +124,15 @@ function updateClearFilterStatus(block) {
       coveoQueryConfig.fireSelection = false;
       dispatchCoveoQuery = true;
     }
-    hildeSectionsWithinFilter(browseFiltersSection, true);
+    hideSectionsWithinFilter(browseFiltersSection, true);
   } else {
     dispatchCoveoQuery = true;
     clearFilterBtn.disabled = true;
     hideSectionsBelowFilter(block, true);
+    buildCardsShimmer.remove();
     browseFiltersContainer.classList.remove('browse-filters-full-container');
     selectionContainer.classList.remove('browse-filters-input-selected');
-    hildeSectionsWithinFilter(browseFiltersSection, false);
+    hideSectionsWithinFilter(browseFiltersSection, false);
   }
   if (dispatchCoveoQuery) {
     dispatchCoveoAdvancedQuery(coveoQueryConfig);
@@ -584,7 +587,7 @@ function handleUriHash() {
     } else if (keyName === 'aq' && filterInfo) {
       const selectedTopics = getSelectedTopics(filterInfo);
       const contentDiv = document.querySelector('.browse-topics');
-      const buttons = contentDiv.querySelectorAll('button');
+      const buttons = contentDiv?.querySelectorAll('button') ?? [];
       Array.from(buttons).forEach((button) => {
         const matchFound = selectedTopics.find((topic) => button.dataset.topicname?.includes(topic));
         if (matchFound) {
@@ -756,13 +759,14 @@ function handleSearchBoxSubscription() {
   }
   const searchSuggestionsPopoverEl = browseFilterSearchSection.querySelector('.search-suggestions-popover');
 
-  const hideSuggestions =
+  const missingSuggestions =
     searchInputEl.value === '' ||
     suggestions.length === 0 ||
     searchSuggestionsPopoverEl.classList.contains('search-suggestions-popover-hide');
+  const hideSuggestions = missingSuggestions || !searchInputEl.classList.contains('suggestion-interactive');
 
   toggleSearchSuggestionsVisibility(!hideSuggestions);
-  if (hideSuggestions) {
+  if (missingSuggestions) {
     searchInputEl.removeEventListener('click', showSearchSuggestionsOnInputClick);
   } else {
     searchInputEl.addEventListener('click', showSearchSuggestionsOnInputClick);
@@ -787,12 +791,14 @@ function handleSearchBoxSubscription() {
 
   suggestionsElement.addEventListener('click', (e) => {
     const searchText = e.target?.textContent ?? '';
+    searchInputEl.classList.remove('suggestion-interactive');
     selectSearchSuggestion(searchText);
   });
 
   suggestionsElement.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       const searchText = e.target?.textContent ?? '';
+      searchInputEl.classList.remove('suggestion-interactive');
       selectSearchSuggestion(searchText);
     } else {
       const isArrowUp = e.key === 'ArrowUp';
@@ -826,7 +832,6 @@ function handleCoveoHeadlessSearch(
     clearSearchHandler,
   },
 ) {
-  buildCardsShimmer.remove();
   const filterResultsEl = createTag('div', { class: 'browse-filters-results' });
 
   const browseFiltersSection = block.querySelector('.browse-filters-form');
@@ -835,7 +840,7 @@ function handleCoveoHeadlessSearch(
   const clearIcon = filterInputSection.querySelector('.icon-clear');
   const searchInput = filterInputSection.querySelector('input');
   browseFiltersSection.appendChild(filterResultsEl);
-
+  constructFilterPagination(block);
   searchIcon.addEventListener('click', submitSearchHandler);
   clearIcon.addEventListener('click', () => {
     searchInput.value = '';
@@ -858,6 +863,7 @@ function handleCoveoHeadlessSearch(
         () => {
           const newResultsPerPage = getBrowseFiltersResultCount();
           if (window.headlessResultsPerPage.state.numberOfResults !== newResultsPerPage) {
+            buildCardsShimmer.updateCount(newResultsPerPage);
             window.headlessResultsPerPage.set(newResultsPerPage);
           }
         },
@@ -865,7 +871,29 @@ function handleCoveoHeadlessSearch(
       );
     });
   }
-  constructFilterPagination(block);
+  const filtersPaginationEl = browseFiltersSection.querySelector('.browse-filters-pagination');
+  document.addEventListener(COVEO_SEARCH_CUSTOM_EVENTS.PREPROCESS, (e) => {
+    const { method = '' } = e.detail ?? {};
+    if (method === 'search') {
+      const clearFilterBtn = browseFiltersSection.querySelector('.browse-filters-clear');
+      if (clearFilterBtn?.disabled) {
+        return;
+      }
+      buildCardsShimmer.add(browseFiltersSection);
+      filterResultsEl.style.display = 'none';
+      filtersPaginationEl.style.display = 'none';
+      browseFiltersSection.insertBefore(
+        document.querySelector('.browse-filters-form .shimmer-placeholder'),
+        browseFiltersSection.childNodes[document.querySelector('.browse-topics') ? 4 : 3],
+      );
+    }
+  });
+  document.addEventListener(COVEO_SEARCH_CUSTOM_EVENTS.PROCESS_SEARCH_RESPONSE, () => {
+    filterResultsEl.style.display = '';
+    filtersPaginationEl.style.display = '';
+    buildCardsShimmer.remove();
+  });
+
   handleUriHash();
   renderPageNumbers();
 }
@@ -937,11 +965,6 @@ function generateAnalyticsFilters(block, totalCount) {
 async function handleSearchEngineSubscription(block) {
   const browseFilterForm = document.querySelector(CLASS_BROWSE_FILTER_FORM);
   const filterResultsEl = browseFilterForm?.querySelector('.browse-filters-results');
-  buildCardsShimmer.add(browseFilterForm);
-  browseFilterForm.insertBefore(
-    document.querySelector('.shimmer-placeholder'),
-    browseFilterForm.childNodes[document.querySelector('.browse-topics') ? 4 : 3],
-  );
   if (!filterResultsEl || window.headlessStatusControllers?.state?.isLoading) {
     return;
   }
@@ -950,7 +973,6 @@ async function handleSearchEngineSubscription(block) {
   const { results, searchResponseId, response } = search;
   if (results.length > 0) {
     try {
-      buildCardsShimmer.remove();
       const cardsData = await BrowseCardsCoveoDataAdaptor.mapResultsToCardsData(results);
       const renderCards =
         !filterResultsEl.dataset.searchresponseid ||
@@ -983,7 +1005,6 @@ async function handleSearchEngineSubscription(block) {
       console.log('*** failed to create card because of the error:', err);
     }
   } else {
-    buildCardsShimmer.remove();
     /* Analytics */
     if (
       !filterResultsEl.classList.contains('no-results') &&
@@ -1032,7 +1053,11 @@ function renderSortContainer(block) {
         document.addEventListener(
           'click',
           (event) => {
-            if (!event.target || !dropDownBtn.nextSibling.contains(event.target)) {
+            let hideDropdown = !event.target || !dropDownBtn.nextSibling.contains(event.target);
+            if (event.target === dropDownBtn && dropDownBtn.classList.contains('active')) {
+              hideDropdown = false;
+            }
+            if (hideDropdown) {
               dropDownBtn.nextSibling.classList.remove('show');
             }
           },
@@ -1065,11 +1090,14 @@ function decorateBrowseTopics(block) {
 
   const div = document.createElement('div');
   div.classList.add('browse-topics');
+  // default style to h2 so existing published pages are not rendered unstyled if not re-authored
+  const styledHeader =
+    headingElement.firstElementChild === null ? `<h2>${headingContent}</h2>` : headingElement.innerHTML;
 
   const headerDiv = htmlToElement(`
     <div class="browse-topics-block-header">
       <div class="browse-topics-block-title">
-          <h2>${headingContent}</h2>
+          ${styledHeader}
       </div>
     </div>
   `);

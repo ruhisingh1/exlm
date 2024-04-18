@@ -1,4 +1,4 @@
-import { isSignedInUser } from '../../scripts/data-service/profile-service.js';
+import { defaultProfileClient, isSignedInUser, signOut } from '../../scripts/auth/profile.js';
 import { decorateIcons, loadCSS, getMetadata } from '../../scripts/lib-franklin.js';
 import {
   htmlToElement,
@@ -6,14 +6,13 @@ import {
   fetchLanguagePlaceholders,
   decorateLinks,
   getConfig,
+  getLink,
+  fetchFragment,
 } from '../../scripts/scripts.js';
+import { getProducts } from '../browse-rail/browse-rail.js';
 
 const languageModule = import('../../scripts/language.js');
-const authOperationsModule = import('../../scripts/auth/auth-operations.js');
-
-// Khoros Proxy URL (Determine the environment based on the host name)
-const environment = window.location.hostname === 'experienceleague.adobe.com' ? '' : '-dev';
-export const khorosProxyProfileAPI = `https://51837-exlmconverter${environment}.adobeioruntime.net/api/v1/web/main/khoros/plugins/custom/adobe/adobedx/profile-menu-list`;
+const { khorosProfileUrl } = getConfig();
 
 let searchElementPromise = null;
 
@@ -123,7 +122,7 @@ const communityLocalesMap = new Map([
 async function fetchCommunityProfileData() {
   const locale = communityLocalesMap.get(document.querySelector('html').lang) || communityLocalesMap.get('en');
   try {
-    const response = await fetch(`${khorosProxyProfileAPI}?lang=${locale}`, {
+    const response = await fetch(`${khorosProfileUrl}?lang=${locale}`, {
       method: 'GET',
       headers: {
         'x-ims-token': await window.adobeIMS?.getAccessToken().token,
@@ -181,11 +180,6 @@ const randomId = (length = 6) =>
  */
 const getCell = (block, row, cell) => block.querySelector(`:scope > div:nth-child(${row}) > div:nth-child(${cell})`);
 
-// fetch fragment html
-const fetchFragment = async (rePath, lang = 'en') => {
-  const response = await fetch(`/fragments/${lang}/${rePath}.plain.html`);
-  return response.text();
-};
 // Mobile Only (Until 1024px)
 const isMobile = () => window.matchMedia('(max-width: 1023px)').matches;
 
@@ -425,6 +419,26 @@ const navDecorator = async (navBlock) => {
 
   navBlock.firstChild.id = hamburger.getAttribute('aria-controls');
   navBlock.prepend(hamburger);
+
+  // Featured Product List added in Top Products Page
+  const productList = await getProducts();
+
+  [...navBlock.querySelectorAll('.nav-item')].forEach((navItemEl) => {
+    if (navItemEl.querySelector(':scope > a[featured-products]')) {
+      const featuredProductLi = navBlock.querySelector('li.nav-item a[featured-products]');
+      // Remove the <li> element from the DOM
+      featuredProductLi.remove();
+      productList.forEach((item) => {
+        if (item.featured) {
+          const newLi = document.createElement('li');
+          newLi.className = 'nav-item nav-item-leaf';
+          newLi.innerHTML = `<a href="${getLink(item.path)}">${item.title}</a>`;
+          navItemEl.parentNode.appendChild(newLi);
+        }
+      });
+    }
+  });
+
   const isSignedIn = await isSignedInUser();
   if (!isSignedIn) {
     // hide auth-only nav items - see decorateLinks method for details
@@ -524,7 +538,7 @@ const languageDecorator = async (languageBlock) => {
 
   const prependLanguagePopover = async (parent) => {
     await languageModule.then(({ buildLanguagePopover }) => {
-      buildLanguagePopover().then(({ popover, languages }) => {
+      buildLanguagePopover(null, 'language-picker-popover-header').then(({ popover, languages }) => {
         decoratorState.languages.resolve(languages);
         parent.append(popover);
       });
@@ -532,7 +546,7 @@ const languageDecorator = async (languageBlock) => {
   };
 
   const languageHtml = `
-      <button type="button" class="language-selector-button" aria-haspopup="true" aria-controls="language-picker-popover" aria-label="${title}">
+      <button type="button" class="language-selector-button" aria-haspopup="true" aria-controls="language-picker-popover-header" aria-label="${title}">
         <span class="icon icon-globegrid"></span>
       </button>
     `;
@@ -541,18 +555,6 @@ const languageDecorator = async (languageBlock) => {
   prependLanguagePopover(languageBlock);
   return languageBlock;
 };
-
-async function getPPSProfile(accessToken, accountId) {
-  const { ppsOrigin, ims } = getConfig();
-  const res = await fetch(`${ppsOrigin}/api/profile`, {
-    headers: {
-      'X-Api-Key': ims.client_id,
-      'X-Account-Id': accountId,
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-  return res.json();
-}
 
 /**
  * Decorates the sign-in block
@@ -575,9 +577,8 @@ const signInDecorator = async (signInBlock) => {
     );
 
     signInBlock.replaceChildren(profile);
-    const { token } = window.adobeIMS.getAccessToken();
-    const accountId = (await window.adobeIMS.getProfile()).userId;
-    getPPSProfile(token, accountId)
+    defaultProfileClient
+      .getPPSProfile()
       .then((ppsProfile) => {
         const profilePicture = ppsProfile?.images['50'];
         if (profilePicture) {
@@ -747,7 +748,6 @@ const profileMenuDecorator = async (profileMenuBlock) => {
 
     if (profileMenuWrapper.querySelector('[data-id="sign-out"]')) {
       profileMenuWrapper.querySelector('[data-id="sign-out"]').addEventListener('click', async () => {
-        const { signOut } = await authOperationsModule;
         signOut();
       });
     }
