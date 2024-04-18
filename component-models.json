@@ -2456,6 +2456,54 @@
             "value": "external"
           }
         ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "coveo-content-type",
+        "label": "Coveo Content Type",
+        "value": "Article"
+      },
+      {
+        "component": "aem-tag",
+        "name": "coveo-solution",
+        "label": "Coveo Solution",
+        "rootPath": "/content/cq:tags/exl/solution"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "author-type",
+        "label": "Author Type",
+        "description": "If the author is internal (Adobe) or Practioner",
+        "options": [
+          {
+            "name": "Internal",
+            "value": "internal"
+          },
+          {
+            "name": "External",
+            "value": "external"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "String",
+        "name": "author-name",
+        "label": "Author Name"
+      },
+      {
+        "component": "aem-tag",
+        "name": "role",
+        "label": "Role(s)",
+        "rootPath": "/content/cq:tags/exl/role"
+      },
+      {
+        "component": "aem-tag",
+        "name": "level",
+        "label": "Experience Level(s)",
+        "rootPath": "/content/cq:tags/exl/experience-level"
       }
     ]
   },
