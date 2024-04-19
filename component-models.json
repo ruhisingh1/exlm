@@ -2567,9 +2567,17 @@
       {
         "component": "aem-content",
         "valueType": "string",
+        "name": "author-bio",
+        "value": "",
+        "label": "Author Bio page"
+      },
+       {
+        "component": "aem-tag",
+        "valueType": "string",
         "name": "author-bio-page",
         "value": "",
         "label": "Author Bio page"
+        "rootPath": "/content/exlm"
       },
       {
         "component": "multiselect",
