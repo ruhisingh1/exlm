@@ -2458,11 +2458,17 @@
         ]
       },
       {
-        "component": "text",
+        "component": "select",
         "valueType": "string",
         "name": "coveo-content-type",
         "label": "Coveo Content Type",
-        "value": "Article"
+        "value": "",
+        "options": [
+          {
+            "name": "Article",
+            "value": "Article"
+          }
+        ]
       },
       {
         "component": "aem-tag",
@@ -2489,24 +2495,56 @@
         ]
       },
       {
-        "component": "text",
+        "component": "aem-content",
         "valueType": "String",
-        "name": "author-name",
-        "label": "Author Name"
+        "name": "author-bio-page",
+        "label": "Author Bio page"
       },
       {
-        "component": "aem-tag",
-        "name": "role",
+        "component": "multiselect",
+        "name": "roles",
         "label": "Role(s)",
         "valueType": "string",
-        "rootPath": "/content/cq:tags/exl/role"
+        "description": "Sets the role(s) in page meta.",
+        "options": [
+          {
+            "name": "Admin",
+            "value": "Admin"
+          },
+          {
+            "name": "Developer",
+            "value": "Developer"
+          },
+          {
+            "name": "Leader",
+            "value": "Leader"
+          },
+          {
+            "name": "User",
+            "value": "User"
+          }
+        ]
       },
       {
-        "component": "aem-tag",
+        "component": "multiselect",
         "name": "level",
         "label": "Experience Level(s)",
         "valueType": "string",
-        "rootPath": "/content/cq:tags/exl/experience-level"
+        "description": "Sets the level(s) in page meta.",
+        "options": [
+          {
+            "name": "Beginner",
+            "value": "Beginner"
+          },
+          {
+            "name": "Intermediate",
+            "value": "Intermediate"
+          },
+          {
+            "name": "Experienced",
+            "value": "Experienced"
+          }
+        ]
       }
     ]
   },
