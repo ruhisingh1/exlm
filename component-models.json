@@ -2552,23 +2552,6 @@
         ]
       },
       {
-        "component": "select",
-        "valueType": "string",
-        "name": "author-type",
-        "label": "Author Type",
-        "description": "If the author is internal (Adobe) or Practioner",
-        "options": [
-          {
-            "name": "Internal",
-            "value": "internal"
-          },
-          {
-            "name": "External",
-            "value": "external"
-          }
-        ]
-      },
-      {
         "component": "text",
         "valueType": "string",
         "name": "author-bio-page",
