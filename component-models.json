@@ -2445,7 +2445,7 @@
         "valueType": "string",
         "name": "article-theme",
         "label": "Article Theme",
-        "value": "Adobe",
+        "value": "",
         "options": [
           {
             "name": "Adobe",
@@ -2466,7 +2466,7 @@
         "options": [
           {
             "name": "Non-Article",
-            "value": ""
+            "value": "Non-Article"
           },
           {
             "name": "Article",
