@@ -2496,7 +2496,8 @@
       },
       {
         "component": "aem-content",
-        "valueType": "String",
+        "valueType": "string",
+        "value": "",
         "name": "author-bio-page",
         "label": "Author Bio page"
       },
