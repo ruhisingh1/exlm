@@ -2684,6 +2684,13 @@
             "value": "external"
           }
         ]
+      },
+       {
+        "component": "aem-content",
+        "valueType": "string",
+        "name": "author-bio-page",
+        "value": "",
+        "label": "Author Bio page"
       }
     ]
   }
