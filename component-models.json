@@ -2575,8 +2575,7 @@
         "component": "aem-tag",
         "name": "author-bio-page",
         "label": "Author Bio page",
-        "valueType": "string",
-        "rootPath": "/content/exlm"
+        "valueType": "string"
       },
       {
         "component": "multiselect",
