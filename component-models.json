@@ -2471,11 +2471,81 @@
         ]
       },
       {
-        "component": "aem-tag",
-        "name": "coveo-solution",
-        "label": "Coveo Solution",
+        "component": "multiselect",
         "valueType": "string",
-        "rootPath": "/content/cq:tags/exl/solution"
+        "name": "coveo-solution",
+        "label": "Coveo Solution(s)",
+        "description": "Sets the Coveo Solution(s) in page meta.",
+        "options": [
+          {
+            "name": "AEM Assets",
+            "value": "AEM Assets"
+          },
+          {
+            "name": "AEM Forms",
+            "value": "AEM Forms"
+          },
+          {
+            "name": "AEM Sites",
+            "value": "AEM Sites"
+          },
+          {
+            "name": "Analytics",
+            "value": "Analytics"
+          },
+          {
+            "name": "Audience Manager",
+            "value": "Audience Manager"
+          },
+          {
+            "name": "Campaign Classic",
+            "value": "Campaign Classic"
+          },
+          {
+            "name": "Campaign Standard",
+            "value": "Campaign Standard"
+          },
+          {
+            "name": "Commerce",
+            "value": "Commerce"
+          },
+          {
+            "name": "Content Supply Chain",
+            "value": "Content Supply Chain"
+          },
+          {
+            "name": "Customer Journey Analytics",
+            "value": "Customer Journey Analytics"
+          },
+          {
+            "name": "Experience Cloud Integrations",
+            "value": "Experience Cloud Integrations"
+          },
+          {
+            "name": "Experience Platform",
+            "value": "Experience Platform"
+          },
+          {
+            "name": "Journey Optimizer",
+            "value": "Journey Optimizer"
+          },
+          {
+            "name": "Marketo Engage",
+            "value": "Marketo Engage"
+          },
+          {
+            "name": "Real-Time CDP",
+            "value": "Real-Time CDP"
+          },
+          {
+            "name": "Target",
+            "value": "Target"
+          },
+          {
+            "name": "Workfront",
+            "value": "Workfront"
+          }
+        ]
       },
       {
         "component": "select",
@@ -2497,8 +2567,8 @@
       {
         "component": "aem-content",
         "valueType": "string",
-        "value": "",
         "name": "author-bio-page",
+        "value": "",
         "label": "Author Bio page"
       },
       {
