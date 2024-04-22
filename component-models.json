@@ -2554,6 +2554,13 @@
         "label": "Author Bio page"
       },
       {
+        "component": "aem-content",
+        "valueType": "string",
+        "name": "author-page",
+        "value": "",
+        "label": "Author page"
+      },
+      {
         "component": "multiselect",
         "name": "roles",
         "label": "Role(s)",
