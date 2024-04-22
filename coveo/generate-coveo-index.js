@@ -5,6 +5,8 @@ import { getLink, getPathDetails } from '../scripts/scripts.js';
 const { lang } = getPathDetails();
 const articles = await ffetch(`/${lang}/article-index.json`).all();
 // eslint-disable-next-line no-console
+console.log("articles js file");
+// eslint-disable-next-line no-console
 console.log(articles);
 
 articles.forEach((article) => {
