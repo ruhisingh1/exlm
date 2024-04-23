@@ -1,4 +1,4 @@
-name: Page Publish
+name: Articles Page Published
 
 on: 
   repository_dispatch:
