@@ -20,7 +20,7 @@
   <changefreq>daily</changefreq>
   <coveo:metadata>
     <coveo-content-type>Article</coveo-content-type>
-    <coveo-solution>Acrobat</coveo-solution>
+    <coveo-solution>Acrobat, Advertising</coveo-solution>
     <role>Developer</role>
     <level>"{^�g���^</level>
   </coveo:metadata>
@@ -31,8 +31,8 @@
   <changefreq>daily</changefreq>
   <coveo:metadata>
     <coveo-content-type>Article</coveo-content-type>
-    <coveo-solution>Advertising</coveo-solution>
-    <role>Developer{k�W�Leader</role>
+    <coveo-solution>Advertising, Analytics</coveo-solution>
+    <role>Developer, Leader</role>
     <level>^�'�q�</level>
   </coveo:metadata>
 </url>
