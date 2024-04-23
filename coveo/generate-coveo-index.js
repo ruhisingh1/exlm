@@ -87,9 +87,10 @@ async function generateXmlContent() {
 async function writeCoveoXML() {
     try {
         const xmlContent = await generateXmlContent();
-        const fileName = `coveo_${language}.xml`;\
+        const fileName = `coveo_${language}.xml`;
         fs.writeFileSync(fileName, xmlContent);
     } catch (error) {
+      // eslint-disable-next-line no-console
         console.error('Error writing Coveo XML file:', error);
         throw error;
     }
@@ -99,6 +100,7 @@ async function main() {
     try {
         await writeCoveoXML();
     } catch (error) {
+      // eslint-disable-next-line no-console
         console.error('Error:', error);
     }
 }
