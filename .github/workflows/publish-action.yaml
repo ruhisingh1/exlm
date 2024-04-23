@@ -17,7 +17,7 @@ jobs:
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
       - name: Run scripts and commit changes
-        if: ${{ endsWith(github.event.client_payload.path, 'article-index.json') }}
+        if: ${{ contains(github.event.client_payload.path, '/articles') }}
         working-directory: ./coveo
         run: |
           node generate-coveo-index.js

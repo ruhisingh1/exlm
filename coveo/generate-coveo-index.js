@@ -53,7 +53,21 @@ writeCoveoXML(articles);
 function isNotEmpty(field) {
   return field && field !== '';
 }
+/ Function to decode base64 strings
+function decodeBase64(encodedString) {
+  return atob(encodedString);
+}
 
+// Function to decode and join encoded strings
+function decodeAndJoin(encodedStrings) {
+  // Split each encoded string and decode it
+  const decodedStrings = encodedStrings.map((encodedString) => decodeBase64(encodedString.split("/")[1]));
+
+  // Join the decoded strings with comma
+  const joinedString = decodedStrings.join(", ");
+
+  return joinedString;
+}
 async function createCoveoFields(index) {
   // eslint-disable-next-line no-console
   console.log('Processing data...');
@@ -76,9 +90,9 @@ async function createCoveoFields(index) {
     item.lastmod = lastModified.toISOString();
 
     item.path = isNotEmpty(item.path) ? `${getLink(item.path)}` : item.internal_path;
-    item.role = item.role?.item.role;
-    item.solution = item[`coveo-solution`]?.item[`coveo-solution`];
-    item.level = item.level?.item.level;
+    item.role = decodeAndJoin(item.role?.item.role);
+    item.solution = decodeAndJoin(item[`coveo-solution`]?.item[`coveo-solution`]);
+    item.level = decodeAndJoin(item.level?.item.level);
     item.contenttype = item[`coveo-content-type`]?.item[`coveo-content-type`];
     item.authorType = item[`coveo-content-type`]?.item[`coveo-content-type`];
     item.authorName = item[`coveo-content-type`]?.item[`coveo-content-type`];
