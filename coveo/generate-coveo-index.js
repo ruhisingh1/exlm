@@ -23,7 +23,7 @@ console.log('Language index:', languageIndex); // Debugging statement
 const language = languageIndex !== -1 ? args[languageIndex + 1] : 'en'; // Default language is 'en'
 console.log('Selected language:', language); // Debugging statement
 
-const articles = await ffetch(`https://main--franklin-exlm--ruhisingh1.hlx.page/en/article-index.json`).all();
+const articles = await ffetch(`https://main--franklin-exlm--ruhisingh1.hlx.page/en/article-index.json`);
 // eslint-disable-next-line no-console
 console.log(articles);
 
