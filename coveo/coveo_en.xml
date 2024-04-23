@@ -9,9 +9,9 @@
   <changefreq>daily</changefreq>
   <coveo:metadata>
     <coveo-content-type></coveo-content-type>
-    <coveo-solution><![CDATA[  ]]></coveo-solution>
-    <role><![CDATA[  ]]></role>
-    <level><![CDATA[  ]]></level>
+    <coveo-solution></coveo-solution>
+    <role></role>
+    <level></level>
   </coveo:metadata>
 </url>
 <url>
@@ -20,20 +20,20 @@
   <changefreq>daily</changefreq>
   <coveo:metadata>
     <coveo-content-type>Article</coveo-content-type>
-    <coveo-solution><![CDATA[ Acrobat ]]></coveo-solution>
-    <role><![CDATA[ Developer ]]></role>
-    <level><![CDATA[ "{^�g���^ ]]></level>
+    <coveo-solution>Acrobat</coveo-solution>
+    <role>Developer</role>
+    <level>"{^�g���^</level>
   </coveo:metadata>
 </url>
 <url>
   <loc>/en/articles/article2</loc>
-  <lastmod>1713873773</lastmod>
+  <lastmod>1713875777</lastmod>
   <changefreq>daily</changefreq>
   <coveo:metadata>
     <coveo-content-type>Article</coveo-content-type>
-    <coveo-solution><![CDATA[ Advertising ]]></coveo-solution>
-    <role><![CDATA[ Developer{k�W�Leader ]]></role>
-    <level><![CDATA[ ^�'�q� ]]></level>
+    <coveo-solution>Advertising</coveo-solution>
+    <role>Developer{k�W�Leader</role>
+    <level>^�'�q�</level>
   </coveo:metadata>
 </url>
             </urlset>
