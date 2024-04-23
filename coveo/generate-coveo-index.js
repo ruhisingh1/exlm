@@ -1,5 +1,5 @@
 import fs from 'fs';
-import https from 'https'; // Changed from require('http')
+import https from 'https';
 import process from 'process';
 
 // Parse command line arguments
@@ -52,22 +52,22 @@ function decodeBase64(encodedString) {
 async function generateXmlContent() {
     try {
         // Call fetchDataFromURL instead of fetchArticles
-        const articles = await fetchDataFromURL(url); // Assuming url is defined in the global scope
+        const articles = await fetchDataFromURL(url);
         console.log(articles);
         const xmlData = [];
 
-        articles.forEach((article) => {
+        articles.data.forEach((article) => { // Access 'data' property of articles
             xmlData.push('<url>');
             xmlData.push(`  <loc>${article.path}</loc>`);
-            xmlData.push(`  <lastmod>${article.lastmod}</lastmod>`);
+            xmlData.push(`  <lastmod>${article.lastModified}</lastmod>`); // Fix property name
             xmlData.push('  <changefreq>daily</changefreq>');
             xmlData.push('  <coveo:metadata>');
-            xmlData.push(`    <coveo-content-type>${article.contenttype}</coveo-content-type>`);
-            xmlData.push(`    <coveo-solution>${decodeBase64(article.solution)}</coveo-solution>`);
-            xmlData.push(`    <role>${decodeBase64(article.role)}</role>`);
-            xmlData.push(`    <level>${decodeBase64(article.level)}</level>`);
-            xmlData.push(`    <author-type>${article.authorType}</author-type>`);
-            xmlData.push(`    <author-name>${article.authorName}</author-name>`);
+            xmlData.push(`    <coveo-content-type>${article.coveoContentType}</coveo-content-type>`);
+            xmlData.push(`    <coveo-solution>${decodeBase64(article.coveoSolution)}</coveo-solution>`);
+            xmlData.push(`    <role>${decodeBase64(article.coveoRole)}</role>`); // Fix property name
+            xmlData.push(`    <level>${decodeBase64(article.coveoLevel)}</level>`); // Fix property name
+            xmlData.push(`    <author-type>${article.authorType}</author-type>`); // Make sure article object has 'authorType' property
+            xmlData.push(`    <author-name>${article.authorName}</author-name>`); // Make sure article object has 'authorName' property
             xmlData.push('  </coveo:metadata>');
             xmlData.push('</url>');
         });
@@ -89,7 +89,7 @@ async function generateXmlContent() {
 // Write Coveo XML file
 async function writeCoveoXML() {
     try {
-        const xmlContent = await generateXmlContent();
+        const xmlContent = await generateXmlContent(); // Access 'url' from the outer scope
         const fileName = `coveo_${language}.xml`;
         console.log('Writing to file:', fileName);
         fs.writeFileSync(fileName, xmlContent);
