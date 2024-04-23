@@ -1,14 +1,12 @@
 import fs from 'fs';
 import process from 'process';
-// import fetch from 'node-fetch'; // Import fetch module
+// eslint-disable-next-line import/no-extraneous-dependencies
+import fetch from 'node-fetch'; 
 
 // Parse command line arguments
 const args = process.argv.slice(2);
-console.log('Command line arguments:', args);
 const languageIndex = args.indexOf('--language');
-console.log('Language index:', languageIndex);
 const language = languageIndex !== -1 ? args[languageIndex + 1] : 'en';
-console.log('Selected language:', language);
 
 // Fetch articles
 async function fetchArticles() {
@@ -23,11 +21,15 @@ async function fetchArticles() {
         throw error;
     }
 }
-
+// Function to decode base64 strings
+function decodeBase64(encodedString) {
+  return Buffer.from(encodedString, 'base64').toString('utf-8');
+}
 // Process articles and generate XML content
 async function generateXmlContent() {
     try {
         const articles = await fetchArticles();
+        console.log(articles);
         const xmlData = [];
 
         articles.forEach((article) => {
