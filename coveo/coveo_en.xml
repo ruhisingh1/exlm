@@ -22,18 +22,18 @@
     <coveo-content-type>Article</coveo-content-type>
     <coveo-solution>Acrobat, Advertising</coveo-solution>
     <role>Developer</role>
-    <level>"{^�g���^</level>
+    <level>Intermediate</level>
   </coveo:metadata>
 </url>
 <url>
   <loc>/en/articles/article2</loc>
-  <lastmod>1713876445</lastmod>
+  <lastmod>1713876754</lastmod>
   <changefreq>daily</changefreq>
   <coveo:metadata>
     <coveo-content-type>Article</coveo-content-type>
     <coveo-solution>Advertising, Analytics, Audience Manager</coveo-solution>
     <role>Developer, Leader</role>
-    <level>^�'�q�</level>
+    <level>Experienced</level>
   </coveo:metadata>
 </url>
             </urlset>
