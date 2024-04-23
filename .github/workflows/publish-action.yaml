@@ -8,14 +8,7 @@ on:
 jobs:
   build-coveo:
     runs-on: ubuntu-latest
-    outputs:
-      language: ${{ steps.get_language.outputs.language }}
     steps:
-      - name: Extract language
-        id: get_language
-        run: |
-          language=$(echo "${{ github.event.client_payload.path }}" | awk -F '/' '{print $2}')
-          echo "::set-output name=language::$language"
       - uses: actions/checkout@v3
       - name: Use Node.js
         uses: actions/setup-node@v3
@@ -23,15 +16,13 @@ jobs:
           node-version: '18'
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
-      - name: Generate Coveo Index
+      - name: Run scripts and commit changes
+        if: ${{ contains(github.event.client_payload.path, '/articles') }}
         working-directory: ./coveo
         run: |
-          node generate-coveo-index.js --language ${{ steps.get_language.outputs.language }}
-          mv coveo.xml coveo_${{ steps.get_language.outputs.language }}.xml
-      - name: Commit changes
-        run: |
+          node generate-coveo-index.js
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add ./coveo_${{ steps.get_language.outputs.language }}.xml
-          git commit -m "Update generated coveo_${{ steps.get_language.outputs.language }}.xml file"
+          git add ./coveo.xml
+          git commit -m "Update generated coveo.xml file"
           git push
