@@ -23,11 +23,16 @@ const generateCoveoXml = () => {
 
 // Write Coveo XML file
 const writeCoveoXmlFile = (xmlContent) => {
-    const fileName = `coveo_${language}.xml`;
-    console.log('Writing to file:', fileName); // Debugging statement
-    fs.writeFileSync(fileName, xmlContent);
-    console.log(`Coveo XML file '${fileName}' created successfully.`);
+  const fileName = `coveo_${language}.xml`;
+  console.log('Writing to file:', fileName); // Debugging statement
+  try {
+      fs.writeFileSync(fileName, xmlContent);
+      console.log(`Coveo XML file '${fileName}' created successfully.`);
+  } catch (error) {
+      console.error('Error writing file:', error);
+  }
 };
+
 
 // Main function
 const main = () => {
