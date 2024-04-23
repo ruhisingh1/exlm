@@ -1,6 +1,6 @@
 name: Page Publish
 
-on: 
+on:
   repository_dispatch:
     types:
       - resource-published
@@ -19,12 +19,13 @@ jobs:
           echo "::set-output name=language::$language"
 
       - uses: actions/checkout@v3
-      - name: Get Repository Information
-        id: get_repo_info
+      
+      - name: Get Repository Details
+        id: get_repo_details
         run: |
-          repo_info=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }})
-          repo_html_url=$(echo "$repo_info" | jq -r '.html_url')
-          echo "::set-output name=repo_html_url::$repo_html_url"
+          repo_url="${{ github.repository_url }}"
+          repo_name=$(basename "${repo_url}")
+          echo "::set-output name=repo_name::$repo_name"
       
       - name: Use Node.js
         uses: actions/setup-node@v3
@@ -38,9 +39,9 @@ jobs:
         run: |
           node generate-coveo-index.js \
             --language ${{ steps.get_language.outputs.language }} \
-            --domain "${{ steps.get_repo_info.outputs.repo_html_url }}" \
+            --repo-name ${{ steps.get_repo_details.outputs.repo_name }} \
             > coveo_${{ steps.get_language.outputs.language }}.xml
-          
+
           # Check if the file exists or has been modified
           if [ -f ./coveo_${{ steps.get_language.outputs.language }}.xml ]; then
             echo "File exists"

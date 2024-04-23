@@ -6,9 +6,13 @@ import process from 'process';
 const args = process.argv.slice(2);
 const languageIndex = args.indexOf('--language');
 const language = languageIndex !== -1 ? args[languageIndex + 1] : 'en';
-const domainIndex = args.indexOf('--domain');
-const domain = domainIndex !== -1 ? args[domainIndex + 1] : '';
-
+const repoNameIndex = args.indexOf('--repo-name');
+const repoName = repoNameIndex !== -1 ? args[repoNameIndex + 1] : '';
+let domain = '';
+if(repoName === "franklin-exlm"){
+  domain = 'https://main--franklin-exlm--ruhisingh1.hlx.page/';
+}
+console.log(domain);
 // Function to decode base64 strings
 function decodeBase64(encodedString) {
   return Buffer.from(encodedString, 'base64').toString('utf-8');
@@ -66,7 +70,7 @@ async function fetchDataFromURL(url) {
 
 // Main function to generate XML content
 async function generateXmlContent() {
-  const url = `${domain}/${language}/article-index.json`;
+  const url = `${domain}${language}/article-index.json`;
   try {
     const articles = await fetchDataFromURL(url);
     const xmlData = [];
