@@ -80,7 +80,7 @@ async function generateXmlContent() {
       xmlData.push(`    <coveo-solution>${decodedSolution}</coveo-solution>`);
       const decodedRole = decodeAndRemovePrefix(article.coveoRole, 'exl:role/');
       xmlData.push(`    <role>${decodedRole}</role>`);
-      const decodedLevel = decodeBase64(decodeAndRemovePrefix(article.coveoLevel, 'exl:experience-level/'));
+      const decodedLevel = decodeAndRemovePrefix(article.coveoLevel, 'exl:experience-level/');
       xmlData.push(`    <level>${decodedLevel}</level>`);
       xmlData.push('  </coveo:metadata>');
       xmlData.push('</url>');
