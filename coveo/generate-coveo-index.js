@@ -1,4 +1,4 @@
-const fs = require('fs');
+import fs from 'fs';
 
 // Parse command line arguments
 const args = process.argv.slice(2);
