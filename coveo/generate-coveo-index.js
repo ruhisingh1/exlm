@@ -16,23 +16,23 @@ function decodeBase64(encodedString) {
 function decodeAndRemovePrefix(value, prefix) {
   // Check if the value contains a comma
   if (value.includes(',')) {
-      // Split the value by comma
-      const parts = value.split(', ');
-      // Decode and remove prefix for each part
-      const decodedParts = parts.map(part => {
-          const decodedValue = decodeBase64(part.replace(prefix, ''));
-          return decodedValue;
-      });
-      // Join the decoded parts back with comma
-      const decodedValue = decodedParts.join(', ');
+    // Split the value by comma
+    const parts = value.split(', ');
+    // Decode and remove prefix for each part
+    const decodedParts = parts.map((part) => {
+      const decodedValue = decodeBase64(part.replace(prefix, ''));
       return decodedValue;
-  } 
-      // If the value is single without comma, decode and return it
-      const decodedValue = decodeBase64(value.replace(prefix, ''));
-      return decodedValue;
-  
+    });
+    // Join the decoded parts back with comma
+    const decodedValue = decodedParts.join(', ');
+    return decodedValue;
+    // eslint-disable-next-line no-else-return
+  } else {
+    // If the value is single without comma, decode and return it
+    const decodedValue = decodeBase64(value.replace(prefix, ''));
+    return decodedValue;
+  }
 }
-
 
 // Fetch articles
 async function fetchDataFromURL(url) {
