@@ -1,6 +1,6 @@
 import fs from 'fs';
 import process from 'process'; // Import the process module
-// import fetch from 'node-fetch';
+import fetch from 'node-fetch';
 
 async function ffetch(url) {
     try {
@@ -27,12 +27,12 @@ const articles = await ffetch(`https://main--franklin-exlm--ruhisingh1.hlx.page/
 // eslint-disable-next-line no-console
 console.log(articles);
 
-articles.forEach((article) => {
-  // eslint-disable-next-line no-console
-  console.log(article.path);
-  // eslint-disable-next-line no-console
-  console.log(article.authorBioPage);
-});
+// articles.forEach((article) => {
+//   // eslint-disable-next-line no-console
+//   console.log(article.path);
+//   // eslint-disable-next-line no-console
+//   console.log(article.authorBioPage);
+// });
 
 function isNotEmpty(field) {
   return field && field !== '';
