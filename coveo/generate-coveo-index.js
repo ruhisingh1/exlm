@@ -1,5 +1,5 @@
 import fs from 'fs';
-import http from 'http'; // Changed from require('http')
+import https from 'https'; // Changed from require('http')
 import process from 'process';
 
 // Parse command line arguments
@@ -10,7 +10,7 @@ const language = languageIndex !== -1 ? args[languageIndex + 1] : 'en';
 // Fetch articles
 async function fetchDataFromURL(url) {
     return new Promise((resolve, reject) => {
-        http.get(url, (response) => {
+        https.get(url, (response) => {
             let data = '';
 
             // A chunk of data has been received.
