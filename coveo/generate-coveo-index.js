@@ -1,3 +1,4 @@
+/* eslint-disable no-console, no-unused-expressions, no-nested-ternary, quote-props */
 const fs = require('fs');
 
 // Parse command line arguments
