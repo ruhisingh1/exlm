@@ -19,16 +19,27 @@ jobs:
           echo "::set-output name=language::$language"
 
       - uses: actions/checkout@v3
+      - name: Get Repository Information
+        id: get_repo_info
+        run: |
+          repo_info=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }})
+          repo_html_url=$(echo "$repo_info" | jq -r '.html_url')
+          echo "::set-output name=repo_html_url::$repo_html_url"
+      
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '14' # Ensure version is compatible with the script
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
+      
       - name: Generate Coveo Index
         working-directory: ./coveo
         run: |
-          node generate-coveo-index.js --language ${{ steps.get_language.outputs.language }} > coveo_${{ steps.get_language.outputs.language }}.xml
+          node generate-coveo-index.js \
+            --language ${{ steps.get_language.outputs.language }} \
+            --domain "${{ steps.get_repo_info.outputs.repo_html_url }}" \
+            > coveo_${{ steps.get_language.outputs.language }}.xml
           
           # Check if the file exists or has been modified
           if [ -f ./coveo_${{ steps.get_language.outputs.language }}.xml ]; then

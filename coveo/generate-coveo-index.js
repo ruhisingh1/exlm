@@ -6,6 +6,8 @@ import process from 'process';
 const args = process.argv.slice(2);
 const languageIndex = args.indexOf('--language');
 const language = languageIndex !== -1 ? args[languageIndex + 1] : 'en';
+const domainIndex = args.indexOf('--domain');
+const domain = domainIndex !== -1 ? args[domainIndex + 1] : '';
 
 // Function to decode base64 strings
 function decodeBase64(encodedString) {
@@ -61,17 +63,10 @@ async function fetchDataFromURL(url) {
       });
   });
 }
-const exlmDomain = process.env.EXLM_DOMAIN;
 
-if (!exlmDomain) {
-    console.error('EXLM_DOMAIN environment variable is not set.');
-    // process.exit(1); // Exit with error code 1
-}
-
-console.log('EXLM_DOMAIN:', exlmDomain);
 // Main function to generate XML content
 async function generateXmlContent() {
-  const url = `${exlmDomain}${language}/article-index.json`;
+  const url = `${domain}/${language}/article-index.json`;
   try {
     const articles = await fetchDataFromURL(url);
     const xmlData = [];
