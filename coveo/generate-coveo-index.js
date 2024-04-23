@@ -1,6 +1,19 @@
 import fs from 'fs';
 import process from 'process'; // Import the process module
-import ffetch from '../scripts/ffetch.js';
+// import fetch from 'node-fetch';
+
+async function ffetch(url) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error; // Re-throw the error to handle it elsewhere if needed
+    }
+}
 
 // Parse command line arguments
 const args = process.argv.slice(2); // Access process.argv directly
