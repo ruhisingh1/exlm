@@ -1,0 +1,118 @@
+{
+  columns: [
+    'path',
+    'title',
+    'theme',
+    'lastModified',
+    'robots',
+    'authorBioPage',
+    'coveoContentType',
+    'coveoSolution',
+    'coveoRole',
+    'coveoLevel'
+  ],
+  data: [
+    {
+      path: '/en/articles',
+      title: 'Articles',
+      theme: '',
+      lastModified: 1713783372,
+      robots: '',
+      lastPublished: '2024-04-22T10:56:12.466Z',
+      authorBioPage: '',
+      coveoContentType: '',
+      coveoSolution: '',
+      coveoRole: '',
+      coveoLevel: ''
+    },
+    {
+      path: '/en/articles/article1',
+      title: 'article1',
+      theme: '',
+      lastModified: 1713858335,
+      robots: '',
+      authorBioPage: '',
+      coveoContentType: 'Article',
+      coveoSolution: 'exl:solution/QWNyb2JhdA==, exl:solution/QWR2ZXJ0aXNpbmc=',
+      coveoRole: 'exl:role/RGV2ZWxvcGVy',
+      coveoLevel: 'exl:experience-level/SW50ZXJtZWRpYXRl',
+      lastPublished: '2024-04-23T07:45:35.430Z'
+    },
+    {
+      path: '/en/articles/article2',
+      title: 'article2',
+      theme: '',
+      lastModified: 1713868083,
+      robots: '',
+      authorBioPage: '/en/article1',
+      coveoContentType: 'Article',
+      coveoSolution: 'exl:solution/QWR2ZXJ0aXNpbmc=, exl:solution/QW5hbHl0aWNz',
+      coveoRole: 'exl:role/RGV2ZWxvcGVy',
+      coveoLevel: 'exl:experience-level/RXhwZXJpZW5jZWQ=',
+      lastPublished: '2024-04-23T10:28:03.329Z'
+    }
+  ],
+  offset: 0,
+  limit: 3,
+  total: 3,
+  ':type': 'sheet'
+}
+Data: {
+  columns: [
+    'path',
+    'title',
+    'theme',
+    'lastModified',
+    'robots',
+    'authorBioPage',
+    'coveoContentType',
+    'coveoSolution',
+    'coveoRole',
+    'coveoLevel'
+  ],
+  data: [
+    {
+      path: '/en/articles',
+      title: 'Articles',
+      theme: '',
+      lastModified: 1713783372,
+      robots: '',
+      lastPublished: '2024-04-22T10:56:12.466Z',
+      authorBioPage: '',
+      coveoContentType: '',
+      coveoSolution: '',
+      coveoRole: '',
+      coveoLevel: ''
+    },
+    {
+      path: '/en/articles/article1',
+      title: 'article1',
+      theme: '',
+      lastModified: 1713858335,
+      robots: '',
+      authorBioPage: '',
+      coveoContentType: 'Article',
+      coveoSolution: 'exl:solution/QWNyb2JhdA==, exl:solution/QWR2ZXJ0aXNpbmc=',
+      coveoRole: 'exl:role/RGV2ZWxvcGVy',
+      coveoLevel: 'exl:experience-level/SW50ZXJtZWRpYXRl',
+      lastPublished: '2024-04-23T07:45:35.430Z'
+    },
+    {
+      path: '/en/articles/article2',
+      title: 'article2',
+      theme: '',
+      lastModified: 1713868083,
+      robots: '',
+      authorBioPage: '/en/article1',
+      coveoContentType: 'Article',
+      coveoSolution: 'exl:solution/QWR2ZXJ0aXNpbmc=, exl:solution/QW5hbHl0aWNz',
+      coveoRole: 'exl:role/RGV2ZWxvcGVy',
+      coveoLevel: 'exl:experience-level/RXhwZXJpZW5jZWQ=',
+      lastPublished: '2024-04-23T10:28:03.329Z'
+    }
+  ],
+  offset: 0,
+  limit: 3,
+  total: 3,
+  ':type': 'sheet'
+}
