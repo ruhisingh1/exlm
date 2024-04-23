@@ -1,6 +1,6 @@
 import fs from 'fs';
 import process from 'process'; // Import the process module
-import fetch from 'node-fetch';
+// import fetch from 'node-fetch';
 
 async function ffetch(url) {
     try {
