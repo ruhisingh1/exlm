@@ -61,10 +61,17 @@ async function fetchDataFromURL(url) {
       });
   });
 }
+const exlmDomain = process.env.EXLM_DOMAIN;
 
+if (!exlmDomain) {
+    console.error('EXLM_DOMAIN environment variable is not set.');
+    // process.exit(1); // Exit with error code 1
+}
+
+console.log('EXLM_DOMAIN:', exlmDomain);
 // Main function to generate XML content
 async function generateXmlContent() {
-  const url = `https://main--franklin-exlm--ruhisingh1.hlx.page/${language}/article-index.json`;
+  const url = `${exlmDomain}${language}/article-index.json`;
   try {
     const articles = await fetchDataFromURL(url);
     const xmlData = [];
