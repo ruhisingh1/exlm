@@ -1,4 +1,4 @@
-name: Articles Page Published
+name: Page Publish
 
 on: 
   repository_dispatch:
@@ -29,10 +29,16 @@ jobs:
         working-directory: ./coveo
         run: |
           node generate-coveo-index.js --language ${{ steps.get_language.outputs.language }} > coveo_${{ steps.get_language.outputs.language }}.xml
-      - name: Commit changes
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add ./coveo_${{ steps.get_language.outputs.language }}.xml
-          git commit -m "Update generated coveo_${{ steps.get_language.outputs.language }}.xml file"
-          git push
+          
+          # Check if the file exists or has been modified
+          if [ -f ./coveo_${{ steps.get_language.outputs.language }}.xml ]; then
+            echo "File exists"
+            git config --local user.email "action@github.com"
+            git config --local user.name "GitHub Action"
+            git add ./coveo_${{ steps.get_language.outputs.language }}.xml
+            git commit -m "Update generated coveo_${{ steps.get_language.outputs.language }}.xml file"
+            git push
+          else
+            echo "File does not exist"
+            exit 1
+          fi
