@@ -1,5 +1,20 @@
 
-        <CoveoIndex>
-            <Language>de</Language>
-            <!-- Add more elements as needed -->
-        </Coveo XML file 'coveo_de.xml' created successfully.
+            <urlset xmlns="http://www.google.com/schemas/sitemap/0.84"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xmlns:coveo="http://www.coveo.com/schemas/metadata"
+                    xsi:schemaLocation="http://www.google.com/schemas/sitemap/0.84 http://www.google.com/schemas/sitemap/0.84/sitemap.xsd">
+                <url>
+  <loc>/de/articles/article2</loc>
+  <lastmod>1713862098</lastmod>
+  <changefreq>daily</changefreq>
+  <coveo:metadata>
+    <coveo-content-type>Article</coveo-content-type>
+    <coveo-solution>{l�[����Advertising</coveo-solution>
+    <role>{k�W�Developer</role>
+    <level>{^Ɨ����{�^��Experienced</level>
+    <author-type>undefined</author-type>
+    <author-name>undefined</author-name>
+  </coveo:metadata>
+</url>
+            </urlset>
+        
