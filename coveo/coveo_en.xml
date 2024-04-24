@@ -1,51 +1,623 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>en</title>
+    <link rel="canonical" href="https://main--franklin-exlm--ruhisingh1.hlx.page/">
+    <meta name="description" content="Test pages to get started with block development on X-walk: AEM + UE + Franklin.">
+    <meta property="og:title" content="en">
+    <meta property="og:description" content="Test pages to get started with block development on X-walk: AEM + UE + Franklin.">
+    <meta property="og:url" content="https://main--franklin-exlm--ruhisingh1.hlx.page/">
+    <meta property="og:image" content="https://main--franklin-exlm--ruhisingh1.hlx.page/media_167cfbfc34cc282c88433151e6d6593961592ca37.png?width=1200&#x26;format=pjpg&#x26;optimize=medium">
+    <meta property="og:image:secure_url" content="https://main--franklin-exlm--ruhisingh1.hlx.page/media_167cfbfc34cc282c88433151e6d6593961592ca37.png?width=1200&#x26;format=pjpg&#x26;optimize=medium">
+    <meta property="og:image:alt" content="Default alt test">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="en">
+    <meta name="twitter:description" content="Test pages to get started with block development on X-walk: AEM + UE + Franklin.">
+    <meta name="twitter:image" content="https://main--franklin-exlm--ruhisingh1.hlx.page/media_167cfbfc34cc282c88433151e6d6593961592ca37.png?width=1200&#x26;format=pjpg&#x26;optimize=medium">
+    <meta name="published-time" content="2024-03-12T08:05:07.031Z">
+    <meta name="modified-time" content="2024-03-12T08:03:22.444Z">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#EAEAEA">
+    <meta charset="UTF-8">
+    <meta name="google" content="notranslate">
+    <meta property="og:type" content="website">
+    <script src="/scripts/lib-franklin.js" type="module"></script>
+    <script src="/scripts/scripts.js" type="module"></script>
+    <link rel="stylesheet" href="/styles/styles.css">
+    <script>
+  /*to prevent Firefox FOUC, this must be here*/
+  let FF_FOUC_FIX;
+</script>
+  </head>
+  <body>
+    <header></header>
+    <main>
+      <div>
+        <p>WELCOME TO MOCK Home Page</p>
+        <p>
+          <picture>
+            <source type="image/webp" srcset="./media_167cfbfc34cc282c88433151e6d6593961592ca37.png?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+            <source type="image/webp" srcset="./media_167cfbfc34cc282c88433151e6d6593961592ca37.png?width=750&#x26;format=webply&#x26;optimize=medium">
+            <source type="image/png" srcset="./media_167cfbfc34cc282c88433151e6d6593961592ca37.png?width=2000&#x26;format=png&#x26;optimize=medium" media="(min-width: 600px)">
+            <img loading="lazy" alt="Default alt test" src="./media_167cfbfc34cc282c88433151e6d6593961592ca37.png?width=750&#x26;format=png&#x26;optimize=medium" width="2026" height="766">
+          </picture>
+        </p>
+        <h2 id="sample-test-pages-">Sample test pages >>></h2>
+        <p><strong>Test</strong> <em>pages</em> to get started with block development on X-walk: AEM + UE + Franklin.</p>
+        <p><strong><a href="/en/text-samples">Text Sample Page</a></strong></p>
+        <p><strong><a href="/en/image-samples">Image Sample Page</a></strong></p>
+        <p><strong><a href="/en/title-samples">Title Sample Page</a></strong></p>
+        <p><strong><a href="/en/button-samples">Button Sample Page</a></strong></p>
+        <p><strong><a href="#">Test</a></strong></p>
+        <p>style</p>
+        <p>highlight</p>
+        <div class="events-cards">
+          <div>
+            <div></div>
+          </div>
+          <div>
+            <div></div>
+          </div>
+          <div>
+            <div></div>
+          </div>
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <div class="section-metadata spectrum-gray-100">
+          <div>
+            <div>style</div>
+            <div>default</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p>
+          <picture>
+            <source type="image/webp" srcset="./media_1428d3b6dfc01d28ce2cfd01bd219e04bf0496677.png?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+            <source type="image/webp" srcset="./media_1428d3b6dfc01d28ce2cfd01bd219e04bf0496677.png?width=750&#x26;format=webply&#x26;optimize=medium">
+            <source type="image/png" srcset="./media_1428d3b6dfc01d28ce2cfd01bd219e04bf0496677.png?width=2000&#x26;format=png&#x26;optimize=medium" media="(min-width: 600px)">
+            <img loading="lazy" alt="" src="./media_1428d3b6dfc01d28ce2cfd01bd219e04bf0496677.png?width=750&#x26;format=png&#x26;optimize=medium" width="1040" height="800">
+          </picture>
+        </p>
+        <p>
+          <picture>
+            <source type="image/webp" srcset="./media_1428d3b6dfc01d28ce2cfd01bd219e04bf0496677.png?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+            <source type="image/webp" srcset="./media_1428d3b6dfc01d28ce2cfd01bd219e04bf0496677.png?width=750&#x26;format=webply&#x26;optimize=medium">
+            <source type="image/png" srcset="./media_1428d3b6dfc01d28ce2cfd01bd219e04bf0496677.png?width=2000&#x26;format=png&#x26;optimize=medium" media="(min-width: 600px)">
+            <img loading="lazy" alt="" src="./media_1428d3b6dfc01d28ce2cfd01bd219e04bf0496677.png?width=750&#x26;format=png&#x26;optimize=medium" width="1040" height="800">
+          </picture>
+        </p>
+        <div class="section-metadata">
+          <div>
+            <div>style</div>
+            <div>highlight</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="icon-block">
+          <div>
+            <div>
+              <picture>
+                <source type="image/webp" srcset="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+                <source type="image/webp" srcset="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=750&#x26;format=webply&#x26;optimize=medium">
+                <source type="image/svg+xml" srcset="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=2000&#x26;format=svg&#x26;optimize=medium" media="(min-width: 600px)">
+                <img loading="lazy" alt="" src="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=750&#x26;format=svg&#x26;optimize=medium" width="24" height="24">
+              </picture>
+            </div>
+            <div>Default Heading</div>
+            <div>Default description</div>
+            <div><a href="/content/exlm/global/en">Default Link Text</a></div>
+          </div>
+          <div>
+            <div>
+              <picture>
+                <source type="image/webp" srcset="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+                <source type="image/webp" srcset="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=750&#x26;format=webply&#x26;optimize=medium">
+                <source type="image/svg+xml" srcset="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=2000&#x26;format=svg&#x26;optimize=medium" media="(min-width: 600px)">
+                <img loading="lazy" alt="" src="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=750&#x26;format=svg&#x26;optimize=medium" width="24" height="24">
+              </picture>
+            </div>
+            <div>Default Heading</div>
+            <div>Default description</div>
+            <div><a href="/content/exlm/global/en">Default Link Text</a></div>
+          </div>
+          <div>
+            <div>
+              <picture>
+                <source type="image/webp" srcset="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+                <source type="image/webp" srcset="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=750&#x26;format=webply&#x26;optimize=medium">
+                <source type="image/svg+xml" srcset="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=2000&#x26;format=svg&#x26;optimize=medium" media="(min-width: 600px)">
+                <img loading="lazy" alt="" src="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=750&#x26;format=svg&#x26;optimize=medium" width="24" height="24">
+              </picture>
+            </div>
+            <div>Default Heading</div>
+            <div>Default description</div>
+            <div><a href="/content/exlm/global/en">Default Link Text</a></div>
+          </div>
+        </div>
+        <div class="marquee">
+          <div>
+            <div>
+              <picture>
+                <source type="image/webp" srcset="./media_1d02ac132c95dea831b914821d537a0bbbcc09083.png?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+                <source type="image/webp" srcset="./media_1d02ac132c95dea831b914821d537a0bbbcc09083.png?width=750&#x26;format=webply&#x26;optimize=medium">
+                <source type="image/png" srcset="./media_1d02ac132c95dea831b914821d537a0bbbcc09083.png?width=2000&#x26;format=png&#x26;optimize=medium" media="(min-width: 600px)">
+                <img loading="lazy" alt="" src="./media_1d02ac132c95dea831b914821d537a0bbbcc09083.png?width=750&#x26;format=png&#x26;optimize=medium" width="786" height="653">
+              </picture>
+            </div>
+          </div>
+          <div>
+            <div></div>
+          </div>
+          <div>
+            <div>
+              <h2 id="marquee-title">Marquee Title</h2>
+            </div>
+          </div>
+          <div>
+            <div>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt</div>
+          </div>
+          <div>
+            <div><a href="https://video.tv.adobe.com/v/334101?captions=eng">Watch video</a></div>
+          </div>
+          <div>
+            <div>video</div>
+          </div>
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <div class="section-metadata">
+          <div>
+            <div>style</div>
+            <div>default</div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer></footer>
+  </body>
+</html>
 
-            <urlset xmlns="http://www.google.com/schemas/sitemap/0.84"
-                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                    xmlns:coveo="http://www.coveo.com/schemas/metadata"
-                    xsi:schemaLocation="http://www.google.com/schemas/sitemap/0.84 http://www.google.com/schemas/sitemap/0.84/sitemap.xsd">
-                <url>
-  <loc>/en/articles</loc>
-  <lastmod>1713783372</lastmod>
-  <changefreq>daily</changefreq>
-  <coveo:metadata>
-    <coveo-content-type></coveo-content-type>
-    <coveo-solution></coveo-solution>
-    <role></role>
-    <level></level>
-  </coveo:metadata>
-</url>
-<url>
-  <loc>/en/articles/article1</loc>
-  <lastmod>1713858335</lastmod>
-  <changefreq>daily</changefreq>
-  <coveo:metadata>
-    <coveo-content-type>Article</coveo-content-type>
-    <coveo-solution>Acrobat, Advertising</coveo-solution>
-    <role>Developer</role>
-    <level>Intermediate</level>
-  </coveo:metadata>
-</url>
-<url>
-  <loc>/en/articles/article2</loc>
-  <lastmod>1713891310</lastmod>
-  <changefreq>daily</changefreq>
-  <coveo:metadata>
-    <coveo-content-type>Article</coveo-content-type>
-    <coveo-solution>Advertising, Analytics, Audience Manager</coveo-solution>
-    <role>Developer, Leader</role>
-    <level>Experienced</level>
-  </coveo:metadata>
-</url>
-<url>
-  <loc>/en/articles/author-bio</loc>
-  <lastmod>1713943615</lastmod>
-  <changefreq>daily</changefreq>
-  <coveo:metadata>
-    <coveo-content-type></coveo-content-type>
-    <coveo-solution></coveo-solution>
-    <role></role>
-    <level></level>
-  </coveo:metadata>
-</url>
-            </urlset>
-        
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>en</title>
+    <link rel="canonical" href="https://main--franklin-exlm--ruhisingh1.hlx.page/">
+    <meta name="description" content="Test pages to get started with block development on X-walk: AEM + UE + Franklin.">
+    <meta property="og:title" content="en">
+    <meta property="og:description" content="Test pages to get started with block development on X-walk: AEM + UE + Franklin.">
+    <meta property="og:url" content="https://main--franklin-exlm--ruhisingh1.hlx.page/">
+    <meta property="og:image" content="https://main--franklin-exlm--ruhisingh1.hlx.page/media_167cfbfc34cc282c88433151e6d6593961592ca37.png?width=1200&#x26;format=pjpg&#x26;optimize=medium">
+    <meta property="og:image:secure_url" content="https://main--franklin-exlm--ruhisingh1.hlx.page/media_167cfbfc34cc282c88433151e6d6593961592ca37.png?width=1200&#x26;format=pjpg&#x26;optimize=medium">
+    <meta property="og:image:alt" content="Default alt test">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="en">
+    <meta name="twitter:description" content="Test pages to get started with block development on X-walk: AEM + UE + Franklin.">
+    <meta name="twitter:image" content="https://main--franklin-exlm--ruhisingh1.hlx.page/media_167cfbfc34cc282c88433151e6d6593961592ca37.png?width=1200&#x26;format=pjpg&#x26;optimize=medium">
+    <meta name="published-time" content="2024-03-12T08:05:07.031Z">
+    <meta name="modified-time" content="2024-03-12T08:03:22.444Z">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#EAEAEA">
+    <meta charset="UTF-8">
+    <meta name="google" content="notranslate">
+    <meta property="og:type" content="website">
+    <script src="/scripts/lib-franklin.js" type="module"></script>
+    <script src="/scripts/scripts.js" type="module"></script>
+    <link rel="stylesheet" href="/styles/styles.css">
+    <script>
+  /*to prevent Firefox FOUC, this must be here*/
+  let FF_FOUC_FIX;
+</script>
+  </head>
+  <body>
+    <header></header>
+    <main>
+      <div>
+        <p>WELCOME TO MOCK Home Page</p>
+        <p>
+          <picture>
+            <source type="image/webp" srcset="./media_167cfbfc34cc282c88433151e6d6593961592ca37.png?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+            <source type="image/webp" srcset="./media_167cfbfc34cc282c88433151e6d6593961592ca37.png?width=750&#x26;format=webply&#x26;optimize=medium">
+            <source type="image/png" srcset="./media_167cfbfc34cc282c88433151e6d6593961592ca37.png?width=2000&#x26;format=png&#x26;optimize=medium" media="(min-width: 600px)">
+            <img loading="lazy" alt="Default alt test" src="./media_167cfbfc34cc282c88433151e6d6593961592ca37.png?width=750&#x26;format=png&#x26;optimize=medium" width="2026" height="766">
+          </picture>
+        </p>
+        <h2 id="sample-test-pages-">Sample test pages >>></h2>
+        <p><strong>Test</strong> <em>pages</em> to get started with block development on X-walk: AEM + UE + Franklin.</p>
+        <p><strong><a href="/en/text-samples">Text Sample Page</a></strong></p>
+        <p><strong><a href="/en/image-samples">Image Sample Page</a></strong></p>
+        <p><strong><a href="/en/title-samples">Title Sample Page</a></strong></p>
+        <p><strong><a href="/en/button-samples">Button Sample Page</a></strong></p>
+        <p><strong><a href="#">Test</a></strong></p>
+        <p>style</p>
+        <p>highlight</p>
+        <div class="events-cards">
+          <div>
+            <div></div>
+          </div>
+          <div>
+            <div></div>
+          </div>
+          <div>
+            <div></div>
+          </div>
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <div class="section-metadata spectrum-gray-100">
+          <div>
+            <div>style</div>
+            <div>default</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p>
+          <picture>
+            <source type="image/webp" srcset="./media_1428d3b6dfc01d28ce2cfd01bd219e04bf0496677.png?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+            <source type="image/webp" srcset="./media_1428d3b6dfc01d28ce2cfd01bd219e04bf0496677.png?width=750&#x26;format=webply&#x26;optimize=medium">
+            <source type="image/png" srcset="./media_1428d3b6dfc01d28ce2cfd01bd219e04bf0496677.png?width=2000&#x26;format=png&#x26;optimize=medium" media="(min-width: 600px)">
+            <img loading="lazy" alt="" src="./media_1428d3b6dfc01d28ce2cfd01bd219e04bf0496677.png?width=750&#x26;format=png&#x26;optimize=medium" width="1040" height="800">
+          </picture>
+        </p>
+        <p>
+          <picture>
+            <source type="image/webp" srcset="./media_1428d3b6dfc01d28ce2cfd01bd219e04bf0496677.png?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+            <source type="image/webp" srcset="./media_1428d3b6dfc01d28ce2cfd01bd219e04bf0496677.png?width=750&#x26;format=webply&#x26;optimize=medium">
+            <source type="image/png" srcset="./media_1428d3b6dfc01d28ce2cfd01bd219e04bf0496677.png?width=2000&#x26;format=png&#x26;optimize=medium" media="(min-width: 600px)">
+            <img loading="lazy" alt="" src="./media_1428d3b6dfc01d28ce2cfd01bd219e04bf0496677.png?width=750&#x26;format=png&#x26;optimize=medium" width="1040" height="800">
+          </picture>
+        </p>
+        <div class="section-metadata">
+          <div>
+            <div>style</div>
+            <div>highlight</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="icon-block">
+          <div>
+            <div>
+              <picture>
+                <source type="image/webp" srcset="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+                <source type="image/webp" srcset="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=750&#x26;format=webply&#x26;optimize=medium">
+                <source type="image/svg+xml" srcset="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=2000&#x26;format=svg&#x26;optimize=medium" media="(min-width: 600px)">
+                <img loading="lazy" alt="" src="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=750&#x26;format=svg&#x26;optimize=medium" width="24" height="24">
+              </picture>
+            </div>
+            <div>Default Heading</div>
+            <div>Default description</div>
+            <div><a href="/content/exlm/global/en">Default Link Text</a></div>
+          </div>
+          <div>
+            <div>
+              <picture>
+                <source type="image/webp" srcset="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+                <source type="image/webp" srcset="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=750&#x26;format=webply&#x26;optimize=medium">
+                <source type="image/svg+xml" srcset="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=2000&#x26;format=svg&#x26;optimize=medium" media="(min-width: 600px)">
+                <img loading="lazy" alt="" src="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=750&#x26;format=svg&#x26;optimize=medium" width="24" height="24">
+              </picture>
+            </div>
+            <div>Default Heading</div>
+            <div>Default description</div>
+            <div><a href="/content/exlm/global/en">Default Link Text</a></div>
+          </div>
+          <div>
+            <div>
+              <picture>
+                <source type="image/webp" srcset="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+                <source type="image/webp" srcset="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=750&#x26;format=webply&#x26;optimize=medium">
+                <source type="image/svg+xml" srcset="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=2000&#x26;format=svg&#x26;optimize=medium" media="(min-width: 600px)">
+                <img loading="lazy" alt="" src="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=750&#x26;format=svg&#x26;optimize=medium" width="24" height="24">
+              </picture>
+            </div>
+            <div>Default Heading</div>
+            <div>Default description</div>
+            <div><a href="/content/exlm/global/en">Default Link Text</a></div>
+          </div>
+        </div>
+        <div class="marquee">
+          <div>
+            <div>
+              <picture>
+                <source type="image/webp" srcset="./media_1d02ac132c95dea831b914821d537a0bbbcc09083.png?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+                <source type="image/webp" srcset="./media_1d02ac132c95dea831b914821d537a0bbbcc09083.png?width=750&#x26;format=webply&#x26;optimize=medium">
+                <source type="image/png" srcset="./media_1d02ac132c95dea831b914821d537a0bbbcc09083.png?width=2000&#x26;format=png&#x26;optimize=medium" media="(min-width: 600px)">
+                <img loading="lazy" alt="" src="./media_1d02ac132c95dea831b914821d537a0bbbcc09083.png?width=750&#x26;format=png&#x26;optimize=medium" width="786" height="653">
+              </picture>
+            </div>
+          </div>
+          <div>
+            <div></div>
+          </div>
+          <div>
+            <div>
+              <h2 id="marquee-title">Marquee Title</h2>
+            </div>
+          </div>
+          <div>
+            <div>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt</div>
+          </div>
+          <div>
+            <div><a href="https://video.tv.adobe.com/v/334101?captions=eng">Watch video</a></div>
+          </div>
+          <div>
+            <div>video</div>
+          </div>
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <div class="section-metadata">
+          <div>
+            <div>style</div>
+            <div>default</div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer></footer>
+  </body>
+</html>
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>author-bio</title>
+    <link rel="canonical" href="https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/author-bio">
+    <meta property="og:title" content="author-bio">
+    <meta property="og:url" content="https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/author-bio">
+    <meta property="og:image" content="https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/media_1bb13ad19a413adad95023181581420b3796f78f8.png?width=1200&#x26;format=pjpg&#x26;optimize=medium">
+    <meta property="og:image:secure_url" content="https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/media_1bb13ad19a413adad95023181581420b3796f78f8.png?width=1200&#x26;format=pjpg&#x26;optimize=medium">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="author-bio">
+    <meta name="twitter:image" content="https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/media_1bb13ad19a413adad95023181581420b3796f78f8.png?width=1200&#x26;format=pjpg&#x26;optimize=medium">
+    <meta name="published-time" content="2024-04-24T07:26:51.373Z">
+    <meta name="modified-time" content="2024-04-24T07:25:15.771Z">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#EAEAEA">
+    <meta charset="UTF-8">
+    <meta name="google" content="notranslate">
+    <meta property="og:type" content="website">
+    <script src="/scripts/lib-franklin.js" type="module"></script>
+    <script src="/scripts/scripts.js" type="module"></script>
+    <link rel="stylesheet" href="/styles/styles.css">
+    <script>
+  /*to prevent Firefox FOUC, this must be here*/
+  let FF_FOUC_FIX;
+</script>
+  </head>
+  <body>
+    <header></header>
+    <main>
+      <div>
+        <div class="author-bio">
+          <div>
+            <div>
+              <picture>
+                <source type="image/webp" srcset="./media_1bb13ad19a413adad95023181581420b3796f78f8.png?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+                <source type="image/webp" srcset="./media_1bb13ad19a413adad95023181581420b3796f78f8.png?width=750&#x26;format=webply&#x26;optimize=medium">
+                <source type="image/png" srcset="./media_1bb13ad19a413adad95023181581420b3796f78f8.png?width=2000&#x26;format=png&#x26;optimize=medium" media="(min-width: 600px)">
+                <img loading="lazy" alt="" src="./media_1bb13ad19a413adad95023181581420b3796f78f8.png?width=750&#x26;format=png&#x26;optimize=medium" width="91" height="93">
+              </picture>
+            </div>
+          </div>
+          <div>
+            <div>Ruhi</div>
+          </div>
+          <div>
+            <div>Senior Technical Consultant</div>
+          </div>
+          <div>
+            <div>Adobe</div>
+          </div>
+          <div>
+            <div></div>
+          </div>
+          <div>
+            <div></div>
+          </div>
+          <div>
+            <div></div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer></footer>
+  </body>
+</html>
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>en</title>
+    <link rel="canonical" href="https://main--franklin-exlm--ruhisingh1.hlx.page/">
+    <meta name="description" content="Test pages to get started with block development on X-walk: AEM + UE + Franklin.">
+    <meta property="og:title" content="en">
+    <meta property="og:description" content="Test pages to get started with block development on X-walk: AEM + UE + Franklin.">
+    <meta property="og:url" content="https://main--franklin-exlm--ruhisingh1.hlx.page/">
+    <meta property="og:image" content="https://main--franklin-exlm--ruhisingh1.hlx.page/media_167cfbfc34cc282c88433151e6d6593961592ca37.png?width=1200&#x26;format=pjpg&#x26;optimize=medium">
+    <meta property="og:image:secure_url" content="https://main--franklin-exlm--ruhisingh1.hlx.page/media_167cfbfc34cc282c88433151e6d6593961592ca37.png?width=1200&#x26;format=pjpg&#x26;optimize=medium">
+    <meta property="og:image:alt" content="Default alt test">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="en">
+    <meta name="twitter:description" content="Test pages to get started with block development on X-walk: AEM + UE + Franklin.">
+    <meta name="twitter:image" content="https://main--franklin-exlm--ruhisingh1.hlx.page/media_167cfbfc34cc282c88433151e6d6593961592ca37.png?width=1200&#x26;format=pjpg&#x26;optimize=medium">
+    <meta name="published-time" content="2024-03-12T08:05:07.031Z">
+    <meta name="modified-time" content="2024-03-12T08:03:22.444Z">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#EAEAEA">
+    <meta charset="UTF-8">
+    <meta name="google" content="notranslate">
+    <meta property="og:type" content="website">
+    <script src="/scripts/lib-franklin.js" type="module"></script>
+    <script src="/scripts/scripts.js" type="module"></script>
+    <link rel="stylesheet" href="/styles/styles.css">
+    <script>
+  /*to prevent Firefox FOUC, this must be here*/
+  let FF_FOUC_FIX;
+</script>
+  </head>
+  <body>
+    <header></header>
+    <main>
+      <div>
+        <p>WELCOME TO MOCK Home Page</p>
+        <p>
+          <picture>
+            <source type="image/webp" srcset="./media_167cfbfc34cc282c88433151e6d6593961592ca37.png?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+            <source type="image/webp" srcset="./media_167cfbfc34cc282c88433151e6d6593961592ca37.png?width=750&#x26;format=webply&#x26;optimize=medium">
+            <source type="image/png" srcset="./media_167cfbfc34cc282c88433151e6d6593961592ca37.png?width=2000&#x26;format=png&#x26;optimize=medium" media="(min-width: 600px)">
+            <img loading="lazy" alt="Default alt test" src="./media_167cfbfc34cc282c88433151e6d6593961592ca37.png?width=750&#x26;format=png&#x26;optimize=medium" width="2026" height="766">
+          </picture>
+        </p>
+        <h2 id="sample-test-pages-">Sample test pages >>></h2>
+        <p><strong>Test</strong> <em>pages</em> to get started with block development on X-walk: AEM + UE + Franklin.</p>
+        <p><strong><a href="/en/text-samples">Text Sample Page</a></strong></p>
+        <p><strong><a href="/en/image-samples">Image Sample Page</a></strong></p>
+        <p><strong><a href="/en/title-samples">Title Sample Page</a></strong></p>
+        <p><strong><a href="/en/button-samples">Button Sample Page</a></strong></p>
+        <p><strong><a href="#">Test</a></strong></p>
+        <p>style</p>
+        <p>highlight</p>
+        <div class="events-cards">
+          <div>
+            <div></div>
+          </div>
+          <div>
+            <div></div>
+          </div>
+          <div>
+            <div></div>
+          </div>
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <div class="section-metadata spectrum-gray-100">
+          <div>
+            <div>style</div>
+            <div>default</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p>
+          <picture>
+            <source type="image/webp" srcset="./media_1428d3b6dfc01d28ce2cfd01bd219e04bf0496677.png?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+            <source type="image/webp" srcset="./media_1428d3b6dfc01d28ce2cfd01bd219e04bf0496677.png?width=750&#x26;format=webply&#x26;optimize=medium">
+            <source type="image/png" srcset="./media_1428d3b6dfc01d28ce2cfd01bd219e04bf0496677.png?width=2000&#x26;format=png&#x26;optimize=medium" media="(min-width: 600px)">
+            <img loading="lazy" alt="" src="./media_1428d3b6dfc01d28ce2cfd01bd219e04bf0496677.png?width=750&#x26;format=png&#x26;optimize=medium" width="1040" height="800">
+          </picture>
+        </p>
+        <p>
+          <picture>
+            <source type="image/webp" srcset="./media_1428d3b6dfc01d28ce2cfd01bd219e04bf0496677.png?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+            <source type="image/webp" srcset="./media_1428d3b6dfc01d28ce2cfd01bd219e04bf0496677.png?width=750&#x26;format=webply&#x26;optimize=medium">
+            <source type="image/png" srcset="./media_1428d3b6dfc01d28ce2cfd01bd219e04bf0496677.png?width=2000&#x26;format=png&#x26;optimize=medium" media="(min-width: 600px)">
+            <img loading="lazy" alt="" src="./media_1428d3b6dfc01d28ce2cfd01bd219e04bf0496677.png?width=750&#x26;format=png&#x26;optimize=medium" width="1040" height="800">
+          </picture>
+        </p>
+        <div class="section-metadata">
+          <div>
+            <div>style</div>
+            <div>highlight</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="icon-block">
+          <div>
+            <div>
+              <picture>
+                <source type="image/webp" srcset="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+                <source type="image/webp" srcset="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=750&#x26;format=webply&#x26;optimize=medium">
+                <source type="image/svg+xml" srcset="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=2000&#x26;format=svg&#x26;optimize=medium" media="(min-width: 600px)">
+                <img loading="lazy" alt="" src="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=750&#x26;format=svg&#x26;optimize=medium" width="24" height="24">
+              </picture>
+            </div>
+            <div>Default Heading</div>
+            <div>Default description</div>
+            <div><a href="/content/exlm/global/en">Default Link Text</a></div>
+          </div>
+          <div>
+            <div>
+              <picture>
+                <source type="image/webp" srcset="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+                <source type="image/webp" srcset="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=750&#x26;format=webply&#x26;optimize=medium">
+                <source type="image/svg+xml" srcset="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=2000&#x26;format=svg&#x26;optimize=medium" media="(min-width: 600px)">
+                <img loading="lazy" alt="" src="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=750&#x26;format=svg&#x26;optimize=medium" width="24" height="24">
+              </picture>
+            </div>
+            <div>Default Heading</div>
+            <div>Default description</div>
+            <div><a href="/content/exlm/global/en">Default Link Text</a></div>
+          </div>
+          <div>
+            <div>
+              <picture>
+                <source type="image/webp" srcset="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+                <source type="image/webp" srcset="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=750&#x26;format=webply&#x26;optimize=medium">
+                <source type="image/svg+xml" srcset="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=2000&#x26;format=svg&#x26;optimize=medium" media="(min-width: 600px)">
+                <img loading="lazy" alt="" src="./media_1deced3b87e885593186104af1fcf00f739e5df50.svg?width=750&#x26;format=svg&#x26;optimize=medium" width="24" height="24">
+              </picture>
+            </div>
+            <div>Default Heading</div>
+            <div>Default description</div>
+            <div><a href="/content/exlm/global/en">Default Link Text</a></div>
+          </div>
+        </div>
+        <div class="marquee">
+          <div>
+            <div>
+              <picture>
+                <source type="image/webp" srcset="./media_1d02ac132c95dea831b914821d537a0bbbcc09083.png?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+                <source type="image/webp" srcset="./media_1d02ac132c95dea831b914821d537a0bbbcc09083.png?width=750&#x26;format=webply&#x26;optimize=medium">
+                <source type="image/png" srcset="./media_1d02ac132c95dea831b914821d537a0bbbcc09083.png?width=2000&#x26;format=png&#x26;optimize=medium" media="(min-width: 600px)">
+                <img loading="lazy" alt="" src="./media_1d02ac132c95dea831b914821d537a0bbbcc09083.png?width=750&#x26;format=png&#x26;optimize=medium" width="786" height="653">
+              </picture>
+            </div>
+          </div>
+          <div>
+            <div></div>
+          </div>
+          <div>
+            <div>
+              <h2 id="marquee-title">Marquee Title</h2>
+            </div>
+          </div>
+          <div>
+            <div>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt</div>
+          </div>
+          <div>
+            <div><a href="https://video.tv.adobe.com/v/334101?captions=eng">Watch video</a></div>
+          </div>
+          <div>
+            <div>video</div>
+          </div>
+          <div>
+            <div></div>
+          </div>
+        </div>
+        <div class="section-metadata">
+          <div>
+            <div>style</div>
+            <div>default</div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer></footer>
+  </body>
+</html>
+
