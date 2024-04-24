@@ -1,1 +1,51 @@
 
+            <urlset xmlns="http://www.google.com/schemas/sitemap/0.84"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xmlns:coveo="http://www.coveo.com/schemas/metadata"
+                    xsi:schemaLocation="http://www.google.com/schemas/sitemap/0.84 http://www.google.com/schemas/sitemap/0.84/sitemap.xsd">
+                <url>
+  <loc>/en/articles</loc>
+  <lastmod>1713783372</lastmod>
+  <changefreq>daily</changefreq>
+  <coveo:metadata>
+    <coveo-content-type></coveo-content-type>
+    <coveo-solution></coveo-solution>
+    <role></role>
+    <level></level>
+  </coveo:metadata>
+</url>
+<url>
+  <loc>/en/articles/article1</loc>
+  <lastmod>1713858335</lastmod>
+  <changefreq>daily</changefreq>
+  <coveo:metadata>
+    <coveo-content-type>Article</coveo-content-type>
+    <coveo-solution>Acrobat, Advertising</coveo-solution>
+    <role>Developer</role>
+    <level>Intermediate</level>
+  </coveo:metadata>
+</url>
+<url>
+  <loc>/en/articles/article2</loc>
+  <lastmod>1713891310</lastmod>
+  <changefreq>daily</changefreq>
+  <coveo:metadata>
+    <coveo-content-type>Article</coveo-content-type>
+    <coveo-solution>Advertising, Analytics, Audience Manager</coveo-solution>
+    <role>Developer, Leader</role>
+    <level>Experienced</level>
+  </coveo:metadata>
+</url>
+<url>
+  <loc>/en/articles/author-bio</loc>
+  <lastmod>1713943615</lastmod>
+  <changefreq>daily</changefreq>
+  <coveo:metadata>
+    <coveo-content-type></coveo-content-type>
+    <coveo-solution></coveo-solution>
+    <role></role>
+    <level></level>
+  </coveo:metadata>
+</url>
+            </urlset>
+        
