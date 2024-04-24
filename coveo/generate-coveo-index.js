@@ -1,14 +1,14 @@
 import fs from 'fs';
 import https from 'https';
 import process from 'process';
-// import jsdom from 'jsdom';
+import { JSDOM } from 'jsdom';
 
 // Define a configuration object mapping repository names to domains
 const domainConfig = {
-  'franklin-exlm': 'https://main--franklin-exlm--ruhisingh1.hlx.page/',
-  'exlm': 'https://experienceleague-dev.adobe.com/',
-  'exlm-stage': 'https://experienceleague-stage.adobe.com/',
-  'exlm-prod': 'https://experienceleague.adobe.com/',
+  'franklin-exlm': 'https://main--franklin-exlm--ruhisingh1.hlx.page',
+  exlm: 'https://experienceleague-dev.adobe.com',
+  'exlm-stage': 'https://experienceleague-stage.adobe.com',
+  'exlm-prod': 'https://experienceleague.adobe.com',
 };
 
 const args = process.argv.slice(2);
@@ -79,22 +79,25 @@ async function fetchDataFromURL(url) {
 
 // Main function to generate XML content
 async function generateXmlContent() {
-  const url = `${domain}${language}/article-index.json`;
+  const url = `${domain}/${language}/article-index.json`;
   try {
     const articles = await fetchDataFromURL(url);
     const xmlData = [];
 
     articles.data.forEach(async (article) => {
       const authorBioPage = `${domain}${article.authorBioPage}`;
-      const authorName = '';
-      const authorType = '';
-      // const authorBioPageData = await fetchDataFromURL(authorBioPage);
+      let authorName = '';
+      let authorType = '';
+      const authorBioPageData = await fetchDataFromURL(authorBioPage);
       // console.log(authorBioPage);
       // console.log(authorBioPageData);
-      // await fetchDataFromURL(url);(authorBioPage).then((authorInfo) => {
-      //   authorName = `${authorInfo.authorName.textContent.trim()}`;
-      //   authorType = `${authorInfo.authorCompany.textContent.trim()}`;
-      // });
+      const dom = new JSDOM(authorBioPageData);
+      const { document } = dom.window;
+      const authorBioDiv = document.querySelector('.author-bio');
+      if (authorBioDiv) {
+        authorName = authorBioDiv.querySelector('div:nth-child(2)').textContent.trim();
+        authorType = authorBioDiv.querySelector('div:nth-child(4)').textContent.trim();
+      }
       xmlData.push('<url>');
       xmlData.push(`  <loc>${domain}${article.path}</loc>`);
       xmlData.push(`  <lastmod>${article.lastModified}</lastmod>`);
