@@ -1059,8 +1059,8 @@ function decodePageMetaTags() {
   const solutions = solutionMeta ? formatPageMetaTags(solutionMeta.content) : [];
   const roles = roleMeta ? formatPageMetaTags(roleMeta.content) : [];
   const experienceLevels = levelMeta ? formatPageMetaTags(levelMeta.content) : [];
-  const authorBio = authorMeta ? getEDSLink(authorMeta.content) : '';
-  
+  const authorBio = authorMeta ? `${window.location.origin}${authorMeta.content}` : '';
+
   const decodedSolutions = solutions.map((solution) => {
     // In case of sub-solutions. E.g. exl:solution/campaign/standard
     const parts = solution.split('/');
