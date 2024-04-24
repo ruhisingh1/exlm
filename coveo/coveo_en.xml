@@ -31,7 +31,7 @@
 </url>
 <url>
   <loc>https://main--franklin-exlm--ruhisingh1.hlx.page//en/articles/article2</loc>
-  <lastmod>1713951235</lastmod>
+  <lastmod>1713951374</lastmod>
   <changefreq>daily</changefreq>
   <coveo:metadata>
     <coveo-content-type>Article</coveo-content-type>
@@ -45,6 +45,19 @@
 <url>
   <loc>https://main--franklin-exlm--ruhisingh1.hlx.page//en/articles/author-bio</loc>
   <lastmod>1713943615</lastmod>
+  <changefreq>daily</changefreq>
+  <coveo:metadata>
+    <coveo-content-type></coveo-content-type>
+    <author-type></author-type>
+    <author-name></author-name>
+    <coveo-solution></coveo-solution>
+    <role></role>
+    <level></level>
+  </coveo:metadata>
+</url>
+<url>
+  <loc>https://main--franklin-exlm--ruhisingh1.hlx.page//en/articles/article2/article3</loc>
+  <lastmod>1713951485</lastmod>
   <changefreq>daily</changefreq>
   <coveo:metadata>
     <coveo-content-type></coveo-content-type>
