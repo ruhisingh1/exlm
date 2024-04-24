@@ -3,11 +3,9 @@ name: Page Publish
 on:
   repository_dispatch:
     types:
-      - resource-published:
-          branches:
-            - main
-    paths:
-      - '**/articles/**' # Trigger for paths containing /articles
+      - resource-published
+  paths:
+    - '**/articles/**'  # Trigger for paths containing /articles
 
 jobs:
   build-coveo:
