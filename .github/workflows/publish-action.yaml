@@ -3,10 +3,15 @@ name: Page Publish
 on:
   repository_dispatch:
     types:
-      - resource-published
+      - resource-published:
+          branches:
+            - main
+    paths:
+      - '**/articles/**' # Trigger for paths containing /articles
 
 jobs:
   build-coveo:
+    if: github.event.client_payload.published_pages && github.event.client_payload.published_pages.includes('/articles') && github.event.client_payload.path.includes('/articles')
     runs-on: ubuntu-latest
     steps:
       - name: Extract language
@@ -28,8 +33,20 @@ jobs:
           cache-dependency-path: '**/package-lock.json'
 
       - name: Install JSDOM
-        run: npm install jsdom
-        
+        id: install_jsdom
+        run: |
+          if [ ! -d "${{ runner.workspace }}/node_modules/jsdom" ]; then
+            npm install jsdom
+          fi
+
+      - name: Cache node_modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
+
       - name: Get Repository Details
         id: get_repo_details
         run: |

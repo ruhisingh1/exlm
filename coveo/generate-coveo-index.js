@@ -106,8 +106,8 @@ async function generateXmlContent() {
       xmlData.push('  <changefreq>daily</changefreq>');
       xmlData.push('  <coveo:metadata>');
       xmlData.push(`    <coveo-content-type>${article.coveoContentType}</coveo-content-type>`);
-      xmlData.push(`    <author-type>${authorName}</author-type>`);
-      xmlData.push(`    <author-name>${authorType}</author-name>`);
+      xmlData.push(`    <author-type>${authorType}</author-type>`);
+      xmlData.push(`    <author-name>${authorName}</author-name>`);
       const decodedSolution = decodeAndRemovePrefix(article.coveoSolution, 'exl:solution/');
       xmlData.push(`    <coveo-solution>${decodedSolution}</coveo-solution>`);
       const decodedRole = decodeAndRemovePrefix(article.coveoRole, 'exl:role/');
