@@ -1,8 +1,59 @@
-https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/author-bio
-https://main--franklin-exlm--ruhisingh1.hlx.page/
-https://main--franklin-exlm--ruhisingh1.hlx.page/
-https://main--franklin-exlm--ruhisingh1.hlx.page/
-                xsi:schemaLocation="http://www.google.com/schemas/sitemap/0.84 http://www.google.com/schemas/sitemap/0.84/sitemap.xsd">
-                
+
+            <urlset xmlns="http://www.google.com/schemas/sitemap/0.84"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xmlns:coveo="http://www.coveo.com/schemas/metadata"
+                    xsi:schemaLocation="http://www.google.com/schemas/sitemap/0.84 http://www.google.com/schemas/sitemap/0.84/sitemap.xsd">
+                <url>
+  <loc>https://main--franklin-exlm--ruhisingh1.hlx.page//en/articles</loc>
+  <lastmod>1713783372</lastmod>
+  <changefreq>daily</changefreq>
+  <coveo:metadata>
+    <coveo-content-type></coveo-content-type>
+    <author-type></author-type>
+    <author-name></author-name>
+    <coveo-solution></coveo-solution>
+    <role></role>
+    <level></level>
+  </coveo:metadata>
+</url>
+<url>
+  <loc>https://main--franklin-exlm--ruhisingh1.hlx.page//en/articles/article1</loc>
+  <lastmod>1713858335</lastmod>
+  <changefreq>daily</changefreq>
+  <coveo:metadata>
+    <coveo-content-type>Article</coveo-content-type>
+    <author-type></author-type>
+    <author-name></author-name>
+    <coveo-solution>Acrobat, Advertising</coveo-solution>
+    <role>Developer</role>
+    <level>Intermediate</level>
+  </coveo:metadata>
+</url>
+<url>
+  <loc>https://main--franklin-exlm--ruhisingh1.hlx.page//en/articles/article2</loc>
+  <lastmod>1713951235</lastmod>
+  <changefreq>daily</changefreq>
+  <coveo:metadata>
+    <coveo-content-type>Article</coveo-content-type>
+    <author-type></author-type>
+    <author-name></author-name>
+    <coveo-solution>Advertising, Analytics, Audience Manager</coveo-solution>
+    <role>Developer, Leader</role>
+    <level>Experienced</level>
+  </coveo:metadata>
+</url>
+<url>
+  <loc>https://main--franklin-exlm--ruhisingh1.hlx.page//en/articles/author-bio</loc>
+  <lastmod>1713943615</lastmod>
+  <changefreq>daily</changefreq>
+  <coveo:metadata>
+    <coveo-content-type></coveo-content-type>
+    <author-type></author-type>
+    <author-name></author-name>
+    <coveo-solution></coveo-solution>
+    <role></role>
+    <level></level>
+  </coveo:metadata>
+</url>
             </urlset>
         
