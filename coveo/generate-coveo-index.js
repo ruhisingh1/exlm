@@ -1,7 +1,7 @@
 import fs from 'fs';
 import https from 'https';
 import process from 'process';
-import { fetchAuthorBio } from '../scripts/scripts.js';
+import { fetchAuthorBio } from '../scripts/author-bio/author-bio.js';
 
 // Define a configuration object mapping repository names to domains
 const domainConfig = {
@@ -76,7 +76,7 @@ async function generateXmlContent() {
     const xmlData = [];
 
     articles.data.forEach((article) => {
-      const authorBioPage = `${article.authorBioPage}`;
+      const authorBioPage = `${domain}${article.authorBioPage}`;
       let authorName = '';
       let authorType = '';
       fetchAuthorBio(authorBioPage).then((authorInfo) => {
@@ -84,7 +84,7 @@ async function generateXmlContent() {
         authorType = `${authorInfo.authorCompany.textContent.trim()}`;
       });
       xmlData.push('<url>');
-      xmlData.push(`  <loc>${article.path}</loc>`);
+      xmlData.push(`  <loc>${domain}${article.path}</loc>`);
       xmlData.push(`  <lastmod>${article.lastModified}</lastmod>`);
       xmlData.push('  <changefreq>daily</changefreq>');
       xmlData.push('  <coveo:metadata>');
