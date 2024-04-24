@@ -86,19 +86,31 @@ async function generateXmlContent() {
     const xmlData = [];
 
     articles.data.forEach(async (article) => {
-      const authorBioPage = `${domain}${article.authorBioPage}`;
       let authorName = '';
       let authorType = '';
-      const authorBioPageData = await fetchDataFromURL(authorBioPage);
-      console.log(authorBioPage);
-      console.log(authorBioPageData);
-      const dom = new JSDOM(authorBioPageData);
-      const { document } = dom.window;
-      const authorBioDiv = document.querySelector('.author-bio');
-      if (authorBioDiv) {
-        authorName = authorBioDiv.querySelector('div:nth-child(2)').textContent.trim();
-        authorType = authorBioDiv.querySelector('div:nth-child(4)').textContent.trim();
+      if (article.authorBioPage !== '') {
+        const authorBioPage = `${domain}${article.authorBioPage}`;
+
+        try {
+          const authorBioPageData = await fetchDataFromURL(authorBioPage);
+          console.log(authorBioPage);
+          console.log(authorBioPageData);
+
+          const dom = new JSDOM(authorBioPageData);
+          const { document } = dom.window;
+
+          const authorBioDiv = document.querySelector('.author-bio');
+          if (authorBioDiv) {
+            authorName = authorBioDiv.querySelector('div:nth-child(2)').textContent.trim();
+            authorType = authorBioDiv.querySelector('div:nth-child(4)').textContent.trim();
+            console.log(authorName);
+            console.log(authorType);
+          }
+        } catch (error) {
+          console.error('Error fetching or parsing author bio page:', error);
+        }
       }
+
       xmlData.push('<url>');
       xmlData.push(`  <loc>${domain}${article.path}</loc>`);
       xmlData.push(`  <lastmod>${article.lastModified}</lastmod>`);
