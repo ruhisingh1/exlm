@@ -1,7 +1,6 @@
 import fs from 'fs';
 import https from 'https';
 import process from 'process';
-import { fetchAuthorBio } from '../scripts/author-bio/author-bio.js';
 
 // Define a configuration object mapping repository names to domains
 const domainConfig = {
@@ -75,14 +74,16 @@ async function generateXmlContent() {
     const articles = await fetchDataFromURL(url);
     const xmlData = [];
 
-    articles.data.forEach((article) => {
+    articles.data.forEach(async (article) => {
       const authorBioPage = `${domain}${article.authorBioPage}`;
-      let authorName = '';
-      let authorType = '';
-      fetchAuthorBio(authorBioPage).then((authorInfo) => {
-        authorName = `${authorInfo.authorName.textContent.trim()}`;
-        authorType = `${authorInfo.authorCompany.textContent.trim()}`;
-      });
+      const authorName = '';
+      const authorType = '';
+      const authorBioPageData = await fetchDataFromURL(authorBioPage);
+      console.log(authorBioPageData);
+      // await fetchDataFromURL(url);(authorBioPage).then((authorInfo) => {
+      //   authorName = `${authorInfo.authorName.textContent.trim()}`;
+      //   authorType = `${authorInfo.authorCompany.textContent.trim()}`;
+      // });
       xmlData.push('<url>');
       xmlData.push(`  <loc>${domain}${article.path}</loc>`);
       xmlData.push(`  <lastmod>${article.lastModified}</lastmod>`);
