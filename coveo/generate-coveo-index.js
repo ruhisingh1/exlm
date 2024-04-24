@@ -54,8 +54,17 @@ async function fetchDataFromURL(url) {
         // The whole response has been received.
         response.on('end', () => {
           try {
-            const jsonData = JSON.parse(data);
-            resolve(jsonData);
+            const contentType = response.headers['content-type'];
+            if (contentType.includes('application/json')) {
+              const jsonData = JSON.parse(data);
+              resolve(jsonData);
+            } else if (contentType.includes('text/html')) {
+              // If it's HTML, resolve with HTML string
+              resolve(data);
+            } else {
+              // Otherwise, treat as plain text
+              resolve(data);
+            }
           } catch (error) {
             reject(error);
           }
