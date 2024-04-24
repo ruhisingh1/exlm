@@ -2,17 +2,21 @@ import fs from 'fs';
 import https from 'https';
 import process from 'process';
 
-// Parse command line arguments
+// Define a configuration object mapping repository names to domains
+const domainConfig = {
+  'franklin-exlm': 'https://main--franklin-exlm--ruhisingh1.hlx.page/',
+  'exlm': 'https://experienceleague-dev.adobe.com/',
+  'exlm-stage': 'https://experienceleague-stage.adobe.com/',
+  'exlm-prod': 'https://experienceleague.adobe.com/',
+};
+
 const args = process.argv.slice(2);
 const languageIndex = args.indexOf('--language');
 const language = languageIndex !== -1 ? args[languageIndex + 1] : 'en';
 const repoNameIndex = args.indexOf('--repo-name');
 const repoName = repoNameIndex !== -1 ? args[repoNameIndex + 1] : '';
-let domain = '';
-if(repoName === "franklin-exlm"){
-  domain = 'https://main--franklin-exlm--ruhisingh1.hlx.page/';
-}
-console.log(domain);
+const domain = domainConfig[repoName] || '';
+
 // Function to decode base64 strings
 function decodeBase64(encodedString) {
   return Buffer.from(encodedString, 'base64').toString('utf-8');
@@ -20,21 +24,16 @@ function decodeBase64(encodedString) {
 
 // Generic function to decode base64 and remove prefix
 function decodeAndRemovePrefix(value, prefix) {
-  // Check if the value contains a comma
   if (value.includes(',')) {
-    // Split the value by comma
     const parts = value.split(', ');
-    // Decode and remove prefix for each part
     const decodedParts = parts.map((part) => {
       const decodedValue = decodeBase64(part.replace(prefix, ''));
       return decodedValue;
     });
-    // Join the decoded parts back with comma
     const decodedValue = decodedParts.join(', ');
     return decodedValue;
     // eslint-disable-next-line no-else-return
   } else {
-    // If the value is single without comma, decode and return it
     const decodedValue = decodeBase64(value.replace(prefix, ''));
     return decodedValue;
   }
