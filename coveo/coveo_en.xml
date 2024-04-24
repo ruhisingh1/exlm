@@ -1,71 +1,72 @@
-https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/author-bio
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>author-bio</title>
-    <link rel="canonical" href="https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/author-bio">
-    <meta property="og:title" content="author-bio">
-    <meta property="og:url" content="https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/author-bio">
-    <meta property="og:image" content="https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/media_1bb13ad19a413adad95023181581420b3796f78f8.png?width=1200&#x26;format=pjpg&#x26;optimize=medium">
-    <meta property="og:image:secure_url" content="https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/media_1bb13ad19a413adad95023181581420b3796f78f8.png?width=1200&#x26;format=pjpg&#x26;optimize=medium">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="author-bio">
-    <meta name="twitter:image" content="https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/media_1bb13ad19a413adad95023181581420b3796f78f8.png?width=1200&#x26;format=pjpg&#x26;optimize=medium">
-    <meta name="published-time" content="2024-04-24T07:26:51.373Z">
-    <meta name="modified-time" content="2024-04-24T07:25:15.771Z">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#EAEAEA">
-    <meta charset="UTF-8">
-    <meta name="google" content="notranslate">
-    <meta property="og:type" content="website">
-    <script src="/scripts/lib-franklin.js" type="module"></script>
-    <script src="/scripts/scripts.js" type="module"></script>
-    <link rel="stylesheet" href="/styles/styles.css">
-    <script>
-  /*to prevent Firefox FOUC, this must be here*/
-  let FF_FOUC_FIX;
-</script>
-  </head>
-  <body>
-    <header></header>
-    <main>
-      <div>
-        <div class="author-bio">
-          <div>
-            <div>
-              <picture>
-                <source type="image/webp" srcset="./media_1bb13ad19a413adad95023181581420b3796f78f8.png?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
-                <source type="image/webp" srcset="./media_1bb13ad19a413adad95023181581420b3796f78f8.png?width=750&#x26;format=webply&#x26;optimize=medium">
-                <source type="image/png" srcset="./media_1bb13ad19a413adad95023181581420b3796f78f8.png?width=2000&#x26;format=png&#x26;optimize=medium" media="(min-width: 600px)">
-                <img loading="lazy" alt="" src="./media_1bb13ad19a413adad95023181581420b3796f78f8.png?width=750&#x26;format=png&#x26;optimize=medium" width="91" height="93">
-              </picture>
-            </div>
-          </div>
-          <div>
-            <div>Ruhi</div>
-          </div>
-          <div>
-            <div>Senior Technical Consultant</div>
-          </div>
-          <div>
-            <div>Adobe</div>
-          </div>
-          <div>
-            <div></div>
-          </div>
-          <div>
-            <div></div>
-          </div>
-          <div>
-            <div></div>
-          </div>
-        </div>
-      </div>
-    </main>
-    <footer></footer>
-  </body>
-</html>
 
-Ruhi
-Adobe
+      <urlset xmlns="http://www.google.com/schemas/sitemap/0.84"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns:coveo="http://www.coveo.com/schemas/metadata"
+              xsi:schemaLocation="http://www.google.com/schemas/sitemap/0.84 http://www.google.com/schemas/sitemap/0.84/sitemap.xsd">
+          <url>
+  <loc>https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles</loc>
+  <lastmod>1713783372</lastmod>
+  <changefreq>daily</changefreq>
+  <coveo:metadata>
+    <coveo-content-type></coveo-content-type>
+    <author-type></author-type>
+    <author-name></author-name>
+    <coveo-solution></coveo-solution>
+    <role></role>
+    <level></level>
+  </coveo:metadata>
+</url>
+<url>
+  <loc>https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/article1</loc>
+  <lastmod>1713858335</lastmod>
+  <changefreq>daily</changefreq>
+  <coveo:metadata>
+    <coveo-content-type>Article</coveo-content-type>
+    <author-type></author-type>
+    <author-name></author-name>
+    <coveo-solution>Acrobat, Advertising</coveo-solution>
+    <role>Developer</role>
+    <level>Intermediate</level>
+  </coveo:metadata>
+</url>
+<url>
+  <loc>https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/author-bio</loc>
+  <lastmod>1713943615</lastmod>
+  <changefreq>daily</changefreq>
+  <coveo:metadata>
+    <coveo-content-type></coveo-content-type>
+    <author-type></author-type>
+    <author-name></author-name>
+    <coveo-solution></coveo-solution>
+    <role></role>
+    <level></level>
+  </coveo:metadata>
+</url>
+<url>
+  <loc>https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/article2/article3</loc>
+  <lastmod>1713951485</lastmod>
+  <changefreq>daily</changefreq>
+  <coveo:metadata>
+    <coveo-content-type></coveo-content-type>
+    <author-type></author-type>
+    <author-name></author-name>
+    <coveo-solution></coveo-solution>
+    <role></role>
+    <level></level>
+  </coveo:metadata>
+</url>
+<url>
+  <loc>https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/article2</loc>
+  <lastmod>1713954779</lastmod>
+  <changefreq>daily</changefreq>
+  <coveo:metadata>
+    <coveo-content-type>Article</coveo-content-type>
+    <author-type>Ruhi</author-type>
+    <author-name>Adobe</author-name>
+    <coveo-solution>Advertising, Analytics, Audience Manager</coveo-solution>
+    <role>Developer, Leader</role>
+    <level>Experienced</level>
+  </coveo:metadata>
+</url>
+      </urlset>
+    
