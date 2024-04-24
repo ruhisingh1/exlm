@@ -31,7 +31,7 @@
 </url>
 <url>
   <loc>https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/article2</loc>
-  <lastmod>1713972769</lastmod>
+  <lastmod>1713975447</lastmod>
   <changefreq>daily</changefreq>
   <coveo:metadata>
     <coveo-content-type>Article</coveo-content-type>
@@ -66,6 +66,19 @@
     <coveo-solution></coveo-solution>
     <role></role>
     <level></level>
+  </coveo:metadata>
+</url>
+<url>
+  <loc>https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/test</loc>
+  <lastmod>1713975822</lastmod>
+  <changefreq>daily</changefreq>
+  <coveo:metadata>
+    <coveo-content-type>Article</coveo-content-type>
+    <author-type></author-type>
+    <author-name></author-name>
+    <coveo-solution>Experience Manager�ظ, Acrobat</coveo-solution>
+    <role>Developer, User</role>
+    <level>Intermediate, Experienced</level>
   </coveo:metadata>
 </url>
       </urlset>
