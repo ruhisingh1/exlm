@@ -84,19 +84,24 @@ async function generateXmlContent() {
       let authorName = '';
       let authorType = '';
       if (article.authorBioPage !== '') {
-        const authorBioPage = `${domain}${article.authorBioPage}`;
-        try {
-          const authorBioPageData = await fetchDataFromURL(authorBioPage);
-          const dom = new JSDOM(authorBioPageData);
-          const { document } = dom.window;
-          const authorBioDiv = document.querySelector('.author-bio');
-          if (authorBioDiv) {
-            authorName = authorBioDiv.querySelector('div:nth-child(2)').textContent.trim();
-            authorType = authorBioDiv.querySelector('div:nth-child(4)').textContent.trim();
+        const regex = /^\/content\/exlm(?:-[^\s/]+)?\/global$/;
+        const match = article.authorBioPage.match(regex);
+
+        if (match) {
+          const authorBioPage = `${domain}${article.authorBioPage}`;
+          try {
+            const authorBioPageData = await fetchDataFromURL(authorBioPage);
+            const dom = new JSDOM(authorBioPageData);
+            const { document } = dom.window;
+            const authorBioDiv = document.querySelector('.author-bio');
+            if (authorBioDiv) {
+              authorName = authorBioDiv.querySelector('div:nth-child(2)').textContent.trim();
+              authorType = authorBioDiv.querySelector('div:nth-child(4)').textContent.trim();
+            }
+          } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error('Error fetching or parsing author bio page:', error);
           }
-        } catch (error) {
-          // eslint-disable-next-line no-console
-          console.error('Error fetching or parsing author bio page:', error);
         }
       }
 
