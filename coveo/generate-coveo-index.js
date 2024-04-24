@@ -4,7 +4,7 @@ import process from 'process';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { JSDOM } from 'jsdom';
 
-// Define a configuration object mapping repository names to domains
+// Configuration object mapping repository names to domains
 const domainConfig = {
   'franklin-exlm': 'https://main--franklin-exlm--ruhisingh1.hlx.page',
   exlm: 'https://experienceleague-dev.adobe.com',
@@ -41,19 +41,15 @@ function decodeAndRemovePrefix(value, prefix) {
   }
 }
 
-// Fetch articles
 async function fetchDataFromURL(url) {
   return new Promise((resolve, reject) => {
     https
       .get(url, (response) => {
         let data = '';
-
-        // A chunk of data has been received.
         response.on('data', (chunk) => {
           data += chunk;
         });
 
-        // The whole response has been received.
         response.on('end', () => {
           try {
             const contentType = response.headers['content-type'];
@@ -61,10 +57,8 @@ async function fetchDataFromURL(url) {
               const jsonData = JSON.parse(data);
               resolve(jsonData);
             } else if (contentType.includes('text/html')) {
-              // If it's HTML, resolve with HTML string
               resolve(data);
             } else {
-              // Otherwise, treat as plain text
               resolve(data);
             }
           } catch (error) {
@@ -78,35 +72,30 @@ async function fetchDataFromURL(url) {
   });
 }
 
-// Main function to generate XML content
+// Generate XML content
 async function generateXmlContent() {
   const url = `${domain}/${language}/article-index.json`;
   try {
     const articles = await fetchDataFromURL(url);
     const xmlData = [];
 
-    articles.data.forEach(async (article) => {
+    // Create an array to store all the promises
+    const promises = articles.data.map(async (article) => {
       let authorName = '';
       let authorType = '';
       if (article.authorBioPage !== '') {
         const authorBioPage = `${domain}${article.authorBioPage}`;
-
         try {
           const authorBioPageData = await fetchDataFromURL(authorBioPage);
-          console.log(authorBioPage);
-          console.log(authorBioPageData);
-
           const dom = new JSDOM(authorBioPageData);
           const { document } = dom.window;
-
           const authorBioDiv = document.querySelector('.author-bio');
           if (authorBioDiv) {
             authorName = authorBioDiv.querySelector('div:nth-child(2)').textContent.trim();
             authorType = authorBioDiv.querySelector('div:nth-child(4)').textContent.trim();
-            console.log(authorName);
-            console.log(authorType);
           }
         } catch (error) {
+          // eslint-disable-next-line no-console
           console.error('Error fetching or parsing author bio page:', error);
         }
       }
@@ -129,14 +118,17 @@ async function generateXmlContent() {
       xmlData.push('</url>');
     });
 
+    // Wait for all promises to resolve
+    await Promise.all(promises);
+
     return `
-            <urlset xmlns="http://www.google.com/schemas/sitemap/0.84"
-                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                    xmlns:coveo="http://www.coveo.com/schemas/metadata"
-                    xsi:schemaLocation="http://www.google.com/schemas/sitemap/0.84 http://www.google.com/schemas/sitemap/0.84/sitemap.xsd">
-                ${xmlData.join('\n')}
-            </urlset>
-        `;
+      <urlset xmlns="http://www.google.com/schemas/sitemap/0.84"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns:coveo="http://www.coveo.com/schemas/metadata"
+              xsi:schemaLocation="http://www.google.com/schemas/sitemap/0.84 http://www.google.com/schemas/sitemap/0.84/sitemap.xsd">
+          ${xmlData.join('\n')}
+      </urlset>
+    `;
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Error generating XML content:', error);
