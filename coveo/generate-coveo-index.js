@@ -1,6 +1,7 @@
 import fs from 'fs';
 import https from 'https';
 import process from 'process';
+import { fetchAuthorBio } from '../scripts/scripts.js';
 
 // Define a configuration object mapping repository names to domains
 const domainConfig = {
@@ -75,12 +76,21 @@ async function generateXmlContent() {
     const xmlData = [];
 
     articles.data.forEach((article) => {
+      const authorBioPage = `${article.authorBioPage}`;
+      let authorName = '';
+      let authorType = '';
+      fetchAuthorBio(authorBioPage).then((authorInfo) => {
+        authorName = `${authorInfo.authorName.textContent.trim()}`;
+        authorType = `${authorInfo.authorCompany.textContent.trim()}`;
+      });
       xmlData.push('<url>');
       xmlData.push(`  <loc>${article.path}</loc>`);
       xmlData.push(`  <lastmod>${article.lastModified}</lastmod>`);
       xmlData.push('  <changefreq>daily</changefreq>');
       xmlData.push('  <coveo:metadata>');
       xmlData.push(`    <coveo-content-type>${article.coveoContentType}</coveo-content-type>`);
+      xmlData.push(`    <author-type>${authorName}</author-type>`);
+      xmlData.push(`    <author-name>${authorType}</author-name>`);
       const decodedSolution = decodeAndRemovePrefix(article.coveoSolution, 'exl:solution/');
       xmlData.push(`    <coveo-solution>${decodedSolution}</coveo-solution>`);
       const decodedRole = decodeAndRemovePrefix(article.coveoRole, 'exl:role/');
