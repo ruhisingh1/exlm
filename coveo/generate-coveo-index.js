@@ -88,7 +88,8 @@ async function generateXmlContent() {
       const authorName = '';
       const authorType = '';
       const authorBioPageData = await fetchDataFromURL(authorBioPage);
-      console.log(authorBioPageData);
+      console.log(authorBioPage);
+      // console.log(authorBioPageData);
       // await fetchDataFromURL(url);(authorBioPage).then((authorInfo) => {
       //   authorName = `${authorInfo.authorName.textContent.trim()}`;
       //   authorType = `${authorInfo.authorCompany.textContent.trim()}`;
