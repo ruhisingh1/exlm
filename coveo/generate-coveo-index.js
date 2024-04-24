@@ -1,6 +1,7 @@
 import fs from 'fs';
 import https from 'https';
 import process from 'process';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { JSDOM } from 'jsdom';
 
 // Define a configuration object mapping repository names to domains
@@ -89,8 +90,8 @@ async function generateXmlContent() {
       let authorName = '';
       let authorType = '';
       const authorBioPageData = await fetchDataFromURL(authorBioPage);
-      // console.log(authorBioPage);
-      // console.log(authorBioPageData);
+      console.log(authorBioPage);
+      console.log(authorBioPageData);
       const dom = new JSDOM(authorBioPageData);
       const { document } = dom.window;
       const authorBioDiv = document.querySelector('.author-bio');
