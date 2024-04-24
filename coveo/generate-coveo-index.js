@@ -1,6 +1,7 @@
 import fs from 'fs';
 import https from 'https';
 import process from 'process';
+// import jsdom from 'jsdom';
 
 // Define a configuration object mapping repository names to domains
 const domainConfig = {
@@ -87,8 +88,8 @@ async function generateXmlContent() {
       const authorBioPage = `${domain}${article.authorBioPage}`;
       const authorName = '';
       const authorType = '';
-      const authorBioPageData = await fetchDataFromURL(authorBioPage);
-      console.log(authorBioPage);
+      // const authorBioPageData = await fetchDataFromURL(authorBioPage);
+      // console.log(authorBioPage);
       // console.log(authorBioPageData);
       // await fetchDataFromURL(url);(authorBioPage).then((authorInfo) => {
       //   authorName = `${authorInfo.authorName.textContent.trim()}`;

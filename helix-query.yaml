@@ -218,6 +218,14 @@ indices:
         select: head > meta[name="level"]
         value: |
           attribute(el, 'content')
+      authorType:
+        select: head > meta[name="author-type"]
+        value: |
+          attribute(el, 'content')
+      authorName:
+        select: head > meta[name="author-name"]
+        value: |
+          attribute(el, 'content')
 
   article-fr:
     <<: *base-article
