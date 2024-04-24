@@ -4,8 +4,6 @@ on:
   repository_dispatch:
     types:
       - resource-published
-  paths:
-    - '**/articles/**'  # Trigger for paths containing /articles
 
 jobs:
   build-coveo:
