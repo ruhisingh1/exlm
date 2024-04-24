@@ -7,8 +7,8 @@ on:
 
 jobs:
   build-coveo:
-    if: github.event.client_payload.published_pages && github.event.client_payload.published_pages.includes('/articles') && github.event.client_payload.path.includes('/articles')
     runs-on: ubuntu-latest
+    if: ${{ github.event.client_payload.path.includes('/articles') }}
     steps:
       - name: Extract language
         id: get_language
