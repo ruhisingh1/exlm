@@ -87,81 +87,82 @@ async function generateXmlContent() {
     const xmlData = [];
 
     const promises = articles.data.map(async (article) => {
-      if (article.path.includes('/articles/authors')) {
-        return;
-      }
-      let authorName = '';
-      let authorType = '';
-      if (article.authorBioPage !== '') {
-        let authorBioPage = `${article.authorBioPage}`;
-        const regex = /^\/content\/exlm(?:-[^\s/]+)?\/global$/;
-        const match = article.authorBioPage.match(regex);
+      const langPrefix = `/${language}/`;
 
-        if (match) {
-          authorBioPage = `${domain}${match[1]}`;
-        } else {
-          authorBioPage = `${domain}${article.authorBioPage}`;
-        }
+      if (article.path !== `${langPrefix}articles` && !article.path.startsWith(`${langPrefix}articles/authors`)) {
+        let authorName = '';
+        let authorType = '';
+        if (article.authorBioPage !== '') {
+          let authorBioPage = `${article.authorBioPage}`;
+          const regex = /^\/content\/exlm(?:-[^\s/]+)?\/global$/;
+          const match = article.authorBioPage.match(regex);
 
-        const parts = authorBioPage.split('/');
-        if (languagesMap.has(parts[3])) {
-          parts[3] = languagesMap.get(parts[3]);
-        }
-        const updatedAuthorBioPage = parts.join('/');
-        try {
-          const authorBioPageData = await fetchDataFromURL(updatedAuthorBioPage);
-          const dom = new JSDOM(authorBioPageData);
-          const { document } = dom.window;
-          const authorBioDiv = document.querySelector('.author-bio');
-          if (authorBioDiv) {
-            authorName = authorBioDiv.querySelector('div:nth-child(2)').textContent.trim();
-            authorType = authorBioDiv.querySelector('div:nth-child(4)').textContent.trim();
+          if (match) {
+            authorBioPage = `${domain}${match[1]}`;
+          } else {
+            authorBioPage = `${domain}${article.authorBioPage}`;
           }
-        } catch (error) {
-          // eslint-disable-next-line no-console
-          console.error('Error fetching or parsing author bio page:', error);
+
+          const parts = authorBioPage.split('/');
+          if (languagesMap.has(parts[3])) {
+            parts[3] = languagesMap.get(parts[3]);
+          }
+          const updatedAuthorBioPage = parts.join('/');
+          try {
+            const authorBioPageData = await fetchDataFromURL(updatedAuthorBioPage);
+            const dom = new JSDOM(authorBioPageData);
+            const { document } = dom.window;
+            const authorBioDiv = document.querySelector('.author-bio');
+            if (authorBioDiv) {
+              authorName = authorBioDiv.querySelector('div:nth-child(2)').textContent.trim();
+              authorType = authorBioDiv.querySelector('div:nth-child(4)').textContent.trim();
+            }
+          } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error('Error fetching or parsing author bio page:', error);
+          }
         }
-      }
-      const solutions = article.coveoSolution ? formatPageMetaTags(article.coveoSolution) : [];
-      const roles = article.coveoRole ? formatPageMetaTags(article.coveoRole) : [];
-      const experienceLevels = article.coveoLevel ? formatPageMetaTags(article.coveoLevel) : [];
-      let versionContent = '';
-      const decodedSolutions = solutions.map((solution) => {
-        const parts = solution.split('/');
-        const decodedParts = parts.map((part) => decodeBase64(part));
+        const solutions = article.coveoSolution ? formatPageMetaTags(article.coveoSolution) : [];
+        const roles = article.coveoRole ? formatPageMetaTags(article.coveoRole) : [];
+        const experienceLevels = article.coveoLevel ? formatPageMetaTags(article.coveoLevel) : [];
+        let versionContent = '';
+        const decodedSolutions = solutions.map((solution) => {
+          const parts = solution.split('/');
+          const decodedParts = parts.map((part) => decodeBase64(part));
 
-        if (parts.length > 1) {
-          versionContent = decodeBase64(parts.slice(1).join('/'));
+          if (parts.length > 1) {
+            versionContent = decodeBase64(parts.slice(1).join('/'));
+          }
+
+          return decodedParts[0];
+        });
+
+        const decodedRoles = roles.map((role) => decodeBase64(role));
+        const decodedLevels = experienceLevels.map((level) => decodeBase64(level));
+
+        xmlData.push('<url>');
+        xmlData.push(`  <loc>${domain}${article.path}</loc>`);
+        xmlData.push(`  <lastmod>${article.lastModified}</lastmod>`);
+        xmlData.push('  <changefreq>daily</changefreq>');
+        xmlData.push('  <coveo:metadata>');
+        xmlData.push(`    <coveo-content-type>${article.coveoContentType}</coveo-content-type>`);
+        xmlData.push(`    <author-type>${authorType}</author-type>`);
+        xmlData.push(`    <author-name>${authorName}</author-name>`);
+        if (decodedSolutions.join(',')) {
+          xmlData.push(`    <coveo-solution>${decodedSolutions.join(',')}</coveo-solution>`);
         }
-
-        return decodedParts[0];
-      });
-
-      const decodedRoles = roles.map((role) => decodeBase64(role));
-      const decodedLevels = experienceLevels.map((level) => decodeBase64(level));
-
-      xmlData.push('<url>');
-      xmlData.push(`  <loc>${domain}${article.path}</loc>`);
-      xmlData.push(`  <lastmod>${article.lastModified}</lastmod>`);
-      xmlData.push('  <changefreq>daily</changefreq>');
-      xmlData.push('  <coveo:metadata>');
-      xmlData.push(`    <coveo-content-type>${article.coveoContentType}</coveo-content-type>`);
-      xmlData.push(`    <author-type>${authorType}</author-type>`);
-      xmlData.push(`    <author-name>${authorName}</author-name>`);
-      if (decodedSolutions.join(',')) {
-        xmlData.push(`    <coveo-solution>${decodedSolutions.join(',')}</coveo-solution>`);
+        if (decodedRoles) {
+          xmlData.push(`    <role>${decodedRoles}</role>`);
+        }
+        if (decodedLevels) {
+          xmlData.push(`    <level>${decodedLevels}</level>`);
+        }
+        if (versionContent) {
+          xmlData.push(`    <version>${versionContent}</version>`);
+        }
+        xmlData.push('  </coveo:metadata>');
+        xmlData.push('</url>');
       }
-      if (decodedRoles) {
-        xmlData.push(`    <role>${decodedRoles}</role>`);
-      }
-      if (decodedLevels) {
-        xmlData.push(`    <level>${decodedLevels}</level>`);
-      }
-      if (versionContent) {
-        xmlData.push(`    <version>${versionContent}</version>`);
-      }
-      xmlData.push('  </coveo:metadata>');
-      xmlData.push('</url>');
     });
 
     await Promise.all(promises);
