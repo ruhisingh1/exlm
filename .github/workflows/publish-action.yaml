@@ -8,7 +8,7 @@ on:
 jobs:
   build-coveo:
     runs-on: ubuntu-latest
-    if: contains(github.event.client_payload.path, '/articles')
+    if: contains(github.event.client_payload.path, '/articles/') && !contains(github.event.client_payload.path, '/articles/authors')
     steps:
       - name: Extract language
         id: get_language
