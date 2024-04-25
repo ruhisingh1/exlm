@@ -2487,6 +2487,14 @@
         "valueType": "string",
         "rootPath": "/content/cq:tags/exl/experience-level",
         "description": "Sets the level(s) in page meta."
+      },
+      {
+        "component": "aem-tag",
+        "name": "test",
+        "label": "test",
+        "valueType": "string",
+        "rootPath": "/content/cq:tags/exl/experience-level",
+        "description": "Sets the level(s) in page meta."
       }
     ]
   },
