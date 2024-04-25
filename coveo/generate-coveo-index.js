@@ -126,7 +126,7 @@ async function generateXmlContent() {
       const decodedSolutions = solutions.map((solution) => {
         const parts = solution.split('/');
         const decodedParts = parts.map((part) => decodeBase64(part));
-        
+
         if (parts.length > 1) {
           versionContent = decodeBase64(parts.slice(1).join('/'));
         }
@@ -155,7 +155,7 @@ async function generateXmlContent() {
         xmlData.push(`    <level>${decodedLevels}</level>`);
       }
       if (versionContent) {
-        xmlData.push(`    <coveo-version>${versionContent}</coveo-version>`);
+        xmlData.push(`    <version>${versionContent}</version>`);
       }
       xmlData.push('  </coveo:metadata>');
       xmlData.push('</url>');
@@ -182,7 +182,7 @@ async function writeCoveoXML() {
   try {
     const xmlContent = await generateXmlContent();
     if (xmlContent.trim() !== '') {
-      const fileName = `coveo_${language}.xml`;
+      const fileName = `coveo_articles_${language}.xml`;
       fs.writeFileSync(fileName, xmlContent);
     } else {
       // eslint-disable-next-line no-console
