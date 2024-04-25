@@ -46,7 +46,7 @@ function decodeBase64(encodedString) {
   return Buffer.from(encodedString, 'base64').toString('utf-8');
 }
 
-// Generic function to decode base64 and remove prefix
+/// Generic function to decode base64 and remove prefix
 function decodeAndRemovePrefix(value, prefix) {
   const parts = value.split(',').map(part => {
     const trimmedPart = part.trim();
@@ -55,8 +55,8 @@ function decodeAndRemovePrefix(value, prefix) {
       if (index !== -1) {
         // Extracting solution and version
         const solution = decodeBase64(trimmedPart.substring(prefix.length, index));
-        const version = decodeBase64(trimmedPart.substring(index + 1));
-        return { solution, version };
+        const version = trimmedPart.substring(index + 1);
+        return { solution: solution.decodedValue, version };
       } else {
         return decodeBase64(trimmedPart.replace(prefix, ''));
       }
@@ -75,10 +75,11 @@ function decodeAndRemovePrefix(value, prefix) {
   }).join(', ');
 
   // Handling version separately
-  const version = parts.filter(part => typeof part === 'object').map(part => part.version).join(', ');
+  const versions = parts.filter(part => typeof part === 'object').map(part => part.version).join(', ');
 
-  return { decodedValue, version };
+  return { decodedValue, versions };
 }
+
 
 async function fetchDataFromURL(url) {
   return new Promise((resolve, reject) => {
