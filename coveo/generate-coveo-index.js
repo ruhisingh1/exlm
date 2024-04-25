@@ -122,14 +122,13 @@ async function generateXmlContent() {
       const solutions = article.coveoSolution ? formatPageMetaTags(article.coveoSolution) : [];
       const roles = article.coveoRole ? formatPageMetaTags(article.coveoRole) : [];
       const experienceLevels = article.coveoLevel ? formatPageMetaTags(article.coveoLevel) : [];
-
+      let versionContent = '';
       const decodedSolutions = solutions.map((solution) => {
         const parts = solution.split('/');
         const decodedParts = parts.map((part) => decodeBase64(part));
-        let versionContent = '';
+        
         if (parts.length > 1) {
           versionContent = decodeBase64(parts.slice(1).join('/'));
-          xmlData.push(`    <coveo-version>${versionContent}</coveo-version>`);
         }
 
         return decodedParts[0];
@@ -154,6 +153,9 @@ async function generateXmlContent() {
       }
       if (decodedLevels) {
         xmlData.push(`    <level>${decodedLevels}</level>`);
+      }
+      if (versionContent) {
+        xmlData.push(`    <coveo-version>${versionContent}</coveo-version>`);
       }
       xmlData.push('  </coveo:metadata>');
       xmlData.push('</url>');
