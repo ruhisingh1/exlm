@@ -126,9 +126,9 @@ async function generateXmlContent() {
       const decodedSolutions = solutions.map((solution) => {
         const parts = solution.split('/');
         const decodedParts = parts.map((part) => decodeBase64(part));
-
+        let versionContent = '';
         if (parts.length > 1) {
-          const versionContent = decodeBase64(parts.slice(1).join('/'));
+          versionContent = decodeBase64(parts.slice(1).join('/'));
           xmlData.push(`    <coveo-version>${versionContent}</coveo-version>`);
         }
 
