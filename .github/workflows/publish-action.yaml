@@ -62,7 +62,7 @@ jobs:
             echo "File exists"
             git config --local user.email "action@github.com"
             git config --local user.name "GitHub Action"
-            git add ./coveo_${{ steps.get_language.outputs.language }}.xml
+            git add ./coveo_articles_${{ steps.get_language.outputs.language }}.xml
             git commit -m "Update generated coveo_${{ steps.get_language.outputs.language }}.xml file"
             git push
           else

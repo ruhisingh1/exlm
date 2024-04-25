@@ -182,7 +182,7 @@ indices:
     include:
       - /en/articles/**
     exclude:
-      - /en/articles/authors**
+      - /en/articles/authors/**
     target: /en/article-index.json
     properties:
       title:
@@ -226,7 +226,7 @@ indices:
     include:
       - /fr/articles/**
     exclude:
-      - /fr/articles/authors**
+      - /fr/articles/authors/**
     target: /fr/article-index.json
 
   article-de:
@@ -234,7 +234,7 @@ indices:
     include:
       - /de/articles/**
     exclude:
-      - /de/articles/authors**
+      - /de/articles/authors/**
     target: /de/article-index.json
 
   article-es:
@@ -242,7 +242,7 @@ indices:
     include:
       - /es/articles/**
     exclude:
-      - /es/articles/authors**
+      - /es/articles/authors/**
     target: /es/article-index.json
 
   article-it:
@@ -250,7 +250,7 @@ indices:
     include:
       - /it/articles/**
     exclude:
-      - /it/articles/authors**
+      - /it/articles/authors/**
     target: /it/article-index.json
 
   article-nl:
@@ -258,7 +258,7 @@ indices:
     include:
       - /nl/articles/**
     exclude:
-      - /nl/articles/authors**
+      - /nl/articles/authors/**
     target: /nl/article-index.json
 
   article-pt-br:
@@ -266,7 +266,7 @@ indices:
     include:
       - /pt-br/articles/**
     exclude:
-      - /pt-br/articles/authors**
+      - /pt-br/articles/authors/**
     target: /pt-br/article-index.json
 
   article-ko:
@@ -274,7 +274,7 @@ indices:
     include:
       - /ko/articles/**
     exclude:
-      - /ko/articles/authors**
+      - /ko/articles/authors/**
     target: /ko/article-index.json
 
   article-ja:
@@ -282,7 +282,7 @@ indices:
     include:
       - /ja/articles/**
     exclude:
-      - /ja/articles/authors**
+      - /ja/articles/authors/**
     target: /ja/article-index.json
 
   article-sv:
@@ -290,7 +290,7 @@ indices:
     include:
       - /sv/articles/**
     exclude:
-      - /sv/articles/authors**
+      - /sv/articles/authors/**
     target: /sv/article-index.json
 
   article-zh-hans:
@@ -298,7 +298,7 @@ indices:
     include:
       - /zh-hans/articles/**
     exclude:
-      - /zh-hans/articles/authors**
+      - /zh-hans/articles/authors/**
     target: /zh-hans/article-index.json
 
   article-zh-hant:
@@ -306,7 +306,7 @@ indices:
     include:
       - /zh-hant/articles/**
     exclude:
-      - /zh-hant/articles/authors**
+      - /zh-hant/articles/authors/**
     target: /zh-hant/article-index.json
 
   # Sitemap indicies, split in 2 google has a limit of 50k (and 50MB) urls per sitemap
