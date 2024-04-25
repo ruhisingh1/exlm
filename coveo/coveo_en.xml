@@ -56,19 +56,6 @@
   </coveo:metadata>
 </url>
 <url>
-  <loc>https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/article2</loc>
-  <lastmod>1713978739</lastmod>
-  <changefreq>daily</changefreq>
-  <coveo:metadata>
-    <coveo-content-type>Article</coveo-content-type>
-    <author-type>Adobe</author-type>
-    <author-name>Ruhi</author-name>
-    <coveo-solution>Advertising, Analytics, Audience Manager</coveo-solution>
-    <role>Developer, Leader</role>
-    <level>Experienced</level>
-  </coveo:metadata>
-</url>
-<url>
   <loc>https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/article2/article3</loc>
   <lastmod>1713978771</lastmod>
   <changefreq>daily</changefreq>
@@ -79,6 +66,19 @@
     <coveo-solution>Advertising, Audience Manager</coveo-solution>
     <role>Developer, User, Leader, Admin</role>
     <level>Beginner, Intermediate</level>
+  </coveo:metadata>
+</url>
+<url>
+  <loc>https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/article2</loc>
+  <lastmod>1713978739</lastmod>
+  <changefreq>daily</changefreq>
+  <coveo:metadata>
+    <coveo-content-type>Article</coveo-content-type>
+    <author-type>Adobe</author-type>
+    <author-name>Ruhi</author-name>
+    <coveo-solution>Advertising, Analytics, Audience Manager</coveo-solution>
+    <role>Developer, Leader</role>
+    <level>Experienced</level>
   </coveo:metadata>
 </url>
       </urlset>
