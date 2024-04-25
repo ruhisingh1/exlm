@@ -46,17 +46,17 @@ function decodeBase64(encodedString) {
   return Buffer.from(encodedString, 'base64').toString('utf-8');
 }
 
-/// Generic function to decode base64 and remove prefix
+// Generic function to decode base64 and remove prefix
 function decodeAndRemovePrefix(value, prefix) {
-  const parts = value.split(',').map(part => {
+  const parts = value.split(',').map((part) => {
     const trimmedPart = part.trim();
     if (trimmedPart.startsWith(prefix)) {
       const index = trimmedPart.indexOf('/');
       if (index !== -1) {
         // Extracting solution and version
         const solution = decodeBase64(trimmedPart.substring(prefix.length, index));
-        const version = trimmedPart.substring(index + 1);
-        return { solution: solution.decodedValue, version };
+        const version = decodeBase64(trimmedPart.substring(index + 1));
+        return { solution, version };
       } else {
         return decodeBase64(trimmedPart.replace(prefix, ''));
       }
@@ -66,20 +66,24 @@ function decodeAndRemovePrefix(value, prefix) {
   });
 
   // Joining the parts back into a string
-  const decodedValue = parts.map(part => {
-    if (typeof part === 'object') {
-      return part.solution;
-    } else {
-      return part;
-    }
-  }).join(', ');
+  const decodedValue = parts
+    .map((part) => {
+      if (typeof part === 'object') {
+        return part.solution;
+      } else {
+        return part;
+      }
+    })
+    .join(', ');
 
   // Handling version separately
-  const versions = parts.filter(part => typeof part === 'object').map(part => part.version).join(', ');
+  const versions = parts
+    .filter((part) => typeof part === 'object')
+    .map((part) => part.version)
+    .join(', ');
 
   return { decodedValue, versions };
 }
-
 
 async function fetchDataFromURL(url) {
   return new Promise((resolve, reject) => {
@@ -163,14 +167,15 @@ async function generateXmlContent() {
       xmlData.push(`    <author-type>${authorType}</author-type>`);
       xmlData.push(`    <author-name>${authorName}</author-name>`);
       const decodedSolution = decodeAndRemovePrefix(article.coveoSolution, 'exl:solution/');
-      xmlData.push(`    <coveo-solution>${decodedSolution}</coveo-solution>`);
+      xmlData.push(`    <coveo-solution>${decodedSolution.decodedValue}</coveo-solution>`);
       const decodedRole = decodeAndRemovePrefix(article.coveoRole, 'exl:role/');
-      xmlData.push(`    <role>${decodedRole}</role>`);
+      xmlData.push(`    <role>${decodedRole.decodedValue}</role>`);
       const decodedLevel = decodeAndRemovePrefix(article.coveoLevel, 'exl:experience-level/');
-      xmlData.push(`    <level>${decodedLevel}</level>`);
-      if (decodedSolution.version) {
-        xmlData.push(`    <version>${decodedSolution.version}</version>`);
+      xmlData.push(`    <level>${decodedLevel.decodedValue}</level>`);
+      if (decodedSolution.versions) {
+        xmlData.push(`    <version>${decodedSolution.versions}</version>`);
       }
+
       xmlData.push('  </coveo:metadata>');
       xmlData.push('</url>');
     });
