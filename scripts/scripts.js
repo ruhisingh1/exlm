@@ -1094,7 +1094,7 @@ function decodePageMetaTags() {
 }
 
 if (isArticleLandingPage()) {
- // decodePageMetaTags();
+  decodePageMetaTags();
 }
 
 async function loadPage() {

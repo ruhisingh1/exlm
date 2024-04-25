@@ -1,17 +1,7 @@
-/* eslint-disable no-else-return */
 import fs from 'fs';
 import https from 'https';
 import process from 'process';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { JSDOM } from 'jsdom';
-
-// Configuration object mapping repository names to domains
-const domainConfig = {
-  'franklin-exlm': 'https://main--franklin-exlm--ruhisingh1.hlx.page',
-  exlm: 'https://experienceleague-dev.adobe.com',
-  'exlm-stage': 'https://experienceleague-stage.adobe.com',
-  'exlm-prod': 'https://experienceleague.adobe.com',
-};
 
 const languagesMap = new Map([
   ['de', 'de'],
@@ -37,52 +27,22 @@ if (languageIndex !== -1) {
   language = languagesMap.get(requestedLanguage) || language;
 }
 
+const domainConfig = {
+  'franklin-exlm': 'https://main--franklin-exlm--ruhisingh1.hlx.page',
+  exlm: 'https://experienceleague-dev.adobe.com',
+  'exlm-stage': 'https://experienceleague-stage.adobe.com',
+  'exlm-prod': 'https://experienceleague.adobe.com',
+};
+
 const repoNameIndex = args.indexOf('--repo-name');
 const repoName = repoNameIndex !== -1 ? args[repoNameIndex + 1] : '';
 const domain = domainConfig[repoName] || '';
 
-// Function to decode base64 strings
-function decodeBase64(encodedString) {
-  return Buffer.from(encodedString, 'base64').toString('utf-8');
-}
-
-// Generic function to decode base64 and remove prefix
-function decodeAndRemovePrefix(value, prefix) {
-  const parts = value.split(',').map((part) => {
-    const trimmedPart = part.trim();
-    if (trimmedPart.startsWith(prefix)) {
-      const index = trimmedPart.indexOf('/');
-      if (index !== -1) {
-        // Extracting solution and version
-        const solution = decodeBase64(trimmedPart.substring(prefix.length, index));
-        const version = decodeBase64(trimmedPart.substring(index + 1));
-        return { solution, version };
-      } else {
-        return decodeBase64(trimmedPart.replace(prefix, ''));
-      }
-    } else {
-      return trimmedPart;
-    }
-  });
-
-  // Joining the parts back into a string
-  const decodedValue = parts
-    .map((part) => {
-      if (typeof part === 'object') {
-        return part.solution;
-      } else {
-        return part;
-      }
-    })
-    .join(', ');
-
-  // Handling version separately
-  const versions = parts
-    .filter((part) => typeof part === 'object')
-    .map((part) => part.version)
-    .join(', ');
-
-  return { decodedValue, versions };
+function formatPageMetaTags(inputString) {
+  return inputString
+    .replace(/exl:[^/]*\/*/g, '')
+    .split(',')
+    .map((part) => part.trim());
 }
 
 async function fetchDataFromURL(url) {
@@ -116,14 +76,16 @@ async function fetchDataFromURL(url) {
   });
 }
 
-// Generate XML content
+function decodeBase64(encodedString) {
+  return Buffer.from(encodedString, 'base64').toString('utf-8');
+}
+
 async function generateXmlContent() {
   const url = `${domain}/${language}/article-index.json`;
   try {
     const articles = await fetchDataFromURL(url);
     const xmlData = [];
 
-    // Create an array to store all the promises
     const promises = articles.data.map(async (article) => {
       let authorName = '';
       let authorType = '';
@@ -157,6 +119,24 @@ async function generateXmlContent() {
           console.error('Error fetching or parsing author bio page:', error);
         }
       }
+      const solutions = article.coveoSolution ? formatPageMetaTags(article.coveoSolution) : [];
+      const roles = article.coveoRole ? formatPageMetaTags(article.coveoRole) : [];
+      const experienceLevels = article.coveoLevel ? formatPageMetaTags(article.coveoLevel) : [];
+
+      const decodedSolutions = solutions.map((solution) => {
+        const parts = solution.split('/');
+        const decodedParts = parts.map((part) => decodeBase64(part));
+
+        if (parts.length > 1) {
+          const versionContent = decodeBase64(parts.slice(1).join('/'));
+          xmlData.push(`    <coveo-version>${versionContent}</coveo-version>`);
+        }
+
+        return decodedParts[0];
+      });
+
+      const decodedRoles = roles.map((role) => decodeBase64(role));
+      const decodedLevels = experienceLevels.map((level) => decodeBase64(level));
 
       xmlData.push('<url>');
       xmlData.push(`  <loc>${domain}${article.path}</loc>`);
@@ -166,21 +146,19 @@ async function generateXmlContent() {
       xmlData.push(`    <coveo-content-type>${article.coveoContentType}</coveo-content-type>`);
       xmlData.push(`    <author-type>${authorType}</author-type>`);
       xmlData.push(`    <author-name>${authorName}</author-name>`);
-      const decodedSolution = decodeAndRemovePrefix(article.coveoSolution, 'exl:solution/');
-      xmlData.push(`    <coveo-solution>${decodedSolution.decodedValue}</coveo-solution>`);
-      const decodedRole = decodeAndRemovePrefix(article.coveoRole, 'exl:role/');
-      xmlData.push(`    <role>${decodedRole.decodedValue}</role>`);
-      const decodedLevel = decodeAndRemovePrefix(article.coveoLevel, 'exl:experience-level/');
-      xmlData.push(`    <level>${decodedLevel.decodedValue}</level>`);
-      if (decodedSolution.versions) {
-        xmlData.push(`    <version>${decodedSolution.versions}</version>`);
+      if (decodedSolutions.join(',')) {
+        xmlData.push(`    <coveo-solution>${decodedSolutions.join(',')}</coveo-solution>`);
       }
-
+      if (decodedRoles) {
+        xmlData.push(`    <role>${decodedRoles}</role>`);
+      }
+      if (decodedLevels) {
+        xmlData.push(`    <level>${decodedLevels}</level>`);
+      }
       xmlData.push('  </coveo:metadata>');
       xmlData.push('</url>');
     });
 
-    // Wait for all promises to resolve
     await Promise.all(promises);
 
     return `
@@ -198,8 +176,6 @@ async function generateXmlContent() {
   }
 }
 
-// Write Coveo XML file
-// Write Coveo XML file
 async function writeCoveoXML() {
   try {
     const xmlContent = await generateXmlContent();
