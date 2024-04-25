@@ -2508,6 +2508,13 @@
         "value": "",
         "label": "Block quote",
         "description": "Sets the text"
+      },
+      {
+        "component": "aem-content",
+        "valueType": "string",
+        "name": "author-bio-page",
+        "value": "",
+        "label": "Author Bio page"
       }
     ]
   },
