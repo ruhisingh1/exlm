@@ -30,18 +30,6 @@
   </coveo:metadata>
 </url>
 <url>
-  <loc>https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/authors/author-bio</loc>
-  <lastmod>1714044408</lastmod>
-  <changefreq>daily</changefreq>
-  <coveo:metadata>
-    <coveo-content-type></coveo-content-type>
-    <author-type></author-type>
-    <author-name></author-name>
-    <role></role>
-    <level></level>
-  </coveo:metadata>
-</url>
-<url>
   <loc>https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/article2/article3</loc>
   <lastmod>1713978771</lastmod>
   <changefreq>daily</changefreq>
@@ -52,20 +40,6 @@
     <coveo-solution>Advertising,Audience Manager</coveo-solution>
     <role>Developer,User,Leader,Admin</role>
     <level>Beginner,Intermediate</level>
-  </coveo:metadata>
-</url>
-<url>
-  <loc>https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/article2</loc>
-  <lastmod>1714044463</lastmod>
-  <changefreq>daily</changefreq>
-  <coveo:metadata>
-    <coveo-content-type>Article</coveo-content-type>
-    <author-type>Adobe</author-type>
-    <author-name>Ruhi</author-name>
-    <coveo-solution>Advertising,Analytics,Audience Manager,Experience Manager</coveo-solution>
-    <role>Developer,Leader</role>
-    <level>Experienced</level>
-    <version>6.5</version>
   </coveo:metadata>
 </url>
 <url>
@@ -92,6 +66,20 @@
     <coveo-solution>Acrobat,Advertising</coveo-solution>
     <role>Developer</role>
     <level>Intermediate</level>
+  </coveo:metadata>
+</url>
+<url>
+  <loc>https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/article2</loc>
+  <lastmod>1714045159</lastmod>
+  <changefreq>daily</changefreq>
+  <coveo:metadata>
+    <coveo-content-type>Article</coveo-content-type>
+    <author-type>Adobe</author-type>
+    <author-name>Ruhi</author-name>
+    <coveo-solution>Advertising,Analytics,Audience Manager,Experience Manager</coveo-solution>
+    <role>Developer,Leader</role>
+    <level>Experienced</level>
+    <version>6.5</version>
   </coveo:metadata>
 </url>
       </urlset>
