@@ -1,3 +1,4 @@
+/* eslint-disable no-else-return */
 import fs from 'fs';
 import https from 'https';
 import process from 'process';
@@ -12,9 +13,30 @@ const domainConfig = {
   'exlm-prod': 'https://experienceleague.adobe.com',
 };
 
+const languagesMap = new Map([
+  ['de', 'de'],
+  ['en', 'en'],
+  ['ja', 'ja'],
+  ['fr', 'fr'],
+  ['es', 'es'],
+  ['pt-BR', 'pt-br'],
+  ['ko', 'ko'],
+  ['sv', 'sv'],
+  ['nl', 'nl'],
+  ['it', 'it'],
+  ['zh-CN', 'zh-hans'],
+  ['zh-TW', 'zh-hant'],
+]);
+
 const args = process.argv.slice(2);
 const languageIndex = args.indexOf('--language');
-const language = languageIndex !== -1 ? args[languageIndex + 1] : 'en';
+let language = 'en';
+
+if (languageIndex !== -1) {
+  const requestedLanguage = args[languageIndex + 1];
+  language = languagesMap.get(requestedLanguage) || language;
+}
+
 const repoNameIndex = args.indexOf('--repo-name');
 const repoName = repoNameIndex !== -1 ? args[repoNameIndex + 1] : '';
 const domain = domainConfig[repoName] || '';
@@ -26,19 +48,36 @@ function decodeBase64(encodedString) {
 
 // Generic function to decode base64 and remove prefix
 function decodeAndRemovePrefix(value, prefix) {
-  if (value.includes(',')) {
-    const parts = value.split(', ');
-    const decodedParts = parts.map((part) => {
-      const decodedValue = decodeBase64(part.replace(prefix, ''));
-      return decodedValue;
-    });
-    const decodedValue = decodedParts.join(', ');
-    return decodedValue;
-    // eslint-disable-next-line no-else-return
-  } else {
-    const decodedValue = decodeBase64(value.replace(prefix, ''));
-    return decodedValue;
-  }
+  const parts = value.split(',').map(part => {
+    const trimmedPart = part.trim();
+    if (trimmedPart.startsWith(prefix)) {
+      const index = trimmedPart.indexOf('/');
+      if (index !== -1) {
+        // Extracting solution and version
+        const solution = decodeBase64(trimmedPart.substring(prefix.length, index));
+        const version = decodeBase64(trimmedPart.substring(index + 1));
+        return { solution, version };
+      } else {
+        return decodeBase64(trimmedPart.replace(prefix, ''));
+      }
+    } else {
+      return trimmedPart;
+    }
+  });
+
+  // Joining the parts back into a string
+  const decodedValue = parts.map(part => {
+    if (typeof part === 'object') {
+      return part.solution;
+    } else {
+      return part;
+    }
+  }).join(', ');
+
+  // Handling version separately
+  const version = parts.filter(part => typeof part === 'object').map(part => part.version).join(', ');
+
+  return { decodedValue, version };
 }
 
 async function fetchDataFromURL(url) {
@@ -93,8 +132,14 @@ async function generateXmlContent() {
         } else {
           authorBioPage = `${domain}${article.authorBioPage}`;
         }
+
+        const parts = authorBioPage.split('/');
+        if (languagesMap.has(parts[3])) {
+          parts[3] = languagesMap.get(parts[3]);
+        }
+        const updatedAuthorBioPage = parts.join('/');
         try {
-          const authorBioPageData = await fetchDataFromURL(authorBioPage);
+          const authorBioPageData = await fetchDataFromURL(updatedAuthorBioPage);
           const dom = new JSDOM(authorBioPageData);
           const { document } = dom.window;
           const authorBioDiv = document.querySelector('.author-bio');
@@ -122,6 +167,9 @@ async function generateXmlContent() {
       xmlData.push(`    <role>${decodedRole}</role>`);
       const decodedLevel = decodeAndRemovePrefix(article.coveoLevel, 'exl:experience-level/');
       xmlData.push(`    <level>${decodedLevel}</level>`);
+      if (decodedSolution.version) {
+        xmlData.push(`    <version>${decodedSolution.version}</version>`);
+      }
       xmlData.push('  </coveo:metadata>');
       xmlData.push('</url>');
     });
@@ -145,11 +193,17 @@ async function generateXmlContent() {
 }
 
 // Write Coveo XML file
+// Write Coveo XML file
 async function writeCoveoXML() {
   try {
     const xmlContent = await generateXmlContent();
-    const fileName = `coveo_${language}.xml`;
-    fs.writeFileSync(fileName, xmlContent);
+    if (xmlContent.trim() !== '') {
+      const fileName = `coveo_${language}.xml`;
+      fs.writeFileSync(fileName, xmlContent);
+    } else {
+      // eslint-disable-next-line no-console
+      console.log('XML content is empty. Skipping file creation.');
+    }
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Error writing Coveo XML file:', error);

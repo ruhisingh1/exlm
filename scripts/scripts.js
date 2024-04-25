@@ -1045,7 +1045,7 @@ export function createPlaceholderSpan(placeholderKey, fallbackText, onResolved) 
 
 function formatPageMetaTags(inputString) {
   return inputString
-    .replace(/exl:[^\/]*\/*/g, '')
+    .replace(/exl:[^/]*\/*/g, '')
     .split(',')
     .map((part) => part.trim());
 }
@@ -1065,7 +1065,6 @@ function decodePageMetaTags() {
     // In case of sub-solutions. E.g. exl:solution/campaign/standard
     const parts = solution.split('/');
     const decodedParts = parts.map((part) => atob(part));
-    const decodedSolution = decodedParts.join(' ');
 
     // If it's a sub-solution, create a version meta tag
     if (parts.length > 1) {
@@ -1075,14 +1074,10 @@ function decodePageMetaTags() {
       document.head.appendChild(versionMeta);
     }
 
-    return decodedSolution;
+    return decodedParts[0];
   });
-  const decodedRoles = roles.map((role) => {
-    return atob(role);
-  });
-  const decodedLevels = experienceLevels.map((level) => {
-    return atob(level);
-  });
+  const decodedRoles = roles.map((role) => atob(role));
+  const decodedLevels = experienceLevels.map((level) => atob(level));
 
   if (solutionMeta) {
     solutionMeta.content = decodedSolutions.join(',');
@@ -1099,7 +1094,7 @@ function decodePageMetaTags() {
 }
 
 if (isArticleLandingPage()) {
-  decodePageMetaTags();
+ // decodePageMetaTags();
 }
 
 async function loadPage() {

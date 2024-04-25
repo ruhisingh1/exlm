@@ -211,16 +211,5 @@ export default async function ArticleMarquee(block) {
       ${authorInfo.authorTitle.outerHTML}
       <div class="article-marquee-tag">${tagname}</div>
     `;
-    // Create and add two new metadata fields
-  const newMeta1 = document.createElement('meta');
-  newMeta1.setAttribute('name', 'author-type');
-  newMeta1.setAttribute('content', `${authorInfo.authorCompany.textContent.trim()}`);
-
-  const newMeta2 = document.createElement('meta');
-  newMeta2.setAttribute('name', 'author-name');
-  newMeta2.setAttribute('content', `${authorInfo.authorName.textContent.trim()}`);
-
-  document.head.appendChild(newMeta1);
-  document.head.appendChild(newMeta2);
   });
 }
