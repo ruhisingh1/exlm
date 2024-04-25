@@ -87,6 +87,9 @@ async function generateXmlContent() {
     const xmlData = [];
 
     const promises = articles.data.map(async (article) => {
+      if (article.path.includes('/articles/authors')) {
+        return;
+      }
       let authorName = '';
       let authorType = '';
       if (article.authorBioPage !== '') {
