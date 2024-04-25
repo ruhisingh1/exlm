@@ -5,7 +5,20 @@
               xsi:schemaLocation="http://www.google.com/schemas/sitemap/0.84 http://www.google.com/schemas/sitemap/0.84/sitemap.xsd">
           <url>
   <loc>https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles</loc>
-  <lastmod>1713783372</lastmod>
+  <lastmod>1714023547</lastmod>
+  <changefreq>daily</changefreq>
+  <coveo:metadata>
+    <coveo-content-type></coveo-content-type>
+    <author-type></author-type>
+    <author-name></author-name>
+    <coveo-solution>Acrobat, Experience Manager�ظ</coveo-solution>
+    <role>Developer</role>
+    <level></level>
+  </coveo:metadata>
+</url>
+<url>
+  <loc>https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/author-bio</loc>
+  <lastmod>1713978741</lastmod>
   <changefreq>daily</changefreq>
   <coveo:metadata>
     <coveo-content-type></coveo-content-type>
@@ -17,68 +30,55 @@
   </coveo:metadata>
 </url>
 <url>
-  <loc>https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/article1</loc>
-  <lastmod>1713858335</lastmod>
+  <loc>https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/article2</loc>
+  <lastmod>1713978739</lastmod>
   <changefreq>daily</changefreq>
   <coveo:metadata>
     <coveo-content-type>Article</coveo-content-type>
-    <author-type></author-type>
-    <author-name></author-name>
+    <author-type>Adobe</author-type>
+    <author-name>Ruhi</author-name>
+    <coveo-solution>Advertising, Analytics, Audience Manager</coveo-solution>
+    <role>Developer, Leader</role>
+    <level>Experienced</level>
+  </coveo:metadata>
+</url>
+<url>
+  <loc>https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/test</loc>
+  <lastmod>1713978742</lastmod>
+  <changefreq>daily</changefreq>
+  <coveo:metadata>
+    <coveo-content-type>Article</coveo-content-type>
+    <author-type>Adobe</author-type>
+    <author-name>Ruhi</author-name>
+    <coveo-solution>Acrobat</coveo-solution>
+    <role>Developer, User</role>
+    <level>Intermediate, Experienced</level>
+  </coveo:metadata>
+</url>
+<url>
+  <loc>https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/article1</loc>
+  <lastmod>1713978737</lastmod>
+  <changefreq>daily</changefreq>
+  <coveo:metadata>
+    <coveo-content-type>Article</coveo-content-type>
+    <author-type>Adobe</author-type>
+    <author-name>Ruhi</author-name>
     <coveo-solution>Acrobat, Advertising</coveo-solution>
     <role>Developer</role>
     <level>Intermediate</level>
   </coveo:metadata>
 </url>
 <url>
-  <loc>https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/article2</loc>
-  <lastmod>1713975447</lastmod>
-  <changefreq>daily</changefreq>
-  <coveo:metadata>
-    <coveo-content-type>Article</coveo-content-type>
-    <author-type></author-type>
-    <author-name></author-name>
-    <coveo-solution>Advertising, Analytics, Audience Manager, Experience Manager�ظ</coveo-solution>
-    <role>Developer, Leader</role>
-    <level>Experienced</level>
-  </coveo:metadata>
-</url>
-<url>
-  <loc>https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/author-bio</loc>
-  <lastmod>1713943615</lastmod>
-  <changefreq>daily</changefreq>
-  <coveo:metadata>
-    <coveo-content-type></coveo-content-type>
-    <author-type></author-type>
-    <author-name></author-name>
-    <coveo-solution></coveo-solution>
-    <role></role>
-    <level></level>
-  </coveo:metadata>
-</url>
-<url>
   <loc>https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/article2/article3</loc>
-  <lastmod>1713951485</lastmod>
-  <changefreq>daily</changefreq>
-  <coveo:metadata>
-    <coveo-content-type></coveo-content-type>
-    <author-type></author-type>
-    <author-name></author-name>
-    <coveo-solution></coveo-solution>
-    <role></role>
-    <level></level>
-  </coveo:metadata>
-</url>
-<url>
-  <loc>https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/test</loc>
-  <lastmod>1713975822</lastmod>
+  <lastmod>1713978771</lastmod>
   <changefreq>daily</changefreq>
   <coveo:metadata>
     <coveo-content-type>Article</coveo-content-type>
-    <author-type></author-type>
-    <author-name></author-name>
-    <coveo-solution>Experience Manager�ظ, Acrobat</coveo-solution>
-    <role>Developer, User</role>
-    <level>Intermediate, Experienced</level>
+    <author-type>Adobe</author-type>
+    <author-name>Ruhi</author-name>
+    <coveo-solution>Advertising, Audience Manager</coveo-solution>
+    <role>Developer, User, Leader, Admin</role>
+    <level>Beginner, Intermediate</level>
   </coveo:metadata>
 </url>
       </urlset>
