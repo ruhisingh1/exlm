@@ -2651,6 +2651,10 @@
     ]
   },
   {
+    "id": "mini-toc",
+    "fields": []
+  },
+  {
     "id": "article-tags",
     "fields": [
       {
