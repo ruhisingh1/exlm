@@ -240,7 +240,7 @@ function buildAutoBlocks(main) {
       addArticleLandingRail(main);
     }
     // eslint-disable-next-line no-use-before-define
-    addMiniTocForArticlesPage(main);
+    // addMiniTocForArticlesPage(main);
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Auto Blocking failed', error);
