@@ -29,19 +29,6 @@
   </coveo:metadata>
 </url>
 <url>
-  <loc>https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/article3</loc>
-  <lastmod>1714654838</lastmod>
-  <changefreq>daily</changefreq>
-  <coveo:metadata>
-    <coveo-content-type>Article</coveo-content-type>
-    <author-type>Adobe</author-type>
-    <author-name>Ruhi</author-name>
-    <coveo-solution>�ޮج�x,�bzw1�ځ�</coveo-solution>
-    <role>�ޖ�^,Rǫ,-�z,٢</role>
-    <level>�"�w�,"{^�g���^</level>
-  </coveo:metadata>
-</url>
-<url>
   <loc>https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/test</loc>
   <lastmod>1714042143</lastmod>
   <changefreq>daily</changefreq>
@@ -52,6 +39,19 @@
     <coveo-solution>Acrobat</coveo-solution>
     <role>Developer,User</role>
     <level>Intermediate,Experienced</level>
+  </coveo:metadata>
+</url>
+<url>
+  <loc>https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/article3</loc>
+  <lastmod>1714654838</lastmod>
+  <changefreq>daily</changefreq>
+  <coveo:metadata>
+    <coveo-content-type>Article</coveo-content-type>
+    <author-type>Adobe</author-type>
+    <author-name>Ruhi</author-name>
+    <coveo-solution>�ޮج�x,�bzw1�ځ�</coveo-solution>
+    <role>�ޖ�^,Rǫ,-�z,٢</role>
+    <level>�"�w�,"{^�g���^</level>
   </coveo:metadata>
 </url>
 <url>
@@ -69,7 +69,7 @@
 </url>
 <url>
   <loc>https://main--franklin-exlm--ruhisingh1.hlx.page/en/articles/article2</loc>
-  <lastmod>1714658281</lastmod>
+  <lastmod>1714727477</lastmod>
   <changefreq>daily</changefreq>
   <coveo:metadata>
     <coveo-content-type>Article</coveo-content-type>
