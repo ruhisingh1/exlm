@@ -247,8 +247,6 @@ function buildAutoBlocks(main) {
     if (isArticleLandingPage()) {
       addArticleLandingRail(main);
     }
-    // eslint-disable-next-line no-use-before-define
-    addMiniTocForArticlesPage(main);
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Auto Blocking failed', error);
@@ -629,7 +627,7 @@ export function getConfig() {
   };
 
   let launchScriptSrc;
-  if (isProd) launchScriptSrc = 'https://assets.adobedtm.com/d4d114c60e50/9f881954c8dc/launch-7a902c4895c3.min.js';
+  if (isProd) launchScriptSrc = 'https://assets.adobedtm.com/a7d65461e54e/6e9802a06173/launch-43baf8381f4b.min.js';
   else if (isStage)
     launchScriptSrc = 'https://assets.adobedtm.com/d4d114c60e50/9f881954c8dc/launch-102059c3cf0a-staging.min.js';
   else launchScriptSrc = 'https://assets.adobedtm.com/d4d114c60e50/9f881954c8dc/launch-caabfb728852-development.js';
@@ -879,23 +877,6 @@ async function loadArticles() {
     const mod = await import('./articles/articles.js');
     if (mod.default) {
       await mod.default();
-    }
-  }
-}
-
-function addMiniTocForArticlesPage(main) {
-  if (isArticlePage()) {
-    const [, articleBody] = main.children;
-    if (articleBody && !articleBody.querySelector('.mini-toc')) {
-      // Dynamically add mini-toc section for articles page
-      const miniTocWrapper = htmlToElement(`
-      <div class="mini-toc">
-        <div>
-          <div></div>
-        </div>
-      </div>
-      `);
-      articleBody.appendChild(miniTocWrapper);
     }
   }
 }
