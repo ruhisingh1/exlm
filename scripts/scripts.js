@@ -20,7 +20,6 @@ import {
   readBlockConfig,
   createOptimizedPicture,
 } from './lib-franklin.js';
-// eslint-disable-next-line import/no-cycle
 
 const LCP_BLOCKS = ['marquee', 'article-marquee']; // add your LCP blocks to the list
 export const timers = new Map();
@@ -178,19 +177,27 @@ function addBrowseBreadCrumb(main) {
   }
 }
 
+/**
+ * Extract author information from the author page.
+ * @param {HTMLElement} block
+ */
 export function extractAuthorInfo(block) {
   const authorInfo = [...block.children].map((row) => row.firstElementChild);
   return {
-    authorImage: authorInfo[0] ?? '',
-    authorName: authorInfo[1] ?? '',
-    authorTitle: authorInfo[2] ?? '',
-    authorCompany: authorInfo[3] ?? '',
-    authorDescription: authorInfo[4] ?? '',
-    authorSocialLinkText: authorInfo[5] ?? '',
-    authorSocialLinkURL: authorInfo[6] ?? '',
+    authorImage: authorInfo[0]?.querySelector('img')?.getAttribute('src'),
+    authorName: authorInfo[1]?.textContent.trim(),
+    authorTitle: authorInfo[2]?.textContent.trim(),
+    authorCompany: authorInfo[3]?.textContent.trim(),
+    authorDescription: authorInfo[4],
+    authorSocialLinkText: authorInfo[5]?.textContent.trim(),
+    authorSocialLinkURL: authorInfo[6]?.textContent.trim(),
   };
 }
 
+/**
+ * Fetch the author information from the author page.
+ * @param {HTMLAnchorElement} anchor || {string} link
+ */
 export async function fetchAuthorBio(anchor) {
   const link = anchor.href ? anchor.href : anchor;
   return fetch(link)
@@ -198,7 +205,8 @@ export async function fetchAuthorBio(anchor) {
     .then((html) => {
       const parser = new DOMParser();
       const htmlDoc = parser.parseFromString(html, 'text/html');
-      return extractAuthorInfo(htmlDoc.querySelector('.author-bio'));
+      const authorInfo = extractAuthorInfo(htmlDoc.querySelector('.author-bio'));
+      return authorInfo;
     })
     .catch((error) => {
       console.error(error);
@@ -238,11 +246,9 @@ function buildAutoBlocks(main) {
     }
     if (isArticleLandingPage()) {
       addArticleLandingRail(main);
-      // eslint-disable-next-line no-use-before-define
-      decorateArticlePageMeta();
     }
     // eslint-disable-next-line no-use-before-define
-    // addMiniTocForArticlesPage(main);
+    addMiniTocForArticlesPage(main);
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Auto Blocking failed', error);
@@ -623,7 +629,7 @@ export function getConfig() {
   };
 
   let launchScriptSrc;
-  if (isProd) launchScriptSrc = 'https://assets.adobedtm.com/a7d65461e54e/6e9802a06173/launch-43baf8381f4b.min.js';
+  if (isProd) launchScriptSrc = 'https://assets.adobedtm.com/d4d114c60e50/9f881954c8dc/launch-7a902c4895c3.min.js';
   else if (isStage)
     launchScriptSrc = 'https://assets.adobedtm.com/d4d114c60e50/9f881954c8dc/launch-102059c3cf0a-staging.min.js';
   else launchScriptSrc = 'https://assets.adobedtm.com/d4d114c60e50/9f881954c8dc/launch-caabfb728852-development.js';
@@ -868,7 +874,6 @@ async function loadRails() {
  * Custom - Loads and builds layout for articles page
  */
 async function loadArticles() {
-  decorateArticlePageMeta();
   if (isArticlePage()) {
     loadCSS(`${window.hlx.codeBasePath}/scripts/articles/articles.css`);
     const mod = await import('./articles/articles.js');
@@ -1027,7 +1032,7 @@ function handleHomePageHashes() {
  * @param {string} fallbackText
  * @returns
  */
-export function createPlaceholderSpan(placeholderKey, fallbackText, onResolved) {
+export function createPlaceholderSpan(placeholderKey, fallbackText, onResolved, onRejected) {
   const span = document.createElement('span');
   span.setAttribute('data-placeholder', placeholderKey);
   span.setAttribute('data-placeholder-fallback', fallbackText);
@@ -1042,62 +1047,9 @@ export function createPlaceholderSpan(placeholderKey, fallbackText, onResolved) 
     })
     .catch(() => {
       span.textContent = fallbackText;
+      if (onRejected) onRejected(span);
     });
   return span;
-}
-
-function formatPageMetaTags(inputString) {
-  return inputString
-    .replace(/exl:[^/]*\/*/g, '')
-    .split(',')
-    .map((part) => part.trim());
-}
-
-function decodePageMetaTags() {
-  const solutionMeta = document.querySelector(`meta[name="coveo-solution"]`);
-  const roleMeta = document.querySelector(`meta[name="role"]`);
-  const levelMeta = document.querySelector(`meta[name="level"]`);
-
-  const solutions = solutionMeta ? formatPageMetaTags(solutionMeta.content) : [];
-  const roles = roleMeta ? formatPageMetaTags(roleMeta.content) : [];
-  const experienceLevels = levelMeta ? formatPageMetaTags(levelMeta.content) : [];
-
-  const decodedSolutions = solutions.map((solution) => {
-    // In case of sub-solutions. E.g. exl:solution/campaign/standard
-    const parts = solution.split('/');
-    const decodedParts = parts.map((part) => atob(part));
-
-    // If it's a sub-solution, create a version meta tag
-    if (parts.length > 1) {
-      const versionMeta = document.createElement('meta');
-      versionMeta.name = 'version';
-      versionMeta.content = atob(parts.slice(1).join('/'));
-      document.head.appendChild(versionMeta);
-    }
-
-    return decodedParts[0];
-  });
-  const decodedRoles = roles.map((role) => atob(role));
-  const decodedLevels = experienceLevels.map((level) => atob(level));
-
-  if (solutionMeta) {
-    solutionMeta.content = decodedSolutions.join(',');
-  }
-  if (roleMeta) {
-    roleMeta.content = decodedRoles.join(',');
-  }
-  if (levelMeta) {
-    levelMeta.content = decodedLevels.join(',');
-  }
-}
-
-export function decorateArticlePageMeta() {
-  if (
-    document.documentElement.classList.contains('adobe-ue-edit') ||
-    document.documentElement.classList.contains('adobe-ue-preview')
-  ) {
-    decodePageMetaTags();
-  }
 }
 
 async function loadPage() {
