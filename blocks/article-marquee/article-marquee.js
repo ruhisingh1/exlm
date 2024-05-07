@@ -170,7 +170,13 @@ function createBreadcrumb(container) {
 export default async function ArticleMarquee(block) {
   loadCSS(`${window.hlx.codeBasePath}/scripts/toast/toast.css`);
   const [readTime, headingType] = block.querySelectorAll(':scope div > div');
-
+  let link = getMetadata('author-bio-page');
+  if (
+    document.documentElement.classList.contains('adobe-ue-edit') ||
+    document.documentElement.classList.contains('adobe-ue-preview')
+  ) {
+    link = `${link}.html`;
+  }
   const articleDetails = `<div class="article-marquee-info-container"><div class="article-info">
                                 <div class="breadcrumb"></div>
                                 <${headingType.textContent ? headingType.textContent : 'h1'}>${document.title}</${
@@ -197,31 +203,24 @@ export default async function ArticleMarquee(block) {
   createBreadcrumb(breadcrumbContainer);
   decorateIcons(block);
 
-  let authorBioPageUrl = getMetadata('author-bio-page');
-  if (
-    document.documentElement.classList.contains('adobe-ue-edit') ||
-    document.documentElement.classList.contains('adobe-ue-preview')
-  ) {
-    authorBioPageUrl = authorBioPageUrl.replace(/\/content\/[^/]+\/global/, '');
-  }
-  if(authorBioPageUrl) {
-  fetchAuthorBio(authorBioPageUrl).then((authorInfo) => {
-    const authorInfoContainer = block.querySelector('.author-details');
-    let tagname = placeholders.articleMarqueeAdobeTag;
-    let articleType = authorInfo?.authorCompany?.toLowerCase();
-    if (!articleType) articleType = metadataProperties.adobe;
-    if (articleType !== metadataProperties.adobe) {
-      tagname = placeholders.articleMarqueeExternalTag;
-    }
-    authorInfoContainer.outerHTML = `
-      <div>${createOptimizedPicture(authorInfo?.authorImage).outerHTML}</div>
-      <div>${authorInfo?.authorName}</div> 
-      <div>${authorInfo?.authorTitle}</div>
-      <div class="article-marquee-tag">${tagname}</div>
-    `;
+  if (link) {
+    fetchAuthorBio(link).then((authorInfo) => {
+      const authorInfoContainer = block.querySelector('.author-details');
+      let tagname = placeholders.articleMarqueeAdobeTag;
+      let articleType = authorInfo?.authorCompany?.toLowerCase();
+      if (!articleType) articleType = metadataProperties.adobe;
+      if (articleType !== metadataProperties.adobe) {
+        tagname = placeholders.articleMarqueeExternalTag;
+      }
+      authorInfoContainer.outerHTML = `
+        <div>${createOptimizedPicture(authorInfo?.authorImage).outerHTML}</div>
+        <div>${authorInfo?.authorName}</div> 
+        <div>${authorInfo?.authorTitle}</div>
+        <div class="article-marquee-tag">${tagname}</div>
+      `;
 
-    block.querySelector('.article-marquee-large-bg').classList.add(articleType);
-    block.querySelector('.article-marquee-bg-container').classList.add(articleType);
-  });
-}
+      block.querySelector('.article-marquee-large-bg').classList.add(articleType);
+      block.querySelector('.article-marquee-bg-container').classList.add(articleType);
+    });
+  }
 }
