@@ -238,6 +238,8 @@ function buildAutoBlocks(main) {
     }
     if (isArticleLandingPage()) {
       addArticleLandingRail(main);
+      // eslint-disable-next-line no-use-before-define
+      decorateArticlePageMeta();
     }
     // eslint-disable-next-line no-use-before-define
     // addMiniTocForArticlesPage(main);
@@ -866,6 +868,7 @@ async function loadRails() {
  * Custom - Loads and builds layout for articles page
  */
 async function loadArticles() {
+  decorateArticlePageMeta();
   if (isArticlePage()) {
     loadCSS(`${window.hlx.codeBasePath}/scripts/articles/articles.css`);
     const mod = await import('./articles/articles.js');
@@ -1050,7 +1053,7 @@ function formatPageMetaTags(inputString) {
     .map((part) => part.trim());
 }
 
-export function decodePageMetaTags() {
+function decodePageMetaTags() {
   const solutionMeta = document.querySelector(`meta[name="coveo-solution"]`);
   const roleMeta = document.querySelector(`meta[name="role"]`);
   const levelMeta = document.querySelector(`meta[name="level"]`);
@@ -1089,15 +1092,13 @@ export function decodePageMetaTags() {
 }
 
 export function decorateArticlePageMeta() {
-if (
-  document.documentElement.classList.contains('adobe-ue-edit') ||
-  document.documentElement.classList.contains('adobe-ue-preview')
-) {
-  decodePageMetaTags();
+  if (
+    document.documentElement.classList.contains('adobe-ue-edit') ||
+    document.documentElement.classList.contains('adobe-ue-preview')
+  ) {
+    decodePageMetaTags();
+  }
 }
-}
-
-
 
 async function loadPage() {
   // THIS IS TEMPORARY FOR SUMMIT.
@@ -1110,9 +1111,6 @@ async function loadPage() {
   loadDelayed();
   showBrowseBackgroundGraphic();
   loadDefaultModule(`${window.hlx.codeBasePath}/scripts/prev-next-btn.js`);
-  if (isArticleLandingPage() || isArticlePage()) {
-    decorateArticlePageMeta();
-  }
 }
 
 // load the page unless DO_NOT_LOAD_PAGE is set - used for existing EXLM pages POC
