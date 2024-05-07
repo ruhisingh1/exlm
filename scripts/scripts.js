@@ -1097,9 +1097,7 @@ if (
 }
 }
 
-if (isArticleLandingPage() || isArticlePage()) {
-  decorateArticlePageMeta();
-}
+
 
 async function loadPage() {
   // THIS IS TEMPORARY FOR SUMMIT.
@@ -1112,6 +1110,9 @@ async function loadPage() {
   loadDelayed();
   showBrowseBackgroundGraphic();
   loadDefaultModule(`${window.hlx.codeBasePath}/scripts/prev-next-btn.js`);
+  if (isArticleLandingPage() || isArticlePage()) {
+    decorateArticlePageMeta();
+  }
 }
 
 // load the page unless DO_NOT_LOAD_PAGE is set - used for existing EXLM pages POC
