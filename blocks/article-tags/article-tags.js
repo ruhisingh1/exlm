@@ -1,8 +1,8 @@
-import { htmlToElement, decodePageMetaTags } from '../../scripts/scripts.js';
+import { htmlToElement, decorateArticlePageMeta } from '../../scripts/scripts.js';
 import { getMetadata } from '../../scripts/lib-franklin.js';
 
 export default function decorate(block) {
-  decodePageMetaTags();
+  // decorateArticlePageMeta();
   const solutions = getMetadata('coveo-solution');
   const roles = getMetadata('role');
   const experienceLevels = getMetadata('level');
