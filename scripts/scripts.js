@@ -1050,7 +1050,7 @@ function formatPageMetaTags(inputString) {
     .map((part) => part.trim());
 }
 
-function decodePageMetaTags() {
+export function decodePageMetaTags() {
   const solutionMeta = document.querySelector(`meta[name="coveo-solution"]`);
   const roleMeta = document.querySelector(`meta[name="role"]`);
   const levelMeta = document.querySelector(`meta[name="level"]`);
@@ -1088,13 +1088,17 @@ function decodePageMetaTags() {
   }
 }
 
+export function decorateArticlePageMeta() {
 if (
   document.documentElement.classList.contains('adobe-ue-edit') ||
   document.documentElement.classList.contains('adobe-ue-preview')
 ) {
-  if (isArticleLandingPage() || isArticlePage()) {
-    decodePageMetaTags();
-  }
+  decodePageMetaTags();
+}
+}
+
+if (isArticleLandingPage() || isArticlePage()) {
+  decorateArticlePageMeta();
 }
 
 async function loadPage() {
