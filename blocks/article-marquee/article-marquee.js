@@ -169,7 +169,7 @@ function createBreadcrumb(container) {
  */
 export default async function ArticleMarquee(block) {
   loadCSS(`${window.hlx.codeBasePath}/scripts/toast/toast.css`);
-  const [link, readTime, headingType] = block.querySelectorAll(':scope div > div');
+  const [readTime, headingType] = block.querySelectorAll(':scope div > div');
 
   const articleDetails = `<div class="article-marquee-info-container"><div class="article-info">
                                 <div class="breadcrumb"></div>
@@ -197,7 +197,13 @@ export default async function ArticleMarquee(block) {
   createBreadcrumb(breadcrumbContainer);
   decorateIcons(block);
 
-  const authorBioPageUrl = getMetadata('author-bio-page');
+  let authorBioPageUrl = getMetadata('author-bio-page');
+  if (
+    document.documentElement.classList.contains('adobe-ue-edit') ||
+    document.documentElement.classList.contains('adobe-ue-preview')
+  ) {
+    authorBioPageUrl = authorBioPageUrl.replace(/\/content\/[^/]+\/global/, '');
+  }
   if(authorBioPageUrl) {
   fetchAuthorBio(authorBioPageUrl).then((authorInfo) => {
     const authorInfoContainer = block.querySelector('.author-details');
