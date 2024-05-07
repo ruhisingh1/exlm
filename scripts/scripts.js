@@ -1043,8 +1043,6 @@ export function createPlaceholderSpan(placeholderKey, fallbackText, onResolved) 
   return span;
 }
 
-import { isArticleLandingPage, isArticlePage } from '../scripts.js';
-
 function formatPageMetaTags(inputString) {
   return inputString
     .replace(/exl:[^/]*\/*/g, '')
@@ -1098,7 +1096,6 @@ if (
     decodePageMetaTags();
   }
 }
-
 
 async function loadPage() {
   // THIS IS TEMPORARY FOR SUMMIT.
