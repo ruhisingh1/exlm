@@ -1043,6 +1043,8 @@ export function createPlaceholderSpan(placeholderKey, fallbackText, onResolved) 
   return span;
 }
 
+import { isArticleLandingPage, isArticlePage } from '../scripts.js';
+
 function formatPageMetaTags(inputString) {
   return inputString
     .replace(/exl:[^/]*\/*/g, '')
@@ -1054,12 +1056,10 @@ function decodePageMetaTags() {
   const solutionMeta = document.querySelector(`meta[name="coveo-solution"]`);
   const roleMeta = document.querySelector(`meta[name="role"]`);
   const levelMeta = document.querySelector(`meta[name="level"]`);
-  const authorMeta = document.querySelector(`meta[name="author-bio-page"]`);
 
   const solutions = solutionMeta ? formatPageMetaTags(solutionMeta.content) : [];
   const roles = roleMeta ? formatPageMetaTags(roleMeta.content) : [];
   const experienceLevels = levelMeta ? formatPageMetaTags(levelMeta.content) : [];
-  const authorBio = authorMeta ? `${window.location.origin}${authorMeta.content}` : '';
 
   const decodedSolutions = solutions.map((solution) => {
     // In case of sub-solutions. E.g. exl:solution/campaign/standard
@@ -1088,14 +1088,17 @@ function decodePageMetaTags() {
   if (levelMeta) {
     levelMeta.content = decodedLevels.join(',');
   }
-  if (authorMeta) {
-    authorMeta.content = authorBio;
+}
+
+if (
+  document.documentElement.classList.contains('adobe-ue-edit') ||
+  document.documentElement.classList.contains('adobe-ue-preview')
+) {
+  if (isArticleLandingPage() || isArticlePage()) {
+    decodePageMetaTags();
   }
 }
 
-if (isArticleLandingPage() || isArticlePage()) {
- // decodePageMetaTags();
-}
 
 async function loadPage() {
   // THIS IS TEMPORARY FOR SUMMIT.
