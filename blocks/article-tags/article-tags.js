@@ -51,7 +51,7 @@ export default function decorate(block) {
     document.documentElement.classList.contains('adobe-ue-edit') ||
     document.documentElement.classList.contains('adobe-ue-preview')
   ) {
-    decodeArticlePageMetaTags();
+     decodeArticlePageMetaTags();
   }
   const solutions = getMetadata('coveo-solution');
   const roles = getMetadata('role');

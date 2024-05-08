@@ -5,8 +5,9 @@ export default function decorate(block) {
   const authorSummaryContainer = document.createElement('div');
   let link = getMetadata('author-bio-page');
   if (
-    document.documentElement.classList.contains('adobe-ue-edit') ||
-    document.documentElement.classList.contains('adobe-ue-preview')
+    link &&
+    (document.documentElement.classList.contains('adobe-ue-edit') ||
+      document.documentElement.classList.contains('adobe-ue-preview'))
   ) {
     link = `${link}.html`;
   }
