@@ -53,7 +53,13 @@ export default function decorate(block) {
   ) {
      decodeArticlePageMetaTags();
   }
-  const solutions = getMetadata('coveo-solution');
+  const coveosolutions = getMetadata('coveo-solution');
+const solutions = [...new Set(coveosolutions.split(';').map(item => {
+  const parts = item.split('|');
+  return parts.length > 1 ? parts[1].trim() : item.trim();
+}))].join(',');
+
+
   const roles = getMetadata('role');
   const experienceLevels = getMetadata('level');
 
