@@ -30,9 +30,9 @@ function decodeArticlePageMetaTags() {
       document.head.appendChild(versionMeta);
 
       // If there are multiple parts, join them with ";"
-      const solution = atob(parts[0]);
-      const subSolution = atob(parts[1]);
-      return `${solution}|${solution} ${subSolution}`;
+      const product = atob(parts[0]);
+      const version = atob(parts[1]);
+      return `${product}|${product} ${version}`;
     }
 
     return decodedParts[0];
@@ -56,14 +56,17 @@ export default function decorate(block) {
     document.documentElement.classList.contains('adobe-ue-edit') ||
     document.documentElement.classList.contains('adobe-ue-preview')
   ) {
-     decodeArticlePageMetaTags();
+    decodeArticlePageMetaTags();
   }
   const coveosolutions = getMetadata('coveo-solution');
-const solutions = [...new Set(coveosolutions.split(';').map(item => {
-  const parts = item.split('|');
-  return parts.length > 1 ? parts[1].trim() : item.trim();
-}))].join(',');
-
+  const solutions = [
+    ...new Set(
+      coveosolutions.split(';').map((item) => {
+        const parts = item.split('|');
+        return parts.length > 1 ? parts[1].trim() : item.trim();
+      }),
+    ),
+  ].join(',');
 
   const roles = getMetadata('role');
   const experienceLevels = getMetadata('level');
