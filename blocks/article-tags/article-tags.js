@@ -28,6 +28,11 @@ function decodeArticlePageMetaTags() {
       versionMeta.name = 'version';
       versionMeta.content = atob(parts.slice(1).join('/'));
       document.head.appendChild(versionMeta);
+
+      // If there are multiple parts, join them with ";"
+      const solution = parts[0];
+      const subSolution = parts[1];
+      return `${solution}|${solution} ${subSolution}`;
     }
 
     return decodedParts[0];
@@ -36,7 +41,7 @@ function decodeArticlePageMetaTags() {
   const decodedLevels = experienceLevels.map((level) => atob(level));
 
   if (solutionMeta) {
-   // solutionMeta.content = decodedSolutions.join(',');
+    solutionMeta.content = decodedSolutions.join(',');
   }
   if (roleMeta) {
     roleMeta.content = decodedRoles.join(',');
