@@ -90,7 +90,7 @@ const BrowseCardsCoveoDataAdaptor = (() => {
     } else if (el_product) {
       products = Array.isArray(el_product) ? el_product : el_product.split(/,\s*/);
     }
-    const tags = createTags(result, contentType.toLowerCase());
+    const tags = createTags(result, contentType?.toLowerCase());
     let url = parentResult?.clickUri || parentResult?.uri || clickUri || uri || '';
     url = rewriteDocsPath(url);
     const contentTypeTitleCase = convertToTitleCase(contentType?.toLowerCase());
@@ -99,7 +99,7 @@ const BrowseCardsCoveoDataAdaptor = (() => {
       ...browseCardDataModel,
       id: parentResult?.el_id || el_id || '',
       contentType,
-      badgeTitle: CONTENT_TYPES[contentType.toUpperCase()]?.LABEL,
+      badgeTitle: contentType ? CONTENT_TYPES[contentType.toUpperCase()]?.LABEL : '',
       thumbnail:
         raw?.exl_thumbnail ||
         (raw?.video_url &&
@@ -117,9 +117,10 @@ const BrowseCardsCoveoDataAdaptor = (() => {
       permanentid: raw?.permanentid,
       searchUid,
       index,
-      authorName: raw?.author_name || '',
-      authorBioPage: raw?.author_bio_page || '',
-      authorType: raw?.author_type || '',
+      authorInfo: {
+        name: raw?.author_name || '',
+        type: raw?.author_type || '',
+      },
     };
   };
 
