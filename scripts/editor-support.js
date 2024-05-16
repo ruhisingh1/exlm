@@ -93,6 +93,7 @@ function updateUEInstrumentation() {
       setUEFilter(section, 'section-author-bio');
     }
   }
+<<<<<<< HEAD
 
   // ----- if profile pages, identified by theme
   if (document.querySelector('body[class^=profile]')) {
@@ -105,6 +106,8 @@ function updateUEInstrumentation() {
     // update available sections
     setUEFilter(main, 'main-profile-signup');
   }
+=======
+>>>>>>> 3a22a58032dc1fff176b90a4bbae2dbd95738f80
 }
 
 /**
