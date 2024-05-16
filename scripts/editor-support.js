@@ -97,13 +97,19 @@ function updateUEInstrumentation() {
   // ----- if profile pages, identified by theme
   if (document.querySelector('body[class^=profile]')) {
     // update available sections
-    setUEFilter(main, 'main-profile');
+    setUEFilter(main, 'empty');
+    // update the only available default section
+    const section = main.querySelector('.section');
+    setUEFilter(section, 'section-profile');
   }
 
   // ----- if signup-flow-modal pages, identified by theme
   if (document.querySelector('body[class^=signup]')) {
     // update available sections
-    setUEFilter(main, 'main-profile-signup');
+    setUEFilter(main, 'empty');
+    // update the only available default section
+    const section = main.querySelector('.section');
+    setUEFilter(section, 'section-profile-signup');
   }
 }
 

@@ -16,14 +16,6 @@
     "components": ["article-content-section", "article-header-section", "section"]
   },
   {
-    "id": "main-profile",
-    "components": ["section-profile"]
-  },
-  {
-    "id": "main-profile-signup",
-    "components": ["section-profile-signup"]
-  },
-  {
     "id": "section",
     "components": [
       "text",
