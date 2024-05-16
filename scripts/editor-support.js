@@ -98,8 +98,9 @@ function updateUEInstrumentation() {
   if (document.querySelector('body[class^=profile]')) {
     // update available sections
     setUEFilter(main, 'main-profile');
-    const section = main.querySelector('.section');
-    setUEFilter(section, 'section-profile');
+    main.querySelectorAll('.section').forEach((elem) => {
+      setUEFilter(elem, 'section-profile');
+    });
   }
 
   // ----- if signup-flow-modal pages, identified by theme
