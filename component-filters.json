@@ -16,6 +16,10 @@
     "components": ["article-content-section", "article-header-section", "section"]
   },
   {
+    "id": "main-profile",
+    "components": ["section-profile", "section"]
+  },
+  {
     "id": "section",
     "components": [
       "text",
@@ -83,11 +87,11 @@
   },
   {
     "id": "section-profile",
-    "components": ["author-bio"]
+    "components": ["text", "title", "image"]
   },
   {
     "id": "section-profile-signup",
-    "components": ["author-bio"]
+    "components": ["text", "title", "image"]
   },
   {
     "id": "article-content-section",

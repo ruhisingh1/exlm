@@ -97,8 +97,7 @@ function updateUEInstrumentation() {
   // ----- if profile pages, identified by theme
   if (document.querySelector('body[class^=profile]')) {
     // update available sections
-    setUEFilter(main, 'empty');
-    // update the only available default section
+    setUEFilter(main, 'main-profile');
     const section = main.querySelector('.section');
     setUEFilter(section, 'section-profile');
   }
