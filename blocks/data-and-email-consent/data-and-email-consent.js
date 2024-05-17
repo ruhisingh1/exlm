@@ -61,6 +61,22 @@ export default async function decorate(block) {
   block.append(dom);
   const isSignedIn = await isSignedInUser();
 
+  if (isSignedIn) {
+    const profileData = await defaultProfileClient.getMergedProfile();
+    const emailOptIn = profileData?.emailOptIn;
+    const inProductActivity = profileData?.inProductActivity;
+
+    // Initialize checkbox states based on profile data
+    block.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
+      const preferenceName = checkbox.getAttribute('data-name');
+      if (preferenceName === 'emailOptIn') {
+        checkbox.checked = emailOptIn;
+      } else if (preferenceName === 'inProductActivity') {
+        checkbox.checked = inProductActivity;
+      }
+    });
+  }
+
   // Add event listeners to checkboxes
   block.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
     checkbox.addEventListener('change', function checkboxChangeHandler(e) {
@@ -74,6 +90,17 @@ export default async function decorate(block) {
         defaultProfileClient.updateProfile(preferenceName, isChecked)
           .then(() => sendNotice(PROFILE_UPDATED))
           .catch(() => sendNotice(PROFILE_NOT_UPDATED));
+      }
+    });
+  });
+
+  // Add click event listeners to notification rows
+  block.querySelectorAll('.notification').forEach((notification) => {
+    notification.addEventListener('click', function notificationClickHandler(e) {
+      const checkbox = this.querySelector('input[type="checkbox"]');
+      if (e.target !== checkbox) {
+        checkbox.checked = !checkbox.checked;
+        checkbox.dispatchEvent(new Event('change', { bubbles: true }));
       }
     });
   });

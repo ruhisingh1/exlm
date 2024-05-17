@@ -4,11 +4,12 @@
 }
 
 .data-and-email-consent-wrapper .notification {
-  margin-bottom: 10px;
+  cursor: pointer;
+  margin-bottom: 20px;
   border: 1px solid var(--spectrum-gray-400);
   align-items: center;
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 4px;
 }
 
 .data-and-email-consent-wrapper .notification.highlight {
@@ -19,6 +20,10 @@
   cursor: pointer;
   display: inline-flex;
   gap: 10px;
+}
+
+.data-and-email-consent-wrapper .notification .checkbox .subtext{
+  font-weight: bold;
 }
 
 .data-and-email-consent-wrapper .notification .checkbox input {
