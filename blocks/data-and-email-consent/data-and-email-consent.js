@@ -27,13 +27,13 @@ export default async function decorate(block) {
   const legalText = legal.textContent.trim();
 
   // Build DOM
-  const dom = document.createRange().createContextualFragment(`
+  const notificationDOM = document.createRange().createContextualFragment(`
     <div class="notification-container">
       <div class='row notification'>
         ${
           collectDataLabelText !== ''
             ? `<label class="checkbox">
-            <input data-autosave='true' data-name="inProductActivity" type="checkbox">
+            <input data-name="inProductActivity" type="checkbox">
             <span class="subtext">${collectDataLabelText}</span>
           </label>`
             : ``
@@ -44,28 +44,28 @@ export default async function decorate(block) {
         ${
           emailLabelText !== ''
             ? `<label class="checkbox">
-            <input data-autosave='true' data-name="emailOptIn" type="checkbox">
+            <input data-name="emailOptIn" type="checkbox">
             <span class="subtext">${emailLabelText}</span>
           </label>`
             : ``
         }
         ${emailDescText !== '' ? `<p>${emailDescText}</p>` : ``}
       </div>
-      <div class='row'>
+      <div class='row legal'>
         ${legalText !== '' ? `<p>${legalText}</p>` : ``}
       </div>
     </div>
   `);
 
   block.textContent = '';
-  block.append(dom);
+  block.append(notificationDOM);
   const isSignedIn = await isSignedInUser();
 
   if (isSignedIn) {
     const profileData = await defaultProfileClient.getMergedProfile();
     const emailOptIn = profileData?.emailOptIn;
     const inProductActivity = profileData?.inProductActivity;
-  
+
     // Initialize checkbox states based on profile data
     block.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
       const preferenceName = checkbox.getAttribute('data-name');
@@ -74,8 +74,9 @@ export default async function decorate(block) {
       } else if (preferenceName === 'inProductActivity' && inProductActivity === true) {
         checkbox.checked = inProductActivity;
       }
+      checkbox.closest('.notification').classList.toggle('highlight', checkbox.checked);
     });
-  }  
+  }
 
   // Add event listeners to checkboxes
   block.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
