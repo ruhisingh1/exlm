@@ -71,7 +71,8 @@ export default async function decorate(block) {
       const preferenceName = checkbox.getAttribute('data-name');
       if (preferenceName === 'emailOptIn' && emailOptIn === true) {
         checkbox.checked = emailOptIn;
-      } else if (preferenceName === 'inProductActivity' && inProductActivity === true) {
+      } 
+      if (preferenceName === 'inProductActivity' && inProductActivity === true) {
         checkbox.checked = inProductActivity;
       }
       checkbox.closest('.notification').classList.toggle('highlight', checkbox.checked);
