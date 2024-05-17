@@ -65,17 +65,17 @@ export default async function decorate(block) {
     const profileData = await defaultProfileClient.getMergedProfile();
     const emailOptIn = profileData?.emailOptIn;
     const inProductActivity = profileData?.inProductActivity;
-
+  
     // Initialize checkbox states based on profile data
     block.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
       const preferenceName = checkbox.getAttribute('data-name');
-      if (preferenceName === 'emailOptIn') {
+      if (preferenceName === 'emailOptIn' && emailOptIn === true) {
         checkbox.checked = emailOptIn;
-      } else if (preferenceName === 'inProductActivity') {
+      } else if (preferenceName === 'inProductActivity' && inProductActivity === true) {
         checkbox.checked = inProductActivity;
       }
     });
-  }
+  }  
 
   // Add event listeners to checkboxes
   block.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
