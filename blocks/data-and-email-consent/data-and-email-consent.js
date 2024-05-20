@@ -17,8 +17,9 @@ const PROFILE_UPDATED = placeholders?.profileUpdated || 'Your profile changes ha
 const PROFILE_NOT_UPDATED = placeholders?.profileNotUpdated || 'Your profile changes have not been saved!';
 
 export default async function decorate(block) {
-  const [collectDataLabel, collectDataDesc, emailLabel, emailDesc, legal] = block.querySelectorAll(':scope div > div');
-
+  const [collectDataLabel, collectDataDesc, emailLabel, emailDesc, legal] = [...block.children].map(
+    (row) => row.firstElementChild,
+  );
   // Extract text content and trim it
   const collectDataLabelText = collectDataLabel.textContent.trim();
   const collectDataDescText = collectDataDesc.textContent.trim();
@@ -59,8 +60,8 @@ export default async function decorate(block) {
 
   block.textContent = '';
   block.append(notificationDOM);
-  const isSignedIn = await isSignedInUser();
 
+  const isSignedIn = await isSignedInUser();
   if (isSignedIn) {
     const profileData = await defaultProfileClient.getMergedProfile();
     const emailOptIn = profileData?.emailOptIn;
@@ -71,7 +72,7 @@ export default async function decorate(block) {
       const preferenceName = checkbox.getAttribute('data-name');
       if (preferenceName === 'emailOptIn' && emailOptIn === true) {
         checkbox.checked = emailOptIn;
-      } 
+      }
       if (preferenceName === 'inProductActivity' && inProductActivity === true) {
         checkbox.checked = inProductActivity;
       }
@@ -89,7 +90,8 @@ export default async function decorate(block) {
       this.closest('.notification').classList.toggle('highlight', isChecked);
 
       if (isSignedIn) {
-        defaultProfileClient.updateProfile(preferenceName, isChecked)
+        defaultProfileClient
+          .updateProfile(preferenceName, isChecked)
           .then(() => sendNotice(PROFILE_UPDATED))
           .catch(() => sendNotice(PROFILE_NOT_UPDATED));
       }
