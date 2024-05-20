@@ -90,11 +90,11 @@ export default async function decorate(block) {
 
     checkbox.addEventListener('change', (e) => {
       e.preventDefault();
-      const isChecked = this.checked;
+      const isChecked = checkbox.checked;
       checkbox.closest('.notification').classList.toggle('highlight', isChecked);
 
       if (isSignedIn) {
-        const preferenceName = this.getAttribute('data-name');
+        const preferenceName = checkbox.getAttribute('data-name');
         defaultProfileClient
           .updateProfile(preferenceName, isChecked)
           .then(() => sendNotice(PROFILE_UPDATED))
