@@ -1,4 +1,4 @@
-import { fetchLanguagePlaceholders, decorateExternalLinks } from '../../scripts/scripts.js';
+import { fetchLanguagePlaceholders } from '../../scripts/scripts.js';
 import { defaultProfileClient, isSignedInUser } from '../../scripts/auth/profile.js';
 
 let placeholders = {};
@@ -35,7 +35,7 @@ export default async function decorate(block) {
   const accountCardDOM = document.createRange().createContextualFragment(`
     <div class="card-header">
         <div class="adobe-account">${ADOBE_ACCOUNT}</div>
-        <div class="make-changes"><a href="${adobeAccountLink}" class="external">${MAKE_CHANGES_TEXT}</a></div>
+        <div class="make-changes"><span class="icon icon-link-out"></span><a href="${adobeAccountLink}" target="_blank">${MAKE_CHANGES_TEXT}</a></div>
       </div>
       <div class="card-body">
         <div class="avatar">${profileImg}</div>
@@ -49,5 +49,4 @@ export default async function decorate(block) {
 
   block.textContent = '';
   block.append(accountCardDOM);
-  decorateExternalLinks(block);
 }

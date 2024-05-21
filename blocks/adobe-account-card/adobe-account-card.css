@@ -31,20 +31,12 @@
     margin-top: 0;
 }
 
-.card-header .make-changes a{
+.card-header .make-changes a {
     text-align: left;
     font: normal normal normal 12px/15px Adobe Clean;
     letter-spacing: 0px;
     color: #222222;
     opacity: 1;
-}
-
-.card-header .make-changes a.external::after {
-    content: '';
-}
-
-.card-header .make-changes:hover {
-    text-decoration: underline;
 }
 
 .card-body {
@@ -53,8 +45,8 @@
 }
 
 .avatar {
-    width: 50px;
-    height: 50px;
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
     background-color: #0073e6;
     color: #fff;
@@ -66,13 +58,18 @@
 }
 
 .user-info .display-name {
-    margin: 0;
-    font-size: 1.2em;
-    color: #333;
+    text-align: left;
+    font: normal normal bold 18px/22px Adobe Clean;
+    letter-spacing: 0px;
+    color: #000000;
+    opacity: 1;
 }
 
-.user-info .email, .user-info .company {
-    margin: 5px 0;
-    font-size: 0.9em;
-    color: #666;
+.user-info .email,
+.user-info .company {
+    text-align: left;
+    font: normal normal normal 14px/20px Adobe Clean;
+    letter-spacing: 0px;
+    color: #222222;
+    opacity: 1;
 }
