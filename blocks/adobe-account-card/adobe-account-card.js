@@ -1,3 +1,4 @@
+import { decorateIcons } from '../../scripts/lib-franklin.js';
 import { fetchLanguagePlaceholders } from '../../scripts/scripts.js';
 import { defaultProfileClient, isSignedInUser } from '../../scripts/auth/profile.js';
 
@@ -19,7 +20,7 @@ export default async function decorate(block) {
         <div class="make-changes"><span class="icon icon-new-tab"></span><a href="${adobeAccountLink}" target="_blank">${MAKE_CHANGES_TEXT}</a></div>
       </div>
       <div class="card-body">
-        <div class="avatar"><div class="profile"></div></div>
+        <div class="avatar"><span class="icon icon-profile"></span></div>
         <div class="user-info">
           <div class="display-name">Username</div>
           <div class="company">Company</div>
@@ -30,13 +31,14 @@ export default async function decorate(block) {
 
   block.textContent = '';
   block.append(accountCardDOM);
+  await decorateIcons(block);
 
   const isSignedIn = await isSignedInUser();
   if (isSignedIn) {
     const profileData = JSON.parse(sessionStorage.getItem('profile')) || {};
-    const displayName = profileData.displayName || '';
-    const email = profileData.email || '';
-    const company = profileData.company || '';
+    const displayName = profileData?.displayName || '';
+    const email = profileData?.email || '';
+    const company = profileData?.company || '';
     const profileImg = await defaultProfileClient.getPPSProfile().then((ppsProfile) => {
       const profilePicture = ppsProfile?.images['50'];
       if (profilePicture) {
@@ -46,6 +48,6 @@ export default async function decorate(block) {
     block.querySelector('.display-name').innerHTML = displayName;
     block.querySelector('.company').innerHTML = company;
     block.querySelector('.email').innerHTML = email;
-    block.querySelector('.profile').innerHTML = profileImg;
+    block.querySelector('.avatar').innerHTML = profileImg;
   }
 }
