@@ -31,6 +31,14 @@
     margin-top: 0;
 }
 
+.adobe-account-card .card-header .make-changes {
+    display: inline-flex;
+}
+
+.adobe-account-card .card-header .make-changes .icon-new-tab {
+    margin-top: 8px;
+}
+
 .adobe-account-card .card-header .make-changes a {
     text-align: left;
     font: normal normal normal 12px/15px Adobe Clean;
@@ -55,10 +63,12 @@
     font-size: 1.5em;
     margin-right: 15px;
 }
-.adobe-account-card .avatar .icon-profile{
+
+.adobe-account-card .avatar .icon-profile {
     width: 50px;
     height: 50px;
 }
+
 .adobe-account-card .user-info .display-name {
     text-align: left;
     font: normal normal bold 18px/22px Adobe Clean;
