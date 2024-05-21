@@ -27,22 +27,22 @@ if (isSignedIn) {
     const profilePicture = ppsProfile?.images['50'];
     if (profilePicture) {
       return `<img class="profile-picture" src="${profilePicture}" alt="profile picture" />`;
-    } 
+    }
   });
 }
 
 export default async function decorate(block) {
   const accountCardDOM = document.createRange().createContextualFragment(`
     <div class="card-header">
-        <h3>${ADOBE_ACCOUNT}</h3>
-        <a href="${adobeAccountLink}" class="make-changes external">${MAKE_CHANGES_TEXT}</a>
+        <div class="adobe-account">${ADOBE_ACCOUNT}</div>
+        <div class="make-changes"><a href="${adobeAccountLink}" class="external">${MAKE_CHANGES_TEXT}</a></div>
       </div>
       <div class="card-body">
         <div class="avatar">${profileImg}</div>
         <div class="user-info">
-          <h4>${displayName}</h4>
-          <p>${company}</p>
-          <p>${email}</p>
+          <div class="display-name">${displayName}</div>
+          <div class="company">${company}</div>
+          <div class="email">${email}</div>
         </div>
       </div>
   `);
