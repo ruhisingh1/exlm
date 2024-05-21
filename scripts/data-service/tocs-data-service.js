@@ -24,7 +24,7 @@ export default class TocDataService {
       const response = await fetch(`${this.url}${tocID}`, {
         method: 'GET',
       });
-      
+
       const data = await response.json();
       sessionStorage.setItem(`${TOC}_${tocID}`, JSON.stringify(data.data));
       console.log(data);
