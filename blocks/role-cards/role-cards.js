@@ -15,33 +15,43 @@ try {
 
 const PROFILE_UPDATED = placeholders?.profileUpdated || 'Your profile changes have been saved!';
 const PROFILE_NOT_UPDATED = placeholders?.profileNotUpdated || 'Your profile changes have not been saved!';
+const SELECT_ROLE = placeholders?.selectRole || 'Select this role';
 
 export default async function decorate(block) {
   block.textContent = '';
+  const isSignedIn = await isSignedInUser();
 
   const roleCardsData = [
     {
-      title: placeholders.filterRoleUserTitle,
+      title: placeholders.filterRoleUserTitle || 'Business User',
       icon: 'business-user',
-      description: placeholders.filterRoleUserDescription,
-      selectionDefault: '',
+      description:
+        placeholders.filterRoleUserDescription ||
+        `Responsible for utilizing Adobe solutions to achieve daily job functions, complete tasks, and achieve business objectives.`,
+      selectionDefault: placeholders.noSelectionDefault || '(No selection default)',
     },
     {
-      title: placeholders.filterRoleDeveloperTitle,
+      title: placeholders.filterRoleDeveloperTitle || 'Developer',
       icon: 'developer',
-      description: placeholders.filterRoleDeveloperDescription,
+      description:
+        placeholders.filterRoleDeveloperDescription ||
+        `Responsible for engineering Adobe solutions' implementation, integration, data-modeling, data engineering, and other technical skills.`,
       selectionDefault: '',
     },
     {
-      title: placeholders.filterRoleAdminTitle,
+      title: placeholders.filterRoleAdminTitle || 'Administrator',
       icon: 'admin',
-      description: placeholders.filterRoleAdminDescription,
+      description:
+        placeholders.filterRoleAdminDescription ||
+        `Responsible for the technical operations, configuration, permissions, management, and support needs of Adobe solutions.`,
       selectionDefault: '',
     },
     {
-      title: placeholders.filterRoleLeaderTitle,
+      title: placeholders.filterRoleLeaderTitle || 'Business Leader',
       icon: 'business-leader',
-      description: placeholders.filterRoleLeaderDescription,
+      description:
+        placeholders.filterRoleLeaderDescription ||
+        `Responsible for owning the digital strategy and accelerating value through Adobe solutions.`,
       selectionDefault: '',
     },
   ];
@@ -53,15 +63,17 @@ export default async function decorate(block) {
           return `
         <div class="role-cards-block">
         <div class="role-cards-description">
+        <div class="role-cards-icon">
         <span class="icon icon-${card.icon}"></span>
         <h3>${card.title}</h3>
+        </div>
         <p>${card.description}</p>
         </div>
         <div class="role-cards-selectiondefault">
-        <p>${card.selectionDefault}</p>
+        ${isSignedIn ? `<p>${card.selectionDefault}</p>` : ''}
         <span class="role-cards-checkbox">
-        <input name="selectRole" type="checkbox" id="selectRole-${index}">
-        <label class="subText" for="selectRole-${index}">Select this role</label>
+        <input name="selectRole-${index}" type="checkbox" id="selectRole-${index}">
+        <label class="subText" for="selectRole-${index}">${SELECT_ROLE}</label>
         </span>
         </div>
         </div>`;
@@ -73,7 +85,6 @@ export default async function decorate(block) {
   block.append(roleCardsDiv);
   decorateIcons(block);
 
-  const isSignedIn = await isSignedInUser();
   if (isSignedIn) {
     const profileData = await defaultProfileClient.getMergedProfile();
     const role = profileData?.role;
