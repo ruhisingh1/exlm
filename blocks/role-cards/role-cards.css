@@ -1,6 +1,6 @@
 body[class ^= 'profile'] .role-cards .role-cards-container {
     display: grid;
-    gap: 30px;
+    gap: 24px;
     grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
@@ -20,7 +20,7 @@ body[class ^= 'profile'] .role-cards .role-cards-selectiondefault p {
 
 .role-cards .role-cards-container {
     display: grid;
-    gap: 30px;
+    gap: 24px;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
 }
@@ -68,4 +68,13 @@ body[class ^= 'profile'] .role-cards .role-cards-selectiondefault p {
 
 .role-cards-block.highlight  {
     border: 2px solid var(--spectrum-blue-600);
+}
+
+@media (max-width: 600px) {
+    .role-cards .role-cards-container {
+        display: grid;
+        gap: 24px;
+        grid-template-rows: 1fr 1fr 1fr 1fr;
+        grid-template-columns: 1fr;
+    }
 }
