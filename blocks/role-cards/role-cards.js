@@ -23,6 +23,7 @@ export default async function decorate(block) {
 
   const roleCardsData = [
     {
+      role: 'User',
       title: placeholders.filterRoleUserTitle || 'Business User',
       icon: 'business-user',
       description:
@@ -31,6 +32,7 @@ export default async function decorate(block) {
       selectionDefault: placeholders.noSelectionDefault || '(No selection default)',
     },
     {
+      role: 'Developer',
       title: placeholders.filterRoleDeveloperTitle || 'Developer',
       icon: 'developer',
       description:
@@ -39,6 +41,7 @@ export default async function decorate(block) {
       selectionDefault: '',
     },
     {
+      role: 'Admin',
       title: placeholders.filterRoleAdminTitle || 'Administrator',
       icon: 'admin',
       description:
@@ -47,6 +50,7 @@ export default async function decorate(block) {
       selectionDefault: '',
     },
     {
+      role: 'Leader',
       title: placeholders.filterRoleLeaderTitle || 'Business Leader',
       icon: 'business-leader',
       description:
@@ -72,7 +76,7 @@ export default async function decorate(block) {
         <div class="role-cards-selectiondefault">
         ${isSignedIn ? `<p>${card.selectionDefault}</p>` : ''}
         <span class="role-cards-checkbox">
-        <input name="selectRole-${index}" type="checkbox" id="selectRole-${index}">
+        <input name="${card.role}" type="checkbox" id="selectRole-${index}">
         <label class="subText" for="selectRole-${index}">${SELECT_ROLE}</label>
         </span>
         </div>
@@ -89,21 +93,11 @@ export default async function decorate(block) {
     const profileData = await defaultProfileClient.getMergedProfile();
     const role = profileData?.role;
 
-    const roleMapping = {
-      User: 0,
-      Developer: 1,
-      Admin: 2,
-      Leader: 3,
-    };
-
     role.forEach((el) => {
-      const index = roleMapping[el];
-      if (index !== undefined) {
-        const checkBox = document.getElementById(`selectRole-${index}`);
-        if (checkBox) {
-          checkBox.checked = true;
-          checkBox.closest('.role-cards-block').classList.toggle('highlight', checkBox.checked);
-        }
+      const checkBox = document.querySelector(`input[name="${el}"]`);
+      if (checkBox) {
+        checkBox.checked = true;
+        checkBox.closest('.role-cards-block').classList.toggle('highlight', checkBox.checked);
       }
     });
   }
@@ -125,9 +119,22 @@ export default async function decorate(block) {
       checkbox.closest('.role-cards-block').classList.toggle('highlight', isChecked);
 
       if (isSignedIn) {
-        const preferenceName = checkbox.getAttribute('name');
+        const profileKey = checkbox.getAttribute('name');
+        const currentProfile = defaultProfileClient.getMergedProfile();
+        const updatedRoles = currentProfile.role ? [...currentProfile.role] : [];
+
+        if (isChecked) {
+          if (!updatedRoles.includes(profileKey)) {
+            updatedRoles.push(profileKey);
+          }
+        } else {
+          const roleIndex = updatedRoles.indexOf(profileKey);
+          if (roleIndex !== -1) {
+            updatedRoles.splice(roleIndex, 1);
+          }
+        }
         defaultProfileClient
-          .updateProfile(preferenceName, isChecked)
+          .updateProfile('role', updatedRoles)
           .then(() => sendNotice(PROFILE_UPDATED))
           .catch(() => sendNotice(PROFILE_NOT_UPDATED));
       }
