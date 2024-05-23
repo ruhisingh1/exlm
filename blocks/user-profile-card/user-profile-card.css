@@ -6,12 +6,24 @@
 }
 
 .user-profile-card {
-    background-color: var(--spectrum-gray-50);
-    border: 1px solid var(--shimmer-image-slide-mid);
+    background: #FFFFFF;
+    box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.05);
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 24px;
-    width: 386px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.user-profile-card .row {
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #ccc;
+}
+
+.user-profile-card .row:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
 }
 
 .user-profile-card .card-header {
@@ -23,12 +35,11 @@
 
 .user-profile-card .card-header .my-adobe-account,
 .user-profile-card .card-header .my-community-account {
-    font-size: var(--spectrum-font-size-75);
+    font-size: 14px;
     font-weight: bold;
-    letter-spacing: 0.72px;
-    color: var(--text-color);
+    color: #333;
     text-transform: uppercase;
-    margin: 0px;
+    margin: 0;
 }
 
 .user-profile-card .card-header .manage-adobe-account,
@@ -40,9 +51,9 @@
 
 .user-profile-card .card-header .manage-adobe-account a,
 .user-profile-card .card-header .manage-community-account a {
-    margin: 0px;
-    font-size: var(--spectrum-font-size-75);
-    color: var(--spectrum-gray-800);
+    font-size: 14px;
+    color: #0078d4;
+    text-decoration: none;
 }
 
 .user-profile-card .card-body {
@@ -55,8 +66,7 @@
     width: 64px;
     height: 64px;
     border-radius: 50%;
-    background-color: var(--non-spectrum-navy-blue);
-    color: var(--spectrum-gray-50);
+    background-color: #f0f0f0;
 }
 
 .user-profile-card .avatar .icon-profile {
@@ -64,16 +74,32 @@
     height: 64px;
 }
 
-.user-profile-card .user-info .display-name {
-    font-size: var(--spectrum-font-size-300);
+.user-profile-card .user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.user-profile-card .user-info .heading{
+    text-transform: uppercase;
     font-weight: bold;
     color: var(--text-color);
-    margin-bottom: 4px;
+}
+
+.user-profile-card .user-info .display-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
 }
 
 .user-profile-card .user-info .email,
-.user-profile-card .user-info .company {
-    font-size: var(--spectrum-font-size-100);
-    font-weight: normal;
-    color: var(--spectrum-gray-800);
+.user-profile-card .user-info .company,
+.user-profile-card .user-info .location,
+.user-profile-card .user-info .title,
+.user-profile-card .user-info .role,
+.user-profile-card .user-info .industry,
+.user-profile-card .user-info .interests {
+    font-size: 14px;
+    color: #666;
+    letter-spacing: 0.72px;
 }
