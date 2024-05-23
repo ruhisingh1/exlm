@@ -27,8 +27,8 @@ export default async function decorate(block) {
     displayName = profileData?.displayName || '';
     email = profileData?.email || '';
     industry = profileData?.industryInterests || '';
-    const profileRoles = profileData?.role || '';
-    const profileInterests = profileData?.interests || '';
+    const profileRoles = profileData?.role || [];
+    const profileInterests = profileData?.interests || [];
 
     if (profileRoles.length > 0) {
       roles = profileRoles.join('  ');
@@ -78,17 +78,17 @@ export default async function decorate(block) {
         <div class="card-body">
           <div class="user-info">
             <div class="display-name">@RyPot478</div>
-            <div class="title"><span class="heading">TITLE:</span> Head of Experience Design</div>
-            <div class="location"><span class="heading">LOCATION:</span> Salt Lake City, UT</div>
+            <div class="title"><span class="heading">TITLE: </span><span>Head of Experience Design</span></div>
+            <div class="location"><span class="heading">LOCATION: </span><span>Salt Lake City, UT</span></div>
           </div>
         </div>
       </div>
       <div class="row additional-data">
         <div class="card-body">
           <div class="user-info">
-            <div class="role"><span class="heading">My Role:</span> ${roles}</div>
-            <div class="industry"><span class="heading">My Industry:</span> ${industry}</div>
-            <div class="interests"><span class="heading">My Interests:</span> ${interests}</div>
+            <div class="role"><span class="heading">My Role: </span><span>${roles}</span></div>
+            <div class="industry"><span class="heading">My Industry: </span><span>${industry}</span></div>
+            <div class="interests"><span class="heading">My Interests: </span><span>${interests}</span></div>
           </div>
         </div>
       </div>
