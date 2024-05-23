@@ -10,6 +10,7 @@ try {
   console.error('Error fetching placeholders:', err);
 }
 const adobeAccountLink = 'https://account.adobe.com/';
+const communityAccountLink = 'https://account.adobe.com/';
 
 export default async function decorate(block) {
   let displayName = '';
@@ -50,25 +51,25 @@ export default async function decorate(block) {
       </div>
     </div></div>
     <div class="community-account"><div class="card-header">
-    <div class="my-adobe-account">${placeholders?.myAdobeAccount || 'My Adobe Account'}</div>
+    <div class="my-community-account">${placeholders?.myAdobeAccount || 'My Adobe Account'}</div>
     <div class="manage-community-account">
       <span class="icon icon-new-tab"></span>
-      <a href="${adobeAccountLink}" target="_blank">${placeholders?.manageAdobeAccount || 'Manage Adobe account'}</a>
+      <a href="${communityAccountLink}" target="_blank">${placeholders?.updateProfile || 'Update profile'}</a>
     </div>
   </div>
   <div class="card-body">
     <div class="user-info">
-      <div class="display-name">${displayName}</div>
-      <div class="company">${company}</div>
-      <div class="email">${email}</div>
+      <div class="display-name">Ruhi</div>
+      <div class="company">Title: ${company}</div>
+      <div class="email">Location: ${email}</div>
     </div>
   </div></div>
   <div class="additional-data">
 <div class="card-body">
   <div class="user-info">
-    <div class="display-name">${displayName}</div>
-    <div class="company">${company}</div>
-    <div class="email">${email}</div>
+    <div class="display-name">My Role: ${displayName}</div>
+    <div class="company">My Industry: ${company}</div>
+    <div class="email">My Interests: ${email}</div>
   </div>
 </div></div>
   `);

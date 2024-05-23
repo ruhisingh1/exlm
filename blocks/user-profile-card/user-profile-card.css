@@ -21,7 +21,8 @@
     margin-bottom: 16px;
 }
 
-.user-profile-card .card-header .my-adobe-account {
+.user-profile-card .card-header .my-adobe-account,
+.user-profile-card .card-header .my-community-account {
     font-size: var(--spectrum-font-size-75);
     font-weight: bold;
     letter-spacing: 0.72px;
@@ -30,13 +31,15 @@
     margin: 0px;
 }
 
-.user-profile-card .card-header .manage-adobe-account {
+.user-profile-card .card-header .manage-adobe-account,
+.user-profile-card .card-header .manage-community-account {
     display: inline-flex;
     align-items: center;
     gap: 4px;
 }
 
-.user-profile-card .card-header .manage-adobe-account a {
+.user-profile-card .card-header .manage-adobe-account a,
+.user-profile-card .card-header .manage-community-account a {
     margin: 0px;
     font-size: var(--spectrum-font-size-75);
     color: var(--spectrum-gray-800);
