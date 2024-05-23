@@ -80,7 +80,7 @@
     gap: 4px;
 }
 
-.user-profile-card .user-info .heading{
+.user-profile-card .user-info .heading {
     text-transform: uppercase;
     font-weight: bold;
     color: var(--text-color);
@@ -90,21 +90,17 @@
     font-size: var(--spectrum-font-size-300);
     font-weight: bold;
     color: var(--non-spectrum-grey-333);
+    letter-spacing: 0;
 }
 
 .user-profile-card .user-info .community-display-name {
     font-size: var(--spectrum-font-size-300);
     font-weight: bold;
     color: var(--non-spectrum-blue-0364dc);
+    letter-spacing: 0;
 }
 
-.user-profile-card .user-info .email,
-.user-profile-card .user-info .company,
-.user-profile-card .user-info .location,
-.user-profile-card .user-info .title,
-.user-profile-card .user-info .role,
-.user-profile-card .user-info .industry,
-.user-profile-card .user-info .interests {
+.user-profile-card .user-info div {
     font-size: var(--spectrum-font-size-100);
     color: var(--spectrum-gray-800);
     letter-spacing: 0.72px;

@@ -33,7 +33,7 @@ export default async function decorate(block) {
     if (profileRoles.length > 0) {
       roles = profileRoles.join('&nbsp;&nbsp;');
     }
-    
+
     if (profileInterests.length > 0) {
       interests = profileInterests.join('&nbsp;&nbsp;');
     }
@@ -49,7 +49,9 @@ export default async function decorate(block) {
           <div class="my-adobe-account">${placeholders?.myAdobeAccount || 'My Adobe Account'}</div>
           <div class="manage-adobe-account">
             <span class="icon icon-new-tab"></span>
-            <a href="${adobeAccountLink}" target="_blank">${placeholders?.manageAdobeAccount || 'Manage Adobe account'}</a>
+            <a href="${adobeAccountLink}" target="_blank">${
+              placeholders?.manageAdobeAccount || 'Manage Adobe account'
+            }</a>
           </div>
         </div>
         <div class="card-body">
@@ -62,8 +64,8 @@ export default async function decorate(block) {
           </div>
           <div class="user-info">
             <div class="display-name">${displayName}</div>
-            <div class="company">${company}</div>
-            <div class="email">${email}</div>
+            <div>${company}</div>
+            <div>${email}</div>
           </div>
         </div>
       </div>
@@ -72,23 +74,33 @@ export default async function decorate(block) {
           <div class="my-community-account">${placeholders?.myCommunityAccount || 'My Community Profile'}</div>
           <div class="manage-community-account">
             <span class="icon icon-new-tab"></span>
-            <a href="${communityAccountLink}" target="_blank">${placeholders?.updateProfile || 'Update profile'}</a>
+            <a href="${communityAccountLink}" target="_blank">${
+              placeholders?.updateCommunityProfile || 'Update profile'
+            }</a>
           </div>
         </div>
         <div class="card-body">
           <div class="user-info">
             <div class="community-display-name">@RyPot478</div>
-            <div class="title"><span class="heading">TITLE: </span><span>Head of Experience Design</span></div>
-            <div class="location"><span class="heading">LOCATION: </span><span>Salt Lake City, UT</span></div>
+            <div><span class="heading">${
+              placeholders?.title || 'Title'
+            }: </span><span>Head of Experience Design</span></div>
+            <div><span class="heading">${
+              placeholders?.location || 'Location'
+            }: </span><span>Salt Lake City, UT</span></div>
           </div>
         </div>
       </div>
       <div class="row additional-data">
         <div class="card-body">
           <div class="user-info">
-            <div class="role"><span class="heading">My Role: </span><span>${roles}</span></div>
-            <div class="industry"><span class="heading">My Industry: </span><span>${industry}</span></div>
-            <div class="interests"><span class="heading">My Interests: </span><span>${interests}</span></div>
+            <div><span class="heading">${placeholders?.myRole || 'My Role'}: </span><span>${roles}</span></div>
+            <div><span class="heading">${
+              placeholders?.myIndustry || 'My Industry'
+            }: </span><span>${industry}</span></div>
+            <div><span class="heading">${
+              placeholders?.myInterests || 'My interests'
+            }: </span><span>${interests}</span></div>
           </div>
         </div>
       </div>
