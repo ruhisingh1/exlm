@@ -31,11 +31,11 @@ export default async function decorate(block) {
     const profileInterests = profileData?.interests || '';
 
     if (profileRoles.length > 0) {
-      roles = profileRoles.join(' ');
+      roles = profileRoles.join('  ');
     }
     
     if (profileInterests.length > 0) {
-      interests = profileInterests.join(' ');
+      interests = profileInterests.join('  ');
     }
 
     const ppsProfileData = await defaultProfileClient.getPPSProfile();
