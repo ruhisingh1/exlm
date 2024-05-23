@@ -10,7 +10,7 @@ try {
   console.error('Error fetching placeholders:', err);
 }
 const adobeAccountLink = 'https://account.adobe.com/';
-const communityAccountLink = 'https://account.adobe.com/';
+const communityAccountLink = '';
 
 export default async function decorate(block) {
   let displayName = '';
@@ -77,7 +77,7 @@ export default async function decorate(block) {
         </div>
         <div class="card-body">
           <div class="user-info">
-            <div class="display-name">@RyPot478</div>
+            <div class="community-display-name">@RyPot478</div>
             <div class="title"><span class="heading">TITLE: </span><span>Head of Experience Design</span></div>
             <div class="location"><span class="heading">LOCATION: </span><span>Salt Lake City, UT</span></div>
           </div>

@@ -6,7 +6,7 @@
 }
 
 .user-profile-card {
-    background: #FFFFFF;
+    background: var(--spectrum-gray-50);
     box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.05);
     border-radius: 8px;
     padding: 24px;
@@ -17,7 +17,7 @@
 .user-profile-card .row {
     margin-bottom: 24px;
     padding-bottom: 24px;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid var(--shimmer-image-slide-mid);
 }
 
 .user-profile-card .row:last-child {
@@ -35,9 +35,9 @@
 
 .user-profile-card .card-header .my-adobe-account,
 .user-profile-card .card-header .my-community-account {
-    font-size: 14px;
+    font-size: var(--spectrum-font-size-100);
     font-weight: bold;
-    color: #333;
+    color: var(--non-spectrum-grey-333);
     text-transform: uppercase;
     margin: 0;
 }
@@ -51,8 +51,8 @@
 
 .user-profile-card .card-header .manage-adobe-account a,
 .user-profile-card .card-header .manage-community-account a {
-    font-size: 14px;
-    color: #0078d4;
+    font-size: var(--spectrum-font-size-75);
+    color: var(--spectrum-gray-800);
     text-decoration: none;
 }
 
@@ -66,7 +66,7 @@
     width: 64px;
     height: 64px;
     border-radius: 50%;
-    background-color: #f0f0f0;
+    background-color: var(--non-spectrum-navy-blue);
 }
 
 .user-profile-card .avatar .icon-profile {
@@ -87,9 +87,15 @@
 }
 
 .user-profile-card .user-info .display-name {
-    font-size: 16px;
+    font-size: var(--spectrum-font-size-300);
     font-weight: bold;
-    color: #333;
+    color: var(--non-spectrum-grey-333);
+}
+
+.user-profile-card .user-info .community-display-name {
+    font-size: var(--spectrum-font-size-300);
+    font-weight: bold;
+    color: var(--non-spectrum-blue-0364dc);
 }
 
 .user-profile-card .user-info .email,
@@ -99,7 +105,7 @@
 .user-profile-card .user-info .role,
 .user-profile-card .user-info .industry,
 .user-profile-card .user-info .interests {
-    font-size: 14px;
-    color: #666;
+    font-size: var(--spectrum-font-size-100);
+    color: var(--spectrum-gray-800);
     letter-spacing: 0.72px;
 }
