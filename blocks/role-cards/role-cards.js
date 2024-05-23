@@ -1,8 +1,8 @@
 import { htmlToElement, fetchLanguagePlaceholders } from '../../scripts/scripts.js';
-import { decorateIcons } from '../../scripts/lib-franklin.js';
+import { decorateIcons, loadCSS } from '../../scripts/lib-franklin.js';
 import { sendNotice } from '../../scripts/toast/toast.js';
-import { loadCSS } from '../../scripts/lib-franklin.js';
 import { defaultProfileClient, isSignedInUser } from '../../scripts/auth/profile.js';
+
 loadCSS(`${window.hlx.codeBasePath}/scripts/toast/toast.css`);
 
 let placeholders = {};
@@ -63,8 +63,8 @@ export default async function decorate(block) {
   const roleCardsDiv = htmlToElement(`
     <div class="role-cards-container">
       ${roleCardsData
-        .map((card, index) => {
-          return `
+        .map(
+          (card, index) => `
         <div class="role-cards-block">
         <div class="role-cards-description">
         <div class="role-cards-icon">
@@ -80,8 +80,8 @@ export default async function decorate(block) {
         <label class="subText" for="selectRole-${index}">${SELECT_ROLE}</label>
         </span>
         </div>
-        </div>`;
-        })
+        </div>`,
+        )
         .join('')}
     </div>
   `);
