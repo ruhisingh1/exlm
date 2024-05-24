@@ -20,6 +20,10 @@
     "components": ["profile-section"]
   },
   {
+    "id": "main-signup",
+    "components": ["sign-up-flow-section"]
+  },
+  {
     "id": "section",
     "components": [
       "text",
