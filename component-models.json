@@ -2932,5 +2932,46 @@
         "label": "Legal"
       }
     ]
+  },
+  {
+    "id": "section-profile",
+    "fields": [
+      {
+        "component": "select",
+        "name": "style",
+        "value": "",
+        "label": "Style",
+        "description": "The section style",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "default",
+            "value": "default"
+          },
+          {
+            "name": "highlight",
+            "value": "highlight"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "blocks",
+        "value": "",
+        "label": "Include Blocks",
+        "description": "Add blocks to section",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "adobe-account-card",
+            "value": "adobe-account-card"
+          },
+          {
+            "name": "user-profile-card",
+            "value": "user-profile-card"
+          }
+        ]
+      }
+    ]
   }
 ]
