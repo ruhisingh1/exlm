@@ -56,8 +56,10 @@ export const adobeAccountDOM = `<div class="row adobe-account">
     </div>
     <div class="user-info">
       <div class="display-name adobe-display-name">${displayName}</div>
-      <div class="user-company">${company}</div>
-      <div class="user-email">${email}</div>
+      <div class="user-details">
+        <div class="user-company">test${company}</div>
+        <div class="user-email">test${email}</div>
+      </div>
     </div>
   </div>
 </div>`;
