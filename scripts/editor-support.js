@@ -99,7 +99,7 @@ function updateUEInstrumentation() {
     // update available sections
     setUEFilter(main, 'main-profile');
     main.querySelectorAll('.section').forEach((elem) => {
-      setUEFilter(elem, 'section-profile');
+      setUEFilter(elem, 'profile-section');
     });
   }
 
