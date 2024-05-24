@@ -106,7 +106,7 @@ function updateUEInstrumentation() {
   // ----- if signup-flow-modal pages, identified by theme
   if (document.querySelector('body[class^=signup]')) {
     // update available sections
-    setUEFilter(main, 'main-signup');
+    setUEFilter(main, 'empty');
     // update the only available default section
     const section = main.querySelector('.section');
     setUEFilter(section, 'sign-up-flow-section');
