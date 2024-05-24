@@ -92,7 +92,7 @@ export default async function decorate(block) {
   if (isSignedIn) {
     const profileData = await defaultProfileClient.getMergedProfile();
     const role = profileData?.role;
-
+    const updatedRoles = [];
     role.forEach((el) => {
       const checkBox = document.querySelector(`input[name="${el}"]`);
       if (checkBox) {
@@ -120,8 +120,8 @@ export default async function decorate(block) {
 
       if (isSignedIn) {
         const profileKey = checkbox.getAttribute('name');
-        const currentProfile = defaultProfileClient.getMergedProfile();
-        const updatedRoles = currentProfile.role ? [...currentProfile.role] : [];
+        // const currentProfile = defaultProfileClient.getMergedProfile();
+        // const updatedRoles = currentProfile.role ? [...currentProfile.role] : [];
 
         if (isChecked) {
           if (!updatedRoles.includes(profileKey)) {
