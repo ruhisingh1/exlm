@@ -76,14 +76,10 @@
     font-size: var(--spectrum-font-size-300);
     font-weight: bold;
     color: var(--non-spectrum-grey-333);
-    letter-spacing: 0;
 }
 
 .user-info .community-display-name {
-    font-size: var(--spectrum-font-size-300);
-    font-weight: bold;
     color: var(--non-spectrum-blue-0364dc);
-    letter-spacing: 0;
 }
 
 .user-info div {
