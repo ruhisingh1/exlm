@@ -107,10 +107,9 @@ function updateUEInstrumentation() {
   if (document.querySelector('body[class^=signup]')) {
     // update available sections
     setUEFilter(main, 'main-signup');
-    // update the only available default section
-    const section = main.querySelector('.section');
-    setUEFilter(section, 'sign-up-flow-section');
-  }
+    main.querySelectorAll('.section').forEach((elem) => {
+    setUEFilter(elem, 'sign-up-flow-section');
+  });
 }
 
 /**
