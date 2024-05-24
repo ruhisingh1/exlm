@@ -100,7 +100,7 @@ export default async function decorate(block) {
       }
     });
   }
-  const updatedRoles = '';
+  const updatedRoles = [];
   block.querySelectorAll('.role-cards-block').forEach((card) => {
     const checkbox = card.querySelector('input[type="checkbox"]');
 
