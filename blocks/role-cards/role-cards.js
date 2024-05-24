@@ -97,7 +97,7 @@ export default async function decorate(block) {
       if (checkBox) {
         checkBox.checked = true;
         checkBox.closest('.role-cards-block').classList.toggle('highlight', checkBox.checked);
-        updatedRoles.push(checkBox.getAttribute('name'));
+        updatedRoles.push(el);
       }
     });
   }
