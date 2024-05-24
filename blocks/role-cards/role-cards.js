@@ -112,7 +112,7 @@ export default async function decorate(block) {
       }
     });
 
-    checkbox.addEventListener('change', (e) => {
+    checkbox.addEventListener('change', async (e) => {
       e.preventDefault();
       const isChecked = checkbox.checked;
       checkbox.closest('.role-cards-block').classList.toggle('highlight', isChecked);
@@ -132,7 +132,7 @@ export default async function decorate(block) {
             updatedRoles.splice(roleIndex, 1);
           }
         }
-        defaultProfileClient
+        await defaultProfileClient
           .updateProfile('role', updatedRoles)
           .then(() => sendNotice(PROFILE_UPDATED))
           .catch(() => sendNotice(PROFILE_NOT_UPDATED));
