@@ -17,7 +17,7 @@
   },
   {
     "id": "main-profile",
-    "components": ["section-profile", "section"]
+    "components": ["profile-section"]
   },
   {
     "id": "section",
@@ -86,7 +86,7 @@
     "components": ["author-bio"]
   },
   {
-    "id": "section-profile",
+    "id": "profile-section",
     "components": [
       "text",
       "title",
@@ -100,7 +100,7 @@
     ]
   },
   {
-    "id": "section-profile-signup",
+    "id": "sign-up-flow-section",
     "components": ["text", "title", "button", "image", "adobe-account-card", "data-and-email-consent", "role-cards", "user-profile-card"]
   },
   {

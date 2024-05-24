@@ -109,7 +109,7 @@ function updateUEInstrumentation() {
     setUEFilter(main, 'empty');
     // update the only available default section
     const section = main.querySelector('.section');
-    setUEFilter(section, 'section-profile-signup');
+    setUEFilter(section, 'sign-up-flow-section');
   }
 }
 

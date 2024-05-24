@@ -2934,7 +2934,7 @@
     ]
   },
   {
-    "id": "section-profile",
+    "id": "profile-section",
     "fields": [
       {
         "component": "select",
@@ -2969,6 +2969,29 @@
           {
             "name": "user-profile-card",
             "value": "user-profile-card"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "sign-up-flow-section",
+    "fields": [
+      {
+        "component": "select",
+        "name": "style",
+        "value": "",
+        "label": "Style",
+        "description": "The section style",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "default",
+            "value": "default"
+          },
+          {
+            "name": "highlight",
+            "value": "highlight"
           }
         ]
       }

@@ -144,6 +144,28 @@
               }
             }
           }
+        },
+        {
+          "title": "Profile Section",
+          "id": "profile-section",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/section/v1/section"
+              }
+            }
+          }
+        },
+        {
+          "title": "Sign Up Flow Section",
+          "id": "sign-up-flow-section",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/section/v1/section"
+              }
+            }
+          }
         }
       ]
     },
