@@ -141,7 +141,7 @@
   },
   {
     "id": "columns",
-    "components": []
+    "components": ["user-profile-card"]
   },
   {
     "id": "column",
