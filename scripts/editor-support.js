@@ -111,7 +111,7 @@ function updateUEInstrumentation() {
     setUEFilter(elem, 'sign-up-flow-section');
   });
 }
-
+}
 /**
  * Event listener for aue:content-patch, edit of a component
  */
