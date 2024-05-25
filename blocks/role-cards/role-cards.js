@@ -88,21 +88,22 @@ export default async function decorate(block) {
 
   block.append(roleCardsDiv);
   decorateIcons(block);
-  const updatedRoles = [];
+
   if (isSignedIn) {
     const profileData = await defaultProfileClient.getMergedProfile();
     const role = profileData?.role;
+
     role.forEach((el) => {
       const checkBox = document.querySelector(`input[name="${el}"]`);
       if (checkBox) {
         checkBox.checked = true;
         checkBox.closest('.role-cards-block').classList.toggle('highlight', checkBox.checked);
-        updatedRoles.push(el);
       }
     });
   }
-  
+
   block.querySelectorAll('.role-cards-block').forEach((card) => {
+    const updatedRoles = [];
     const checkbox = card.querySelector('input[type="checkbox"]');
 
     card.addEventListener('click', (e) => {
@@ -113,27 +114,15 @@ export default async function decorate(block) {
       }
     });
 
-    checkbox.addEventListener('change', async (e) => {
+    checkbox.addEventListener('change', (e) => {
       e.preventDefault();
       const isChecked = checkbox.checked;
       checkbox.closest('.role-cards-block').classList.toggle('highlight', isChecked);
 
       if (isSignedIn) {
         const profileKey = checkbox.getAttribute('name');
-        // const currentProfile = defaultProfileClient.getMergedProfile();
-        // const updatedRoles = currentProfile.role ? [...currentProfile.role] : [];
-
-        if (isChecked) {
-          if (!updatedRoles.includes(profileKey)) {
-            updatedRoles.push(profileKey);
-          }
-        } else {
-          const roleIndex = updatedRoles.indexOf(profileKey);
-          if (roleIndex !== -1) {
-            updatedRoles.splice(roleIndex, 1);
-          }
-        }
-        await defaultProfileClient
+        updatedRoles.push(profileKey);
+        defaultProfileClient
           .updateProfile('role', updatedRoles)
           .then(() => sendNotice(PROFILE_UPDATED))
           .catch(() => sendNotice(PROFILE_NOT_UPDATED));
