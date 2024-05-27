@@ -108,7 +108,7 @@ function updateUEInstrumentation() {
     // update available sections
     setUEFilter(main, 'main-signup');
     main.querySelectorAll('.section').forEach((elem) => {
-    setUEFilter(section, 'sign-up-flow-section');
+      setUEFilter(elem, 'sign-up-flow-section');
   });
 }
 }
