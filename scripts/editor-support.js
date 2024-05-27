@@ -107,12 +107,11 @@ function updateUEInstrumentation() {
   if (document.querySelector('body[class^=signup]')) {
     // update available sections
     setUEFilter(main, 'main-signup');
-    // update the only available default section
-    const section = main.querySelector('.section');
+    main.querySelectorAll('.section').forEach((elem) => {
     setUEFilter(section, 'sign-up-flow-section');
-  }
+  });
 }
-
+}
 /**
  * Event listener for aue:content-patch, edit of a component
  */
