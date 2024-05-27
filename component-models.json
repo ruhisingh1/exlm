@@ -2943,34 +2943,15 @@
         "label": "Style",
         "description": "The section style",
         "valueType": "string",
-        "options": [
-          {
-            "name": "default",
-            "value": "default"
-          },
-          {
-            "name": "highlight",
-            "value": "highlight"
-          }
-        ]
+        "hidden": true,
+        "options": []
       },
       {
-        "component": "select",
-        "name": "blocks",
-        "value": "",
-        "label": "Include Blocks",
-        "description": "Add blocks to section",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "adobe-account-card",
-            "value": "adobe-account-card"
-          },
-          {
-            "name": "user-profile-card",
-            "value": "user-profile-card"
-          }
-        ]
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "two-column-layout",
+        "label": "Enable two-column layout for this section?",
+        "description": "This enables the two-column layout for this section."
       }
     ]
   },
@@ -2984,16 +2965,8 @@
         "label": "Style",
         "description": "The section style",
         "valueType": "string",
-        "options": [
-          {
-            "name": "default",
-            "value": "default"
-          },
-          {
-            "name": "highlight",
-            "value": "highlight"
-          }
-        ]
+        "hidden": true,
+        "options": []
       }
     ]
   }
