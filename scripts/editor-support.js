@@ -106,9 +106,11 @@ function updateUEInstrumentation() {
   // ----- if signup-flow-modal pages, identified by theme
   if (document.querySelector('body[class^=signup]')) {
     // update available sections
-    setUEFilter(main, 'empty');
-    setUEFilter(main.querySelector('.section'), 'sign-up-flow-section');
-}
+    setUEFilter(main, 'main-signup');
+    main.querySelectorAll('.section').forEach((elem) => {
+      setUEFilter(elem, 'sign-up-flow-section');
+    });
+  }
 }
 /**
  * Event listener for aue:content-patch, edit of a component

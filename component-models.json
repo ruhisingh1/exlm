@@ -2951,7 +2951,7 @@
         "valueType": "boolean",
         "name": "two-column-layout",
         "label": "Enable two-column layout for this section?",
-        "description": "This enables the two-column layout for this section."
+        "description": "This will enable two-column layout for this particular section."
       }
     ]
   },
