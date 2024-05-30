@@ -40,7 +40,7 @@ export default async function decorate(block) {
 
   block.textContent = '';
   block.append(entitlementsDOM);
-  await decorateIcons(block);
+  // await decorateIcons(block);
 
   const isSignedIn = await isSignedInUser();
   if (isSignedIn) {
