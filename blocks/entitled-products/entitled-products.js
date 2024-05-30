@@ -51,15 +51,17 @@ export default async function decorate(block) {
           // Call the switchProfile function to get the access token
           const newProfile = await adobeIMS.switchProfile(userOrg.userId);
     const accessToken = newProfile.tokenInfo.token;
+    sessionStorage.setItem('JIL-token', 'Bearer ' + newProfile.tokenInfo.token);
+
+    let requestHeaders = {};
+          requestHeaders.Authorization = sessionStorage.getItem('JIL-token') || '';
           // Define the API endpoint with the specific organization ID
           const apiUrl = `https://bps-il.adobe.io/jil-api/v2/organizations/${userOrg.orgId}/products`;
           
           // Fetch products data with the access token
           const response = await fetch(apiUrl, {
               method: 'GET',
-              headers: {
-                  'Authorization': `Bearer ${accessToken}`
-              },
+              headers: {...requestHeaders},
               key: 'jil-product-list',
               params: {},
           });
