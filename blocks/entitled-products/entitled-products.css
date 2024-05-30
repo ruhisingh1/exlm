@@ -1,18 +1,51 @@
-@import "../../scripts/profile/profile.css";
-.user-profile-card-wrapper {
+.product-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    padding: 24px 0;
+    gap: 20px;
 }
 
-.user-profile-card {
-    background: var(--spectrum-gray-50);
-    box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.05);
-    border-radius: 4px;
-    padding: 24px;
+.product-card {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    width: 200px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.product-title {
+    font-size: 1.5em;
+    margin: 0 0 10px;
+    color: #333333;
+}
+
+.product-subtitle {
+    color: #777777;
+    margin: 0 0 20px;
+}
+
+
+.experience-level {
     width: 100%;
-    max-width: 400px;
-    
+    padding: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+}
+
+.select-product .checkbox, .product {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.select-product .checkbox > input {
+    width: 14px;
+    margin: 0;
+    border: 2px solid var(--spectrum-gray-600);
+    border-radius: 2px;
+}
+.select-product .checkbox > label {
+    font-size: 18px;
+    letter-spacing: 0px;
+    line-height: 22px;
 }
