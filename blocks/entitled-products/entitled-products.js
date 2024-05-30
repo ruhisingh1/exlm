@@ -59,7 +59,9 @@ export default async function decorate(block) {
               method: 'GET',
               headers: {
                   'Authorization': `Bearer ${accessToken}`
-              }
+              },
+              key: 'jil-product-list',
+              params: {},
           });
 
           // Check if the response is ok (status code 200-299)
