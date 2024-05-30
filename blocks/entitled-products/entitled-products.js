@@ -50,7 +50,7 @@ export default async function decorate(block) {
       try {
           // Call the switchProfile function to get the access token
           const accessToken = await adobeIMS.switchProfile(userOrg.userId);
-          
+          console.log("accessToken:", accessToken);
           // Define the API endpoint with the specific organization ID
           const apiUrl = `https://bps-il.adobe.io/jil-api/v2/organizations/${userOrg.orgId}/products`;
           
