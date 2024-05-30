@@ -64,15 +64,15 @@ export default async function decorate(block) {
 
           // Check if the response is ok (status code 200-299)
           if (!response.ok) {
-              throw new Error(`Error fetching products for ${user.orgName}: ${response.statusText}`);
+              throw new Error(`Error fetching products for ${userOrg.orgName}: ${response.statusText}`);
           }
 
           // Parse and log the product data
           const productData = await response.json();
-          console.log(`Product data for ${user.orgName}:`, productData);
+          console.log(`Product data for ${userOrg.orgName}:`, productData);
 
       } catch (error) {
-          console.error(`Failed to fetch products for ${user.orgName}:`, error);
+          console.error(`Failed to fetch products for ${userOrg.orgName}:`, error);
       }
   }
     
