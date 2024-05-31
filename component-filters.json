@@ -17,11 +17,11 @@
   },
   {
     "id": "main-profile",
-    "components": ["profile-section"]
+    "components": ["profile-section", "product-interests-section"]
   },
   {
     "id": "main-signup",
-    "components": ["sign-up-flow-section"]
+    "components": ["sign-up-flow-section", "product-interests-section"]
   },
   {
     "id": "section",
@@ -120,6 +120,10 @@
       "learning-interests",
       "more-product-interests"
     ]
+  },
+  {
+    "id": "product-interests-section",
+    "components": []
   },
   {
     "id": "article-content-section",
