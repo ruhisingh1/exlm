@@ -1,6 +1,6 @@
 import { decorateIcons } from '../../scripts/lib-franklin.js';
 import { sendNotice } from '../../scripts/toast/toast.js';
-import { fetchLanguagePlaceholders } from '../../scripts/scripts.js';
+import { fetchLanguagePlaceholders, getConfig } from '../../scripts/scripts.js';
 import { defaultProfileClient, isSignedInUser } from '../../scripts/auth/profile.js';
 
 // loadCSS(`${window.hlx.codeBasePath}/scripts/toast/toast.css`);
@@ -12,6 +12,8 @@ try {
   /* eslint-disable-next-line no-console */
   console.error('Error fetching placeholders:', err);
 }
+
+const { jilAPi, ims } = getConfig();
 
 export default async function decorate(block) {
   const entitlementsDOM = document.createRange().createContextualFragment(`
@@ -52,19 +54,17 @@ export default async function decorate(block) {
           const newProfile = await adobeIMS.switchProfile(userOrg.userId);
     const accessToken = newProfile.tokenInfo.token;
     sessionStorage.setItem('JIL-token', 'Bearer ' + newProfile.tokenInfo.token);
-
+    let productEndPoint = jilAPi.replace('#ORG_ID', userOrg.orgId);
     let requestHeaders = {};
+    requestHeaders['x-api-key'] = ims.client_id;
           requestHeaders.Authorization = sessionStorage.getItem('JIL-token') || '';
-          // Define the API endpoint with the specific organization ID
-          const apiUrl = `https://bps-il.adobe.io/jil-api/v2/organizations/${userOrg.orgId}/products`;
           
           // Fetch products data with the access token
-          const response = await fetch(apiUrl, {
-              method: 'GET',
-              headers: {...requestHeaders},
-              key: 'jil-product-list',
-              params: {},
-          });
+          const response = await fetch(productEndPoint, {
+            headers: {...requestHeaders},
+            params: {},
+            key: 'jil-product-list'
+          })
 
           // Check if the response is ok (status code 200-299)
           if (!response.ok) {
