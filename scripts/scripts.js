@@ -711,7 +711,7 @@ export function getConfig() {
     eventSourceStreamUrl: '/api/stream',
     // JIL API
     jilApiOrigin: isProd ? 'https://bps-il.adobe.io/jil-api' : 'https://bps-il-stage.adobe.io/jil-api',
-    jilAPi = `${jilApiOrigin}/v2/organizations/#ORG_ID/products`;
+    jilAPi: `${jilApiOrigin}/v2/organizations/#ORG_ID/products`
   };
   return window.exlm.config;
 }
