@@ -660,7 +660,7 @@ export function getConfig() {
   const ppsOrigin = isProd ? 'https://pps.adobe.io' : 'https://pps-stage.adobe.io';
   const ims = {
     client_id: 'ExperienceLeague',
-    environment: isProd ? 'prod' : 'stg1',
+    environment: 'prod',
     debug: !isProd,
   };
 
