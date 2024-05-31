@@ -710,8 +710,7 @@ export function getConfig() {
     // Stream API
     eventSourceStreamUrl: '/api/stream',
     // JIL API
-    jilApiOrigin: isProd ? 'https://bps-il.adobe.io/jil-api' : 'https://bps-il-stage.adobe.io/jil-api',
-    jilAPi: `${jilApiOrigin}/v2/organizations/#ORG_ID/products`
+    jilAPi: isProd ? 'https://bps-il.adobe.io/jil-api/v2/organizations/#ORG_ID/products' : 'https://bps-il-stage.adobe.io/jil-api/v2/organizations/#ORG_ID/products'
   };
   return window.exlm.config;
 }
