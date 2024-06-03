@@ -1,12 +1,4 @@
-import { decorateIcons, loadCSS } from '../../scripts/lib-franklin.js';
-import { sendNotice } from '../../scripts/toast/toast.js';
-import { getConfig } from '../../scripts/scripts.js';
-import { defaultProfileClient, isSignedInUser } from '../../scripts/auth/profile.js';
 import eventHandler from '../../scripts/profile/profile-interests-event.js';
-
-loadCSS(`${window.hlx.codeBasePath}/scripts/toast/toast.css`);
-
-const { jilAPi, ims } = getConfig();
 
 export default async function decorate(block) {
   const [...configs] = [...block.children].map((row) => row.firstElementChild);
@@ -33,23 +25,4 @@ export default async function decorate(block) {
   block.innerHTML = '';
   block.append(entitlementsDOM);
   eventHandler();
-  // await decorateIcons(block);
-
-  // const isSignedIn = await isSignedInUser();
-  // if (isSignedIn) {
-  //     const profileData = await defaultProfileClient.getMergedProfile();
-  //     const solutionLevels = profileData?.solutionLevels || [];
-  //     defaultProfileClient
-  //     .updateProfile("solutionLevels", isChecked)
-  //     .then(() => sendNotice(PROFILE_UPDATED))
-  //     .catch(() => sendNotice(PROFILE_NOT_UPDATED));
-  // }
-
-  // if (isSignedIn) {
-  //   const preferenceName = checkbox.getAttribute('data-name');
-  //   defaultProfileClient
-  //     .updateProfile(preferenceName, isChecked)
-  //     .then(() => sendNotice(PROFILE_UPDATED))
-  //     .catch(() => sendNotice(PROFILE_NOT_UPDATED));
-  // }
 }
