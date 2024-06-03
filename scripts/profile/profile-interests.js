@@ -21,7 +21,7 @@ const options = [
 ];
 
 // eslint-disable-next-line import/prefer-default-export
-export async function buildProductCard(container, element, model) {
+export default async function buildProductCard(container, element, model) {
   const { product = 'Target', isSelected = false } = model;
 
   // Create card container
