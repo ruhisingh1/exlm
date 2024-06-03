@@ -21,7 +21,7 @@ const options = [
 ];
 
 // eslint-disable-next-line import/prefer-default-export
-export default async function buildProductCard(container, element, model) {
+export default async function buildProductCard(element, model) {
   const { product = 'Target', isSelected = false } = model;
 
   // Create card container
@@ -80,4 +80,5 @@ export default async function buildProductCard(container, element, model) {
   // Add to DOM
   element.appendChild(card);
   decorateIcons(element);
+  return card;
 }

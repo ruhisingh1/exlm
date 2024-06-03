@@ -20,9 +20,12 @@ export default async function decorate(block, model) {
     ${styledHeader ? `<div class="heading">${styledHeader}</div>` : ''}
     ${descContent ? `<div class="description">${descContent}</div>` : ''}
   `);
+  
   const { product = 'Target', isSelected = false } = model;
   console.log(`Product: ${product}, Is Selected: ${isSelected}`);
-  entitlementsDOM.append(await buildProductCard(block, model));
+  
+  const productCard = await buildProductCard(block, model);
+  entitlementsDOM.appendChild(productCard);
   
   block.innerHTML = '';
   block.append(entitlementsDOM);
