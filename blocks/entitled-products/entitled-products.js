@@ -21,7 +21,7 @@ export default async function decorate(block, model) {
     ${descContent ? `<div class="description">${descContent}</div>` : ''}
   `);
   
-  entitlementsDOM.appendChild(buildProductCard(block, model));
+  entitlementsDOM.append(buildProductCard(block, model));
   
   block.innerHTML = '';
   block.append(entitlementsDOM);
