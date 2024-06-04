@@ -660,7 +660,7 @@ export function getConfig() {
   const ppsOrigin = isProd ? 'https://pps.adobe.io' : 'https://pps-stage.adobe.io';
   const ims = {
     client_id: 'ExperienceLeague',
-    environment: 'prod',
+    environment: isProd ? 'prod' : 'stg1',
     debug: !isProd,
   };
 
@@ -711,7 +711,7 @@ export function getConfig() {
     // Stream API
     eventSourceStreamUrl: '/api/stream',
     // JIL API
-    jilAPi: isProd ? 'https://bps-il.adobe.io/jil-api/v2/organizations/#ORG_ID/products' : 'https://bps-il.adobe.io/jil-api/v2/organizations/#ORG_ID/products'
+    jilAPi: isProd ? 'https://bps-il.adobe.io/jil-api/v2/organizations/#ORG_ID/products' : 'https://bps-il.adobe.io/jil-api/v2/organizations/#ORG_ID/products',
   };
   return window.exlm.config;
 }
