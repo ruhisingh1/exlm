@@ -1,12 +1,14 @@
 export default function decorate(block) {
-  const [style, text] = [...block.children].map((row) => row.firstElementChild);
+  const [styleElement, textElement] = [...block.children].map((row) => row.firstElementChild);
 
-  const blockStyle = style.textContent().trim() || '';
-  const blockText = text.textContent().trim() || '';
+  const blockStyle = styleElement?.textContent.trim();
+  const blockText = textElement?.innerHTML;
 
   block.innerHTML = '';
   const contentDiv = document.createElement('div');
-  contentDiv.innerHTML = text.innerHTML
+  contentDiv.innerHTML = blockText;
+
+  // Append the content div to the block
   block.append(contentDiv);
   block.classList.add('block-quote-content-test', blockStyle);
 }

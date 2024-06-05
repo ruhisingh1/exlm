@@ -138,7 +138,8 @@
                   "style": "article-content-section",
                   "mini-toc": {
                     "sling:resourceType": "core/franklin/components/block/v1/block",
-                    "name": "Mini TOC"
+                    "name": "Mini TOC",
+                    "model": "mini-toc"
                   }
                 }
               }

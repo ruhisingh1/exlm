@@ -3,7 +3,6 @@ import { loadCSS } from '../../scripts/lib-franklin.js';
 import { sendNotice } from '../../scripts/toast/toast.js';
 import { defaultProfileClient, isSignedInUser } from '../../scripts/auth/profile.js';
 import buildProductCard from '../../scripts/profile/profile-interests.js';
-import eventHandler from '../../scripts/profile/profile-interests-event.js';
 import { htmlToElement, fetchLanguagePlaceholders } from '../../scripts/scripts.js';
 
 loadCSS(`${window.hlx.codeBasePath}/scripts/toast/toast.css`);
@@ -50,51 +49,4 @@ export default async function decorate(block) {
 
   block.appendChild(contentDiv);
 
-  // eventHandler();
-
-  const isSignedIn = await isSignedInUser();
-  if (isSignedIn) {
-    const profileData = await defaultProfileClient.getMergedProfile();
-    const solutionLevels = profileData?.solutionLevels || [];
-
-    solutionLevels.forEach((el) => {
-        const solutionName = el.split(',')[0];
-        const checkBox = block.querySelector(`input[data-name="${solutionName}"]`);
-        if (checkBox) {
-            checkBox.checked = true;
-            checkBox.closest('.profile-interest-card').classList.add('profile-interest-card--selected');
-        }
-    });
-}
-
-  const updatedSolutionLevels = [];
-  block.querySelectorAll('.profile-interest-card').forEach((card) => {
-    const checkbox = card.querySelector('input[type="checkbox"]');
-    const dropdown = card.querySelector('.custom-filter-dropdown');
-
-    checkbox.addEventListener('change', () => {
-      if (isSignedIn) {
-        const solution = checkbox.getAttribute('data-name');
-        const level = dropdown.getAttribute('data-selected');
-        const index = updatedSolutionLevels.findIndex((item) => item.solution === solution);
-        if (checkbox.checked) {
-          // Add or update the solution level
-          if (index !== -1) {
-            updatedSolutionLevels[index].level = level;
-          } else {
-            updatedSolutionLevels.push({ solution, level });
-          }
-        } else {
-          // Remove the solution level if unchecked
-          if (index !== -1) {
-            updatedSolutionLevels.splice(index, 1);
-          }
-        }
-        defaultProfileClient
-          .updateProfile("solutionLevels", updatedSolutionLevels)
-          .then(() => sendNotice(placeholders?.profileUpdated || 'Your profile changes have been saved!'))
-          .catch(() => sendNotice(placeholders?.profileNotUpdated || 'Your profile changes have not been saved!'));
-      }
-    });
-  });
 }
