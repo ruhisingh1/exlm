@@ -1,7 +1,10 @@
-import { getMetadata } from '../../scripts/lib-franklin.js';
-
 export default function decorate(block) {
-  // Getting the theme from the Metadata Properties
-  const theme = getMetadata('article-theme') || 'external';
-  block.classList.add('block-quote-content-test', theme);
+  const [style, text] = [...block.children].map((row) => row.firstElementChild);
+
+  const blockStyle = style.textContent().trim() || '';
+  const blockText = text.textContent().trim() || '';
+
+  block.innerHTML = '';
+  block.innerHTML = blockText.innerHTML;
+  block.classList.add('block-quote-content-test', blockStyle);
 }

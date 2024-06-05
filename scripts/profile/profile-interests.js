@@ -4,7 +4,6 @@ import { htmlToElement, fetchLanguagePlaceholders } from '../scripts.js';
 import getSolutionByName from '../../blocks/toc/toc-solutions.js';
 
 loadCSS(`${window.hlx.codeBasePath}/scripts/profile/profile-interests.css`);
-loadCSS(`${window.hlx.codeBasePath}/scripts/toast/toast.css`);
 
 let placeholders = {};
 try {
@@ -35,6 +34,7 @@ export default async function buildProductCard(container, element, model) {
 
   // Create card container
   const card = document.createElement('div');
+  const cardContent = document.createElement('div');
   card.className = `profile-interest-card ${isSelected ? 'profile-interest-card--selected' : ''}`;
   const { class: solutionInfoClassName } = getSolutionByName(product);
 
@@ -65,44 +65,34 @@ export default async function buildProductCard(container, element, model) {
   new Dropdown(content, 'Beginner', options);
 
   // Checkbox
+  const checboxCta = placeholders.selectThisProduct || 'Select this product';
+  const changeHandler = (e) => {
+    const { checked } = e.target;
+    if (checked) {
+      card.classList.add('profile-interest-card--selected');
+    } else {
+      card.classList.remove('profile-interest-card--selected');
+    }
+  };
   const checkboxContainer = htmlToElement(`
         <div class="profile-interest-checkbox">
-            <input type="checkbox" data-name="${product}">
-            <label for="${product}" class="subtext">${placeholders.selectThisProduct || 'Select this product'}</label>
+            <input type="checkbox" data-name="${product}" id="select-product">
+            <label for="select-product">${checboxCta}</label>
         </div>`);
-
   const checkbox = checkboxContainer.querySelector('input');
   checkbox.checked = isSelected;
-
-  // Change handler function
-  const changeHandler = () => {
-    const { checked } = checkbox;
-    card.classList.toggle('profile-interest-card--selected', checked);
-  };
-
-  // Click event listener for the entire card
-  card.addEventListener('click', () => {
-    checkbox.checked = !checkbox.checked;
-    changeHandler();
-  });
-
-  // Click event listener for the checkbox
-  checkbox.addEventListener('change', () => {
-    changeHandler();
-  });
-
-  // Prevent checkbox click from propagating to card
-  checkbox.addEventListener('click', (event) => {
-    event.stopPropagation();
-  });
+  checkbox.onchange = changeHandler;
 
   // Assemble card
   card.appendChild(header);
   decorateIcons(header, 'solutions/');
-  card.appendChild(content);
+  cardContent.appendChild(content);
   decorateIcons(content);
-  card.appendChild(checkboxContainer);
+  cardContent.appendChild(checkboxContainer);
+
+  card.appendChild(cardContent);
 
   // Add to DOM
   element.appendChild(card);
+  decorateIcons(element);
 }
