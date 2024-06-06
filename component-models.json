@@ -796,6 +796,22 @@
         "name": "rows",
         "value": "",
         "label": "Rows"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "classes",
+        "label": "Style Type",
+        "options": [
+          {
+            "name": "Default",
+            "value": ""
+          },
+          {
+            "name": "Border w/ alternating rows",
+            "value": "b-alt-row"
+          }
+        ]
       }
     ]
   },
@@ -1604,10 +1620,6 @@
           {
             "name": "H5",
             "value": "h5"
-          },
-          {
-            "name": "H6",
-            "value": "h6"
           }
         ]
       },
@@ -1962,6 +1974,82 @@
             "value": "MOST_POPULAR"
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "featured-content",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "img",
+        "label": "Image"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "imgAlt",
+        "value": "",
+        "label": "Image Description",
+        "description": "A descriptive text of the image."
+      },
+      {
+        "component": "multiselect",
+        "name": "classes",
+        "label": "Image Border and Alignment",
+        "valueType": "string",
+        "required": true,
+        "maxSize": 2,
+        "options": [
+          {
+            "name": "Content Source",
+            "children": [
+              {
+                "name": "Adobe",
+                "value": "adobe"
+              },
+              {
+                "name": "External",
+                "value": "External"
+              }
+            ]
+          },
+          {
+            "name": "Alignment",
+            "children": [
+              {
+                "name": "Left",
+                "value": "left"
+              },
+              {
+                "name": "Right",
+                "value": "right"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "component": "aem-content",
+        "valueType": "string",
+        "name": "content_link",
+        "value": "",
+        "label": "Content Page"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "content_description",
+        "value": "",
+        "label": "Description"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "content_cta",
+        "value": "",
+        "label": "Content CTA Text"
       }
     ]
   },
@@ -2494,27 +2582,17 @@
         "description": "Sets the title of the page in page meta."
       },
       {
-        "component": "select",
+        "component": "aem-content",
         "valueType": "string",
-        "name": "article-theme",
-        "label": "Article Theme",
-        "value": "Adobe",
-        "options": [
-          {
-            "name": "Adobe",
-            "value": "adobe"
-          },
-          {
-            "name": "External",
-            "value": "external"
-          }
-        ]
+        "name": "author-bio-page",
+        "value": "",
+        "label": "Author Bio page URL"
       },
       {
         "component": "multiselect",
         "valueType": "string",
         "name": "coveo-content-type",
-        "label": "Coveo Content Type",
+        "label": "Content Type",
         "description": "Sets the coveo content type in page meta.",
         "options": [
           {
@@ -2527,16 +2605,17 @@
         "component": "aem-tag",
         "valueType": "string",
         "name": "coveo-solution",
-        "label": "Coveo Solution(s)",
+        "label": "Solution(s)",
         "rootPath": "/content/cq:tags/exl/solution",
         "description": "Sets the Coveo Solution(s) in page meta."
       },
       {
-        "component": "aem-content",
+        "component": "aem-tag",
         "valueType": "string",
-        "name": "author-bio-page",
-        "value": "",
-        "label": "Author Bio page"
+        "name": "feature-set",
+        "label": "Feature(s)",
+        "rootPath": "/content/cq:tags/exl/feature",
+        "description": "Sets the Coveo Feature(s) in page meta."
       },
       {
         "component": "aem-tag",
@@ -2581,7 +2660,7 @@
         "valueType": "string",
         "name": "block-quote",
         "value": "",
-        "label": "Block quote",
+        "label": "Block quote Text",
         "description": "Sets the text"
       }
     ]
@@ -3016,58 +3095,6 @@
     ]
   },
   {
-    "id": "entitled-products",
-    "fields": [
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "heading",
-        "value": "",
-        "label": "Heading"
-      },
-      {
-        "component": "select",
-        "valueType": "string",
-        "name": "headingType",
-        "value": "h3",
-        "label": "Heading Type",
-        "options": [
-          {
-            "name": "H1",
-            "value": "h1"
-          },
-          {
-            "name": "H2",
-            "value": "h2"
-          },
-          {
-            "name": "H3",
-            "value": "h3"
-          },
-          {
-            "name": "H4",
-            "value": "h4"
-          },
-          {
-            "name": "H5",
-            "value": "h5"
-          },
-          {
-            "name": "H6",
-            "value": "h6"
-          }
-        ]
-      },
-      {
-        "component": "richtext",
-        "valueType": "string",
-        "name": "description",
-        "value": "",
-        "label": "Description"
-      }
-    ]
-  },
-  {
     "id": "product-interests",
     "fields": [
       {
@@ -3172,6 +3199,18 @@
     ]
   },
   {
+    "id": "icon-block",
+    "fields": [
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "allow-center",
+        "label": "Center the section?",
+        "description": "This will center the entire Icon Cards Block."
+      }
+    ]
+  },
+  {
     "id": "note",
     "fields": [
       {
@@ -3183,47 +3222,47 @@
         "options": [
           {
             "name": "Note",
-            "value": "NOTE"
+            "value": "note"
           },
           {
             "name": "Tip",
-            "value": "TIP"
+            "value": "tip"
           },
           {
             "name": "Important",
-            "value": "IMPORTANT"
+            "value": "important"
           },
           {
             "name": "Warning",
-            "value": "WARNING"
+            "value": "warning"
           },
           {
             "name": "Caution",
-            "value": "CAUTION"
+            "value": "caution"
           },
           {
             "name": "Admin",
-            "value": "ADMIN"
+            "value": "admin"
           },
           {
             "name": "Availability",
-            "value": "AVAILABILITY"
+            "value": "availability"
           },
           {
             "name": "Prerequisites",
-            "value": "PREREQUISITES"
+            "value": "prerequisites"
           },
           {
             "name": "Info",
-            "value": "INFO"
+            "value": "info"
           },
           {
             "name": "Error",
-            "value": "ERROR"
+            "value": "error"
           },
           {
             "name": "Success",
-            "value": "SUCCESS"
+            "value": "success"
           }
         ]
       },
