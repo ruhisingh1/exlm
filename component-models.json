@@ -2612,7 +2612,7 @@
       {
         "component": "aem-tag",
         "valueType": "string",
-        "name": "feature-set",
+        "name": "feature",
         "label": "Feature(s)",
         "rootPath": "/content/cq:tags/exl/feature",
         "description": "Sets the Coveo Feature(s) in page meta."
