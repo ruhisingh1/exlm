@@ -2596,7 +2596,7 @@
         "description": "Sets the coveo content type in page meta.",
         "options": [
           {
-            "name": "Article",
+            "name": "Actionable Insights",
             "value": "Article"
           }
         ]
