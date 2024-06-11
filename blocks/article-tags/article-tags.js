@@ -39,22 +39,23 @@ function decodeArticlePageMetaTags() {
 
     return decodedParts[0];
   });
-  const decodedFeatures = features.map((feature) => {
+
+  const decodedFeatures = features
+  .map((feature) => {
     const parts = feature.split('/');
     if (parts.length > 1) {
-        const product = atob(parts[0]);
-        if (!decodedSolutions.includes(product)) {
-            decodedSolutions.push(product);
-        }
-        const featureTag = atob(parts[1]);
-        return `${featureTag}`;
-        // eslint-disable-next-line no-else-return
-    } else {
-        decodedSolutions.push(atob(parts[0]));
-        return '';
+      const product = atob(parts[0]);
+      if (!decodedSolutions.includes(product)) {
+        decodedSolutions.push(product);
+      }
+      const featureTag = atob(parts[1]);
+      return `${featureTag}`;
     }
+    decodedSolutions.push(atob(parts[0]));
+    return ''; // Return an empty string for cases where parts.length <= 1
+  })
+  .filter((feature) => feature !== '');
 
-}).filter((feature) => feature !== '');
 
   const decodedRoles = roles.map((role) => atob(role));
   const decodedLevels = experienceLevels.map((level) => atob(level));
