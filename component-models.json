@@ -2584,6 +2584,7 @@
       {
         "component": "aem-content",
         "valueType": "string",
+        "multi": true,
         "name": "author-bio-page",
         "value": "",
         "label": "Author Bio page URL"
