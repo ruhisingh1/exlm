@@ -59,7 +59,7 @@ function updateUEInstrumentation() {
       setUEFilter(main, 'main-browse');
     }
     // update available blocks for default sections
-    main.querySelectorAll('.section:not(.browse-rail-section)').forEach((elem) => {
+    main.querySelectorAll('.section:not(.browse-rail-section, .tab-section)').forEach((elem) => {
       setUEFilter(elem, 'section-browse');
     });
     return;

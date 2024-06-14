@@ -2566,6 +2566,18 @@
     ]
   },
   {
+    "id": "tab-section",
+    "fields": [
+      {
+        "component": "text",
+        "name": "tab",
+        "value": "",
+        "label": "Tab",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "recommended-courses",
     "fields": [
       {
