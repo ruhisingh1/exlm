@@ -19,6 +19,7 @@ import {
   fetchPlaceholders,
   readBlockConfig,
   createOptimizedPicture,
+  toClassName,
 } from './lib-franklin.js';
 
 const LCP_BLOCKS = ['marquee', 'article-marquee']; // add your LCP blocks to the list
@@ -265,6 +266,34 @@ function addProfileTab(main) {
   main.prepend(profileTabSection);
 }
 
+function buildTabs(main) {
+  const tabs = [...main.querySelectorAll(':scope > div')]
+    .map((section) => {
+      // section metadata not yet parsed
+      const sectionMeta = section.querySelector('div.section-metadata');
+      if (sectionMeta) {
+        const meta = readBlockConfig(sectionMeta);
+        return [section, meta.tab];
+      }
+      return null;
+    })
+    .filter((el) => !!el);
+  if (tabs.length) {
+    const section = document.createElement('div');
+    section.className = 'section';
+    const ul = document.createElement('ul');
+    ul.append(...tabs
+      .map(([, tab]) => {
+        const li = document.createElement('li');
+        li.innerText = tab;
+        return li;
+      }));
+    const tabsBlock = buildBlock('tabs', [[ul]]);
+    section.append(tabsBlock);
+    tabs[0][0].insertAdjacentElement('beforebegin', section);
+  }
+}
+
 /**
  * Builds all synthetic blocks in a container element.
  * @param {Element} main The container element
@@ -272,6 +301,7 @@ function addProfileTab(main) {
 function buildAutoBlocks(main) {
   try {
     buildSyntheticBlocks(main);
+    buildTabs(main);
     // if we are on a product browse page
     if (isBrowsePage()) {
       addBrowseBreadCrumb(main);
@@ -281,8 +311,8 @@ function buildAutoBlocks(main) {
       addArticleLandingRail(main);
     }
     if (isProfilePage()) {
-      addProfileRail(main);
       addProfileTab(main);
+      addProfileRail(main);
     }
   } catch (error) {
     // eslint-disable-next-line no-console
@@ -681,6 +711,7 @@ export function getConfig() {
     ppsOrigin,
     launchScriptSrc,
     khorosProfileUrl: `${cdnOrigin}/api/action/khoros/profile-menu-list`,
+    khorosProfileDetailsUrl: `${cdnOrigin}/api/action/khoros/profile-details`,
     privacyScript: `${cdnOrigin}/etc.clientlibs/globalnav/clientlibs/base/privacy-standalone.js`,
     profileUrl: `${cdnOrigin}/api/profile?lang=${lang}`,
     JWTTokenUrl: `${cdnOrigin}/api/token?lang=${lang}`,
@@ -710,8 +741,6 @@ export function getConfig() {
       : 'https://experienceleaguecommunities-dev.adobe.com/',
     // Stream API
     eventSourceStreamUrl: '/api/stream',
-    // JIL API
-    jilAPi: isProd ? 'https://bps-il.adobe.io/jil-api/v2/organizations/#ORG_ID/products' : 'https://bps-il.adobe.io/jil-api/v2/organizations/#ORG_ID/products',
   };
   return window.exlm.config;
 }
@@ -832,14 +861,27 @@ const loadMartech = async (headerPromise, footerPromise) => {
   );
 };
 
+async function loadThemes() {
+  const toClassNames = (classes) =>
+    classes
+      ?.split(',')
+      ?.map((c) => toClassName(c.trim()))
+      .filter(Boolean) || [];
+  const metaToClassNames = (metaName) => toClassNames(getMetadata(metaName));
+  const themeNames = [...metaToClassNames('template'), ...metaToClassNames('theme')];
+  if (themeNames.length === 0) return Promise.resolve();
+  return Promise.allSettled(themeNames.map((theme) => loadCSS(`${window.hlx.codeBasePath}/styles/theme/${theme}.css`)));
+}
+
 /**
  * Loads everything that doesn't need to be delayed.
  * @param {Element} doc The container element
  */
 async function loadLazy(doc) {
   const main = doc.querySelector('main');
-  await loadBlocks(main);
   loadIms(); // start it early, asyncronously
+  await loadThemes();
+  await loadBlocks(main);
 
   const { hash } = window.location;
   const element = hash ? doc.getElementById(hash.substring(1)) : false;
@@ -1096,10 +1138,26 @@ async function loadPage() {
   loadRails();
   loadDelayed();
   showBrowseBackgroundGraphic();
-  loadDefaultModule(`${window.hlx.codeBasePath}/scripts/prev-next-btn.js`);
+
+  if (isDocArticlePage()) {
+    loadDefaultModule(`${window.hlx.codeBasePath}/scripts/prev-next-btn.js`);
+  }
 }
 
 // load the page unless DO_NOT_LOAD_PAGE is set - used for existing EXLM pages POC
 if (!window.hlx.DO_NOT_LOAD_PAGE) {
-  loadPage();
+  if (isProfilePage()) {
+    if (window.location.href.includes('.html')) {
+      loadPage();
+    } else {
+      await loadIms();
+      if (window?.adobeIMS?.isSignedInUser()) {
+        loadPage();
+      } else {
+        await window?.adobeIMS?.signIn();
+      }
+    }
+  } else {
+    loadPage();
+  }
 }
