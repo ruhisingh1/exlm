@@ -80,6 +80,21 @@
           }
         },
         {
+          "title": "Tab",
+          "id": "tab-section",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/section/v1/section",
+                "template": {
+                  "name": "Tab",
+                  "model": "tab-section"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Editable Browse Rail Section",
           "id": "browse-rail-section",
           "plugins": {
@@ -179,53 +194,6 @@
               }
             }
           }
-        },
-        {
-          "title": "Product Interests Section",
-          "id": "product-interests-section",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/section/v1/section",
-                "template": {
-                  "name": "Product Interests Section",
-                  "model": "product-interests-section",
-                  "style": "product-interests-section",
-                  "filter": "product-interests-section",
-                  "title1": {
-                    "sling:resourceType": "core/franklin/components/title/v1/title"
-                  },
-                  "text1": {
-                    "sling:resourceType": "core/franklin/components/text/v1/text"
-                  },
-                  "entitled-products": {
-                    "sling:resourceType": "core/franklin/components/block/v1/block",
-                    "name": "Entitled Products"
-                  },
-                  "title2": {
-                    "sling:resourceType": "core/franklin/components/title/v1/title"
-                  },
-                  "text2": {
-                    "sling:resourceType": "core/franklin/components/text/v1/text"
-                  },
-                  "learning-interests": {
-                    "sling:resourceType": "core/franklin/components/block/v1/block",
-                    "name": "Learning Interests"
-                  },
-                  "title3": {
-                    "sling:resourceType": "core/franklin/components/title/v1/title"
-                  },
-                  "text3": {
-                    "sling:resourceType": "core/franklin/components/text/v1/text"
-                  },
-                  "more-product-interests": {
-                    "sling:resourceType": "core/franklin/components/block/v1/block",
-                    "name": "More Product Interests"
-                  }
-                }
-              }
-            }
-          }
         }
       ]
     },
@@ -243,6 +211,7 @@
                 "template": {
                   "filter": "icon-block",
                   "name": "Icon Block",
+                  "model": "icon-block",
                   "item1": {
                     "sling:resourceType": "core/franklin/components/block/v1/block/item",
                     "name": "Icon Card",
@@ -634,6 +603,23 @@
           }
         },
         {
+          "title": "Featured Content",
+          "id": "featured-content",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Featured Content",
+                  "model": "featured-content",
+                  "content_cta": "Read Article",
+                  "classes": ["adobe", "left"]
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Events Cards",
           "id": "events-cards",
           "plugins": {
@@ -949,21 +935,6 @@
                 "template": {
                   "name": "Email Card",
                   "model": "email-card"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Entitled Products",
-          "id": "entitled-products",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "Entitled Products",
-                  "model": "entitled-products"
                 }
               }
             }

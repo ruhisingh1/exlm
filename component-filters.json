@@ -5,23 +5,23 @@
   },
   {
     "id": "main",
-    "components": ["section"]
+    "components": ["section", "tab-section"]
   },
   {
     "id": "main-browse",
-    "components": ["section", "browse-rail-section"]
+    "components": ["section", "browse-rail-section", "tab-section"]
   },
   {
     "id": "main-article",
-    "components": ["article-content-section", "article-header-section", "section"]
+    "components": ["article-content-section", "article-header-section", "section", "tab-section"]
   },
   {
     "id": "main-profile",
-    "components": ["profile-section", "product-interests-section"]
+    "components": ["profile-section", "tab-section"]
   },
   {
     "id": "main-signup",
-    "components": ["sign-up-flow-section", "product-interests-section"]
+    "components": ["sign-up-flow-section", "tab-section"]
   },
   {
     "id": "section",
@@ -52,7 +52,27 @@
       "block-quote",
       "callout",
       "featured-authors",
-      "inline-survey"
+      "inline-survey",
+      "featured-content",
+      "browse-filters"
+    ]
+  },
+  {
+    "id": "tab-section",
+    "components": [
+      "text",
+      "image",
+      "button",
+      "title",
+      "columns",
+      "icon-block",
+      "teaser",
+      "detailed-teaser",
+      "video-embed",
+      "media",
+      "block-quote",
+      "callout",
+      "note"
     ]
   },
   {
@@ -101,7 +121,6 @@
       "role-cards",
       "user-profile-card",
       "email-card",
-      "entitled-products",
       "product-interests",
       "product-experience-level"
     ]
@@ -117,14 +136,10 @@
       "data-and-email-consent",
       "role-cards",
       "user-profile-card",
-      "entitled-products",
       "product-interests",
-      "product-experience-level"
+      "product-experience-level",
+      "icon-block"
     ]
-  },
-  {
-    "id": "product-interests-section",
-    "components": ["text","title"]
   },
   {
     "id": "article-content-section",
@@ -140,6 +155,7 @@
       "teaser",
       "detailed-teaser",
       "marquee",
+      "mini-toc",
       "carousel",
       "sign-up",
       "video-embed",
@@ -151,7 +167,7 @@
       "social-share",
       "featured-authors",
       "inline-survey",
-      "mini-toc",
+      "featured-content",
       "note"
     ]
   },
