@@ -288,7 +288,7 @@ function buildTabs(main) {
         li.innerText = tab;
         return li;
       }));
-    const tabsBlock = buildBlock('tabs', [[ul]]);
+    const tabsBlock = buildBlock('tab-section', [[ul]]);
     section.append(tabsBlock);
     tabs[0][0].insertAdjacentElement('beforebegin', section);
   }
