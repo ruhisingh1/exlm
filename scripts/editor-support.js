@@ -59,8 +59,12 @@ function updateUEInstrumentation() {
       setUEFilter(main, 'main-browse');
     }
     // update available blocks for default sections
-    main.querySelectorAll('.section:not(.browse-rail-section, .tab-section)').forEach((elem) => {
+    main.querySelectorAll('.section:not(.browse-rail-section, .tab)').forEach((elem) => {
       setUEFilter(elem, 'section-browse');
+    });
+    // update available blocks for default sections
+    main.querySelectorAll('.section.tab').forEach((elem) => {
+      setUEFilter(elem, 'tab');
     });
     return;
   }
@@ -73,6 +77,11 @@ function updateUEInstrumentation() {
     const articleContentSection = main.querySelector('.article-content-section');
     if (articleContentSection) {
       setUEFilter(articleContentSection, 'article-content-section');
+    }
+    // update available blocks for tab sections
+    const tabSection = main.querySelector('.tab');
+    if (tabSection) {
+      setUEFilter(tabSection, 'tab');
     }
     return;
   }

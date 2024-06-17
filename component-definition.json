@@ -81,14 +81,14 @@
         },
         {
           "title": "Tab",
-          "id": "tab-section",
+          "id": "tab",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/section/v1/section",
                 "template": {
                   "name": "Tab",
-                  "model": "tab-section"
+                  "model": "tab"
                 }
               }
             }
