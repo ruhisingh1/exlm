@@ -77,6 +77,13 @@ function updateUEInstrumentation() {
     main.querySelectorAll('.section:not(.browse-rail-section, .tab-section)').forEach((elem) => {
       setUEFilter(elem, 'section-browse');
     });
+    // update available blocks for tab sections
+    const tabSections = main.querySelectorAll('.tab-section');
+    if (tabSections) {
+      tabSections.forEach((elem) => {
+        setUEFilter(elem, 'tab-section');
+      });
+    }
     return;
   }
 
