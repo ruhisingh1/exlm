@@ -1,10 +1,10 @@
-.tabs {
+.tab-section {
   background-color: var(--spectrum-gray-100);
   padding: 14px 21px 21px;
   border-radius: 7px;
   margin-bottom: 28px;
 }
-.tabs::before {
+.tab-section::before {
   content: "";
   display: block;
   width: 100%;
@@ -13,11 +13,11 @@
   position: relative;
   top: 56px;
 }
-.tabs .tab-list {
+.tab-section .tab-list {
   overflow-x: auto;
   white-space: nowrap;
 }
-.tabs .tab-list button.tab-title {
+.tab-section .tab-list button.tab-title {
   background: none;
   color: var(--spectrum-gray-700);
   padding: 0;
@@ -32,25 +32,25 @@
   border-radius: 0;
   position: relative;
 }
-.tabs .tab-list button.tab-title:not(:first-child) {
+.tab-section .tab-list button.tab-title:not(:first-child) {
   margin-left: 24px;
 }
-.tabs .tab-list button.tab-title[aria-selected=true] {
+.tab-section .tab-list button.tab-title[aria-selected=true] {
   color: var(--text-color);
   border-bottom: 2px solid var(--text-color);
   border-radius: 0;
 }
-.tabs .tab-content {
+.tab-section .tab-content {
   padding: 10.5px 0;
   color: var(--spectrum-gray-800);
   font-family: var(--body-font-family);
   font-size: var(--exlm-font-size-content);
   font-weight: 400;
 }
-.tabs .tab-content .tabpanel {
+.tab-section .tab-content .tabpanel {
   display: none;
   margin-bottom: 12px;
 }
-.tabs .tab-content .tabpanel.active {
+.tab-section .tab-content .tabpanel.active {
   display: block;
 }
