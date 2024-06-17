@@ -1,42 +1,81 @@
-.product-container {
-    display: flex;
-    gap: 20px;
+body.profile > main > .section:not(.profile-tab-section, .profile-rail-section) > .product-interests-wrapper {
+    border: none;
 }
 
-.product-title {
-    font-size: 1.5em;
-    margin: 0 0 10px;
-    color: #333333;
+.product-interests h1,
+.product-interests h2,
+.product-interests h3,
+.product-interests h4,
+.product-interests h5,
+.product-interests h6{
+    border-bottom: 1px solid #D5D5D5;
+    padding-bottom: 18px;
+    margin-bottom: 18px;
 }
 
-.product-subtitle {
-    color: #777777;
-    margin: 0 0 20px;
-}
-
-
-.experience-level {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 20px;
-    border: 1px solid #cccccc;
-    border-radius: 4px;
-}
-
-.checkbox {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.checkbox > input {
-    width: 14px;
+.product-interests > ul.interests-container {
     margin: 0;
-    border: 2px solid var(--spectrum-gray-600);
-    border-radius: 2px;
+    margin-top: 28px;
 }
-.checkbox > label {
-    font-size: 18px;
-    letter-spacing: 0px;
-    line-height: 22px;
+
+.product-interests > ul.interests-container ul {
+    margin-top: 10px;
+    margin-left: 40px;
+}
+
+.product-interests li {
+    list-style: none;
+    margin: 0;
+    margin-right: 10px;
+    color: var(--spectrum-gray-800);
+}
+
+.product-interests label.checkbox {
+    cursor: pointer;
+    font-size: var(--spectrum-font-size-200);
+    display: inline-flex;
+    justify-content: flex-start;
+    align-items: center;  
+}
+
+.product-interests label.checkbox input {
+    margin: 0;
+    margin-right: 10px;
+    width: auto;
+    accent-color: #0265DC;
+}
+
+.product-interests .subtext {
+    line-height: var(--spectrum-line-height-s);
+}
+
+@media (min-width: 600px) {
+    .product-interests .interests-container {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        max-height: 480px;
+    }   
+    .product-interests .subtext {
+        max-width: 150px;
+    }
+}
+
+@media (min-width: 900px) {
+    .product-interests .interests-container li {
+        margin-bottom: 8px;
+        margin-right: 20px;
+    }
+
+    .product-interests .interests-container {
+        max-height: 390px;
+    }   
+    .product-interests label.checkbox {
+        font-size: var(--spectrum-font-size-100);
+    }
+
+    .product-interests .subtext {
+        max-width: none;
+    }
 }

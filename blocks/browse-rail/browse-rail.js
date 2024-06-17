@@ -393,24 +393,5 @@ export default async function decorate(block) {
       await displayProductNav(block, currentPagePath, results);
     }
   }
-<<<<<<< HEAD
-
-  // Toggle functionality for products/sub-pages
-  const toggleElements = block.querySelectorAll('.js-toggle');
-  if (toggleElements) {
-    toggleElements.forEach((toggleElement) => {
-      const subMenu = toggleElement.parentElement.querySelector('ul');
-      toggleElement.classList.add('expanded');
-      toggleElement.addEventListener('click', (event) => {
-        event.preventDefault();
-        subMenu.style.display = subMenu.style.display === 'block' || subMenu.style.display === '' ? 'none' : 'block';
-        toggleElement.classList.toggle('collapsed', subMenu.style.display === 'none');
-        toggleElement.classList.toggle('expanded', subMenu.style.display === 'block');
-      });
-    });
-  }
-}
-=======
   handleToggleClick(block);
 }
->>>>>>> 0944f28e080ae7054711151b92cb203c68b3e287

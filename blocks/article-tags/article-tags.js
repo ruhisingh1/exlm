@@ -41,21 +41,20 @@ function decodeArticlePageMetaTags() {
   });
 
   const decodedFeatures = features
-  .map((feature) => {
-    const parts = feature.split('/');
-    if (parts.length > 1) {
-      const product = atob(parts[0]);
-      if (!decodedSolutions.includes(product)) {
-        decodedSolutions.push(product);
+    .map((feature) => {
+      const parts = feature.split('/');
+      if (parts.length > 1) {
+        const product = atob(parts[0]);
+        if (!decodedSolutions.includes(product)) {
+          decodedSolutions.push(product);
+        }
+        const featureTag = atob(parts[1]);
+        return `${featureTag}`;
       }
-      const featureTag = atob(parts[1]);
-      return `${featureTag}`;
-    }
-    decodedSolutions.push(atob(parts[0]));
-    return ''; // Return an empty string for cases where parts.length <= 1
-  })
-  .filter((feature) => feature !== '');
-
+      decodedSolutions.push(atob(parts[0]));
+      return '';
+    })
+    .filter((feature) => feature !== '');
 
   const decodedRoles = roles.map((role) => atob(role));
   const decodedLevels = experienceLevels.map((level) => atob(level));
@@ -75,10 +74,7 @@ function decodeArticlePageMetaTags() {
 }
 
 export default function decorate(block) {
-  if (
-    document.documentElement.classList.contains('adobe-ue-edit') ||
-    document.documentElement.classList.contains('adobe-ue-preview')
-  ) {
+  if (window.hlx.aemRoot) {
     decodeArticlePageMetaTags();
   }
   const coveosolutions = getMetadata('coveo-solution');

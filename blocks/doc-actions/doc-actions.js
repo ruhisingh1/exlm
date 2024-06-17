@@ -1,4 +1,4 @@
-import { loadCSS, loadBlocks, decorateIcons } from '../../scripts/lib-franklin.js';
+import { loadBlocks, decorateIcons } from '../../scripts/lib-franklin.js';
 import {
   createTag,
   isDocPage,
@@ -178,7 +178,7 @@ async function decorateLanguageToggle(block, placeholders) {
         langToggle.addEventListener('change', async (e) => {
           const { checked } = e.target;
           await toggleContent(checked, docContainer);
-          assetInteractionModel(null, `automatic translation ${e.target.checked ? 'on' : 'off'}`);
+          assetInteractionModel(null, `automatic translation ${e.target.checked ? 'off' : 'on'}`);
         });
         langToggle.parentElement.classList.add('listener');
       }
@@ -202,7 +202,6 @@ async function decorateBookmarkAndCopy(block, placeholders) {
 
 export default async function decorate(block) {
   if (isDocPage) {
-    loadCSS(`${window.hlx.codeBasePath}/scripts/toast/toast.css`);
     fetchLanguagePlaceholders().then((placeholders) => {
       decorateBookmarkMobileBlock(block, placeholders);
       decorateLanguageToggle(block, placeholders);

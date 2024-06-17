@@ -378,7 +378,6 @@ const buildNavItems = async (ul, level = 0) => {
     const addMobileLangSelector = async () => {
       const { getLanguagePath } = await languageModule;
       const languages = await decoratorState.languages.promise;
-      console.log(languages);
       // add language select (visible on mobile only)
       const navItem = ul.appendChild(
         htmlToElement(

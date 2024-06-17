@@ -301,7 +301,7 @@ function buildTabs(main) {
 function buildAutoBlocks(main) {
   try {
     buildSyntheticBlocks(main);
-   // buildTabs(main);
+    buildTabs(main);
     // if we are on a product browse page
     if (isBrowsePage()) {
       addBrowseBreadCrumb(main);

@@ -33,6 +33,21 @@ function restoreState(newBlock, state) {
   }
 }
 
+function setIdsforRTETitles(articleContentSection) {
+  // find all titles with no id in the article content section
+  articleContentSection
+    .querySelectorAll('h1:not([id]),h2:not([id],h3:not([id],h4:not([id],h5:not([id],h6:not([id]')
+    .forEach((title) => {
+      title.id = title.textContent
+        .toLowerCase()
+        .trim()
+        .replaceAll('[^a-z0-9-]', '-')
+        .replaceAll('-{2,}', '-')
+        .replaceAll('^-+', '')
+        .replaceAll('-+$', '');
+    });
+}
+
 // set the filter for an UE editable
 function setUEFilter(element, filter) {
   element.dataset.aueFilter = filter;
@@ -59,12 +74,8 @@ function updateUEInstrumentation() {
       setUEFilter(main, 'main-browse');
     }
     // update available blocks for default sections
-    main.querySelectorAll('.section:not(.browse-rail-section, .tab)').forEach((elem) => {
+    main.querySelectorAll('.section:not(.browse-rail-section)').forEach((elem) => {
       setUEFilter(elem, 'section-browse');
-    });
-    // update available blocks for default sections
-    main.querySelectorAll('.section.tab').forEach((elem) => {
-      setUEFilter(elem, 'tab');
     });
     return;
   }
@@ -77,17 +88,13 @@ function updateUEInstrumentation() {
     const articleContentSection = main.querySelector('.article-content-section');
     if (articleContentSection) {
       setUEFilter(articleContentSection, 'article-content-section');
-    }
-    // update available blocks for tab sections
-    const tabSection = main.querySelector('.tab');
-    if (tabSection) {
-      setUEFilter(tabSection, 'tab');
+      setIdsforRTETitles(articleContentSection);
     }
     return;
   }
 
-  // ----- if author bio page, identified by path segment
-  if (document.location.pathname.includes('/articles/authors/')) {
+  // ----- if author bio page, identified by theme
+  if (document.querySelector('body[class^=authors-bio-page]')) {
     // update available sections
     setUEFilter(main, 'empty');
     // update the only available default section
@@ -107,7 +114,7 @@ function updateUEInstrumentation() {
   if (document.querySelector('body[class^=profile]')) {
     // update available sections
     setUEFilter(main, 'main-profile');
-    main.querySelectorAll('.section:not(.product-interests-section)').forEach((elem) => {
+    main.querySelectorAll('.section').forEach((elem) => {
       setUEFilter(elem, 'profile-section');
     });
   }
@@ -116,11 +123,12 @@ function updateUEInstrumentation() {
   if (document.querySelector('body[class^=signup]')) {
     // update available sections
     setUEFilter(main, 'main-signup');
-    main.querySelectorAll('.section:not(.product-interests-section)').forEach((elem) => {
+    main.querySelectorAll('.section').forEach((elem) => {
       setUEFilter(elem, 'sign-up-flow-section');
     });
   }
 }
+
 /**
  * Event listener for aue:content-patch, edit of a component
  */
