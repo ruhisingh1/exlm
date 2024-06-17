@@ -1,88 +1,94 @@
-/**
- * @typedef TabInfo
- * @property {string} name
- * @property {HTMLElement} $tab
- * @property {HTMLElement} $content
- */
+import { createTag } from '../../scripts/scripts.js';
 
-/**
- * @param {HTMLElement} $block
- * @return {TabInfo[]}
- */
-export function createTabs($block) {
-  const $ul = $block.querySelector('ul');
-  if (!$ul) {
-    return null;
-  }
-  /** @type TabInfo[] */
-  const tabs = [...$ul.querySelectorAll('li')].map(($li) => {
-    const title = $li.textContent;
-    const name = title.toLowerCase().trim();
-    return {
-      title,
-      name,
-      $tab: $li,
-    };
-  });
-  // move $ul below section div
-  $block.replaceChildren($ul);
+function changeTabs(e) {
+  const { target } = e;
+  const tabMenu = target.parentNode;
+  const tabContent = tabMenu.nextElementSibling;
 
-  // search referenced sections and move them inside the tab-container
-  const $sections = document.querySelectorAll('[data-tab]');
+  tabMenu.querySelectorAll('[aria-selected="true"]').forEach((t) => t.setAttribute('aria-selected', false));
 
-  // move the tab's sections before the tab riders.
-  [...$sections].forEach(($tabContent) => {
-    const name = $tabContent.dataset.tab.toLowerCase().trim();
-    const tab = tabs.find((t) => t.name === name);
-    if (tab) {
-      $tabContent.classList.add('tab-item', 'hidden');
-      tab.$content = $tabContent;
-    }
-  });
-  return tabs;
+  target.setAttribute('aria-selected', true);
+
+  tabContent.querySelectorAll('[role="tabpanel"]').forEach((p) => p.classList.remove('active'));
+
+  tabContent.parentNode.querySelector(`#${target.getAttribute('aria-controls')}`).classList.add('active');
 }
 
-/**
- * @param {HTMLElement} $block
- */
-export default function decorate($block) {
-  const tabs = createTabs($block);
+function initTabs(block) {
+  const tabs = block.querySelectorAll('[role="tab"]');
 
-  tabs.forEach((tab, index) => {
-    const $button = document.createElement('button');
-    const { $tab, title, name } = tab;
-    $button.textContent = title;
-    $button.setAttribute('data-tab-index', index);
-    $tab.replaceChildren($button);
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', changeTabs);
+  });
+}
 
-    tab.$content.setAttribute('data-tab-index', index);
+let initCount = 0;
+export default function decorate(block) {
+  const tabList = createTag('div', { class: 'tab-list', role: 'tablist' });
+  const tabContent = createTag('div', { class: 'tab-content' });
 
-    $button.addEventListener('click', () => {
-      const $activeButton = $block.querySelector('button.active');
-      const blockPosition = $block.getBoundingClientRect().top;
-      const offsetPosition = blockPosition + window.scrollY - 80;
+  const tabNames = [];
+  const tabContents = [];
+  // list of Universal Editor instrumented 'tab content' divs
+  const tabInstrumentedDiv = [];
 
-      if ($activeButton !== $tab) {
-        $activeButton.classList.remove('active');
-        $button.classList.add('active');
+  [...block.children].forEach((child) => {
+    // keep the div that has been instrumented for UE
+    tabInstrumentedDiv.push(child);
 
-        tabs.forEach((t) => {
-          if (name === t.name) {
-            t.$content.classList.remove('hidden');
-          } else {
-            t.$content.classList.add('hidden');
-          }
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth',
-          });
-        });
+    [...child.children].forEach((el, index) => {
+      if (index === 0) {
+        tabNames.push(el.textContent.trim());
+      } else {
+        tabContents.push(el.childNodes);
       }
     });
-
-    if (index === 0) {
-      $button.classList.add('active');
-      tab.$content.classList.remove('hidden');
-    }
   });
+
+  tabNames.forEach((name, i) => {
+    const tabBtnAttributes = {
+      role: 'tab',
+      class: 'tab-title',
+      id: `tab-${initCount}-${i}`,
+      tabindex: i > 0 ? '0' : '-1',
+      'aria-selected': i === 0 ? 'true' : 'false',
+      'aria-controls': `tab-panel-${initCount}-${i}`,
+      'aria-label': name,
+      'data-tab-id': i,
+    };
+
+    const tabNameDiv = createTag('button', tabBtnAttributes);
+    tabNameDiv.textContent = name;
+    tabList.appendChild(tabNameDiv);
+  });
+
+  tabContents.forEach((content, i) => {
+    const tabContentAttributes = {
+      id: `tab-panel-${initCount}-${i}`,
+      role: 'tabpanel',
+      class: 'tabpanel',
+      tabindex: '0',
+      'aria-labelledby': `tab-${initCount}-${i}`,
+    };
+
+    // get the instrumented div
+    const tabContentDiv = tabInstrumentedDiv[i];
+    // add all additional attributes
+    Object.entries(tabContentAttributes).forEach(([key, val]) => {
+      tabContentDiv.setAttribute(key, val);
+    });
+
+    // default first tab is active
+    if (i === 0) tabContentDiv.classList.add('active');
+    tabContentDiv.replaceChildren(...Array.from(content));
+    tabContent.appendChild(tabContentDiv);
+  });
+
+  // Replace the existing content with the new tab list and tab content
+  block.innerHTML = ''; // Clear the existing content
+  block.appendChild(tabList);
+  block.appendChild(tabContent);
+
+  initTabs(block);
+  initCount += 1;
 }
