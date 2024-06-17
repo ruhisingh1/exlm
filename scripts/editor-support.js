@@ -90,9 +90,12 @@ function updateUEInstrumentation() {
       setUEFilter(articleContentSection, 'article-content-section');
       setIdsforRTETitles(articleContentSection);
     }
-    const tabSection = main.querySelector('.tab-section');
-    if (tabSection) {
-      setUEFilter(tabSection, 'tab-section');
+    // update available blocks for tab sections
+    const tabSections = main.querySelectorAll('.tab-section');
+    if (tabSections) {
+      tabSections.forEach((elem) => {
+        setUEFilter(elem, 'tab-section');
+      });
     }
     return;
   }
