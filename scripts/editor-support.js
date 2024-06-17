@@ -74,7 +74,7 @@ function updateUEInstrumentation() {
       setUEFilter(main, 'main-browse');
     }
     // update available blocks for default sections
-    main.querySelectorAll('.section:not(.browse-rail-section)').forEach((elem) => {
+    main.querySelectorAll('.section:not(.browse-rail-section, .tab-section)').forEach((elem) => {
       setUEFilter(elem, 'section-browse');
     });
     return;
@@ -89,6 +89,10 @@ function updateUEInstrumentation() {
     if (articleContentSection) {
       setUEFilter(articleContentSection, 'article-content-section');
       setIdsforRTETitles(articleContentSection);
+    }
+    const tabSection = main.querySelector('.tab-section');
+    if (tabSection) {
+      setUEFilter(tabSection, 'tab-section');
     }
     return;
   }
