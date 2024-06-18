@@ -1215,9 +1215,9 @@ async function loadPage() {
     loadDefaultModule(`${window.hlx.codeBasePath}/scripts/prev-next-btn.js`);
   }
 }
-// if (window.hlx.aemRoot) {
+ if (window.hlx.aemRoot || window.location.href.includes('.html')) {
   decodeArticlePageMetaTags();
-// }
+ }
 // load the page unless DO_NOT_LOAD_PAGE is set - used for existing EXLM pages POC
 if (!window.hlx.DO_NOT_LOAD_PAGE) {
   if (isProfilePage()) {
