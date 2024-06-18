@@ -266,32 +266,15 @@ function addProfileTab(main) {
   main.prepend(profileTabSection);
 }
 
-function buildTabs(main) {
-  const tabs = [...main.querySelectorAll(':scope > div')]
-    .map((section) => {
-      // section metadata not yet parsed
-      const sectionMeta = section.querySelector('div.section-metadata');
-      if (sectionMeta) {
-        const meta = readBlockConfig(sectionMeta);
-        return [section, meta.tab];
-      }
-      return null;
-    })
-    .filter((el) => !!el);
-  if (tabs.length) {
-    const section = document.createElement('div');
-    section.className = 'section';
-    const ul = document.createElement('ul');
-    ul.append(...tabs
-      .map(([, tab]) => {
-        const li = document.createElement('li');
-        li.innerText = tab;
-        return li;
-      }));
-    const tabsBlock = buildBlock('tab-section', [[ul]]);
-    section.append(tabsBlock);
-    tabs[0][0].insertAdjacentElement('beforebegin', section);
-  }
+/**
+ * Tabbed layout for Tab section
+ * @param {HTMLElement} main 
+ */
+function addTabSection(main) {
+  const tabSection = document.createElement('div');
+  tabSection.classList.add('tab-section');
+  tabSection.append(buildBlock('tab', []));
+  main.prepend(tabSection);
 }
 
 /**
@@ -301,7 +284,7 @@ function buildTabs(main) {
 function buildAutoBlocks(main) {
   try {
     buildSyntheticBlocks(main);
-   // buildTabs(main);
+    addTabSection(main);
     // if we are on a product browse page
     if (isBrowsePage()) {
       addBrowseBreadCrumb(main);
