@@ -1128,6 +1128,78 @@ export function createPlaceholderSpan(placeholderKey, fallbackText, onResolved, 
   return span;
 }
 
+function formatPageMetaTags(inputString) {
+  return inputString
+    .replace(/exl:[^/]*\/*/g, '')
+    .split(',')
+    .map((part) => part.trim());
+}
+
+function decodeArticlePageMetaTags() {
+  const solutionMeta = document.querySelector(`meta[name="coveo-solution"]`);
+  const roleMeta = document.querySelector(`meta[name="role"]`);
+  const levelMeta = document.querySelector(`meta[name="level"]`);
+  const featureMeta = document.querySelector(`meta[name="feature"]`);
+
+  const solutions = solutionMeta ? formatPageMetaTags(solutionMeta.content) : [];
+  const features = featureMeta ? formatPageMetaTags(featureMeta.content) : [];
+  const roles = roleMeta ? formatPageMetaTags(roleMeta.content) : [];
+  const experienceLevels = levelMeta ? formatPageMetaTags(levelMeta.content) : [];
+  let decodedSolutions = [];
+  decodedSolutions = solutions.map((solution) => {
+    // In case of sub-solutions. E.g. exl:solution/campaign/standard
+    const parts = solution.split('/');
+    const decodedParts = parts.map((part) => atob(part));
+
+    // If it's a sub-solution, create a version meta tag
+    if (parts.length > 1) {
+      const versionMeta = document.createElement('meta');
+      versionMeta.name = 'version';
+      versionMeta.content = atob(parts.slice(1).join('/'));
+      document.head.appendChild(versionMeta);
+
+      // If there are multiple parts, join them with ";"
+      const product = atob(parts[0]);
+      const version = atob(parts[1]);
+      return `${product}|${product} ${version}`;
+    }
+
+    return decodedParts[0];
+  });
+
+  const decodedFeatures = features
+    .map((feature) => {
+      const parts = feature.split('/');
+      if (parts.length > 1) {
+        const product = atob(parts[0]);
+        if (!decodedSolutions.includes(product)) {
+          decodedSolutions.push(product);
+        }
+        const featureTag = atob(parts[1]);
+        return `${featureTag}`;
+      }
+      decodedSolutions.push(atob(parts[0]));
+      return '';
+    })
+    .filter((feature) => feature !== '');
+
+  const decodedRoles = roles.map((role) => atob(role));
+  const decodedLevels = experienceLevels.map((level) => atob(level));
+
+  if (solutionMeta) {
+    solutionMeta.content = decodedSolutions.join(';');
+  }
+  if (featureMeta) {
+    featureMeta.content = decodedFeatures.join(',');
+  }
+  if (roleMeta) {
+    roleMeta.content = decodedRoles.join(',');
+  }
+  if (levelMeta) {
+    levelMeta.content = decodedLevels.join(',');
+  }
+}
+
 async function loadPage() {
   // THIS IS TEMPORARY FOR SUMMIT.
   if (handleHomePageHashes()) return;
@@ -1143,7 +1215,9 @@ async function loadPage() {
     loadDefaultModule(`${window.hlx.codeBasePath}/scripts/prev-next-btn.js`);
   }
 }
-
+if (window.hlx.aemRoot) {
+  decodeArticlePageMetaTags();
+}
 // load the page unless DO_NOT_LOAD_PAGE is set - used for existing EXLM pages POC
 if (!window.hlx.DO_NOT_LOAD_PAGE) {
   if (isProfilePage()) {
