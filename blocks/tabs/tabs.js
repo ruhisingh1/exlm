@@ -24,6 +24,8 @@ function initTabs(block) {
 
 let initCount = 0;
 export default function decorate(block) {
+  console.log('1');
+  console.log(block);
   const tabList = createTag('div', { class: 'tab-list', role: 'tablist' });
   const tabContent = createTag('div', { class: 'tab-content' });
 
@@ -31,7 +33,7 @@ export default function decorate(block) {
   const tabContents = [];
   // list of Universal Editor instrumented 'tab content' divs
   const tabInstrumentedDiv = [];
-
+  console.log(...block.children);
   [...block.children].forEach((child) => {
     // keep the div that has been instrumented for UE
     tabInstrumentedDiv.push(child);

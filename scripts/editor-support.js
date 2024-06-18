@@ -74,15 +74,15 @@ function updateUEInstrumentation() {
       setUEFilter(main, 'main-browse');
     }
     // Update available blocks for tab sections
-    const tabSections = main.querySelectorAll('div[data-aue-model^="tab-section"]');
+    const tabSections = main.querySelectorAll('div[data-aue-model^="tabs"]');
     if (tabSections) {
       tabSections.forEach((elem) => {
-        setUEFilter(elem, 'tab-section');
+        setUEFilter(elem, 'tabs');
       });
     }
 
     // Update available blocks for default sections excluding browse-rail-section and tab-section
-    main.querySelectorAll('.section:not(.browse-rail-section):not([data-aue-model^="tab-section"])').forEach((elem) => {
+    main.querySelectorAll('.section:not(.browse-rail-section):not([data-aue-model^="tabs"])').forEach((elem) => {
       setUEFilter(elem, 'section-browse');
     });
 
@@ -100,10 +100,10 @@ function updateUEInstrumentation() {
       setIdsforRTETitles(articleContentSection);
     }
     // Update available blocks for tab sections
-    const tabSections = main.querySelectorAll('div[data-aue-model^="tab-section"]');
+    const tabSections = main.querySelectorAll('div[data-aue-model^="tabs"]');
     if (tabSections) {
       tabSections.forEach((elem) => {
-        setUEFilter(elem, 'tab-section');
+        setUEFilter(elem, 'tabs');
       });
     }
     return;

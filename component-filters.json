@@ -5,15 +5,15 @@
   },
   {
     "id": "main",
-    "components": ["section", "tab-section"]
+    "components": ["section", "tabs"]
   },
   {
     "id": "main-browse",
-    "components": ["section", "browse-rail-section", "tab-section"]
+    "components": ["section", "browse-rail-section", "tabs"]
   },
   {
     "id": "main-article",
-    "components": ["article-content-section", "article-header-section", "section", "tab-section"]
+    "components": ["article-content-section", "article-header-section", "section", "tabs"]
   },
   {
     "id": "main-profile",
@@ -47,7 +47,6 @@
       "events-cards",
       "adls-cards",
       "tabbed-cards",
-      "tabs",
       "recommended-courses",
       "block-quote",
       "callout",
@@ -58,7 +57,7 @@
     ]
   },
   {
-    "id": "tab-section",
+    "id": "tabs",
     "components": [
       "text",
       "image",
@@ -99,7 +98,6 @@
       "events-cards",
       "adls-cards",
       "tabbed-cards",
-      "tabs",
       "recommended-courses",
       "block-quote",
       "callout"
@@ -220,9 +218,5 @@
   {
     "id": "authorable-card",
     "components": ["authored-card"]
-  },
-  {
-    "id": "tab",
-    "components": ["tab"]
   }
 ]
