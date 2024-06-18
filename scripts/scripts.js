@@ -272,7 +272,7 @@ function addProfileTab(main) {
  */
 function addTabSection(main) {
   const tabSection = document.createElement('div');
-  tabSection.classList.add('tabs-section');
+  tabSection.classList.add('tabs');
   tabSection.append(buildBlock('tabs', []));
   main.prepend(tabSection);
 }
