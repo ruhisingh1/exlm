@@ -1135,7 +1135,7 @@ function formatPageMetaTags(inputString) {
     .map((part) => part.trim());
 }
 
-function decodeArticlePageMetaTags() {
+function decodeAemPageMetaTags() {
   const solutionMeta = document.querySelector(`meta[name="coveo-solution"]`);
   const roleMeta = document.querySelector(`meta[name="role"]`);
   const levelMeta = document.querySelector(`meta[name="level"]`);
@@ -1216,7 +1216,7 @@ async function loadPage() {
   }
 }
  if (window.hlx.aemRoot || window.location.href.includes('.html')) {
-  decodeArticlePageMetaTags();
+  decodeAemPageMetaTags();
  }
 // load the page unless DO_NOT_LOAD_PAGE is set - used for existing EXLM pages POC
 if (!window.hlx.DO_NOT_LOAD_PAGE) {
