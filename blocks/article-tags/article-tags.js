@@ -74,9 +74,9 @@ function decodeArticlePageMetaTags() {
 }
 
 export default function decorate(block) {
-  if (window.hlx.aemRoot) {
-    decodeArticlePageMetaTags();
-  }
+  // if (window.hlx.aemRoot) {
+  //   decodeArticlePageMetaTags();
+  // }
   const coveosolutions = getMetadata('coveo-solution');
   const solutions = [
     ...new Set(
