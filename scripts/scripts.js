@@ -271,10 +271,13 @@ function addProfileTab(main) {
  * @param {HTMLElement} main 
  */
 function addTabSection(main) {
+  const tabs = [...main.querySelectorAll(':scope > div.tab-section')];
+  if(tabs.length){
   const tabSection = document.createElement('div');
   tabSection.classList.add('tab-section');
   tabSection.append(buildBlock('tabs', []));
   main.prepend(tabSection);
+  }
 }
 
 /**
