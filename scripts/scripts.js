@@ -271,13 +271,10 @@ function addProfileTab(main) {
  * @param {HTMLElement} main 
  */
 function addTabSection(main) {
-  const tabs = [...main.querySelectorAll(':scope > div.tab-section')];
-  if(tabs.length){
   const tabSection = document.createElement('div');
   tabSection.classList.add('tab-section');
   tabSection.append(buildBlock('tabs', []));
   main.prepend(tabSection);
-  }
 }
 
 /**
@@ -287,7 +284,11 @@ function addTabSection(main) {
 function buildAutoBlocks(main) {
   try {
     buildSyntheticBlocks(main);
+    const tabs = document.querySelectorAll(`.tab-section`);
+  console.log(tabs.length);
+  // if(tabs.length){
     addTabSection(main);
+ // }
     // if we are on a product browse page
     if (isBrowsePage()) {
       addBrowseBreadCrumb(main);
