@@ -24,27 +24,21 @@ function initTabs(block) {
 
 let initCount = 0;
 export default function decorate(block) {
-  console.log('1');
-  console.log(block);
   const tabList = createTag('div', { class: 'tab-list', role: 'tablist' });
   const tabContent = createTag('div', { class: 'tab-content' });
 
   const tabNames = [];
   const tabContents = [];
-  // list of Universal Editor instrumented 'tab content' divs
   const tabInstrumentedDiv = [];
-  console.log(...block.children);
-  [...block.children].forEach((child) => {
-    // keep the div that has been instrumented for UE
-    tabInstrumentedDiv.push(child);
 
-    [...child.children].forEach((el, index) => {
-      if (index === 0) {
-        tabNames.push(el.textContent.trim());
-      } else {
-        tabContents.push(el.childNodes);
-      }
-    });
+  [...block.children].forEach((child) => {
+    tabInstrumentedDiv.push(child);
+    const childNodes = Array.from(child.children);
+
+    if (childNodes.length > 0) {
+      tabNames.push(childNodes[0].textContent.trim());
+      tabContents.push(childNodes.slice(1));
+    }
   });
 
   tabNames.forEach((name, i) => {
@@ -64,7 +58,7 @@ export default function decorate(block) {
     tabList.appendChild(tabNameDiv);
   });
 
-  tabContents.forEach((content, i) => {
+  tabContents.forEach((contentNodes, i) => {
     const tabContentAttributes = {
       id: `tab-panel-${initCount}-${i}`,
       role: 'tabpanel',
@@ -73,21 +67,17 @@ export default function decorate(block) {
       'aria-labelledby': `tab-${initCount}-${i}`,
     };
 
-    // get the instrumented div
     const tabContentDiv = tabInstrumentedDiv[i];
-    // add all additional attributes
     Object.entries(tabContentAttributes).forEach(([key, val]) => {
       tabContentDiv.setAttribute(key, val);
     });
 
-    // default first tab is active
     if (i === 0) tabContentDiv.classList.add('active');
-    tabContentDiv.replaceChildren(...Array.from(content));
+    tabContentDiv.replaceChildren(...contentNodes);
     tabContent.appendChild(tabContentDiv);
   });
 
-  // Replace the existing content with the new tab list and tab content
-  block.innerHTML = ''; // Clear the existing content
+  block.innerHTML = '';
   block.appendChild(tabList);
   block.appendChild(tabContent);
 
