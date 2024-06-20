@@ -80,17 +80,22 @@
           }
         },
         {
-          "title": "Tab section",
+          "title": "Tab Section",
           "id": "tab-section",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/section/v1/section",
                 "template": {
-                  "name": "Tab section",
+                  "name": "Tab Section",
                   "model": "tab-section",
                   "filter": "tab-section",
-                  "style": "tab-section"
+                  "style": "tab-section",
+                  "title": {
+                    "sling:resourceType": "core/franklin/components/title/v1/title",
+                    "name": "Title",
+                    "model": "title"
+                  }
                 }
               }
             }
