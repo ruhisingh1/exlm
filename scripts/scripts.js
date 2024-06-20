@@ -268,13 +268,13 @@ function addProfileTab(main) {
 
 /**
  * Tabbed layout for Tab section
- * @param {HTMLElement} main 
+ * @param {HTMLElement} main
  */
-function addTabSection(main) {
+function buildTabSection(main) {
   const tabSection = document.createElement('div');
-  tabSection.classList.add('tab-section');
+  main.append(tabSection);
+  tabSection.classList.add('tabs-section');
   tabSection.append(buildBlock('tabs', []));
-  main.prepend(tabSection);
 }
 
 /**
@@ -284,18 +284,16 @@ function addTabSection(main) {
 function buildAutoBlocks(main) {
   try {
     buildSyntheticBlocks(main);
-    const tabs = document.querySelectorAll(`.tab-section`);
-  console.log(tabs.length);
-  // if(tabs.length){
-    addTabSection(main);
- // }
+    buildTabSection(main);
     // if we are on a product browse page
     if (isBrowsePage()) {
       addBrowseBreadCrumb(main);
       addBrowseRail(main);
+      buildTabSection(main);
     }
     if (isArticleLandingPage()) {
       addArticleLandingRail(main);
+      buildTabSection(main);
     }
     if (isProfilePage()) {
       addProfileTab(main);
@@ -1202,9 +1200,9 @@ async function loadPage() {
     loadDefaultModule(`${window.hlx.codeBasePath}/scripts/prev-next-btn.js`);
   }
 }
- if (window.hlx.aemRoot || window.location.href.includes('.html')) {
+if (window.hlx.aemRoot || window.location.href.includes('.html')) {
   decodeAemPageMetaTags();
- }
+}
 // load the page unless DO_NOT_LOAD_PAGE is set - used for existing EXLM pages POC
 if (!window.hlx.DO_NOT_LOAD_PAGE) {
   if (isProfilePage()) {
