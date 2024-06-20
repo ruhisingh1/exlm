@@ -288,15 +288,17 @@ function buildAutoBlocks(main) {
     if (isBrowsePage()) {
       addBrowseBreadCrumb(main);
       addBrowseRail(main);
-      buildTabSection(main);
     }
     if (isArticleLandingPage()) {
       addArticleLandingRail(main);
-      buildTabSection(main);
     }
     if (isProfilePage()) {
       addProfileTab(main);
       addProfileRail(main);
+    }
+    // eslint-disable-next-line no-use-before-define
+    if(!isProfilePage() && !isDocPage() && !isDocArticlePage()){
+      buildTabSection(main);
     }
   } catch (error) {
     // eslint-disable-next-line no-console
