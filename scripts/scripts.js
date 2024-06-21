@@ -300,11 +300,11 @@ async function buildTabSection(main) {
         !sections[i + 1].querySelector('.section-metadata > div > div:nth-child(2)').textContent.includes('tab-section')
       ) {
         tabFound = false;
-        Array.from(sections[i + 1].children).forEach((child) => {
-          if (!child.classList.contains('section-metadata')) {
-            tabContainer.append(child);
-          }
-        });
+        // Array.from(sections[i + 1].children).forEach((child) => {
+        //   if (!child.classList.contains('section-metadata')) {
+        //     tabContainer.append(child);
+        //   }
+        // });
         // sections[i + 1].classList.add('delete-this-section');
       }
       section.classList.add(`tab-index-${tabIndex}`);
