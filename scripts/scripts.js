@@ -305,14 +305,14 @@ async function buildTabSection(main) {
             tabContainer.append(child);
           }
         });
-        sections[i + 1].classList.add('delete-this-section');
+        // sections[i + 1].classList.add('delete-this-section');
       }
       section.classList.add(`tab-index-${tabIndex}`);
     }
   });
-  main.querySelectorAll('.delete-this-section').forEach((section) => {
-    section.remove();
-  });
+  // main.querySelectorAll('.delete-this-section').forEach((section) => {
+  //   section.remove();
+  // });
 }
 
 /**
