@@ -207,7 +207,9 @@ export default async function ArticleMarquee(block) {
 
     if (Array.isArray(links) && links.length > 0) {
       // Filter out null or empty links and map to fetchAuthorBio
-      const authorPromises = links.filter((link) => link).map((link) => fetchAuthorBio(link));
+      const authorPromises = Array.from(new Set(
+        links.filter((link) => link)
+    )).map((link) => fetchAuthorBio(link));
       const authorsInfo = await Promise.all(authorPromises);
       const authorInfoContainer = block.querySelector('.author-details');
       let isExternal = false;
