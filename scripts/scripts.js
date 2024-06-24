@@ -300,19 +300,19 @@ async function buildTabSection(main) {
         !sections[i + 1].querySelector('.section-metadata > div > div:nth-child(2)').textContent.includes('tab-section')
       ) {
         tabFound = false;
-        // Array.from(sections[i + 1].children).forEach((child) => {
-        //   if (!child.classList.contains('section-metadata')) {
-        //     tabContainer.append(child);
-        //   }
-        // });
-        // sections[i + 1].classList.add('delete-this-section');
+        Array.from(sections[i + 1].children).forEach((child) => {
+          if (!child.classList.contains('section-metadata')) {
+            tabContainer.append(child);
+          }
+        });
+        sections[i + 1].classList.add('delete-this-section');
       }
       section.classList.add(`tab-index-${tabIndex}`);
     }
   });
-  // main.querySelectorAll('.delete-this-section').forEach((section) => {
-  //   section.remove();
-  // });
+  main.querySelectorAll('.delete-this-section').forEach((section) => {
+    section.remove();
+  });
 }
 
 /**
@@ -323,7 +323,15 @@ function buildAutoBlocks(main) {
   try {
     buildSyntheticBlocks(main);
     // eslint-disable-next-line no-use-before-define
-    if (!isProfilePage() && !isDocPage() && !isDocArticlePage() && !isSignUpPage()) {
+    if (
+      !isProfilePage() &&
+      // eslint-disable-next-line no-use-before-define
+      !isDocPage() &&
+      // eslint-disable-next-line no-use-before-define
+      !isDocArticlePage() &&
+      !isSignUpPage() &&
+      !window.location.href.includes('.html')
+    ) {
       buildTabSection(main);
     }
     // if we are on a product browse page
