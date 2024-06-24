@@ -6,6 +6,7 @@ import {
   decorateSections,
   loadBlock,
   loadBlocks,
+  buildBlock,
 } from './lib-franklin.js';
 import { decorateRichtext } from './editor-support-rte.js';
 import { decorateMain, loadIms } from './scripts.js';
@@ -78,6 +79,7 @@ function updateUEInstrumentation() {
     if (tabSections) {
       tabSections.forEach((elem) => {
         setUEFilter(elem, 'tab-section');
+        buildBlock('tabs', []);
       });
     }
 
@@ -104,6 +106,7 @@ function updateUEInstrumentation() {
     if (tabSections) {
       tabSections.forEach((elem) => {
         setUEFilter(elem, 'tab-section');
+        buildBlock('tabs', []);
       });
     }
     return;
