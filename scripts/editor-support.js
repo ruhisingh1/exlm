@@ -79,8 +79,9 @@ function updateUEInstrumentation() {
     if (tabSections) {
       tabSections.forEach((elem) => {
         setUEFilter(elem, 'tab-section');
-        buildBlock('tabs', []);
+        
       });
+      buildBlock('tabs', []);
     }
 
     // Update available blocks for default sections excluding browse-rail-section and tab-section
@@ -106,8 +107,9 @@ function updateUEInstrumentation() {
     if (tabSections) {
       tabSections.forEach((elem) => {
         setUEFilter(elem, 'tab-section');
-        buildBlock('tabs', []);
+        
       });
+      buildBlock('tabs', []);
     }
     return;
   }
