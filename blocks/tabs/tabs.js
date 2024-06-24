@@ -26,7 +26,7 @@ function initTabs(block) {
 let initCount = 0;
 export default async function decorate(block) {
   const tabIndex = block?.dataset?.tabIndex;
-  if (tabIndex && !window.hlx.aemRoot) {
+  if (tabIndex) {
     block.textContent = '';
     document.querySelectorAll(`div.tab-section`).forEach((tabSection) => {
       const tabTitle = tabSection?.dataset.title;
@@ -40,7 +40,7 @@ export default async function decorate(block) {
         </div>
       </div>
       `;
-      tabSection.remove();
+      if(!window.hlx.aemRoot) tabSection.remove();
     });
     await loadBlocks(block);
   }
