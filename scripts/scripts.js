@@ -320,7 +320,7 @@ async function buildTabSection(main) {
         tabIndex += 1;
         tabFound = true;
         const tabs = buildBlock('tabs', []);
-        moveInstrumentation(section, tabs);
+        // moveInstrumentation(section, tabs);
         tabs.dataset.tabIndex = tabIndex;
         tabContainer = sections[i - 1];
         tabContainer.append(tabs);
