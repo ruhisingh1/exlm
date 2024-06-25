@@ -38,6 +38,7 @@ export default async function decorate(block) {
       container.append(tabSection);
       block.append(container);
     });
+    document.querySelector(`div.tab-section`).replaceWith(block);
     await loadBlocks(block);
   } 
   const tabList = createTag('div', { class: 'tab-list', role: 'tablist' });
