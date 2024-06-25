@@ -34,12 +34,12 @@ export default async function decorate(block) {
       moveInstrumentation(tabSection, container);
       const titleContainer = document.createElement('div');
       titleContainer.textContent = tabTitle.trim();
-      container.append(titleContainer)
+      container.append(titleContainer);
       container.append(tabSection);
       block.append(container);
     });
     await loadBlocks(block);
-  } else {
+  } 
   const tabList = createTag('div', { class: 'tab-list', role: 'tablist' });
   const tabContent = createTag('div', { class: 'tab-content' });
 
@@ -107,5 +107,5 @@ export default async function decorate(block) {
 
   initTabs(block);
   initCount += 1;
-  }
+  
 }
