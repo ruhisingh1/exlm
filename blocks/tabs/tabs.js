@@ -31,10 +31,10 @@ export default async function decorate(block) {
     document.querySelectorAll(`div.tab-section`).forEach((tabSection) => {
       const tabTitle = tabSection?.dataset.title;
       const container = document.createElement('div');
-      moveInstrumentation(tabSection, container);
+      moveInstrumentation(tabSection, container)
       const titleContainer = document.createElement('div');
       titleContainer.textContent = tabTitle.trim();
-      container.append(titleContainer);
+      container.append(titleContainer)
       container.append(tabSection);
       block.append(container);
     });
@@ -107,5 +107,4 @@ export default async function decorate(block) {
 
   initTabs(block);
   initCount += 1;
-  
 }
