@@ -7,6 +7,7 @@ import {
   loadBlock,
   loadBlocks,
   buildBlock,
+  buildTabSection,
 } from './lib-franklin.js';
 import { decorateRichtext } from './editor-support-rte.js';
 import { decorateMain, loadIms } from './scripts.js';
@@ -109,7 +110,7 @@ function updateUEInstrumentation() {
         setUEFilter(elem, 'tab-section');
         
       });
-      buildBlock('tabs', []);
+      buildTabSection(main);
     }
     return;
   }
