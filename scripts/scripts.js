@@ -59,7 +59,6 @@ export function moveInstrumentation(from, to) {
   );
 }
 
-
 // eslint-disable-next-line
 export function debounce(id = '', fn = () => void 0, ms = 250) {
   if (id.length > 0) {
@@ -311,6 +310,30 @@ function addProfileTab(main) {
 }
 
 /**
+ * Add a mini TOC to the article page.
+ * @param {HTMLElement} main
+ */
+function addMiniToc(main) {
+  if (
+    document.querySelectorAll('.mini-toc').forEach((toc) => {
+      toc.remove();
+    })
+  );
+  const tocSection = document.createElement('div');
+  tocSection.classList.add('mini-toc-section');
+  tocSection.append(buildBlock('mini-toc', []));
+  const contentContainer = document.createElement('div');
+  contentContainer.classList.add('content-container');
+  if (document.querySelector('.article-marquee')) {
+    const articleMarquee = document.querySelector('.article-marquee');
+    articleMarquee.parentNode.insertAdjacentElement('afterend', tocSection);
+  } else {
+    contentContainer.append(...main.children);
+    main.prepend(tocSection);
+  }
+}
+
+/**
  * Tabbed layout for Tab section
  * @param {HTMLElement} main
  */
@@ -327,22 +350,19 @@ async function buildTabSection(main) {
         tabFound = true;
         const tabs = buildBlock('tabs', []);
         tabs.dataset.tabIndex = tabIndex;
-        tabContainer = sections[i - 1];
+        tabContainer = document.createElement('div');
+        tabContainer.classList.add('section');
+        tabContainer.classList.add('article-content-section');
         tabContainer.append(tabs);
+        main.insertBefore(tabContainer, section);
       }
       if (
         tabFound &&
-        !sections[i + 1].querySelector('.section-metadata > div > div:nth-child(2)').textContent.includes('tab-section')
+        !sections[i + 1]
+          ?.querySelector('.section-metadata > div > div:nth-child(2)')
+          ?.textContent.includes('tab-section')
       ) {
         tabFound = false;
-        if(!window.location.href.includes('.html')) {
-          Array.from(sections[i + 1].children).forEach((child) => {
-            if (!child.classList.contains('section-metadata')) {
-              tabContainer.append(child);
-            }
-          });
-          sections[i + 1].classList.add('delete-this-section');
-        }
       }
       section.classList.add(`tab-index-${tabIndex}`);
     }
@@ -359,7 +379,6 @@ async function buildTabSection(main) {
 function buildAutoBlocks(main) {
   try {
     buildSyntheticBlocks(main);
-    // eslint-disable-next-line no-use-before-define
     if (
       !isProfilePage() &&
       // eslint-disable-next-line no-use-before-define
@@ -377,6 +396,10 @@ function buildAutoBlocks(main) {
     }
     if (isArticleLandingPage()) {
       addArticleLandingRail(main);
+    }
+    // eslint-disable-next-line no-use-before-define
+    if (isArticlePage()) {
+      addMiniToc(main);
     }
     if (isProfilePage()) {
       addProfileTab(main);
@@ -733,8 +756,20 @@ export function getConfig() {
       hlxLive: 'main--exlm-prod--adobe-experience-league.hlx.live',
     },
     {
+      env: 'PROD-AUTHOR',
+      cdn: 'author-p122525-e1219150.adobeaemcloud.com',
+      hlxPreview: 'main--exlm-prod--adobe-experience-league.hlx.page',
+      hlxLive: 'main--exlm-prod--adobe-experience-league.hlx.live',
+    },
+    {
       env: 'STAGE',
       cdn: 'experienceleague-stage.adobe.com',
+      hlxPreview: 'main--exlm-stage--adobe-experience-league.hlx.page',
+      hlxLive: 'main--exlm-stage--adobe-experience-league.live',
+    },
+    {
+      env: 'STAGE-AUTHOR',
+      cdn: 'author-p122525-e1219192.adobeaemcloud.com',
       hlxPreview: 'main--exlm-stage--adobe-experience-league.hlx.page',
       hlxLive: 'main--exlm-stage--adobe-experience-league.live',
     },
@@ -753,8 +788,8 @@ export function getConfig() {
   const cdnOrigin = `https://${cdnHost}`;
   const lang = document.querySelector('html').lang || 'en';
   const prodAssetsCdnOrigin = 'https://cdn.experienceleague.adobe.com';
-  const isProd = currentEnv?.env === 'PROD';
-  const isStage = currentEnv?.env === 'STAGE';
+  const isProd = currentEnv?.env.includes('PROD', 'PROD-AUTHOR');
+  const isStage = currentEnv?.env.includes('STAGE', 'STAGE-AUTHOR');
   const ppsOrigin = isProd ? 'https://pps.adobe.io' : 'https://pps-stage.adobe.io';
   const ims = {
     client_id: 'ExperienceLeague',
@@ -1041,6 +1076,18 @@ async function loadArticles() {
     if (mod.default) {
       await mod.default();
     }
+    const contentContainer = document.createElement('div');
+    contentContainer.classList.add('article-content-container');
+    document
+      .querySelectorAll('main > .article-content-section, main > .tab-section, main > .mini-toc-section')
+      .forEach((section) => {
+        contentContainer.append(section);
+      });
+    if (document.querySelector('.article-header-section')) {
+      document.querySelector('.article-header-section').after(contentContainer);
+    } else {
+      document.querySelector('main').prepend(contentContainer);
+    }
   }
 }
 
@@ -1281,6 +1328,13 @@ async function loadPage() {
 
   if (isDocArticlePage()) {
     loadDefaultModule(`${window.hlx.codeBasePath}/scripts/prev-next-btn.js`);
+
+    const params = new URLSearchParams(window.location.search);
+    const hasDiscoverability = Boolean(params.get('discoverability'));
+
+    if (hasDiscoverability) {
+      loadDefaultModule(`${window.hlx.codeBasePath}/scripts/tutorial-widgets/tutorial-widgets.js`);
+    }
   }
 }
 
