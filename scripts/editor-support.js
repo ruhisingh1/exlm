@@ -7,10 +7,9 @@ import {
   loadBlock,
   loadBlocks,
   buildBlock,
-  buildTabSection,
 } from './lib-franklin.js';
 import { decorateRichtext } from './editor-support-rte.js';
-import { decorateMain, loadIms } from './scripts.js';
+import { decorateMain, loadIms, addMiniToc } from './scripts.js';
 
 // set aem content root
 window.hlx.aemRoot = '/content/exlm/global';
@@ -110,7 +109,7 @@ function updateUEInstrumentation() {
         setUEFilter(elem, 'tab-section');
         
       });
-      buildTabSection(main);
+      addMiniToc(main);
     }
     return;
   }

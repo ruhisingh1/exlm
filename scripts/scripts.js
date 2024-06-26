@@ -313,7 +313,7 @@ function addProfileTab(main) {
  * Add a mini TOC to the article page.
  * @param {HTMLElement} main
  */
-function addMiniToc(main) {
+export function addMiniToc(main) {
   if (
     document.querySelectorAll('.mini-toc').forEach((toc) => {
       toc.remove();
