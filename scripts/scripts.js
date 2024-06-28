@@ -313,7 +313,7 @@ function addProfileTab(main) {
  * Add a mini TOC to the article page.
  * @param {HTMLElement} main
  */
-export function addMiniToc(main) {
+function addMiniToc(main) {
   if (
     document.querySelectorAll('.mini-toc').forEach((toc) => {
       toc.remove();
@@ -1241,6 +1241,17 @@ export function createPlaceholderSpan(placeholderKey, fallbackText, onResolved, 
       if (onRejected) onRejected(span);
     });
   return span;
+}
+
+/**
+ * decorates placeholder spans in a given element
+ * @param {HTMLElement} element
+ */
+export function decoratePlaceholders(element) {
+  const placeholdersEls = [...element.querySelectorAll('[data-placeholder]')];
+  placeholdersEls.forEach((el) => {
+    el.replaceWith(createPlaceholderSpan(el.dataset.placeholder, el.textContent));
+  });
 }
 
 function formatPageMetaTags(inputString) {

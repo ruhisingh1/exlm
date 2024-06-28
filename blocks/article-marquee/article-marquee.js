@@ -49,8 +49,12 @@ try {
   console.error('Error fetching placeholders:', err);
 }
 
+function getCurrentPath() {
+  return window.location.pathname;
+}
+
 export async function decorateBookmark(block) {
-  const bookmarkId = ((document.querySelector('meta[name="id"]') || {}).content || '').trim();
+  const bookmarkId = document.querySelector('meta[name="id"]')?.content || getCurrentPath();
   const unAuthBookmark = document.createElement('div');
   unAuthBookmark.className = 'bookmark';
   unAuthBookmark.innerHTML = tooltipTemplate('bookmark-icon', 'Bookmark page', placeholders.bookmarkUnauthLabel);
@@ -66,7 +70,7 @@ export async function decorateBookmark(block) {
     const bookmarkAuthedToolTipIcon = authBookmark.querySelector('.bookmark-icon');
     loadJWT().then(async () => {
       defaultProfileClient.getMergedProfile().then(async (data) => {
-        if (data.bookmarks.includes(bookmarkId)) {
+        if (data?.bookmarks?.find((bookmark) => bookmark.includes(bookmarkId))) {
           bookmarkAuthedToolTipIcon.classList.add('authed');
           bookmarkAuthedToolTipLabel.innerHTML = placeholders.bookmarkAuthLabelRemove;
         }
@@ -206,10 +210,8 @@ export default async function ArticleMarquee(block) {
     decorateIcons(block);
 
     if (Array.isArray(links) && links.length > 0) {
-      // Filter out null or empty links and map to fetchAuthorBio
-      const authorPromises = Array.from(new Set(
-        links.filter((link) => link)
-    )).map((link) => fetchAuthorBio(link));
+      // Filter out null, empty and duplicate links and map to fetchAuthorBio
+      const authorPromises = Array.from(new Set(links.filter((link) => link))).map((link) => fetchAuthorBio(link));
       const authorsInfo = await Promise.all(authorPromises);
       const authorInfoContainer = block.querySelector('.author-details');
       let isExternal = false;
