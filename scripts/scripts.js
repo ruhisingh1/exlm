@@ -1077,15 +1077,19 @@ async function loadArticles() {
     }
     const contentContainer = document.createElement('div');
     contentContainer.classList.add('article-content-container');
-    document
-      .querySelectorAll('main > .article-content-section, main > .tab-section, main > .mini-toc-section')
-      .forEach((section) => {
-        contentContainer.append(section);
-      });
-    if (document.querySelector('.article-header-section')) {
-      document.querySelector('.article-header-section').after(contentContainer);
+    if (!document.querySelector('main > .article-content-section, main > .tab-section')) {
+      document.querySelector('main > .mini-toc-section').remove();
     } else {
-      document.querySelector('main').prepend(contentContainer);
+      document
+        .querySelectorAll('main > .article-content-section, main > .tab-section, main > .mini-toc-section')
+        .forEach((section) => {
+          contentContainer.append(section);
+        });
+      if (document.querySelector('.article-header-section')) {
+        document.querySelector('.article-header-section').after(contentContainer);
+      } else {
+        document.querySelector('main').prepend(contentContainer);
+      }
     }
   }
 }
