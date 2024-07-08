@@ -812,6 +812,7 @@ export function getConfig() {
     coveoToken: 'xxcfe1b6e9-3628-49b5-948d-ed50d3fa6c99',
     liveEventsUrl: `${prodAssetsCdnOrigin}/thumb/upcoming-events.json`,
     adlsUrl: 'https://learning.adobe.com/catalog.result.json',
+    industryUrl: `${cdnOrigin}/api/industries?page_size=200&sort=Order&lang=${lang}`,
     searchUrl: `${cdnOrigin}/search.html`,
     articleUrl: `${cdnOrigin}/api/articles/`,
     solutionsUrl: `${cdnOrigin}/api/solutions?page_size=100`,
@@ -1247,6 +1248,27 @@ export function decoratePlaceholders(element) {
   });
 }
 
+/**
+ * Sets the content of metadata tags.
+ */
+function setMetadata(name, content) {
+  const attr = name && name.includes(':') ? 'property' : 'name';
+  const existingMetaTags = [...document.head.querySelectorAll(`meta[${attr}="${name}"]`)];
+
+  if (existingMetaTags.length === 0) {
+    // Create a new meta tag if it doesn't exist
+    const newMetaTag = document.createElement('meta');
+    newMetaTag.setAttribute(attr, name);
+    newMetaTag.content = content;
+    document.head.appendChild(newMetaTag);
+  } else {
+    // Update existing meta tags
+    existingMetaTags.forEach((metaTag) => {
+      metaTag.content = content;
+    });
+  }
+}
+
 function formatPageMetaTags(inputString) {
   return inputString
     .replace(/exl:[^/]*\/*/g, '')
@@ -1259,7 +1281,15 @@ function decodeAemPageMetaTags() {
   const roleMeta = document.querySelector(`meta[name="role"]`);
   const levelMeta = document.querySelector(`meta[name="level"]`);
   const featureMeta = document.querySelector(`meta[name="feature"]`);
+  const coveoContentTypeMeta = document.querySelector(`meta[name="coveo-content-type"]`);
+  if (coveoContentTypeMeta) setMetadata('type', coveoContentTypeMeta.content);
 
+  // TEMP: Updated Article content type to Perspective
+  if (coveoContentTypeMeta && coveoContentTypeMeta.content === 'Article') {
+    const updatedCoveoContentType = 'Perspective';
+    setMetadata('coveo-content-type', updatedCoveoContentType);
+    setMetadata('type', updatedCoveoContentType);
+  }
   const solutions = solutionMeta ? formatPageMetaTags(solutionMeta.content) : [];
   const features = featureMeta ? formatPageMetaTags(featureMeta.content) : [];
   const roles = roleMeta ? formatPageMetaTags(roleMeta.content) : [];
