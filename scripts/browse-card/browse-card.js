@@ -242,7 +242,7 @@ const buildCardContent = async (card, model) => {
     buildEventContent({ event, cardContent, card });
   }
 
-  if (contentType === CONTENT_TYPES.ARTICLE.MAPPING_KEY) {
+  if (contentType === CONTENT_TYPES.PERSPECTIVE.MAPPING_KEY) {
     const authorElement = createTag('div', { class: 'browse-card-author-info' });
 
     if (authorInfo?.name) {
@@ -272,19 +272,20 @@ const buildCardContent = async (card, model) => {
   const cardOptions = document.createElement('div');
   cardOptions.classList.add('browse-card-options');
 
-  if (
-    contentType !== CONTENT_TYPES.LIVE_EVENT.MAPPING_KEY &&
-    contentType !== CONTENT_TYPES.COMMUNITY.MAPPING_KEY &&
-    contentType !== CONTENT_TYPES.INSTRUCTOR_LED.MAPPING_KEY
-  ) {
-    const cardAction = UserActions({
-      container: cardOptions,
-      id: id || viewLink ? new URL(viewLink).pathname : '',
-      link: copyLink,
-    });
+  const bookmarkEnabled = ![
+    CONTENT_TYPES.LIVE_EVENT.MAPPING_KEY,
+    CONTENT_TYPES.COMMUNITY.MAPPING_KEY,
+    CONTENT_TYPES.INSTRUCTOR_LED.MAPPING_KEY,
+  ].includes(contentType);
+  const cardAction = UserActions({
+    container: cardOptions,
+    id: id || viewLink ? new URL(viewLink).pathname : '',
+    link: copyLink,
+    bookmarkConfig: bookmarkEnabled,
+  });
 
-    cardAction.decorate();
-  }
+  cardAction.decorate();
+
   cardFooter.appendChild(cardOptions);
   buildCardCtaContent({ cardFooter, contentType, viewLinkText });
 };
