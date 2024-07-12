@@ -1317,10 +1317,12 @@ function decodeAemPageMetaTags() {
     levelMeta.content = decodedLevels.join(',');
   }
   if (cqTagsMeta) {
-    const segments = cqTagsMeta.content.split(', ');
-    const decodedCQTags = segments.map((segment) => {
-      return segment.split("/").map((part) => atob(part)).join("/");
-    });
+    const segments = cqTagsMeta.content.split(", ");
+    const decodedCQTags = segments.map((segment) => (
+      segment.split("/").map((part, index) => (
+        (index > 0) ? atob(part) : part
+      )).join("/")
+    ));
     cqTagsMeta.content = decodedCQTags.join(', ');
   }
 }
