@@ -1318,12 +1318,9 @@ function decodeAemPageMetaTags() {
   }
   if (cqTagsMeta) {
     const segments = cqTagsMeta.content.split(', ');
-    const decodedCQTags = segments.map((segment) =>
-      segment
-        .split('/')
-        .map((part) => atob(part))
-        .join('/'),
-    );
+    const decodedCQTags = segments.map((segment) => {
+      return segment.split("/").map((part) => atob(part)).join("/");
+    });
     cqTagsMeta.content = decodedCQTags.join(', ');
   }
 }
