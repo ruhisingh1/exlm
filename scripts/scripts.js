@@ -240,7 +240,11 @@ export async function fetchAuthorBio(anchor) {
     .then((html) => {
       const parser = new DOMParser();
       const htmlDoc = parser.parseFromString(html, 'text/html');
-      const authorInfo = extractAuthorInfo(htmlDoc.querySelector('.author-bio'));
+      const authorInfoEl = htmlDoc.querySelector('.author-bio');
+      if (!authorInfoEl) {
+        return null;
+      }
+      const authorInfo = extractAuthorInfo(authorInfoEl);
       return authorInfo;
     })
     .catch((error) => {
@@ -307,15 +311,10 @@ function addMiniToc(main) {
   );
   const tocSection = document.createElement('div');
   tocSection.classList.add('mini-toc-section');
-  tocSection.append(buildBlock('mini-toc', []));
-  const contentContainer = document.createElement('div');
-  contentContainer.classList.add('content-container');
-  if (document.querySelector('.article-marquee')) {
-    const articleMarquee = document.querySelector('.article-marquee');
-    articleMarquee.parentNode.insertAdjacentElement('afterend', tocSection);
-  } else {
-    main.prepend(tocSection);
-  }
+  const miniTocBlock = buildBlock('mini-toc', []);
+  tocSection.append(miniTocBlock);
+  miniTocBlock.style.display = 'none';
+  main.append(tocSection);
 }
 
 /**
@@ -738,30 +737,21 @@ export function getConfig() {
     {
       env: 'PROD',
       cdn: 'experienceleague.adobe.com',
-      hlxPreview: 'main--exlm-prod--adobe-experience-league.hlx.page',
-      hlxLive: 'main--exlm-prod--adobe-experience-league.hlx.live',
-    },
-    {
-      env: 'PROD-AUTHOR',
-      cdn: 'author-p122525-e1219150.adobeaemcloud.com',
+      authorUrl: 'author-p122525-e1219150.adobeaemcloud.com',
       hlxPreview: 'main--exlm-prod--adobe-experience-league.hlx.page',
       hlxLive: 'main--exlm-prod--adobe-experience-league.hlx.live',
     },
     {
       env: 'STAGE',
       cdn: 'experienceleague-stage.adobe.com',
-      hlxPreview: 'main--exlm-stage--adobe-experience-league.hlx.page',
-      hlxLive: 'main--exlm-stage--adobe-experience-league.live',
-    },
-    {
-      env: 'STAGE-AUTHOR',
-      cdn: 'author-p122525-e1219192.adobeaemcloud.com',
+      authorUrl: 'author-p122525-e1219192.adobeaemcloud.com',
       hlxPreview: 'main--exlm-stage--adobe-experience-league.hlx.page',
       hlxLive: 'main--exlm-stage--adobe-experience-league.live',
     },
     {
       env: 'DEV',
       cdn: 'experienceleague-dev.adobe.com',
+      authorUrl: 'author-p122525-e1200861.adobeaemcloud.com',
       hlxPreview: 'main--exlm--adobe-experience-league.hlx.page',
       hlxLive: 'main--exlm--adobe-experience-league.hlx.live',
     },
@@ -774,8 +764,8 @@ export function getConfig() {
   const cdnOrigin = `https://${cdnHost}`;
   const lang = document.querySelector('html').lang || 'en';
   const prodAssetsCdnOrigin = 'https://cdn.experienceleague.adobe.com';
-  const isProd = currentEnv?.env.includes('PROD', 'PROD-AUTHOR');
-  const isStage = currentEnv?.env.includes('STAGE', 'STAGE-AUTHOR');
+  const isProd = currentEnv?.env === 'PROD' || currentEnv?.authorUrl === 'author-p122525-e1219150.adobeaemcloud.com';
+  const isStage = currentEnv?.env === 'STAGE' || currentEnv?.authorUrl === 'author-p122525-e1219192.adobeaemcloud.com';
   const ppsOrigin = isProd ? 'https://pps.adobe.io' : 'https://pps-stage.adobe.io';
   const ims = {
     client_id: 'ExperienceLeague',
@@ -1068,8 +1058,8 @@ export async function loadArticles() {
     if (!document.querySelector('main > .article-content-section, main > .tab-section')) {
       document.querySelector('main > .mini-toc-section').remove();
     } else {
-      if (document.querySelector('.mini-toc.block')) {
-        document.querySelector('.mini-toc.block').style.display = null;
+      if (document.querySelector('.mini-toc')) {
+        document.querySelector('.mini-toc').style.display = null;
       }
       document
         .querySelectorAll('main > .article-content-section, main > .tab-section, main > .mini-toc-section')
@@ -1197,6 +1187,13 @@ async function loadDefaultModule(jsPath) {
   }
 }
 
+export function isFeatureEnabled(name) {
+  return getMetadata('feature-flags')
+    .split(',')
+    .map((t) => t.toLowerCase().trim())
+    .includes(name);
+}
+
 /**
  * THIS IS TEMPORARY FOR SUMMIT
  */
@@ -1248,27 +1245,6 @@ export function decoratePlaceholders(element) {
   });
 }
 
-/**
- * Sets the content of metadata tags.
- */
-function setMetadata(name, content) {
-  const attr = name && name.includes(':') ? 'property' : 'name';
-  const existingMetaTags = [...document.head.querySelectorAll(`meta[${attr}="${name}"]`)];
-
-  if (existingMetaTags.length === 0) {
-    // Create a new meta tag if it doesn't exist
-    const newMetaTag = document.createElement('meta');
-    newMetaTag.setAttribute(attr, name);
-    newMetaTag.content = content;
-    document.head.appendChild(newMetaTag);
-  } else {
-    // Update existing meta tags
-    existingMetaTags.forEach((metaTag) => {
-      metaTag.content = content;
-    });
-  }
-}
-
 function formatPageMetaTags(inputString) {
   return inputString
     .replace(/exl:[^/]*\/*/g, '')
@@ -1281,15 +1257,8 @@ function decodeAemPageMetaTags() {
   const roleMeta = document.querySelector(`meta[name="role"]`);
   const levelMeta = document.querySelector(`meta[name="level"]`);
   const featureMeta = document.querySelector(`meta[name="feature"]`);
-  const coveoContentTypeMeta = document.querySelector(`meta[name="coveo-content-type"]`);
-  if (coveoContentTypeMeta) setMetadata('type', coveoContentTypeMeta.content);
+  const cqTagsMeta = document.querySelector(`meta[name="cq-tags"]`);
 
-  // TEMP: Updated Article content type to Perspective
-  if (coveoContentTypeMeta && coveoContentTypeMeta.content === 'Article') {
-    const updatedCoveoContentType = 'Perspective';
-    setMetadata('coveo-content-type', updatedCoveoContentType);
-    setMetadata('type', updatedCoveoContentType);
-  }
   const solutions = solutionMeta ? formatPageMetaTags(solutionMeta.content) : [];
   const features = featureMeta ? formatPageMetaTags(featureMeta.content) : [];
   const roles = roleMeta ? formatPageMetaTags(roleMeta.content) : [];
@@ -1347,6 +1316,21 @@ function decodeAemPageMetaTags() {
   if (levelMeta) {
     levelMeta.content = decodedLevels.join(',');
   }
+  if (cqTagsMeta) {
+    const segments = cqTagsMeta.content.split(', ');
+    const decodedCQTags = segments.map((segment) => {
+      const parts = segment.split('/');
+      const decodedParts = parts.map((part, index) => {
+        if (index > 0) {
+          return atob(part);
+        } else {
+          return part;
+        }
+      });
+      return decodedParts.join('/');
+    });
+    cqTagsMeta.content = decodedCQTags.join(', ');
+  }
 }
 
 async function loadPage() {
@@ -1361,11 +1345,22 @@ async function loadPage() {
   showBrowseBackgroundGraphic();
 
   if (isDocArticlePage()) {
+    // wrap main content in a div - UGP-11165
+    const main = document.querySelector('main');
+    const mainSections = [...main.children].slice(0, -2); // ignore last two sections: toc and mini-toc
+    const mainContent = document.createElement('div');
+    // insert mainContent as first child of main
+    main.prepend(mainContent);
+    mainSections.forEach((section) => {
+      mainContent.append(section);
+    });
+
+    // load prex/next buttons
     loadDefaultModule(`${window.hlx.codeBasePath}/scripts/prev-next-btn.js`);
 
+    // discoverability
     const params = new URLSearchParams(window.location.search);
     const hasDiscoverability = Boolean(params.get('discoverability'));
-
     if (hasDiscoverability) {
       loadDefaultModule(`${window.hlx.codeBasePath}/scripts/tutorial-widgets/tutorial-widgets.js`);
     }
