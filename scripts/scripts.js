@@ -1317,19 +1317,15 @@ function decodeAemPageMetaTags() {
     levelMeta.content = decodedLevels.join(',');
   }
   if (cqTagsMeta) {
-    const segments = cqTagsMeta.content.split(', ');
+    const segments = cqTagsMeta.getAttribute('content').split(', ');
     const decodedCQTags = segments.map((segment) => {
       const parts = segment.split('/');
       const decodedParts = parts.map((part, index) => {
-        if (index > 0) {
-          return atob(part);
-        } else {
-          return part;
-        }
+        return index > 0 ? atob(part) : part;
       });
       return decodedParts.join('/');
     });
-    cqTagsMeta.content = decodedCQTags.join(', ');
+    cqTagsMeta.setAttribute('content', decodedCQTags.join(', '));
   }
 }
 
