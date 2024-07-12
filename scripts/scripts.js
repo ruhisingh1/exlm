@@ -1317,15 +1317,14 @@ function decodeAemPageMetaTags() {
     levelMeta.content = decodedLevels.join(',');
   }
   if (cqTagsMeta) {
-    const segments = cqTagsMeta.getAttribute('content').split(', ');
-    const decodedCQTags = segments.map((segment) => {
-      const parts = segment.split('/');
-      const decodedParts = parts.map((part, index) => {
-        return index > 0 ? atob(part) : part;
-      });
-      return decodedParts.join('/');
-    });
-    cqTagsMeta.setAttribute('content', decodedCQTags.join(', '));
+    const segments = cqTagsMeta.content.split(', ');
+    const decodedCQTags = segments.map((segment) =>
+      segment
+        .split('/')
+        .map((part) => atob(part))
+        .join('/'),
+    );
+    cqTagsMeta.content = decodedCQTags.join(', ');
   }
 }
 
