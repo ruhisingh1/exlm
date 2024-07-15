@@ -5,7 +5,7 @@ import { createTooltip, hideTooltipOnScroll } from '../../scripts/browse-card/br
 import BuildPlaceholder from '../../scripts/browse-card/browse-card-placeholder.js';
 import { CONTENT_TYPES } from '../../scripts/browse-card/browse-cards-constants.js';
 
-const { prodAssetsCdnOrigin } = getConfig();
+const { prodAssetsCdnOrigin, cdn, authorUrl} = getConfig();
 
 /**
  * Retrieves the content of metadata tags.
@@ -63,7 +63,8 @@ const getCardData = async (articlePath, placeholders) => {
   }
   const html = await response.text();
   const doc = domParser.parseFromString(html, 'text/html');
-  const fullURL = new URL(articlePath, window.location.origin).href;
+  const fullURL = (window.hlx.aemRoot || window.location.href.includes('.html'))  ? new URL(articlePath, cdn).href : new URL(articlePath, window.location.origin).href;
+
   let type = getMetadata('coveo-content-type', doc);
   if (!type) {
     type = getMetadata('type', doc);
@@ -93,9 +94,9 @@ const getCardData = async (articlePath, placeholders) => {
       type: getMetadata('author-type', doc),
     },
     tags: [],
-    copyLink: articlePath,
+    copyLink: fullURL,
     bookmarkLink: '',
-    viewLink: articlePath,
+    viewLink: fullURL,
     viewLinkText: placeholders[`browseCard${convertToTitleCase(type)}ViewLabel`]
       ? placeholders[`browseCard${convertToTitleCase(type)}ViewLabel`]
       : `View ${type}`,
@@ -172,14 +173,6 @@ export default async function decorate(block) {
   );
 
   cardLoading$.then((cards) => {
-    // if (window.hlx.aemRoot || window.location.href.includes('.html')) {
-    //   if(cards.querySelector('.browse-card').hasClass('perspective-card')){
-    //     cards.querySelector('a').attr('href')
-    //   }else{
-    //     cards.querySelector('a').attr('href')
-    //   }
-    
-    // }
     buildCardsShimmer.remove();
     contentDiv.append(...cards);
     block.appendChild(contentDiv);
