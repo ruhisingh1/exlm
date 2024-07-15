@@ -63,7 +63,7 @@ const getCardData = async (articlePath, placeholders) => {
   }
   const html = await response.text();
   const doc = domParser.parseFromString(html, 'text/html');
-  const fullURL = (window.hlx.aemRoot || window.location.href.includes('.html'))  ? new URL(articlePath, cdnOrigin).href : new URL(articlePath, window.location.origin).href;
+  const fullURL = (window.hlx.aemRoot || window.location.href.includes('.html'))  ? `${cdnOrigin}/${articlePath}` : new URL(articlePath, window.location.origin).href;
 
   let type = getMetadata('coveo-content-type', doc);
   if (!type) {
@@ -173,7 +173,7 @@ export default async function decorate(block) {
   );
 
   cardLoading$.then((cards) => {
-    buildCardsShimmer.remove();
+     buildCardsShimmer.remove();
     contentDiv.append(...cards);
     block.appendChild(contentDiv);
   });
