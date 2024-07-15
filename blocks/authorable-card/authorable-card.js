@@ -64,7 +64,7 @@ const getCardData = async (articlePath, placeholders) => {
   const html = await response.text();
   const doc = domParser.parseFromString(html, 'text/html');
   const fullURL = (window.hlx.aemRoot || window.location.href.includes('.html')) 
-  ? `${cdnOrigin}/${articlePath.replace(`${window.hlx.codeBasePath}`, '')}`
+  ? `${cdnOrigin}${articlePath.replace(`/${window.hlx.codeBasePath}`, '')}`
   : new URL(articlePath, window.location.origin).href;
 
   let type = getMetadata('coveo-content-type', doc);
