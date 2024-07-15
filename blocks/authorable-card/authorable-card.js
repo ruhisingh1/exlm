@@ -64,7 +64,6 @@ const getCardData = async (articlePath, placeholders) => {
   const html = await response.text();
   const doc = domParser.parseFromString(html, 'text/html');
   const fullURL = new URL(articlePath, window.location.origin).href;
-
   let type = getMetadata('coveo-content-type', doc);
   if (!type) {
     type = getMetadata('type', doc);
@@ -94,9 +93,9 @@ const getCardData = async (articlePath, placeholders) => {
       type: getMetadata('author-type', doc),
     },
     tags: [],
-    copyLink: fullURL,
+    copyLink: articlePath,
     bookmarkLink: '',
-    viewLink: fullURL,
+    viewLink: articlePath,
     viewLinkText: placeholders[`browseCard${convertToTitleCase(type)}ViewLabel`]
       ? placeholders[`browseCard${convertToTitleCase(type)}ViewLabel`]
       : `View ${type}`,
@@ -173,6 +172,14 @@ export default async function decorate(block) {
   );
 
   cardLoading$.then((cards) => {
+    // if (window.hlx.aemRoot || window.location.href.includes('.html')) {
+    //   if(cards.querySelector('.browse-card').hasClass('perspective-card')){
+    //     cards.querySelector('a').attr('href')
+    //   }else{
+    //     cards.querySelector('a').attr('href')
+    //   }
+    
+    // }
     buildCardsShimmer.remove();
     contentDiv.append(...cards);
     block.appendChild(contentDiv);
