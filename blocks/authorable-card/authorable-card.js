@@ -5,7 +5,7 @@ import { createTooltip, hideTooltipOnScroll } from '../../scripts/browse-card/br
 import BuildPlaceholder from '../../scripts/browse-card/browse-card-placeholder.js';
 import { CONTENT_TYPES } from '../../scripts/browse-card/browse-cards-constants.js';
 
-const { prodAssetsCdnOrigin, cdn, authorUrl} = getConfig();
+const { prodAssetsCdnOrigin, cdnOrigin} = getConfig();
 
 /**
  * Retrieves the content of metadata tags.
@@ -63,7 +63,7 @@ const getCardData = async (articlePath, placeholders) => {
   }
   const html = await response.text();
   const doc = domParser.parseFromString(html, 'text/html');
-  const fullURL = (window.hlx.aemRoot || window.location.href.includes('.html'))  ? new URL(articlePath, cdn).href : new URL(articlePath, window.location.origin).href;
+  const fullURL = (window.hlx.aemRoot || window.location.href.includes('.html'))  ? new URL(articlePath, cdnOrigin).href : new URL(articlePath, window.location.origin).href;
 
   let type = getMetadata('coveo-content-type', doc);
   if (!type) {
