@@ -921,16 +921,16 @@
             "value": "community"
           },
           {
-            "name": "Courses",
-            "value": "course"
-          },
-          {
             "name": "Documentation",
             "value": "documentation"
           },
           {
             "name": "On-Demand Event",
             "value": "event"
+          },
+          {
+            "name": "Playlists",
+            "value": "playlist"
           },
           {
             "name": "Perspectives",
@@ -1204,10 +1204,10 @@
       },
       {
         "component": "select",
-        "name": "firstCTAlinkType",
+        "name": "linkType",
         "value": "link",
-        "label": "First CTA Link Type",
-        "description": "A link will render a standard anchor button, a video will render a button that opens the video player when clicked, and the sign-in option will trigger the sign-in process.",
+        "label": "Link Type",
+        "description": "Link will render a normal Anchor button, video will render a video button that opens the video player when clicked.",
         "valueType": "string",
         "options": [
           {
@@ -1217,10 +1217,6 @@
           {
             "name": "Video",
             "value": "video"
-          },
-          {
-            "name": "Sign In",
-            "value": "signin"
           }
         ]
       },
@@ -1239,28 +1235,6 @@
         "value": "",
         "label": "Second CTA Link",
         "description": "What link to open when clicking the button."
-      },
-      {
-        "component": "select",
-        "name": "secondCTAlinkType",
-        "value": "link",
-        "label": "Second CTA Link Type",
-        "description": "A link will render a standard anchor button, a video will render a button that opens the video player when clicked, and the sign-in option will trigger the sign-in process.",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Link",
-            "value": "link"
-          },
-          {
-            "name": "Video",
-            "value": "video"
-          },
-          {
-            "name": "Sign In",
-            "value": "signin"
-          }
-        ]
       }
     ]
   },
@@ -1469,24 +1443,6 @@
         "description": "What link to open when clicking the button."
       },
       {
-        "component": "select",
-        "name": "firstCTAlinkType",
-        "value": "link",
-        "label": "First CTA Link Type",
-        "description": "A link will render a standard anchor button, and the sign-in option will trigger the sign-in process.",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Link",
-            "value": "link"
-          },
-          {
-            "name": "Sign In",
-            "value": "signin"
-          }
-        ]
-      },
-      {
         "component": "text",
         "valueType": "string",
         "name": "cta2Text",
@@ -1501,24 +1457,6 @@
         "value": "",
         "label": "Second CTA Link",
         "description": "What link to open when clicking the button."
-      },
-      {
-        "component": "select",
-        "name": "secondCTAlinkType",
-        "value": "link",
-        "label": "Second CTA Link Type",
-        "description": "A link will render a standard anchor button, and the sign-in option will trigger the sign-in process.",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Link",
-            "value": "link"
-          },
-          {
-            "name": "Sign In",
-            "value": "signin"
-          }
-        ]
       }
     ]
   },
@@ -1875,7 +1813,7 @@
         "name": "contentURL",
         "value": "",
         "label": "Content URL",
-        "description": "Provide a link to one of the following content types: Course, Tutorial, Documentation, Troubleshooting, On-Demand Event, Certification or Perspective"
+        "description": "Provide a link to one of the following content types: Playlist, Tutorial, Documentation, Troubleshooting, On-Demand Event, Certification or Perspective"
       }
     ]
   },
@@ -1955,16 +1893,16 @@
             "value": "community"
           },
           {
-            "name": "Courses",
-            "value": "course"
-          },
-          {
             "name": "Documentation",
             "value": "documentation"
           },
           {
             "name": "On-Demand Event",
             "value": "event"
+          },
+          {
+            "name": "Playlists",
+            "value": "playlist"
           },
           {
             "name": "Perspectives",
@@ -2050,16 +1988,16 @@
             "value": "community"
           },
           {
-            "name": "Courses",
-            "value": "course"
-          },
-          {
             "name": "Documentation",
             "value": "documentation"
           },
           {
             "name": "On-Demand Event",
             "value": "event"
+          },
+          {
+            "name": "Playlists",
+            "value": "playlist"
           },
           {
             "name": "Perspectives",
@@ -2547,8 +2485,8 @@
         "description": "Select the content type(s).",
         "options": [
           {
-            "name": "Courses",
-            "value": "course"
+            "name": "Playlists",
+            "value": "playlist"
           },
           {
             "name": "Tutorials",
