@@ -1207,16 +1207,16 @@
         "name": "firstCTALinkType",
         "value": "",
         "label": "First CTA Type",
-        "description": "The link option will render a standard anchor button, the video option will render a button that opens the video player when clicked, and the sign-in option will trigger the sign-in process.",
+        "description": "The 'Link' option will render a standard anchor button, the 'Video' option will render a button that opens the video player when clicked, and the 'Sign In' option will trigger the sign-in process.",
         "valueType": "string",
-        "options": [
-          {
-            "name": "Video",
-            "value": "video"
-          },
+        "options": [          
           {
             "name": "Link",
             "value": "link"
+          },
+          {
+            "name": "Video",
+            "value": "video"
           },
           {
             "name": "Sign In",
@@ -1245,16 +1245,16 @@
         "name": "secondCTALinkType",
         "value": "",
         "label": "Second CTA Type",
-        "description": "The link option will render a standard anchor button, the video will render a button that opens the video player when clicked, and the sign-in option will trigger the sign-in process.",
+        "description": "The 'Link' option will render a standard anchor button, the 'Video' option will render a button that opens the video player when clicked, and the 'Sign In' option will trigger the sign-in process.",
         "valueType": "string",
-        "options": [
-          {
-            "name": "Video",
-            "value": "video"
-          },
+        "options": [          
           {
             "name": "Link",
             "value": "link"
+          },
+          {
+            "name": "Video",
+            "value": "video"
           },
           {
             "name": "Sign In",
@@ -1473,7 +1473,7 @@
         "name": "firstCTALinkType",
         "value": "",
         "label": "First CTA Type",
-        "description": "The link option will render a standard anchor button, and the sign-in option will trigger the sign-in process.",
+        "description": "The 'Link' option will render a standard anchor button, and the 'Sign In' option will trigger the sign-in process.",
         "valueType": "string",
         "options": [
           {
@@ -1507,7 +1507,7 @@
         "name": "secondCTALinkType",
         "value": "",
         "label": "Second CTA Type",
-        "description": "The link option will render a standard anchor button, and the sign-in option will trigger the sign-in process.",
+        "description": "The 'Link' option will render a standard anchor button, and the 'Sign In' option will trigger the sign-in process.",
         "valueType": "string",
         "options": [
           {
