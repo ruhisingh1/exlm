@@ -39,12 +39,12 @@ export default async function decorate(block) {
             {
               ctaElem: firstCta,
               ctaStyle: 'secondary',
-              ctaLinkType: firstCtaLinkType?.textContent?.trim(),
+              ctaLinkType: firstCtaLinkType?.textContent?.trim() || 'link',
             },
             {
               ctaElem: secondCta,
               ctaStyle: 'primary',
-              ctaLinkType: secondCtaLinkType?.textContent?.trim(),
+              ctaLinkType: secondCtaLinkType?.textContent?.trim() || 'link',
             },
           ])}
         </div>

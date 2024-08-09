@@ -1187,28 +1187,6 @@
         "description": "The description shown in Desktop and Tablet view."
       },
       {
-        "component": "select",
-        "name": "firstCTALinkType",
-        "value": "",
-        "label": "First CTA Type",
-        "description": "'Primary' will render button filled, 'Secondary' with an outline.",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Video",
-            "value": "video"
-          },
-          {
-            "name": "Link",
-            "value": "link"
-          },
-          {
-            "name": "Sign In",
-            "value": "signin"
-          }
-        ]
-      },
-      {
         "component": "text",
         "valueType": "string",
         "name": "cta1Text",
@@ -1226,9 +1204,9 @@
       },
       {
         "component": "select",
-        "name": "secondCTALinkType",
+        "name": "firstCTALinkType",
         "value": "",
-        "label": "Second CTA Type",
+        "label": "First CTA Type",
         "description": "'Primary' will render button filled, 'Secondary' with an outline.",
         "valueType": "string",
         "options": [
@@ -1261,6 +1239,28 @@
         "value": "",
         "label": "Second CTA Link",
         "description": "What link to open when clicking the button."
+      },
+      {
+        "component": "select",
+        "name": "secondCTALinkType",
+        "value": "",
+        "label": "Second CTA Type",
+        "description": "'Primary' will render button filled, 'Secondary' with an outline.",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Video",
+            "value": "video"
+          },
+          {
+            "name": "Link",
+            "value": "link"
+          },
+          {
+            "name": "Sign In",
+            "value": "signin"
+          }
+        ]
       }
     ]
   },
@@ -1453,24 +1453,6 @@
         "description": "The description shown in Desktop and Tablet view."
       },
       {
-        "component": "select",
-        "name": "firstCTALinkType",
-        "value": "",
-        "label": "First CTA Type",
-        "description": "'Primary' will render button filled, 'Secondary' with an outline.",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Link",
-            "value": "link"
-          },
-          {
-            "name": "Sign In",
-            "value": "signin"
-          }
-        ]
-      },
-      {
         "component": "text",
         "valueType": "string",
         "name": "cta1Text",
@@ -1488,9 +1470,9 @@
       },
       {
         "component": "select",
-        "name": "secondCTALinkType",
+        "name": "firstCTALinkType",
         "value": "",
-        "label": "Second CTA Type",
+        "label": "First CTA Type",
         "description": "'Primary' will render button filled, 'Secondary' with an outline.",
         "valueType": "string",
         "options": [
@@ -1519,6 +1501,24 @@
         "value": "",
         "label": "Second CTA Link",
         "description": "What link to open when clicking the button."
+      },
+      {
+        "component": "select",
+        "name": "secondCTALinkType",
+        "value": "",
+        "label": "Second CTA Type",
+        "description": "'Primary' will render button filled, 'Secondary' with an outline.",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Link",
+            "value": "link"
+          },
+          {
+            "name": "Sign In",
+            "value": "signin"
+          }
+        ]
       }
     ]
   },
