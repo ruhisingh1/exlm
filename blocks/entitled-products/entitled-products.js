@@ -11,17 +11,17 @@ let placeholders = {};
 try {
   placeholders = await fetchLanguagePlaceholders();
 } catch (err) {
-   // eslint-disable-next-line no-console
+  // eslint-disable-next-line no-console
   console.error('Error fetching placeholders:', err);
 }
 
 export default async function decorate(block) {
-
   const [headingElement, descElement] = [...block.children].map((row) => row.firstElementChild);
   const headingContent = headingElement?.textContent?.trim() || '';
   const descContent = descElement?.textContent?.trim() || '';
 
-  const styledHeader = headingElement?.firstElementChild === null ? `<h3>${headingContent}</h3>` : headingElement.innerHTML;
+  const styledHeader =
+    headingElement?.firstElementChild === null ? `<h3>${headingContent}</h3>` : headingElement.innerHTML;
 
   block.innerHTML = '';
 
@@ -32,7 +32,7 @@ export default async function decorate(block) {
     </div>
   `);
   block.appendChild(headerDiv);
- 
+
   const contentDiv = document.createElement('div');
   contentDiv.classList.add('block-cards-content');
 
@@ -42,11 +42,10 @@ export default async function decorate(block) {
     { product: 'Workfront', isSelected: true },
     { product: 'Target', isSelected: false },
   ];
-  
+
   products.forEach((product) => {
     buildProductCard(block, contentDiv, product);
   });
 
   block.appendChild(contentDiv);
-
 }

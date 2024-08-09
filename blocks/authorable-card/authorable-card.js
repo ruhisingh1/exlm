@@ -75,7 +75,7 @@ export default async function decorate(block) {
   );
 
   cardLoading$.then((cards) => {
-     buildCardsShimmer.remove();
+    buildCardsShimmer.remove();
     contentDiv.append(...cards);
     block.appendChild(contentDiv);
   });
