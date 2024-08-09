@@ -10,7 +10,6 @@ function decorateButtons(buttons) {
             a.classList.add('button', ctaStyle, ctaLinkType);
             return a.outerHTML;
           }
-          // return `<a href="#" title="${ctaElem.textContent}" class="button ${ctaStyle} ${ctaLinkType}">${ctaElem.textContent}</a>`;
       }
       return '';
     })
@@ -84,7 +83,8 @@ export default async function decorate(block) {
     modal.style.display = 'none';
     block.append(modal);
 
-    videoLinkElem.addEventListener('click', () => {
+    videoLinkElem.addEventListener('click', (e) => {
+      e.preventDefault();
       modal.style.display = 'flex';
       document.body.style.overflow = 'hidden';
       if (!modal.querySelector('iframe')) {
