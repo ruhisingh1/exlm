@@ -1187,6 +1187,28 @@
         "description": "The description shown in Desktop and Tablet view."
       },
       {
+        "component": "select",
+        "name": "cta1Type",
+        "value": "link",
+        "label": "Link Type",
+        "description": "Link will render a normal Anchor button, video will render a video button that opens the video player when clicked.",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Link",
+            "value": "link"
+          },
+          {
+            "name": "Video",
+            "value": "video"
+          },
+          {
+            "name": "Sign In",
+            "value": "signin"
+          }
+        ]
+      },
+      {
         "component": "text",
         "valueType": "string",
         "name": "cta1Text",
@@ -1204,9 +1226,9 @@
       },
       {
         "component": "select",
-        "name": "cta1Type",
+        "name": "cta2Type",
         "value": "link",
-        "label": "Link Type",
+        "label": "CTA 2 Link Type",
         "description": "Link will render a normal Anchor button, video will render a video button that opens the video player when clicked.",
         "valueType": "string",
         "options": [
@@ -1239,28 +1261,6 @@
         "value": "",
         "label": "Second CTA Link",
         "description": "What link to open when clicking the button."
-      },
-      {
-        "component": "select",
-        "name": "cta2Type",
-        "value": "link",
-        "label": "CTA 2 Link Type",
-        "description": "Link will render a normal Anchor button, video will render a video button that opens the video player when clicked.",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Link",
-            "value": "link"
-          },
-          {
-            "name": "Video",
-            "value": "video"
-          },
-          {
-            "name": "Sign In",
-            "value": "signin"
-          }
-        ]
       }
     ]
   },
