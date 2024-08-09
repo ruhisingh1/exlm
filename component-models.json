@@ -1477,10 +1477,6 @@
         "valueType": "string",
         "options": [
           {
-            "name": "Video",
-            "value": "video"
-          },
-          {
             "name": "Link",
             "value": "link"
           },
