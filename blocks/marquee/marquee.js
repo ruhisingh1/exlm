@@ -4,14 +4,15 @@ import { decorateIcons } from '../../scripts/lib-franklin.js';
 function decorateButtons(buttons) {
   return buttons
     .map(({ ctaElem, ctaStyle, ctaLinkType = 'link' }) => {
-      if (!ctaElem) return '';
-
-      const a = ctaElem.querySelector('a');
-      if (a) {
-        a.classList.add('button', ctaStyle, ctaLinkType);
-        return a.outerHTML;
+      if (ctaElem && ctaElem.textContent?.trim() !== '') {
+          const a = ctaElem.querySelector('a');
+          if (a) {
+            a.classList.add('button', ctaStyle, ctaLinkType);
+            return a.outerHTML;
+          }
+          // return `<a href="#" title="${ctaElem.textContent}" class="button ${ctaStyle} ${ctaLinkType}">${ctaElem.textContent}</a>`;
       }
-      return `<a href="#" title="${ctaElem.textContent}" class="button ${ctaStyle} ${ctaLinkType}">${ctaElem.textContent}</a>`;
+      return '';
     })
     .join('');
 }
