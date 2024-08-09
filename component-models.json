@@ -1189,7 +1189,7 @@
       {
         "component": "select",
         "name": "cta1Type",
-        "value": "link",
+        "value": "video",
         "label": "Link Type",
         "description": "Link will render a normal Anchor button, video will render a video button that opens the video player when clicked.",
         "valueType": "string",
