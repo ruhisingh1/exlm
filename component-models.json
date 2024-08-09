@@ -1201,7 +1201,7 @@
         "component": "text",
         "valueType": "string",
         "name": "cta1",
-        "value": "",
+        "value": "#",
         "label": "First CTA Link",
         "description": "What link to open when clicking the button."
       },
