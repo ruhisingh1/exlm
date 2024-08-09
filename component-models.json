@@ -1207,7 +1207,7 @@
         "name": "firstCTALinkType",
         "value": "",
         "label": "First CTA Type",
-        "description": "'Primary' will render button filled, 'Secondary' with an outline.",
+        "description": "The link option will render a standard anchor button, the video option will render a button that opens the video player when clicked, and the sign-in option will trigger the sign-in process.",
         "valueType": "string",
         "options": [
           {
@@ -1238,14 +1238,14 @@
         "name": "cta2",
         "value": "",
         "label": "Second CTA Link",
-        "description": "What link to open when clicking the button."
+        "description": "What link should be opened when clicking the button? Add a hash (#) when the sign-in option is getting selected"
       },
       {
         "component": "select",
         "name": "secondCTALinkType",
         "value": "",
         "label": "Second CTA Type",
-        "description": "'Primary' will render button filled, 'Secondary' with an outline.",
+        "description": "The link option will render a standard anchor button, the video will render a button that opens the video player when clicked, and the sign-in option will trigger the sign-in process.",
         "valueType": "string",
         "options": [
           {
@@ -1473,7 +1473,7 @@
         "name": "firstCTALinkType",
         "value": "",
         "label": "First CTA Type",
-        "description": "'Primary' will render button filled, 'Secondary' with an outline.",
+        "description": "The link option will render a standard anchor button, and the sign-in option will trigger the sign-in process.",
         "valueType": "string",
         "options": [
           {
@@ -1500,14 +1500,14 @@
         "name": "cta2",
         "value": "",
         "label": "Second CTA Link",
-        "description": "What link to open when clicking the button."
+        "description": "What link should be opened when clicking the button? Add a hash (#) when the sign-in option is getting selected"
       },
       {
         "component": "select",
         "name": "secondCTALinkType",
         "value": "",
         "label": "Second CTA Type",
-        "description": "'Primary' will render button filled, 'Secondary' with an outline.",
+        "description": "The link option will render a standard anchor button, and the sign-in option will trigger the sign-in process.",
         "valueType": "string",
         "options": [
           {
