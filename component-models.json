@@ -1244,7 +1244,7 @@
         "component": "select",
         "name": "cta2Type",
         "value": "link",
-        "label": "Link Type",
+        "label": "CTA 2 Link Type",
         "description": "Link will render a normal Anchor button, video will render a video button that opens the video player when clicked.",
         "valueType": "string",
         "options": [
