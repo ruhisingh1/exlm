@@ -1471,7 +1471,7 @@
       {
         "component": "select",
         "name": "firstCTALinkType",
-        "value": "link",
+        "value": "",
         "label": "First CTA Type",
         "description": "'Primary' will render button filled, 'Secondary' with an outline.",
         "valueType": "string",
@@ -1505,7 +1505,7 @@
       {
         "component": "select",
         "name": "secondCTALinkType",
-        "value": "link",
+        "value": "",
         "label": "Second CTA Type",
         "description": "'Primary' will render button filled, 'Secondary' with an outline.",
         "valueType": "string",
