@@ -1226,19 +1226,23 @@
       },
       {
         "component": "select",
-        "name": "cta2Type",
-        "value": "primary",
-        "label": "Second CTA Type",
+        "name": "secondLinkType",
+        "value": "video",
+        "label": "First CTA Type",
         "description": "'Primary' will render button filled, 'Secondary' with an outline.",
         "valueType": "string",
         "options": [
           {
-            "name": "Primary",
-            "value": "primary"
+            "name": "Video",
+            "value": "video"
           },
           {
-            "name": "Secondary",
-            "value": "secondary"
+            "name": "Link",
+            "value": "link"
+          },
+          {
+            "name": "Sign In",
+            "value": "signin"
           }
         ]
       },
