@@ -1195,6 +1195,9 @@
         "description": "Text to be shown inside button."
       },
       {
+        "condition": {
+          "!==": [{ "var": "firstCTALinkType" }, "signin"]
+        },
         "component": "text",
         "valueType": "string",
         "name": "cta1",
