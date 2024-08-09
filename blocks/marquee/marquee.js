@@ -19,7 +19,7 @@ function decorateButtons(buttons) {
 export default async function decorate(block) {
   // Extract properties
   // always same order as in model, empty string if not set
-  const [img, eyebrow, title, longDescr, firstCtaLinkType, firstCta, secondCtaLinkType, secondCta] =
+  const [img, eyebrow, title, longDescr, firstCta, firstCtaLinkType, secondCta, secondCtaLinkType] =
     block.querySelectorAll(':scope div > div');
 
   const subjectPicture = img.querySelector('picture');
@@ -39,12 +39,12 @@ export default async function decorate(block) {
             {
               ctaElem: firstCta,
               ctaStyle: 'secondary',
-              ctaLinkType: firstCtaLinkType?.textContent,
+              ctaLinkType: firstCtaLinkType?.textContent?.trim(),
             },
             {
               ctaElem: secondCta,
               ctaStyle: 'primary',
-              ctaLinkType: secondCtaLinkType?.textContent,
+              ctaLinkType: secondCtaLinkType?.textContent?.trim(),
             },
           ])}
         </div>
