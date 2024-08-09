@@ -1189,22 +1189,18 @@
       {
         "component": "select",
         "name": "cta1Type",
-        "value": "video",
-        "label": "First Link Type",
-        "description": "Link will render a normal Anchor button, video will render a video button that opens the video player when clicked.",
+        "value": "primary",
+        "label": "First CTA Type",
+        "description": "'Primary' will render button filled, 'Secondary' with an outline.",
         "valueType": "string",
         "options": [
           {
-            "name": "Link",
-            "value": "link"
+            "name": "Primary",
+            "value": "primary"
           },
           {
-            "name": "Video",
-            "value": "video"
-          },
-          {
-            "name": "Sign In",
-            "value": "signin"
+            "name": "Secondary",
+            "value": "secondary"
           }
         ]
       },
@@ -1225,32 +1221,20 @@
         "description": "What link to open when clicking the button."
       },
       {
-        "component": "text",
-        "valueType": "string",
-        "name": "test",
-        "value": "",
-        "label": "Test CTA",
-        "description": "What link to open when clicking the button."
-      },
-      {
         "component": "select",
         "name": "cta2Type",
-        "value": "link",
-        "label": "CTA 2 Link Type",
-        "description": "Link will render a normal Anchor button, video will render a video button that opens the video player when clicked.",
+        "value": "primary",
+        "label": "Second CTA Type",
+        "description": "'Primary' will render button filled, 'Secondary' with an outline.",
         "valueType": "string",
         "options": [
           {
-            "name": "Link",
-            "value": "link"
+            "name": "Primary",
+            "value": "primary"
           },
           {
-            "name": "Video",
-            "value": "video"
-          },
-          {
-            "name": "Sign In",
-            "value": "signin"
+            "name": "Secondary",
+            "value": "secondary"
           }
         ]
       },
