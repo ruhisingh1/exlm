@@ -1204,8 +1204,8 @@
       },
       {
         "component": "select",
-        "name": "firstLinkType",
-        "value": "video",
+        "name": "cta1LinkType",
+        "value": "link",
         "label": "First CTA Type",
         "description": "'Primary' will render button filled, 'Secondary' with an outline.",
         "valueType": "string",
@@ -1242,9 +1242,9 @@
       },
       {
         "component": "select",
-        "name": "secondLinkType",
-        "value": "video",
-        "label": "First CTA Type",
+        "name": "cta2LinkType",
+        "value": "link",
+        "label": "Second CTA Type",
         "description": "'Primary' will render button filled, 'Secondary' with an outline.",
         "valueType": "string",
         "options": [
@@ -1469,6 +1469,28 @@
         "description": "What link to open when clicking the button."
       },
       {
+        "component": "select",
+        "name": "cta1LinkType",
+        "value": "link",
+        "label": "First CTA Type",
+        "description": "'Primary' will render button filled, 'Secondary' with an outline.",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Video",
+            "value": "video"
+          },
+          {
+            "name": "Link",
+            "value": "link"
+          },
+          {
+            "name": "Sign In",
+            "value": "signin"
+          }
+        ]
+      },
+      {
         "component": "text",
         "valueType": "string",
         "name": "cta2Text",
@@ -1483,6 +1505,24 @@
         "value": "",
         "label": "Second CTA Link",
         "description": "What link to open when clicking the button."
+      },
+      {
+        "component": "select",
+        "name": "cta2LinkType",
+        "value": "link",
+        "label": "Second CTA Type",
+        "description": "'Primary' will render button filled, 'Secondary' with an outline.",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Link",
+            "value": "link"
+          },
+          {
+            "name": "Sign In",
+            "value": "signin"
+          }
+        ]
       }
     ]
   },
