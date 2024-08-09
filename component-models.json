@@ -1217,6 +1217,10 @@
           {
             "name": "Video",
             "value": "video"
+          },
+          {
+            "name": "Sign In",
+            "value": "signin"
           }
         ]
       },
