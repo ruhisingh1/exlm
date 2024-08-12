@@ -3211,232 +3211,29 @@
   {
     "id": "recommended",
     "fields": [
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "title",
-        "value": "",
-        "label": "Heading",
-        "description": "Sets the heading."
-      },
-      {
-        "component": "select",
-        "valueType": "string",
-        "name": "titleType",
-        "value": "h3",
-        "label": "Heading Type",
-        "options": [
-          {
-            "name": "H1",
-            "value": "h1"
-          },
-          {
-            "name": "H2",
-            "value": "h2"
-          },
-          {
-            "name": "H3",
-            "value": "h3"
-          },
-          {
-            "name": "H4",
-            "value": "h4"
-          },
-          {
-            "name": "H5",
-            "value": "h5"
-          },
-          {
-            "name": "H6",
-            "value": "h6"
-          }
-        ]
-      },
-      {
-        "component": "richtext",
-        "valueType": "string",
-        "name": "description",
-        "value": "",
-        "label": "Description",
-        "description": "Sets the description."
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "filterLabel",
-        "value": "",
-        "label": "Filter Label",
-        "description": "Sets the text for filter label"
-      },
-      {
-        "component": "select",
-        "name": "contentType1",
-        "value": "",
-        "label": "Content Type - 1",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Certification",
-            "value": "certification"
-          },
-          {
-            "name": "Communities",
-            "value": "community"
-          },
-          {
-            "name": "Documentation",
-            "value": "documentation"
-          },
-          {
-            "name": "On-Demand Event",
-            "value": "event"
-          },
-          {
-            "name": "Playlists",
-            "value": "playlist"
-          },
-          {
-            "name": "Perspectives",
-            "value": "perspective"
-          },
-          {
-            "name": "Troubleshooting",
-            "value": "troubleshooting"
-          },
-          {
-            "name": "Tutorials",
-            "value": "tutorial"
-          }
-        ]
-      },
-      {
-        "component": "select",
-        "name": "contentType2",
-        "value": "",
-        "label": "Content Type - 2",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Certification",
-            "value": "certification"
-          },
-          {
-            "name": "Communities",
-            "value": "community"
-          },
-          {
-            "name": "Documentation",
-            "value": "documentation"
-          },
-          {
-            "name": "On-Demand Event",
-            "value": "event"
-          },
-          {
-            "name": "Playlists",
-            "value": "playlist"
-          },
-          {
-            "name": "Perspectives",
-            "value": "perspective"
-          },
-          {
-            "name": "Troubleshooting",
-            "value": "troubleshooting"
-          },
-          {
-            "name": "Tutorials",
-            "value": "tutorial"
-          }
-        ]
-      },
-      {
-        "component": "select",
-        "name": "contentType3",
-        "value": "",
-        "label": "Content Type - 3",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Certification",
-            "value": "certification"
-          },
-          {
-            "name": "Communities",
-            "value": "community"
-          },
-          {
-            "name": "Documentation",
-            "value": "documentation"
-          },
-          {
-            "name": "On-Demand Event",
-            "value": "event"
-          },
-          {
-            "name": "Playlists",
-            "value": "playlist"
-          },
-          {
-            "name": "Perspectives",
-            "value": "perspective"
-          },
-          {
-            "name": "Troubleshooting",
-            "value": "troubleshooting"
-          },
-          {
-            "name": "Tutorials",
-            "value": "tutorial"
-          }
-        ]
-      },
-      {
-        "component": "radio-group",
-        "name": "sortBy",
-        "value": "RELEVANCE",
-        "label": "Sort by",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Relevance",
-            "value": "RELEVANCE"
-          },
-          {
-            "name": "Most recent",
-            "value": "MOST_RECENT"
-          },
-          {
-            "name": "Most popular",
-            "value": "MOST_POPULAR"
-          }
-        ]
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "resultText",
-        "value": "",
-        "label": "Result text",
-        "description": "Sets the result text."
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "linkText",
-        "value": "",
-        "label": "Link text",
-        "description": "Sets the text for link."
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "link",
-        "value": "",
-        "label": "Link URL",
-        "description": "Sets the text url."
-      }
-    ]
+    {
+      "component": "tab",
+      "label": "Tab 1",
+      "name": "tab1"
+    },
+    {
+      "component": "text-input",
+      "label": "Text 1",
+      "name": "text1",
+      "valueType": "string"
+    },
+    {
+      "component": "tab",
+      "label": "Tab 2",
+      "name": "tab2"
+    },
+    {
+      "component": "text-input",
+      "label": "Text 2",
+      "name": "text2",
+      "valueType": "string"
+    }
+  ]
   },
   {
     "id": "product-interests",
