@@ -3288,7 +3288,7 @@
         "name": "contentType1",
         "value": "",
         "label": "Content Type 1",
-        "description": "Select the content type to display specific information in the card.",
+        "description": "Select the content type to display specific information in the first card.",
         "valueType": "string",
         "options": [
           {
@@ -3330,7 +3330,7 @@
         "name": "contentType2",
         "value": "",
         "label": "Content Type 2",
-        "description": "Select the content type to display specific information in the card.",
+        "description": "Select the content type to display specific information in the second card.",
         "valueType": "string",
         "options": [
           {
@@ -3372,7 +3372,7 @@
         "name": "contentType3",
         "value": "",
         "label": "Content Type 3",
-        "description": "Select the content type to display specific information in the card.",
+        "description": "Select the content type to display specific information in the third card.",
         "valueType": "string",
         "options": [
           {
@@ -3414,7 +3414,7 @@
         "name": "contentType4",
         "value": "",
         "label": "Content Type 4",
-        "description": "Select the content type to display specific information in the card.",
+        "description": "Select the content type to display specific information in the fourth card.",
         "valueType": "string",
         "options": [
           {
