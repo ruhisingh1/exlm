@@ -3209,7 +3209,7 @@
     ]
   },
   {
-    "id": "recommended-content-type",
+    "id": "recommended",
     "fields": [
       {
         "component": "text",
