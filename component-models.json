@@ -957,9 +957,9 @@
       {
         "component": "boolean",
         "valueType": "boolean",
-        "name": "profile-context",
-        "label": "Profile Context",
-        "description": "This will override the above Solution(s) or Feature(s) tags selection and use profile interests."
+        "name": "profile-interests-context",
+        "label": "Override Solution(s) or Feature(s) with profile context?",
+        "description": "This will override the Solution(s) or Feature(s) tags selection and use profile interests."
       },
       {
         "component": "multiselect",
