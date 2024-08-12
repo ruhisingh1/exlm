@@ -3284,15 +3284,11 @@
         "description": "Sets the text for filter label"
       },
       {
-        "component": "tab",
-        "label": "Content Type 1",
-        "name": "contentTypeTab1"
-      },
-      {
         "component": "select",
         "name": "contentType1",
         "value": "",
-        "label": "",
+        "label": "Content Type 1",
+        "description": "Select the content type to display specific information in the card.",
         "valueType": "string",
         "options": [
           {
@@ -3328,17 +3324,13 @@
             "value": "tutorial"
           }
         ]
-      },
-      {
-        "component": "tab",
-        "label": "Content Type 2",
-        "name": "contentTypeTab2"
       },
       {
         "component": "select",
         "name": "contentType2",
         "value": "",
-        "label": "",
+        "label": "Content Type 2",
+        "description": "Select the content type to display specific information in the card.",
         "valueType": "string",
         "options": [
           {
@@ -3374,17 +3366,13 @@
             "value": "tutorial"
           }
         ]
-      },
-      {
-        "component": "tab",
-        "label": "Content Type 3",
-        "name": "contentTypeTab3"
       },
       {
         "component": "select",
         "name": "contentType3",
         "value": "",
-        "label": "",
+        "label": "Content Type 3",
+        "description": "Select the content type to display specific information in the card.",
         "valueType": "string",
         "options": [
           {
@@ -3422,15 +3410,11 @@
         ]
       },
       {
-        "component": "tab",
-        "label": "Content Type 4",
-        "name": "contentTypeTab4"
-      },
-      {
         "component": "select",
         "name": "contentType4",
         "value": "",
-        "label": "",
+        "label": "Content Type 4",
+        "description": "Select the content type to display specific information in the card.",
         "valueType": "string",
         "options": [
           {
