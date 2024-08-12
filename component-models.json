@@ -3460,18 +3460,5 @@
         "label": "Role and Industry Description"
       }
     ]
-  },
-  {
-    "id": "recommended-content-type",
-    "fields": [
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "title",
-        "value": "",
-        "label": "Heading",
-        "description": "Sets the heading."
-      }
-    ]
   }
 ]
