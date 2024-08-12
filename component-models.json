@@ -3454,7 +3454,7 @@
       {
         "component": "radio-group",
         "name": "sortBy",
-        "value": "RELEVANCE",
+        "value": "",
         "label": "Sort by",
         "valueType": "string",
         "options": [
