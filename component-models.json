@@ -3214,7 +3214,9 @@
     {
       "component": "tab",
       "label": "Tab 1",
-      "name": "tab1"
+      "name": "tab1",
+      "value": "Tab 1",
+      "valueType": "string"
     },
     {
       "component": "text-input",
