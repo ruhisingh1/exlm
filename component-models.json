@@ -2760,6 +2760,7 @@
         "name": "author-bio-page",
         "multi": true,
         "value": "",
+        "rootPath": "/content/exlm/global/en/perspectives/authors",
         "label": "Author Bio page URL"
       },
       {
