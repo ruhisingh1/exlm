@@ -5,6 +5,8 @@ import { buildCard } from '../../scripts/browse-card/browse-card.js';
 import { createTooltip, hideTooltipOnScroll } from '../../scripts/browse-card/browse-card-tooltip.js';
 import BuildPlaceholder from '../../scripts/browse-card/browse-card-placeholder.js';
 import { COVEO_SORT_OPTIONS } from '../../scripts/browse-card/browse-cards-constants.js';
+import { defaultProfileClient, isSignedInUser } from '../../scripts/auth/profile.js';
+
 /**
  * Decorate function to process and log the mapped data.
  * @param {HTMLElement} block - The block of data to process.
@@ -14,7 +16,7 @@ export default async function decorate(block) {
   const [headingElement, toolTipElement, linkElement, ...configs] = [...block.children].map(
     (row) => row.firstElementChild,
   );
-  const [contentType, capabilities, role, level, authorType, sortBy] = configs.map((cell) => cell.textContent.trim());
+  const [contentType, capabilities, profileContext, role, level, authorType, sortBy] = configs.map((cell) => cell.textContent.trim());
   const sortCriteria = COVEO_SORT_OPTIONS[sortBy?.toUpperCase() ?? 'RELEVANCE'];
   const noOfResults = 4;
   const productKey = 'exl:solution';
@@ -98,7 +100,17 @@ export default async function decorate(block) {
   };
 
   extractCapability();
+  const isSignedIn = await isSignedInUser();
+  let userInterests = [];
+let userRole = [];
+let userExpLevel = [];
 
+if (profileContext && isSignedIn) {
+  const profileData = await defaultProfileClient.getMergedProfile();
+  userInterests = profileData?.interests ? profileData.interests : [];
+  userRole = profileData?.role ? profileData.role : [];
+  userExpLevel = profileData?.solutionLevels ? profileData.solutionLevels : [];
+}
   const param = {
     contentType: contentType && contentType.toLowerCase().split(','),
     product: products.length ? removeProductDuplicates(products) : null,
@@ -109,6 +121,11 @@ export default async function decorate(block) {
     authorType: authorType && authorType.split(','),
     sortCriteria,
     noOfResults,
+    context: {
+      interests: userInterests.length ? userInterests : null,
+      role: userRole.length ? userRole : null,
+      solutionLevels: userExpLevel.length ? userExpLevel : null,
+    },
   };
 
   const buildCardsShimmer = new BuildPlaceholder();
