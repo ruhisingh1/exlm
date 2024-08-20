@@ -5,11 +5,11 @@ function decorateButtons(buttons) {
   return buttons
     .map(({ ctaElem, ctaStyle, ctaLinkType }) => {
       if (ctaElem && ctaElem.textContent?.trim() !== '') {
-          const a = ctaElem.querySelector('a');
-          if (a) {
-            a.classList.add('button', ctaStyle, ctaLinkType);
-            return a.outerHTML;
-          }
+        const a = ctaElem.querySelector('a');
+        if (a) {
+          a.classList.add('button', ctaStyle, ctaLinkType);
+          return a.outerHTML;
+        }
       }
       return '';
     })
@@ -72,14 +72,14 @@ export default async function decorate(block) {
   decorateIcons(signupDOM);
   block.append(signupDOM);
 
-  const signInBtn = block.querySelector('.signin');
+  const signInBtns = block.querySelectorAll('.signin');
 
-  if (signInBtn) {
+  signInBtns.forEach((signInBtn) => {
     signInBtn.addEventListener('click', async (e) => {
       e.preventDefault();
       window.adobeIMS.signIn();
     });
-  }
+  });
 
   isSignedInUser().then((isUserSignedIn) => {
     if (!isUserSignedIn || document.documentElement.classList.contains('adobe-ue-edit')) {

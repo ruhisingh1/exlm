@@ -5,11 +5,17 @@ const EXL_PROFILE = 'exlProfile';
 const COMMUNITY_PROFILE = 'communityProfile';
 
 const fetchExlProfileData = async () => {
-  const [profileData, ppsProfileData] = await Promise.all([
+  const [profileData, ppsProfileData] = await Promise.allSettled([
     defaultProfileClient.getMergedProfile(),
     defaultProfileClient.getPPSProfile(),
   ]);
-  return { profileData, ppsProfileData };
+
+  // Throw error only if profileData is rejected
+  if (profileData.status === 'rejected') {
+    throw new Error(profileData.reason);
+  }
+  // Return profileData and ppsProfileData (or empty object if ppsProfileData is rejected)
+  return { profileData: profileData.value, ppsProfileData: ppsProfileData.value || {} };
 };
 
 const fetchCommunityProfileData = async () => defaultProfileClient.fetchCommunityProfileDetails();
@@ -118,14 +124,21 @@ const generateCommunityAccountDOM = (profileData, placeholders, communityAccount
 const generateAdditionalProfileInfoDOM = (profileData, placeholders) => {
   const { roles, industry, interests } = profileData;
 
+  const roleMappings = {
+    Developer: placeholders?.roleCardDeveloperTitle || 'Developer',
+    User: placeholders?.roleCardUserTitle || 'Business User',
+    Leader: placeholders?.roleCardBusinessLeaderTitle || 'Business Leader',
+    Admin: placeholders?.roleCardAdministratorTitle || 'Administrator',
+  };
+
   return `<div class="profile-row additional-data">
     <div class="profile-card-body additional-data-body">
       <div class="profile-user-info">
         ${
           roles && ((Array.isArray(roles) && roles.length > 0) || (typeof roles === 'string' && roles.trim() !== ''))
-            ? `<div class="user-role"><span class="heading">${
-                placeholders?.myRole || 'My Role'
-              }: </span><span>${roles.join('&nbsp;&nbsp;')}</span></div>`
+            ? `<div class="user-role"><span class="heading">${placeholders?.myRole || 'My Role'}: </span><span>${roles
+                .map((role) => roleMappings[role] || role)
+                .join('&nbsp;&nbsp;')}</span></div>`
             : ''
         }
         ${
