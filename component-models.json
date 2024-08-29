@@ -1568,6 +1568,19 @@
     ]
   },
   {
+    "id": "iframe-app",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "iframeUrl",
+        "value": "",
+        "label": "iFrame URL",
+        "description": "Please provide a URL to an iFrame app."
+      }
+    ]
+  },
+  {
     "id": "secondary-search",
     "fields": [
       {
@@ -2784,22 +2797,7 @@
         "valueType": "string",
         "name": "author-bio-page",
         "multi": true,
-        "value": "",
-        "rootPath": "/content/exlm/global/en/perspectives/authors",
         "label": "Author Bio page URL"
-      },
-      {
-        "component": "multiselect",
-        "valueType": "string",
-        "name": "coveo-content-type",
-        "label": "Content Type",
-        "description": "Sets the coveo content type in page meta.",
-        "options": [
-          {
-            "name": "Perspectives",
-            "value": "Perspective"
-          }
-        ]
       },
       {
         "component": "aem-tag",
