@@ -2798,9 +2798,7 @@
         "name": "author-bio-page",
         "multi": true,
         "label": "Author Bio page URL",
-        "validation": {
-    "rootPath": "/content/exlm/global/en/perspectives/authors"
-  }
+      "rootPath": "/content/exlm/global/en/perspectives/authors"
       },
       {
         "component": "aem-tag",
