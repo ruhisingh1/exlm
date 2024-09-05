@@ -56,7 +56,8 @@
       "inline-survey",
       "featured-content",
       "browse-filters",
-      "topic-results"
+      "topic-results",
+      "personalized-content-placeholder"
     ]
   },
   {
@@ -164,7 +165,8 @@
       "bookmarks",
       "awards",
       "profile-welcome",
-      "recommended-content"
+      "recommended-content",
+      "personalized-content-placeholder"
     ]
   },
   {
