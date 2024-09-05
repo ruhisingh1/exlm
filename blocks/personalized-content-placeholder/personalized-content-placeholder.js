@@ -25,16 +25,15 @@ const fetchPageContent = async (url, loader) => {
 
 export default async function decorate(block) {
     const [completePageURL, incompletePageURL] = [...block.children].map((row) => row.querySelector('a')?.href);
+    block.textContent = "Loading"
     const currentSection = block.parentElement.parentElement;
-        document.body.classList.add('profile-home-page');
-    const loader = htmlToElement('<div class="section profile-shimmer"><span></span></div>');
-    currentSection.insertAdjacentElement('beforebegin', loader);
+    document.body.classList.add('profile-home-page');
     defaultProfileClient.getMergedProfile().then(async (profileData) => {
         if (profileData.interests.length) {
-          await fetchPageContent(completePageURL, loader);
+          await fetchPageContent(completePageURL, currentSection);
         } else {
-          await fetchPageContent(incompletePageURL, loader);
+          await fetchPageContent(incompletePageURL, currentSection);          
         }
+          currentSection.remove()
       });
-    loader.remove();
 }
