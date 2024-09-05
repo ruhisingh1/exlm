@@ -26,13 +26,12 @@ const fetchPageContent = async (url, loader) => {
 export default async function decorate(block) {
   const [completePageURL, incompletePageURL] = [...block.children].map((row) => row.querySelector('a')?.href);
   block.textContent = 'This block will load content authored based on if the profile is completed or incomplete';
-
-  if (!window.hlx.aemRoot) {
-    const currentSection = block.parentElement.parentElement;
-    document.body.classList.add('profile-home-page');
+  document.body.classList.add('profile-home-page');
     document.body.appendChild(
         htmlToElement('<div class="profile-background" role="presentation" aria-hidden="true"></div>'),
       );
+  if (!window.hlx.aemRoot) {
+    const currentSection = block.parentElement.parentElement;
     const loader = htmlToElement('<div class="section profile-shimmer"><span></span></div>');
     currentSection.insertAdjacentElement('beforebegin', loader);
     const profileData = await defaultProfileClient.getMergedProfile();
