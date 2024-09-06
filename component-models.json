@@ -3977,6 +3977,10 @@
         "valueType": "string",
         "options": [
           {
+            "name": "Default",
+            "value": ""
+          },
+          {
             "name": "Certification",
             "value": "certification"
           },
@@ -4018,6 +4022,10 @@
         "description": "Recommendation results will be placed on the page based on content type by order selected, if no content type is selected will be dynamic based on profile context.",
         "valueType": "string",
         "options": [
+          {
+            "name": "Default",
+            "value": ""
+          },
           {
             "name": "Certification",
             "value": "certification"
@@ -4061,6 +4069,10 @@
         "valueType": "string",
         "options": [
           {
+            "name": "Default",
+            "value": ""
+          },
+          {
             "name": "Certification",
             "value": "certification"
           },
@@ -4102,6 +4114,10 @@
         "description": "Recommendation results will be placed on the page based on content type by order selected, if no content type is selected will be dynamic based on profile context.",
         "valueType": "string",
         "options": [
+          {
+            "name": "Default",
+            "value": ""
+          },
           {
             "name": "Certification",
             "value": "certification"
@@ -4227,14 +4243,12 @@
         "component": "aem-content",
         "valueType": "string",
         "name": "complete-profile-url",
-        "value": "",
         "label": "Complete profile page URL"
       },
       {
         "component": "aem-content",
         "valueType": "string",
         "name": "incomplete-profile-url",
-        "value": "",
         "label": "Inomplete profile page URL"
       }
     ]
