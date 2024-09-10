@@ -3936,7 +3936,7 @@
       {
         "component": "boolean",
         "valueType": "boolean",
-        "name": "show-profile-card",
+        "name": "showProfileCard",
         "label": "Show profile card?",
         "description": "This will show profile card."
       }
