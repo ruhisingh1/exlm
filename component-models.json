@@ -1189,7 +1189,7 @@
         "valueType": "boolean",
         "name": "backgroundHexCode",
         "label": "Fill marquee with background color",
-        "description": "Fill marquee with background color."
+        "description": "This option allows to fill marquee with the above selected background color."
       },
       {
         "component": "text",
@@ -3938,7 +3938,7 @@
         "valueType": "boolean",
         "name": "showProfileCard",
         "label": "Show profile card?",
-        "description": "This will show profile card."
+        "description": "This will enable profile card for this block."
       }
     ]
   },
@@ -4283,7 +4283,7 @@
         "component": "aem-content",
         "valueType": "string",
         "name": "incomplete-profile-url",
-        "label": "Inomplete profile page URL"
+        "label": "Incomplete profile page URL"
       }
     ]
   }
