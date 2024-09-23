@@ -728,8 +728,8 @@ export function getConfig() {
       env: 'PROD',
       cdn: 'experienceleague.adobe.com',
       authorUrl: 'author-p122525-e1219150.adobeaemcloud.com',
-      hlxPreview: 'main--exlm-prod--adobe-experience-league.hlx.page',
-      hlxLive: 'main--exlm-prod--adobe-experience-league.hlx.live',
+      hlxPreview: 'main--exlm-prod--adobe-experience-league.hlx.page' || 'main--exlm--ruhisingh1.hlx.page',
+      hlxLive: 'main--exlm-prod--adobe-experience-league.hlx.live' || 'main--exlm--ruhisingh1.hlx.live',
     },
     {
       env: 'STAGE',
