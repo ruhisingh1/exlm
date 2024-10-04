@@ -4,6 +4,16 @@ import SignupFlowDialog from './signup-flow-dialog.js';
 import { defaultProfileClient, isSignedInUser } from '../auth/profile.js';
 import { getConfig } from '../scripts.js';
 
+/**
+ * Displays the signup modal based on the user's profile timestamp and interactions.
+ *
+ * - If the user has a profile timestamp older than today, the incomplete signup modal is shown.
+ * - If the user has a profile timestamp that is newer than or equal to the signup modal configuration date,
+ *   the new profile modal is shown.
+ * - If the user has no interests and the modal has been seen before, the function checks if the
+ *   modal should be re-displayed based on the `modalReDisplayDuration` value.
+ *
+ */
 export default async function showSignupDialog() {
   if (!isSignedInUser()) {
     return;
@@ -14,12 +24,12 @@ export default async function showSignupDialog() {
     NEW_PROFILE: 'new-profile',
   };
 
-  // This value is hard-coded. Using a Bulk metadata Value for this did not work due to CDN issues;
-  //  some pages had the metadata while others did not.
+  // This value is hard-coded because using a Bulk metadata value failed due to CDN issues.
   const { signUpFlowConfigDate, modalReDisplayDuration } = getConfig();
 
   const configDate = new Date(signUpFlowConfigDate);
   const profileData = await defaultProfileClient.getMergedProfile();
+  const interactions = profileData.interactions ?? [];
   const interests = profileData.interests ?? [];
   const profileTimeStamp = new Date(profileData.timestamp);
   const modalSeenInteraction = await defaultProfileClient.getLatestInteraction('modalSeen');
@@ -29,35 +39,25 @@ export default async function showSignupDialog() {
 
   if (modalSeenInteraction) {
     const modalSeenTimeStamp = new Date(modalSeenInteraction.timestamp);
-    const pastDate = new Date(todayStartTimeStamp);
-    pastDate.setDate(todayStartTimeStamp.getDate() - modalReDisplayDuration);
-  
-    // Display modal again if no interests and modal timestamp is older than the past date
-    if (interests.length > 0) {
+    const modalReDisplayDate = new Date(todayStartTimeStamp);
+    modalReDisplayDate.setDate(todayStartTimeStamp.getDate() - modalReDisplayDuration);
+
+    // Display Incomplete Sign up modal again if no interests and modalSeen timestamp is older than the configured date
+    if (interests.length > 0 && modalSeenTimeStamp < modalReDisplayDate) {
       SignupFlowDialog.init(SIGNUP_DIALOG_TYPE.INCOMPLETE_PROFILE);
-  
-      // Update modalSeen timestamp only
-      const currentTimestamp = new Date().toISOString();
-  
-      // Fetch all interactions from the profile
-      const interactions = profileData.interactions ?? [];
-  
-      // Remove the existing modalSeen event if it exists
       const updatedInteractions = interactions.filter((interaction) => interaction.event !== 'modalSeen');
-  
+
       // Push the updated modalSeen event with the new timestamp
+      const currentTimestamp = new Date().toISOString();
       updatedInteractions.push({
         event: 'modalSeen',
         timestamp: currentTimestamp,
         modalSeen: true,
       });
-  
-      // Save the updated interactions array back to the profile
-      await defaultProfileClient.updateProfile({ interactions: updatedInteractions });
+
+      await defaultProfileClient.updateProfile('interactions', updatedInteractions, true);
     }
-  }
-  
-   else {
+  } else {
     // eslint-disable-next-line no-lonely-if
     if (profileTimeStamp < todayStartTimeStamp) {
       SignupFlowDialog.init(SIGNUP_DIALOG_TYPE.INCOMPLETE_PROFILE);
