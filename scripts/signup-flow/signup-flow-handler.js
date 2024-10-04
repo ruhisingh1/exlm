@@ -35,7 +35,8 @@ export default async function showSignupDialog() {
     pastDate.setDate(todayStartTimeStamp.getDate() - modalReDisplayDuration);
 
     // Display modal again if no interests and time since last modal shown has passed the duration
-    if (interests.length === 0 && modalSeenTimeStamp < pastDate) {
+    // if (interests.length === 0 && modalSeenTimeStamp < pastDate) {
+      if (interests.length > 0) {
       SignupFlowDialog.init(SIGNUP_DIALOG_TYPE.INCOMPLETE_PROFILE);
 
       // Update modalSeen timestamp
