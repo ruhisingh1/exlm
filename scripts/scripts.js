@@ -807,6 +807,7 @@ export function getConfig() {
     launchScriptSrc = 'https://assets.adobedtm.com/d4d114c60e50/9f881954c8dc/launch-102059c3cf0a-staging.min.js';
   else launchScriptSrc = 'https://assets.adobedtm.com/d4d114c60e50/9f881954c8dc/launch-caabfb728852-development.js';
   const signUpFlowConfigDate = '2024-08-15T00:00:00.762Z';
+  const modalReDisplayDuration = '1'; // in days
 
   window.exlm = window.exlm || {};
   window.exlm.config = {
@@ -819,10 +820,11 @@ export function getConfig() {
     ppsOrigin,
     launchScriptSrc,
     signUpFlowConfigDate,
+    modalReDisplayDuration,
     cookieConsentName,
     targetCriteriaIds,
     khorosProfileUrl: `${cdnOrigin}/api/action/khoros/profile-menu-list`,
-    khorosProfileDetailsUrl: `${cdnOrigin}/api/action/khoros/profile-details?lang=${communityLocale}`,
+    khorosProfileDetailsUrl: `${cdnOrigin}/api/action/khoros/profile-details`,
     privacyScript: `${cdnOrigin}/etc.clientlibs/globalnav/clientlibs/base/privacy-standalone.js`,
     profileUrl: `${cdnOrigin}/api/profile?lang=${lang}`,
     JWTTokenUrl: `${cdnOrigin}/api/token?lang=${lang}`,
