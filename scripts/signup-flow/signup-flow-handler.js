@@ -42,18 +42,21 @@ export default async function showSignupDialog() {
       // Fetch all interactions from the profile
       const interactions = profileData.interactions ?? [];
   
-      // Find the existing modalSeen event in the interactions array
-      const modalSeenEvent = interactions.find((interaction) => interaction.event === 'modalSeen');
+      // Remove the existing modalSeen event if it exists
+      const updatedInteractions = interactions.filter((interaction) => interaction.event !== 'modalSeen');
   
-      if (modalSeenEvent) {
-        // Update the timestamp of the found modalSeen event
-        modalSeenEvent.timestamp = currentTimestamp;
+      // Push the updated modalSeen event with the new timestamp
+      updatedInteractions.push({
+        event: 'modalSeen',
+        timestamp: currentTimestamp,
+        modalSeen: true,
+      });
   
-        // Save the updated interactions array back to the profile
-        await defaultProfileClient.updateProfile('interactions', interactions);
-      }
+      // Save the updated interactions array back to the profile
+      await defaultProfileClient.updateProfile({ interactions: updatedInteractions });
     }
   }
+  
    else {
     // eslint-disable-next-line no-lonely-if
     if (profileTimeStamp < todayStartTimeStamp) {
