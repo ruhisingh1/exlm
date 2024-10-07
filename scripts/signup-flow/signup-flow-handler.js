@@ -62,7 +62,7 @@ export default async function showSignupDialog() {
     const modalReDisplayDate = subtractMonths(todayStartTimeStamp, modalReDisplayDuration);
 
     // Display Incomplete Sign up modal again if no interests and modalSeen timestamp is older than the configured date
-    if (interests.length > 0 && modalSeenTimeStamp < modalReDisplayDate) {
+    if (interests.length === 0 && modalSeenTimeStamp < modalReDisplayDate) {
       SignupFlowDialog.init(SIGNUP_DIALOG_TYPE.INCOMPLETE_PROFILE);
       const updatedInteractions = interactions.filter((interaction) => interaction.event !== 'modalSeen');
 
