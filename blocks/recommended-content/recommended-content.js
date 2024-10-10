@@ -105,7 +105,7 @@ export default async function decorate(block) {
 
     if (!(targetSupport && targetCriteriaId)) {
       block.style.display = 'block';
-      block.setAttribute('data-analytics-rec-source', 'coveo');
+      block.querySelector('.recommended-content-block-section')?.setAttribute('data-analytics-rec-source', 'coveo');
     }
 
     const sortByContent = thirdEl?.innerText?.trim();
@@ -384,7 +384,8 @@ export default async function decorate(block) {
                 if (resp.data) {
                   updateCopyFromTarget(resp, headingElement, descriptionElement);
                   block.style.display = 'block';
-                  block.setAttribute('data-analytics-target-meta', JSON.stringify(resp.data));
+                  // block.setAttribute('data-analytics-target-meta', JSON.stringify(resp.data));
+                  block.querySelector('.recommended-content-block-section')?.setAttribute('data-analytics-rec-source', 'target');
                 }
                 const cardModels = parseCardResponseData(resp, payloadConfig);
                 let renderedCardModels = [];

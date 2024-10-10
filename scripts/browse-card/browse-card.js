@@ -333,6 +333,8 @@ const buildCardContent = async (card, model) => {
  */
 export async function buildCard(container, element, model) {
   const { thumbnail, product, title, contentType, badgeTitle, inProgressStatus, failedToLoad = false } = model;
+
+  element.setAttribute('data-analytics-content-type', contentType);
   // lowercase all urls - because all of our urls are lower-case
   model.viewLink = model.viewLink?.toLowerCase();
   model.copyLink = model.copyLink?.toLowerCase();
@@ -438,10 +440,8 @@ export async function buildCard(container, element, model) {
     }
     cardContainer.appendChild(card);
     element.appendChild(cardContainer);
-    element.setAttribute('data-analytics-content-type', contentType);
   } else {
     element.appendChild(card);
-    element.setAttribute('data-analytics-content-type', contentType);
   }
 
   element.querySelector('a').addEventListener(
