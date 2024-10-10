@@ -105,7 +105,6 @@ export default async function decorate(block) {
 
     if (!(targetSupport && targetCriteriaId)) {
       block.style.display = 'block';
-      block.querySelector('.recommended-content-block-section')?.setAttribute('data-analytics-rec-source', 'coveo');
     }
 
     const sortByContent = thirdEl?.innerText?.trim();
@@ -405,6 +404,7 @@ export default async function decorate(block) {
           }),
         );
       } else {
+        block.querySelector('.recommended-content-block-section')?.setAttribute('data-analytics-rec-source', 'coveo');
         cardPromises = Object.keys(contentTypesFetchMap).map((contentType) => {
           const payload = {
             ...params,
