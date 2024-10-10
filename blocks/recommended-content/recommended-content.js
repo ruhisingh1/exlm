@@ -105,6 +105,7 @@ export default async function decorate(block) {
 
     if (!(targetSupport && targetCriteriaId)) {
       block.style.display = 'block';
+      block.setAttribute('data-analytics-rec-source', 'coveo');
     }
 
     const sortByContent = thirdEl?.innerText?.trim();
