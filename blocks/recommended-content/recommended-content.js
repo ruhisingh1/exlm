@@ -383,7 +383,7 @@ export default async function decorate(block) {
                 if (resp.data) {
                   updateCopyFromTarget(resp, headingElement, descriptionElement);
                   block.style.display = 'block';
-                  block.setAttribute('data-analytics-target-meta', window.exlm?.targetData);
+                  block.setAttribute('data-analytics-target-meta', JSON.stringify(resp.data));
                 }
                 const cardModels = parseCardResponseData(resp, payloadConfig);
                 let renderedCardModels = [];

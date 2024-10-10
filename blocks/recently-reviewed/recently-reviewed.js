@@ -81,12 +81,12 @@ export default async function decorate(block) {
           const items = contentDiv.querySelectorAll('.browse-cards-block-content > div');
           // eslint-disable-next-line no-new
           new Swiper(contentDiv, items, true, null, prevButton, nextButton);
+          block.setAttribute('data-analytics-target-meta', JSON.stringify(resp.data));
         } else {
           buildNoResultsContent(contentDiv, true);
         }
         buildCardsShimmer.remove();
       });
-      block.setAttribute('data-analytics-target-meta', window.exlm?.targetData);
     }
   });
 }
