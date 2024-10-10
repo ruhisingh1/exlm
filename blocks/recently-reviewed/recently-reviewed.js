@@ -40,7 +40,6 @@ function renderNavigationArrows(titleContainer) {
 export default async function decorate(block) {
   checkTargetSupport().then((targetSupport) => {
     block.style.display = 'none';
-    block.setAttribute('data-analytics-target-meta', window.exlm?.targetData);
     const [headingElement, descriptionElement] = [...block.children].map((row) => row.firstElementChild);
     headingElement.classList.add('recently-reviewed-header');
     descriptionElement.classList.add('recently-reviewed-description');
@@ -87,6 +86,7 @@ export default async function decorate(block) {
         }
         buildCardsShimmer.remove();
       });
+      block.setAttribute('data-analytics-target-meta', window.exlm?.targetData);
     }
   });
 }
