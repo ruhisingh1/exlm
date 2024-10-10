@@ -92,6 +92,7 @@ export default async function decorate(block) {
     }
 
     if (targetSupport && targetCriteriaId) {
+      block.setAttribute('data-analytics-target-meta', window.exlm?.targetData);
       if (profileInterests.length > 0) {
         defaultOptionsKey = [];
         defaultOptionsKey.push(ALL_ADOBE_OPTIONS_KEY);
@@ -297,6 +298,7 @@ export default async function decorate(block) {
       const contentDiv = block.querySelector('.recommended-content-block-section');
       const lowercaseOptionType = optionType?.toLowerCase();
       contentDiv.dataset.selected = lowercaseOptionType;
+      contentDiv.setAttribute('data-analytics-filter-id', lowercaseOptionType);
       const showProfileOptions = defaultOptionsKey.some((key) => lowercaseOptionType === key.toLowerCase());
       const interest = filterOptions.find((opt) => opt.toLowerCase() === lowercaseOptionType);
       const expLevelIndex = sortedProfileInterests.findIndex((s) => s === interest);
