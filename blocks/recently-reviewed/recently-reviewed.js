@@ -4,6 +4,7 @@ import {
   checkTargetSupport,
   targetDataAdapter,
   updateCopyFromTarget,
+  setTargetDataAsBlockAttribute,
 } from '../../scripts/target/target.js';
 import BuildPlaceholder from '../../scripts/browse-card/browse-card-placeholder.js';
 import { buildCard, buildNoResultsContent } from '../../scripts/browse-card/browse-card.js';
@@ -26,10 +27,10 @@ function renderNavigationArrows(titleContainer) {
   const navigationElements = htmlToElement(`
         <div class="recently-viewed-nav-section">
             <button class="prev-nav" disabled>
-                <span class="icon icon-chevron"></span>
+                <span class="icon icon-chevron-gray"></span>
             </button>
             <button class="next-nav" disabled>
-                <span class="icon icon-chevron"></span>
+                <span class="icon icon-chevron-gray"></span>
             </button
         </div>
     `);
@@ -81,7 +82,7 @@ export default async function decorate(block) {
           const items = contentDiv.querySelectorAll('.browse-cards-block-content > div');
           // eslint-disable-next-line no-new
           new Swiper(contentDiv, items, true, null, prevButton, nextButton);
-          block.setAttribute('data-analytics-target-meta', JSON.stringify(resp.data));
+          setTargetDataAsBlockAttribute(resp.data, block);
         } else {
           buildNoResultsContent(contentDiv, true);
         }

@@ -15,6 +15,7 @@ import {
   checkTargetSupport,
   targetDataAdapter,
   updateCopyFromTarget,
+  setTargetDataAsBlockAttribute,
 } from '../../scripts/target/target.js';
 
 const DEFAULT_NUM_CARDS = 4;
@@ -383,8 +384,10 @@ export default async function decorate(block) {
                 if (resp.data) {
                   updateCopyFromTarget(resp, headingElement, descriptionElement);
                   block.style.display = 'block';
-                  // block.setAttribute('data-analytics-target-meta', JSON.stringify(resp.data));
-                  block.querySelector('.recommended-content-block-section')?.setAttribute('data-analytics-rec-source', 'target');
+                  setTargetDataAsBlockAttribute(resp.data, block);
+                  block
+                    .querySelector('.recommended-content-block-section')
+                    ?.setAttribute('data-analytics-rec-source', 'target');
                 }
                 const cardModels = parseCardResponseData(resp, payloadConfig);
                 let renderedCardModels = [];
