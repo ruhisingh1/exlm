@@ -1,4 +1,4 @@
-import { createTag, fetchLanguagePlaceholders, getConfig } from '../../scripts/scripts.js';
+import { createTag, fetchLanguagePlaceholders, getConfig, htmlToElement } from '../../scripts/scripts.js';
 import BrowseCardsDelegate from '../../scripts/browse-card/browse-cards-delegate.js';
 import { COVEO_SORT_OPTIONS } from '../../scripts/browse-card/browse-cards-constants.js';
 import { buildCard, buildNoResultsContent } from '../../scripts/browse-card/browse-card.js';
@@ -57,6 +57,21 @@ const interestDataPromise = fetchInterestData();
 const ALL_MY_OPTIONS_KEY = placeholders?.allMyProducts || 'All my products';
 const ALL_ADOBE_OPTIONS_KEY = placeholders?.allAdobeProducts || 'All Adobe Products';
 
+const renderCardPlaceholders = (contentDiv, renderCardsFlag = true) => {
+  const cardDiv = document.createElement('div');
+  cardDiv.classList.add('card-wrapper');
+  if (renderCardsFlag) {
+    contentDiv.appendChild(cardDiv);
+  }
+
+  const cardPlaceholder = new BuildPlaceholder(1);
+  cardPlaceholder.add(cardDiv);
+  return {
+    shimmer: cardPlaceholder,
+    wrapper: cardDiv,
+  };
+};
+
 /**
  * Decorate function to process and log the mapped data.
  * @param {HTMLElement} block - The block of data to process.
@@ -82,6 +97,23 @@ export default async function decorate(block) {
   const [firstEl, secondEl, targetCriteria, thirdEl, fourthEl, fifthEl, ...otherEl] = reversedDomElements;
   const targetCriteriaId = targetCriteria.textContent.trim();
   const profileDataPromise = defaultProfileClient.getMergedProfile();
+
+  const tempWrapper = htmlToElement(`
+      <div class="recommended-content-temp-wrapper">
+        <div class="recommended-tab-headers">
+          <p class="loading-shimmer" style="--placeholder-width: 100%; height: 48px"></p>
+        </div>
+        <div class="browse-cards-block-content recommended-content-block-section recommended-content-shimmer-wrapper"></div>
+      </div>
+    `);
+  const tempContentSection = tempWrapper.querySelector('.recommended-content-block-section');
+  countNumberAsArray(4).forEach(() => {
+    const { shimmer: shimmerInstance, wrapper } = renderCardPlaceholders(tempWrapper);
+    wrapper.appendChild(shimmerInstance.shimmer);
+    tempContentSection.appendChild(wrapper);
+  });
+
+  block.appendChild(tempWrapper);
 
   checkTargetSupport().then(async (targetSupport) => {
     Promise.all([profileDataPromise, interestDataPromise]).then((promiseResponses) => {
@@ -152,25 +184,10 @@ export default async function decorate(block) {
 
       filterOptions.unshift(...defaultOptionsKey);
       const [defaultFilterOption = ''] = filterOptions;
-      const renderedCardTitles = [];
       const containsAllMyProductsTab = filterOptions.includes(ALL_MY_OPTIONS_KEY);
       const cardIdsToExclude = [];
       const allMyProductsCardModels = [];
-
-      const renderCardPlaceholders = (contentDiv, renderCardsFlag = true) => {
-        const cardDiv = document.createElement('div');
-        cardDiv.classList.add('card-wrapper');
-        if (renderCardsFlag) {
-          contentDiv.appendChild(cardDiv);
-        }
-
-        const cardPlaceholder = new BuildPlaceholder(1);
-        cardPlaceholder.add(cardDiv);
-        return {
-          shimmer: cardPlaceholder,
-          wrapper: cardDiv,
-        };
-      };
+      const dataConfiguration = {};
 
       const getCardsData = (payload) =>
         new Promise((resolve) => {
@@ -227,6 +244,7 @@ export default async function decorate(block) {
               }
             });
           } else {
+            // Remove contentType and make new call.
             const payloadInfo = {
               ...apiPayload,
               contentType: null,
@@ -245,11 +263,12 @@ export default async function decorate(block) {
       };
 
       const renderCardsBlock = (cardModels, payloadConfig, contentDiv) => {
-        const { renderCards = true } = payloadConfig;
+        const { renderCards = true, lowercaseOptionType } = payloadConfig;
         const promises = cardModels.map(
           (cardData, i) =>
             new Promise((resolve) => {
               const cardDiv = payloadConfig.wrappers[i];
+              const alreadyRenderedCardIds = dataConfiguration[lowercaseOptionType]?.renderedCardIds || [];
               if (cardData?.cardPromise) {
                 cardData.cardPromise.then((cardDataResponse) => {
                   const { cardsToRenderCount } = cardData;
@@ -257,8 +276,8 @@ export default async function decorate(block) {
                   const cardModelsList = [];
                   if (delayedCardData.length === 0) {
                     if (renderCards) {
-                      cardData.shimmers.forEach((shim, index) => {
-                        shim.remove();
+                      cardData.shimmers?.forEach((shimmerEl, index) => {
+                        shimmerEl.remove();
                         cardData.wrappers[index].style.display = 'none';
                       });
                     }
@@ -273,8 +292,8 @@ export default async function decorate(block) {
                         wrapperDiv.innerHTML = '';
                       }
                       const [defaultCardModel] = delayedCardData;
-                      const targetIndex = delayedCardData.findIndex(
-                        (delayData) => !renderedCardTitles.includes(delayData.title),
+                      const targetIndex = delayedCardData.findIndex((delayData) =>
+                        delayData.id ? !alreadyRenderedCardIds.includes(delayData.id) : false,
                       );
                       let cardModel;
                       if (targetIndex !== -1) {
@@ -285,7 +304,9 @@ export default async function decorate(block) {
                         delayedCardData.splice(0, 1);
                       }
                       if (renderCards) {
-                        renderedCardTitles.push(cardModel.title);
+                        if (cardModel.id) {
+                          dataConfiguration[lowercaseOptionType].renderedCardIds.push(cardModel.id);
+                        }
                         buildCard(contentDiv, wrapperDiv, cardModel);
                       }
                       cardModelsList.push(cardModel);
@@ -296,6 +317,9 @@ export default async function decorate(block) {
               } else {
                 if (renderCards) {
                   cardDiv.innerHTML = '';
+                  if (cardData.id) {
+                    dataConfiguration[lowercaseOptionType].renderedCardIds.push(cardData.id);
+                  }
                   buildCard(contentDiv, cardDiv, cardData);
                 }
                 resolve([cardData]);
@@ -319,6 +343,10 @@ export default async function decorate(block) {
         const lowercaseOptionType = optionType?.toLowerCase();
         const saveCardResponse =
           [ALL_MY_OPTIONS_KEY.toLowerCase()].includes(lowercaseOptionType) && cardIdsToExclude.length === 0;
+        if (!dataConfiguration[lowercaseOptionType]) {
+          dataConfiguration[lowercaseOptionType] = {};
+        }
+        dataConfiguration[lowercaseOptionType].renderedCardIds = [];
         contentDiv.dataset.selected = lowercaseOptionType;
         contentDiv.setAttribute('data-analytics-filter-id', lowercaseOptionType);
         const showProfileOptions = defaultOptionsKey.some((key) => lowercaseOptionType === key.toLowerCase());
@@ -376,6 +404,7 @@ export default async function decorate(block) {
             params,
             optionType,
             renderCards,
+            lowercaseOptionType,
           };
           cardPromises.push(
             new Promise((resolve) => {
@@ -433,6 +462,7 @@ export default async function decorate(block) {
               contentType: payloadContentType,
               wrappers,
               renderCards,
+              lowercaseOptionType,
             };
             return new Promise((resolve) => {
               getCardsData(payload).then(async (resp) => {
@@ -471,6 +501,10 @@ export default async function decorate(block) {
             }
             const cardsCount = contentDiv.querySelectorAll('.browse-card').length;
             if (cardsCount === 0) {
+              Array.from(contentDiv.querySelectorAll('.shimmer-placeholder')).forEach((shimmer) => {
+                shimmer.remove();
+              });
+              buildNoResultsContent(contentDiv, false);
               buildNoResultsContent(contentDiv, true);
               recommendedContentNoResults(contentDiv);
               contentDiv.style.display = 'block';
@@ -502,6 +536,7 @@ export default async function decorate(block) {
       };
 
       const renderCardBlock = (parentDiv) => {
+        block.removeChild(tempWrapper);
         const contentDiv = document.createElement('div');
         contentDiv.classList.add('browse-cards-block-content', 'recommended-content-block-section');
         parentDiv.appendChild(contentDiv);
