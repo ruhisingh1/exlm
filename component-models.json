@@ -799,23 +799,6 @@
         "value": "",
         "label": "Link URL",
         "description": "Sets the link URL for Card."
-      },
-      {
-        "component": "radio-group",
-        "name": "target",
-        "value": "",
-        "label": "Link target",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Open in new tab",
-            "value": "new-tab"
-          },
-          {
-            "name": "Open in same tab",
-            "value": ""
-          }
-        ]
       }
     ]
   },
@@ -972,13 +955,6 @@
         "description": "Optional - all are included if no selection is made."
       },
       {
-        "component": "boolean",
-        "valueType": "boolean",
-        "name": "profile-interests-context",
-        "label": "Override Solution(s) or Feature(s) with profile context?",
-        "description": "This will override the Solution(s) or Feature(s) tags selection and use profile interests."
-      },
-      {
         "component": "multiselect",
         "name": "roles",
         "label": "Role(s)",
@@ -1000,10 +976,6 @@
           {
             "name": "User",
             "value": "User"
-          },
-          {
-            "name": "Based on Profile Context",
-            "value": "profile-context"
           }
         ]
       },
@@ -1025,10 +997,6 @@
           {
             "name": "Experienced",
             "value": "Experienced"
-          },
-          {
-            "name": "Based on Profile Context",
-            "value": "profile-context"
           }
         ]
       },
@@ -2047,10 +2015,6 @@
             "value": "event"
           },
           {
-            "name": "Playlists",
-            "value": "playlist"
-          },
-          {
             "name": "Perspectives",
             "value": "perspective"
           },
@@ -2144,10 +2108,6 @@
           {
             "name": "On-Demand Event",
             "value": "event"
-          },
-          {
-            "name": "Playlists",
-            "value": "playlist"
           },
           {
             "name": "Perspectives",
@@ -3290,281 +3250,6 @@
     ]
   },
   {
-    "id": "recommended-content-type",
-    "fields": [
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "title",
-        "value": "",
-        "label": "Heading",
-        "description": "Sets the heading."
-      },
-      {
-        "component": "select",
-        "valueType": "string",
-        "name": "titleType",
-        "value": "h3",
-        "label": "Heading Type",
-        "options": [
-          {
-            "name": "H1",
-            "value": "h1"
-          },
-          {
-            "name": "H2",
-            "value": "h2"
-          },
-          {
-            "name": "H3",
-            "value": "h3"
-          },
-          {
-            "name": "H4",
-            "value": "h4"
-          },
-          {
-            "name": "H5",
-            "value": "h5"
-          },
-          {
-            "name": "H6",
-            "value": "h6"
-          }
-        ]
-      },
-      {
-        "component": "richtext",
-        "valueType": "string",
-        "name": "description",
-        "value": "",
-        "label": "Description",
-        "description": "Sets the description."
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "filterLabel",
-        "value": "",
-        "label": "Filter Label",
-        "description": "Sets the text for filter label"
-      },
-      {
-        "component": "select",
-        "name": "contentType1",
-        "value": "",
-        "label": "Content Type 1",
-        "description": "Select the content type to display specific information in the first card.",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Certification",
-            "value": "certification"
-          },
-          {
-            "name": "Communities",
-            "value": "community"
-          },
-          {
-            "name": "Documentation",
-            "value": "documentation"
-          },
-          {
-            "name": "On-Demand Event",
-            "value": "event"
-          },
-          {
-            "name": "Playlists",
-            "value": "playlist"
-          },
-          {
-            "name": "Perspectives",
-            "value": "perspective"
-          },
-          {
-            "name": "Troubleshooting",
-            "value": "troubleshooting"
-          },
-          {
-            "name": "Tutorials",
-            "value": "tutorial"
-          }
-        ]
-      },
-      {
-        "component": "select",
-        "name": "contentType2",
-        "value": "",
-        "label": "Content Type 2",
-        "description": "Select the content type to display specific information in the second card.",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Certification",
-            "value": "certification"
-          },
-          {
-            "name": "Communities",
-            "value": "community"
-          },
-          {
-            "name": "Documentation",
-            "value": "documentation"
-          },
-          {
-            "name": "On-Demand Event",
-            "value": "event"
-          },
-          {
-            "name": "Playlists",
-            "value": "playlist"
-          },
-          {
-            "name": "Perspectives",
-            "value": "perspective"
-          },
-          {
-            "name": "Troubleshooting",
-            "value": "troubleshooting"
-          },
-          {
-            "name": "Tutorials",
-            "value": "tutorial"
-          }
-        ]
-      },
-      {
-        "component": "select",
-        "name": "contentType3",
-        "value": "",
-        "label": "Content Type 3",
-        "description": "Select the content type to display specific information in the third card.",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Certification",
-            "value": "certification"
-          },
-          {
-            "name": "Communities",
-            "value": "community"
-          },
-          {
-            "name": "Documentation",
-            "value": "documentation"
-          },
-          {
-            "name": "On-Demand Event",
-            "value": "event"
-          },
-          {
-            "name": "Playlists",
-            "value": "playlist"
-          },
-          {
-            "name": "Perspectives",
-            "value": "perspective"
-          },
-          {
-            "name": "Troubleshooting",
-            "value": "troubleshooting"
-          },
-          {
-            "name": "Tutorials",
-            "value": "tutorial"
-          }
-        ]
-      },
-      {
-        "component": "select",
-        "name": "contentType4",
-        "value": "",
-        "label": "Content Type 4",
-        "description": "Select the content type to display specific information in the fourth card.",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Certification",
-            "value": "certification"
-          },
-          {
-            "name": "Communities",
-            "value": "community"
-          },
-          {
-            "name": "Documentation",
-            "value": "documentation"
-          },
-          {
-            "name": "On-Demand Event",
-            "value": "event"
-          },
-          {
-            "name": "Playlists",
-            "value": "playlist"
-          },
-          {
-            "name": "Perspectives",
-            "value": "perspective"
-          },
-          {
-            "name": "Troubleshooting",
-            "value": "troubleshooting"
-          },
-          {
-            "name": "Tutorials",
-            "value": "tutorial"
-          }
-        ]
-      },
-      {
-        "component": "radio-group",
-        "name": "sortBy",
-        "value": "",
-        "label": "Sort by",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Relevance",
-            "value": "RELEVANCE"
-          },
-          {
-            "name": "Most recent",
-            "value": "MOST_RECENT"
-          },
-          {
-            "name": "Most popular",
-            "value": "MOST_POPULAR"
-          }
-        ]
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "resultText",
-        "value": "",
-        "label": "Result text",
-        "description": "Sets the result text."
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "linkText",
-        "value": "",
-        "label": "Link text",
-        "description": "Sets the text for link."
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "link",
-        "value": "",
-        "label": "Link URL",
-        "description": "Sets the text url."
-      }
-    ]
-  },
-  {
     "id": "product-interests",
     "fields": [
       {
@@ -4260,32 +3945,6 @@
         ]
       },
       {
-        "component": "select",
-        "name": "sortTargetResultsBy",
-        "value": "",
-        "label": "Adobe Target: Sort results by",
-        "description": "Adobe Target will load data based on the selected criteria if user has cookies enabled. Not applicable will default to Coveo",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Not Applicable",
-            "value": ""
-          },
-          {
-            "name": "Most Popular across ExL",
-            "value": "exl-hp-auth-recs-2"
-          },
-          {
-            "name": "Recommended For You",
-            "value": "exl-hp-auth-recs-1"
-          },
-          {
-            "name": "Recently Viewed Content",
-            "value": "exl-hp-auth-recs-3"
-          }
-        ]
-      },
-      {
         "component": "text",
         "valueType": "string",
         "name": "resultText",
@@ -4514,6 +4173,19 @@
         "value": "",
         "label": "Description",
         "description": "Sets the description for the recently reviewed."
+      }
+    ]
+  },
+  {
+    "id": "qualtrics",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "qualtrics-selector",
+        "value": "",
+        "label": "Qualtrics selector",
+        "description": "Enter the 'Qualtrics selector'."
       }
     ]
   }
