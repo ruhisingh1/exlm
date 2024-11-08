@@ -307,12 +307,12 @@ export default async function decorate(block) {
     }
   };
 
-  const getListOfFilterOptions = async (targetSupport, profileInterests) => {
+  const getListOfFilterOptions = async (targetSupport, profileInterests, targetCriteriaScopeId) => {
     const sortedProfileInterests = profileInterests.sort();
     let filterOptions = [...new Set(sortedProfileInterests)];
     filterOptions.unshift(...defaultOptionsKey);
     if (targetSupport) {
-      const emptyFilters = await findEmptyFilters(targetCriteriaId, profileInterests);
+      const emptyFilters = await findEmptyFilters(targetCriteriaScopeId, profileInterests);
       filterOptions = filterOptions.filter((ele) => !emptyFilters.includes(ele));
     }
     return filterOptions;
@@ -387,7 +387,7 @@ export default async function decorate(block) {
         ? profileRoles
         : fourthEl?.innerText?.trim().split(',').filter(Boolean);
 
-      const filterOptions = await getListOfFilterOptions(targetSupport, profileInterests);
+      const filterOptions = await getListOfFilterOptions(targetSupport, profileInterests, targetCriteriaScopeId);
       const [defaultFilterOption = ''] = filterOptions;
       const containsAllAdobeProductsTab = filterOptions.includes(ALL_ADOBE_OPTIONS_KEY);
 
@@ -523,12 +523,9 @@ export default async function decorate(block) {
                 .then(async (resp) => {
                   if (!resp) {
                     if (!UEAuthorMode) {
+                      const section = block.closest('.section');
                       block.parentElement.remove();
-                      document.querySelectorAll('.section:not(.profile-rail-section)').forEach((element) => {
-                        if (element.textContent.trim() === '') {
-                          element.remove();
-                        }
-                      });
+                      if (section?.children?.length === 0) section.remove();
                     }
                   }
                   if (resp?.data) {
