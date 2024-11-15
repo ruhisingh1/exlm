@@ -51,7 +51,7 @@
     "/content/exlm-ruhis/global/ko/placeholders:/ko/placeholders.json",
     "/content/exlm-ruhis/global/ja/placeholders:/ja/placeholders.json",
     "/content/exlm-ruhis/global/sv/placeholders:/sv/placeholders.json",
-    "/content/exlm-ruhis/global/features-taxonomy:/features-taxonomy.json",
+    "/content/exlm-ruhis/features-taxonomy:/features-taxonomy.json",
     "/content/exlm-ruhis/global/zh-CN/placeholders:/zh-hans/placeholders.json",
     "/content/exlm-ruhis/global/zh-TW/placeholders:/zh-hant/placeholders.json",
     "/content/exlm-ruhis.resource/en/browse-index.json:/en/browse-index.json",

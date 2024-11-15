@@ -62,7 +62,7 @@ mmappings:
   - /content/exlm-ruhis/global/zh-TW/placeholders:/zh-hant/placeholders.json
 
   # features-taxonomy
-  - /content/exlm-ruhis/global/features-taxonomy:/en/features-taxonomy.json
+  - /content/exlm-ruhis/features-taxonomy:/features-taxonomy.json
 
   # browse inidices
   - /content/exlm-ruhis.resource/en/browse-index.json:/en/browse-index.json
