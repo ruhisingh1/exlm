@@ -62,18 +62,7 @@ mmappings:
   - /content/exlm-ruhis/global/zh-TW/placeholders:/zh-hant/placeholders.json
 
   # features-taxonomy
-  - /content/exlm-ruhis/global/en/features-taxonomy:/en/features-taxonomy.json
-  - /content/exlm-ruhis/global/fr/features-taxonomy:/fr/features-taxonomy.json
-  - /content/exlm-ruhis/global/de/features-taxonomy:/de/features-taxonomy.json
-  - /content/exlm-ruhis/global/es/features-taxonomy:/es/features-taxonomy.json
-  - /content/exlm-ruhis/global/it/features-taxonomy:/it/features-taxonomy.json
-  - /content/exlm-ruhis/global/nl/features-taxonomy:/nl/features-taxonomy.json
-  - /content/exlm-ruhis/global/pt-BR/features-taxonomy:/pt-br/features-taxonomy.json
-  - /content/exlm-ruhis/global/ko/features-taxonomy:/ko/features-taxonomy.json
-  - /content/exlm-ruhis/global/ja/features-taxonomy:/ja/features-taxonomy.json
-  - /content/exlm-ruhis/global/sv/features-taxonomy:/sv/features-taxonomy.json
-  - /content/exlm-ruhis/global/zh-CN/features-taxonomy:/zh-hans/features-taxonomy.json
-  - /content/exlm-ruhis/global/zh-TW/features-taxonomy:/zh-hant/features-taxonomy.json
+  - /content/exlm-ruhis/global/features-taxonomy:/en/features-taxonomy.json
 
   # browse inidices
   - /content/exlm-ruhis.resource/en/browse-index.json:/en/browse-index.json
