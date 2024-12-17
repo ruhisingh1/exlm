@@ -3991,12 +3991,68 @@
         "value": "",
         "label": "Link URL",
         "description": "Sets the text url."
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "default-to-coveo",
+        "label": "Default to Coveo",
+        "description": "Show results from Coveo instead of Adobe Target"
       }
     ]
   },
   {
     "id": "recommendation-marquee",
     "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "heading",
+        "value": "",
+        "label": "Heading",
+        "description": "Sets the heading."
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "headingType",
+        "value": "h2",
+        "label": "Heading Type",
+        "options": [
+          {
+            "name": "H1",
+            "value": "h1"
+          },
+          {
+            "name": "H2",
+            "value": "h2"
+          },
+          {
+            "name": "H3",
+            "value": "h3"
+          },
+          {
+            "name": "H4",
+            "value": "h4"
+          },
+          {
+            "name": "H5",
+            "value": "h5"
+          },
+          {
+            "name": "H6",
+            "value": "h6"
+          }
+        ]
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "value": "",
+        "label": "Description",
+        "description": "Sets the description."
+      },
       {
         "component": "select",
         "name": "cardOne",
@@ -4332,6 +4388,13 @@
         "value": "",
         "label": "Link URL",
         "description": "Sets the text url."
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "default-to-coveo",
+        "label": "Default to Coveo",
+        "description": "Show results from Coveo instead of Adobe Target"
       }
     ]
   },

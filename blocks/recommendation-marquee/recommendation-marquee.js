@@ -10,7 +10,7 @@ import {
 import { defaultProfileClient } from '../../scripts/auth/profile.js';
 import getEmitter from '../../scripts/events.js';
 import BrowseCardShimmer from '../../scripts/browse-card/browse-card-shimmer.js';
-import ResponsiveList from '../../scripts/responsive-list/responsive-list.js';
+import ResponsivePillList from '../../scripts/responsive-pill-list/responsive-pill-list.js';
 import defaultAdobeTargetClient from '../../scripts/adobe-target/adobe-target.js';
 import BrowseCardsTargetDataAdapter from '../../scripts/browse-card/browse-cards-target-data-adapter.js';
 
@@ -181,8 +181,16 @@ export default async function decorate(block) {
   const placeholderPromise = fetchLanguagePlaceholders();
   // Extracting elements from the block
   const htmlElementData = [...block.children].map((row) => row.firstElementChild);
-  const [linkEl, resultTextEl, sortEl, roleEl, solutionEl, filterProductByOptionEl, ...contentTypesEl] =
+
+  const [coveoToggle, linkEl, resultTextEl, sortEl, roleEl, solutionEl, filterProductByOptionEl, ...restOfEl] =
     htmlElementData.reverse();
+
+  const showOnlyCoveo = coveoToggle?.textContent?.toLowerCase() === 'true';
+  if (showOnlyCoveo) {
+    block.classList.add('coveo-only');
+  }
+
+  const [headingElement, descriptionElement, ...contentTypesEl] = restOfEl.reverse();
   const recommendedContentShimmer = `
   <div class="recommendation-marquee-header">${generateLoadingShimmer([[50, 14]])}</div>
   <div class="recommendation-marquee-description">${generateLoadingShimmer([[50, 10]])}</div>
@@ -199,9 +207,6 @@ export default async function decorate(block) {
 
   const headerContainer = block.querySelector('.recommendation-marquee-header');
   const descriptionContainer = block.querySelector('.recommendation-marquee-description');
-
-  headerContainer.style.display = 'none';
-  descriptionContainer.style.display = 'none';
 
   const targetCriteriaId = block.dataset.targetScope;
   const profileDataPromise = defaultProfileClient.getMergedProfile();
@@ -286,6 +291,7 @@ export default async function decorate(block) {
                     if (cardModel.id) {
                       dataConfiguration[lowercaseOptionType].renderedCardIds.push(cardModel.id);
                     }
+                    cardModel.truncateDescription = false;
                     buildCard(contentDiv, wrapperDiv, cardModel);
                   }
                   cardModelsList.push(cardModel);
@@ -297,6 +303,7 @@ export default async function decorate(block) {
             if (renderCards) {
               cardDiv.innerHTML = '';
               if (cardData.id) {
+                cardData.truncateDescription = false;
                 dataConfiguration[lowercaseOptionType].renderedCardIds.push(cardData.id);
               }
               buildCard(contentDiv, cardDiv, cardData);
@@ -376,14 +383,18 @@ export default async function decorate(block) {
       }
 
       if (!(targetSupport && targetCriteriaScopeId)) {
-        // headerContainer.innerHTML = headingElement.innerText;
-        // descriptionContainer.innerHTML = descriptionElement.innerText;
+        headerContainer.innerHTML = headingElement.innerHTML;
+        descriptionContainer.innerHTML = descriptionElement.innerHTML;
         setCoveoCountAsBlockAttribute();
         block.style.display = 'block';
       }
 
       const sortByContent = sortEl?.innerText?.trim();
-      const contentTypes = contentTypesEl?.map((contentTypeEL) => contentTypeEL?.innerText?.trim()).reverse() || [];
+      const contentTypes =
+        contentTypesEl
+          ?.reverse()
+          ?.map((contentTypeEL) => contentTypeEL?.innerText?.trim())
+          .reverse() || [];
       const contentTypeIsEmpty = contentTypes?.length === 0;
       const numberOfResults = contentTypeIsEmpty ? DEFAULT_NUM_CARDS : 1;
 
@@ -714,7 +725,7 @@ export default async function decorate(block) {
       const defaultOption = defaultFilterOption ? convertToTitleCase(defaultFilterOption) : null;
 
       // eslint-disable-next-line no-new
-      new ResponsiveList({
+      new ResponsivePillList({
         wrapper: blockHeader,
         items: listItems,
         defaultSelected: defaultOption,
@@ -748,14 +759,20 @@ export default async function decorate(block) {
   targetEventEmitter.on('dataChange', async (data) => {
     const blockId = block.id;
     const { blockId: targetBlockId, scope } = data.value;
-    if (targetBlockId === blockId) {
+    if (targetBlockId === blockId && !showOnlyCoveo) {
       renderBlock({ targetSupport: true, targetCriteriaScopeId: scope });
     }
   });
 
-  defaultAdobeTargetClient.checkTargetSupport().then(async (targetSupport) => {
-    if (targetCriteriaId || !targetSupport) {
-      renderBlock({ targetSupport, targetCriteriaScopeId: targetCriteriaId });
-    }
-  });
+  if (showOnlyCoveo) {
+    renderBlock({ targetSupport: false, targetCriteriaScopeId: '' });
+  } else {
+    defaultAdobeTargetClient.checkTargetSupport().then(async (targetSupport) => {
+      if (!targetSupport) {
+        renderBlock({ targetSupport: false, targetCriteriaScopeId: '' });
+      } else if (targetCriteriaId) {
+        renderBlock({ targetSupport, targetCriteriaScopeId: targetCriteriaId });
+      }
+    });
+  }
 }

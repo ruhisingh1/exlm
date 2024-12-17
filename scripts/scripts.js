@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable no-bitwise */
 import {
-  sampleRUM,
   buildBlock,
   loadHeader,
   loadFooter,
@@ -27,7 +26,7 @@ import {
  * Load files async using import() if you must.
  */
 
-const LCP_BLOCKS = ['marquee', 'article-marquee']; // add your LCP blocks to the list
+const LCP_BLOCKS = ['video-embed', 'marquee', 'article-marquee']; // add your LCP blocks to the list
 
 /**
  * load fonts.css and set a session storage flag
@@ -838,7 +837,6 @@ async function loadLazy(doc) {
   if (window.location.search?.indexOf('martech=off') === -1) loadMartech(headerPromise, footerPromise);
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();
-  sampleRUM('lazy');
 }
 
 /**
@@ -904,14 +902,21 @@ export async function loadArticles() {
   }
 }
 
-function showSignupDialog() {
-  const urlParams = new URLSearchParams(window.location.search);
+async function showSignupDialog() {
   const isSignedIn = window?.adobeIMS?.isSignedInUser();
-  const { isProd } = getConfig();
-  if (isSignedIn && !isProd && urlParams.get('signup-wizard') === 'on') {
+  if (!isSignedIn) return;
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const { isProd, signUpFlowConfigDate, modalReDisplayDuration } = getConfig();
+
+  if (!isProd && urlParams.get('signup-wizard') === 'on') {
     // eslint-disable-next-line import/no-cycle
     import('./signup-flow/signup-flow-dialog.js').then((mod) => mod.default.init());
+    return;
   }
+
+  const { default: initSignupFlowHandler } = await import('./signup-flow/signup-flow-handler.js');
+  await initSignupFlowHandler(signUpFlowConfigDate, modalReDisplayDuration);
 }
 
 /**
@@ -1169,7 +1174,7 @@ async function loadPage() {
   loadArticles();
   await loadLazy(document);
   loadDelayed();
-  showSignupDialog();
+  await showSignupDialog();
 
   if (isDocPage) {
     // load prex/next buttons
