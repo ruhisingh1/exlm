@@ -1220,9 +1220,13 @@ function prehidePageForTarget() {
   };
 
   const handleProfilePage = async () => {
+    const imgName = getMetadata('php-bg-image-name');
+    const styleAttribute = imgName 
+    ? `style="--php-bg-image: url('https://experienceleague-dev.adobe.com/content/dam/exlm/php-firefly-images/${imgName}');"` 
+    : '';
     document.body.classList.add('profile-home-page');
     document.body.appendChild(
-      htmlToElement('<div class="profile-background" role="presentation" aria-hidden="true"></div>'),
+      htmlToElement(`<div class="profile-background" role="presentation" aria-hidden="true" ${styleAttribute}"></div>`),
     );
     if (window.location.href.includes('.html')) {
       loadPage();
