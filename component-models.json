@@ -2836,9 +2836,9 @@
       {
         "component": "text",
         "valueType": "string",
-        "name": "php-bg-name",
+        "name": "php-bg-image-name",
         "label": "Personalized Home Page Backgroud Image Name",
-        "description": "Sets the name of the background image for PHP."
+        "description": "Sets the name of the background image for Personalized Home Page."
       }
     ]
   },

@@ -1220,6 +1220,10 @@ function prehidePageForTarget() {
   };
 
   const handleProfilePage = async () => {
+    document.body.classList.add('profile-home-page');
+    document.body.appendChild(
+      htmlToElement('<div class="profile-background" role="presentation" aria-hidden="true"></div>'),
+    );
     if (window.location.href.includes('.html')) {
       loadPage();
     } else {

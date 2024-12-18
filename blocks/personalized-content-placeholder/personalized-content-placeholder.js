@@ -39,10 +39,7 @@ const fetchPageContent = async (url, content, block) => {
 const decoratePersonalizedContent = async (block) => {
   let [completePageURL, incompletePageURL] = [...block.children].map((row) => row.querySelector('a')?.href);
   block.textContent = '';
-  document.body.classList.add('profile-home-page');
-  document.body.appendChild(
-    htmlToElement('<div class="profile-background" role="presentation" aria-hidden="true"></div>'),
-  );
+  
   if (completePageURL && incompletePageURL) {
     if (window.hlx.aemRoot) {
       completePageURL = completePageURL.replace('.html', '');
