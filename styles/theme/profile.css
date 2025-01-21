@@ -123,7 +123,7 @@ body.profile:not(.profile-home-page)
   .section:not(.profile-rail-section, .sign-up-flow-section)
   .default-content-wrapper
   :where(h1, h2, h3, h4, h5, h6):first-child {
-  font-size: 12px;
+  font-size: var(--spectrum-font-size-75);
 }
 
 body.profile .section:not(.profile-rail-section, .sign-up-flow-section) h2,
@@ -135,7 +135,9 @@ body.profile .section:not(.profile-rail-section, .sign-up-flow-section) .default
   line-height: 22px;
 }
 
-body.profile-home-page .section:not(.profile-rail-section, .sign-up-flow-section) > div:not(.default-content-wrapper) {
+body.profile-home-page
+  .section:not(.profile-rail-section, .sign-up-flow-section)
+  > div:not(.default-content-wrapper, .profile-welcome-wrapper) {
   padding-bottom: 40px;
 }
 
@@ -218,7 +220,7 @@ body.profile
 
   body.profile-home-page
     .section:not(.profile-rail-section, .sign-up-flow-section)
-    > div:not(.default-content-wrapper) {
+    > div:not(.default-content-wrapper, .profile-welcome-wrapper) {
     padding-bottom: 48px;
   }
 
@@ -262,18 +264,10 @@ body.profile
     margin-top: 28px;
   }
 
-  body.profile-home-page
-    .section:not(
-      .sign-up-flow-section,
-      .profile-rail-section,
-      .personalized-section,
-      .personalized-content-placeholder-container
-    ):first-child {
+  body.profile-home-page .section:not(.sign-up-flow-section, .profile-rail-section):first-of-type > :first-child {
     max-width: calc(100% - 145px);
-  }
-
-  body.profile-home-page .section:not(.sign-up-flow-section, .profile-rail-section):nth-child(2) {
-    max-width: calc(100% - 145px);
+    margin-left: 0;
+    margin-right: 0;
   }
 
   body.profile div.profile-rail-wrapper {

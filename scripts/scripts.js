@@ -694,7 +694,7 @@ export function getConfig() {
     communityAccountURL: isProd
       ? `https://experienceleaguecommunities.adobe.com/?profile.language=${communityLocale}`
       : `https://experienceleaguecommunities-dev.adobe.com/?profile.language=${communityLocale}`,
-    interestsUrl: `${cdnOrigin}/api/interests?page_size=200&sort=Order&lang=${lang}`,
+    interestsUrl: `${cdnOrigin}/api/interests?page_size=200&sort=Order`,
     // Param for localized Community Profile URL
     localizedCommunityProfileParam: `?profile.language=${communityLocale}`,
   };
@@ -1190,16 +1190,6 @@ async function loadPage() {
   }
 }
 
-/**
- * A simple shorter impl of alloy prehide script.
- * This is used for target A/B testing of home page, and should be removed after the test is done.
- */
-function prehidePageForTarget() {
-  const styleEl = htmlToElement(`<style> body { opacity: 0 !important } </style>`);
-  document.head.appendChild(styleEl);
-  setTimeout(() => styleEl?.parentNode?.removeChild(styleEl), 5000);
-}
-
 // load the page unless DO_NOT_LOAD_PAGE is set - used for existing EXLM pages POC
 (async () => {
   if (window.hlx.DO_NOT_LOAD_PAGE) return;
@@ -1242,15 +1232,9 @@ function prehidePageForTarget() {
     try {
       const signedIn = await isUserSignedIn();
       const { personalizedHomeLink } = getConfig() || {};
-      if (signedIn) {
-        // Execute the prehiding function
-        if (!sessionStorage.getItem(PHP_AB)) {
-          prehidePageForTarget();
-        }
-        if (personalizedHomeLink && sessionStorage.getItem(PHP_AB) === 'authHP') {
-          window.location.pathname = `${lang}${personalizedHomeLink}`;
-          return;
-        }
+      if (signedIn && personalizedHomeLink && sessionStorage.getItem(PHP_AB) === 'authHP') {
+        window.location.pathname = `${lang}${personalizedHomeLink}`;
+        return;
       }
     } catch (error) {
       console.error('Error during redirect process:', error);

@@ -13,7 +13,6 @@ import BrowseCardShimmer from '../../scripts/browse-card/browse-card-shimmer.js'
 import ResponsiveList from '../../scripts/responsive-list/responsive-list.js';
 import defaultAdobeTargetClient from '../../scripts/adobe-target/adobe-target.js';
 import BrowseCardsTargetDataAdapter from '../../scripts/browse-card/browse-cards-target-data-adapter.js';
-import isFeatureEnabled from '../../scripts/utils/feature-flag-utils.js';
 
 let placeholders = {};
 try {
@@ -30,7 +29,7 @@ let cardsWidth;
 let cardsGap;
 const seeMoreConfig = {
   minWidth: 1024,
-  noOfRows: 4,
+  noOfRows: 2,
 };
 
 const UEAuthorMode = window.hlx.aemRoot || window.location.href.includes('.html');
@@ -106,18 +105,26 @@ function createSeeMoreButton(block, contentDiv, fetchDataAndRenderBlock) {
           if (index > 0) {
             div.classList.add('fade-out');
             div.classList.remove('fade-in');
+            const handleTransitionEnd = () => {
+              div.style.display = 'none';
+              div.removeEventListener('animationend', handleTransitionEnd);
+            };
+            div.addEventListener('animationend', handleTransitionEnd);
           }
         });
         btn.innerHTML = placeholders?.recommendedContentSeeMoreButtonText || 'See more Recommendations';
         block.dataset.browseCardRows = 1;
+        setTimeout(() => {
+          block.scrollIntoView({ behavior: 'smooth' });
+        }, 300);
       }
 
       function showNewRow() {
         contentDivs.forEach((div, index) => {
-          // div.style.display = 'flex';
+          div.style.display = 'flex';
 
           if (index > newRow - 1) {
-            // div.style.display = 'none';
+            div.style.display = 'none';
             div.classList.remove('fade-in');
             div.classList.add('fade-out');
           } else {
@@ -369,10 +376,8 @@ export default async function decorate(block) {
             const { width } = entry.contentRect;
             if (Math.abs(entry.contentRect.width - previousWidth) > 1) {
               const optionType = block.querySelector('.browse-cards-block-content').dataset.selected;
-              if (isFeatureEnabled('browsecardv2')) {
-                // Calculate no. of cards that fits
-                calculateNumberOfCardsToRender(block);
-              }
+              // Calculate no. of cards that fits
+              calculateNumberOfCardsToRender(block);
               // Render the new set of cards
               fetchDataAndRenderBlock(optionType, { renderCards: true, createRow: true, clearAllRows: true });
               previousWidth = width;
@@ -539,9 +544,8 @@ export default async function decorate(block) {
         setCoveoCountAsBlockAttribute();
         block.style.display = 'block';
       }
-      if (isFeatureEnabled('browsecardv2')) {
-        calculateNumberOfCardsToRender(block);
-      }
+
+      calculateNumberOfCardsToRender(block);
 
       const sortByContent = sortEl?.innerText?.trim();
 
@@ -740,7 +744,13 @@ export default async function decorate(block) {
         }
         dataConfiguration[lowercaseOptionType].renderedCardIds = [];
         contentDiv.dataset.selected = lowercaseOptionType;
-        contentDiv.setAttribute('data-analytics-filter-id', lowercaseOptionType);
+        let analyticsProductName = '';
+        if ([ALL_ADOBE_OPTIONS_KEY.toLowerCase()].includes(lowercaseOptionType)) {
+          analyticsProductName = 'all adobe products';
+        } else {
+          analyticsProductName = lowercaseOptionType;
+        }
+        contentDiv.setAttribute('data-analytics-filter-id', analyticsProductName);
         const showDefaultOptions = defaultOptionsKey.some((key) => lowercaseOptionType === key.toLowerCase());
         const interest = filterOptions.find((opt) => opt.toLowerCase() === lowercaseOptionType);
         const expLevelIndex = sortedProfileInterests.findIndex((s) => s === interest);
@@ -902,10 +912,8 @@ export default async function decorate(block) {
             }
             const cardsCount = contentDiv.querySelectorAll('.browse-card').length;
             if (cardsCount !== 0) {
-              if (isFeatureEnabled('browsecardv2')) {
-                calculateNumberOfCardsOnResize(fetchDataAndRenderBlock);
-                createSeeMoreButton(block, contentDiv, fetchDataAndRenderBlock);
-              }
+              calculateNumberOfCardsOnResize(fetchDataAndRenderBlock);
+              createSeeMoreButton(block, contentDiv, fetchDataAndRenderBlock);
             }
             if (cardsCount === 0) {
               Array.from(contentDiv.querySelectorAll('.browse-card-shimmer')).forEach((shimmerEl) => {
