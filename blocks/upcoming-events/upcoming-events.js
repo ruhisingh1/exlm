@@ -31,11 +31,12 @@ async function getListofProducts() {
 }
 
 export default async function decorate(block) {
-
-  const [headingElement, descriptionElement, filterLabelElement] = [...block.children].map((row) => row.firstElementChild);
+  const [headingElement, descriptionElement, filterLabelElement] = [...block.children].map(
+    (row) => row.firstElementChild,
+  );
 
   block.innerHTML = '';
-  block.classList.add('browse-cards-block');
+  block.classList.add('upcoming-events-block');
 
   const headerDiv = htmlToElement(`
     <div class="upcoming-events-block-header">
@@ -47,24 +48,24 @@ export default async function decorate(block) {
           ${descriptionElement?.innerHTML || ''}
         </div>
       </div>
-      <form class="browse-card-dropdown"></form>
+      <form class="upcoming-events-products-dropdown"></form>
     </div>
   `);
 
   block.appendChild(headerDiv);
-
   const products = await getListofProducts();
   const productsList = [];
   products.forEach((product) => {
     productsList.push({
       title: product,
+      name: product,
     });
   });
 
   // Initialize the dropdown with product options
   const productDropdown = new Dropdown(
-    block.querySelector('.browse-card-dropdown'),
-    `${filterLabelElement.innerHTML}`,
+    block.querySelector('.upcoming-events-products-dropdown'),
+    `${filterLabelElement?.innerHTML}`,
     productsList,
   );
 
@@ -108,7 +109,7 @@ export default async function decorate(block) {
   } catch (err) {
     buildCardsShimmer.removeShimmer();
     // eslint-disable-next-line no-console
-    console.error('Error loading event cards:', err);
+    console.error('Error loading upcoming event cards:', err);
   }
 
   function fetchFilteredCardData(data, params) {
