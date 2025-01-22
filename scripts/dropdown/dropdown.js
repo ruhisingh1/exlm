@@ -10,39 +10,66 @@ await loadCSS(`${window.hlx.codeBasePath}/scripts/dropdown/dropdown.css`);
 
 export default class Dropdown {
   /**
-   * Constructor for initializing dropdown using parent form element, default values, options arrays, and id.
+   * Constructor for initializing dropdown.
    *
    * @param {HTMLFormElement} parentFormElement - Parent form element
-   * @param {Array} defaultValues - Array of Dropdown default value
-   * @param {Array} optionsArrays -  Array of options list
-   * @param {Number} id - Unique dropdown id
+   * @param {String} defaultValue - Dropdown default value
+   * @param {Array} optionsArray - Array of options list
    * @param {String} variant - Dropdown variant
+   * @param {Number} id - Unique dropdown id
+   * @param {Boolean} isMultiSelect - Enable multi-select mode
    */
-  constructor(parentFormElement, defaultValue, optionsArray, variant = DROPDOWN_VARIANTS.DEFAULT, id = null) {
+  constructor(parentFormElement, defaultValue, optionsArray, variant = DROPDOWN_VARIANTS.DEFAULT, id = null, isMultiSelect = false) {
     this.parentFormElement = parentFormElement;
     this.defaultValue = defaultValue;
     this.optionsArray = optionsArray;
     this.id = id || document.querySelectorAll('.custom-filter-dropdown').length;
     this.variant = variant;
+    this.isMultiSelect = isMultiSelect;
     this.initFormElements();
     this.handleClickEvents();
   }
 
   /**
-   * handleOnChange - A function that sets up an event listener for the change event on a dropdown element and calls the provided callback with the selected data.
+   * Updates the dropdown value in multi-select mode.
    *
-   * @param {function} callback - The callback function to be called with the selected data from the dropdown.
-   * @return {void}
+   * @param {Array} values - Array of selected values.
    */
-  handleOnChange(callback) {
-    this.dropdown.addEventListener('change', () => {
-      callback(this.dropdown.dataset.selected);
+  updateMultiSelectValues(values) {
+    const selectedValues = Array.isArray(values) ? values : [values];
+    const selectedLabels = [];
+
+    this.dropdown.querySelectorAll('.custom-checkbox input[type="checkbox"]').forEach((checkbox) => {
+      if (selectedValues.includes(checkbox.value)) {
+        checkbox.checked = true;
+        selectedLabels.push(checkbox.dataset.label);
+      } else {
+        checkbox.checked = false;
+      }
     });
+
+    this.dropdown.dataset.selected = selectedValues.join(',');
+    const label = this.dropdown.querySelector('button > span');
+    label.innerText = selectedLabels.join(', ') || this.defaultValue;
+  }
+
+  /**
+   * Retrieves the selected values in multi-select mode.
+   *
+   * @returns {Array} - Array of selected values.
+   */
+  getSelectedValues() {
+    const selectedValues = [];
+    this.dropdown.querySelectorAll('.custom-checkbox input[type="checkbox"]').forEach((checkbox) => {
+      if (checkbox.checked) {
+        selectedValues.push(checkbox.value);
+      }
+    });
+    return selectedValues;
   }
 
   /**
    * Closes all open dropdowns.
-   *
    */
   static closeAllDropdowns() {
     document.querySelectorAll('.custom-filter-dropdown.open').forEach((dropdown) => {
@@ -52,35 +79,19 @@ export default class Dropdown {
   }
 
   /**
-   * Updates the dropdown value based on the given value.
-   *
-   * @param {type} value - The value to update the dropdown with.
-   * @return {type} - No return value.
-   */
-  updateDropdownValue(value) {
-    this.dropdown.querySelectorAll('.custom-checkbox input[type="checkbox"]').forEach((checkbox) => {
-      if (checkbox.value === value) {
-        this.dropdown.dataset.selected = value;
-        const label = this.dropdown.querySelector('button > span');
-        label.innerText = checkbox.dataset.label;
-        checkbox.checked = true;
-      }
-    });
-  }
-
-  /**
-   * Handle click events and perform specific actions based on the event target.
+   * Handle click events and perform actions based on the event target.
    */
   handleClickEvents() {
     if (!Dropdown.isClickHandlerAdded) {
-      document.removeEventListener('click', this.constructor.handleDocumentClick); // Remove the existing listener if any
-      document.addEventListener('click', this.constructor.handleDocumentClick); // Add the new listener
+      document.removeEventListener('click', this.constructor.handleDocumentClick); // Remove existing listener
+      document.addEventListener('click', this.constructor.handleDocumentClick); // Add new listener
       Dropdown.isClickHandlerAdded = true;
     }
   }
 
   /**
-   * Event handler for document click events
+   * Event handler for document click events with multi-select support.
+   *
    * @param {Event} event - The click event
    */
   static handleDocumentClick(event) {
@@ -103,31 +114,30 @@ export default class Dropdown {
     }
 
     if (event.target.closest('.custom-checkbox')) {
-      if (event.target.value) {
-        const dropdown = event.target.closest('.custom-filter-dropdown');
-        const { variant } = dropdown.dataset;
-        const button = dropdown.children[0];
+      const dropdown = event.target.closest('.custom-filter-dropdown');
+      const button = dropdown.children[0];
+      const isMultiSelect = dropdown.dataset.isMultiSelect === 'true';
 
+      if (isMultiSelect) {
+        const selectedValues = [];
+        const selectedLabels = [];
+
+        dropdown.querySelectorAll('.custom-checkbox input[type="checkbox"]').forEach((checkbox) => {
+          if (checkbox.checked) {
+            selectedValues.push(checkbox.value);
+            selectedLabels.push(checkbox.dataset.label);
+          }
+        });
+
+        dropdown.dataset.selected = selectedValues.join(',');
+        button.children[0].textContent = selectedLabels.join(', ') || dropdown.dataset.filterType;
+      } else {
         dropdown.querySelectorAll('.custom-checkbox input[type="checkbox"]').forEach((checkbox) => {
           if (event.target.value !== checkbox.value) checkbox.checked = false;
         });
 
-        const updateButtonText = variant !== DROPDOWN_VARIANTS.ANCHOR;
-        let buttonText;
-        if (event.target.value === dropdown.dataset.selected) {
-          dropdown.dataset.selected = dropdown.dataset.filterType;
-          buttonText = dropdown.dataset.filterType;
-          dropdown.querySelectorAll('.custom-checkbox input[type="checkbox"]').forEach((checkbox) => {
-            if (dropdown.dataset.selected === checkbox.value) checkbox.checked = true;
-          });
-        } else {
-          dropdown.dataset.selected = event.target.value;
-          buttonText = event.target.dataset.label;
-        }
-
-        if (updateButtonText) {
-          button.children[0].textContent = buttonText;
-        }
+        dropdown.dataset.selected = event.target.value;
+        button.children[0].textContent = event.target.dataset.label;
 
         if (dropdown.classList.contains('open')) {
           dropdown.classList.remove('open');
@@ -138,7 +148,7 @@ export default class Dropdown {
   }
 
   /**
-   * Initialize form elements.
+   * Initialize form elements with multi-select support.
    */
   initFormElements() {
     this.parentFormElement.addEventListener('submit', (event) => event.preventDefault());
@@ -147,15 +157,16 @@ export default class Dropdown {
     dropdown.classList.add('custom-filter-dropdown');
     dropdown.dataset.filterType = this.defaultValue;
     dropdown.dataset.variant = this.variant;
+    dropdown.dataset.isMultiSelect = this.isMultiSelect;
     this.dropdown = dropdown;
 
     dropdown.appendChild(
       htmlToElement(`
-                <button>
-          		    <span class="custom-filter-dropdown-name">${this.defaultValue}</span>
-          		    <span class="icon icon-chevron"></span>
-          	    </button>
-              `),
+        <button>
+          <span class="custom-filter-dropdown-name">${this.defaultValue}</span>
+          <span class="icon icon-chevron"></span>
+        </button>
+      `),
     );
     decorateIcons(dropdown);
 
@@ -164,29 +175,23 @@ export default class Dropdown {
     dropdown.appendChild(dropdownContent);
 
     this.optionsArray.forEach((item, itemIndex) => {
-      const dropdownitem = htmlToElement(
+      const dropdownItem = htmlToElement(
         ` <div class="custom-checkbox">
-                    <input type="checkbox" id="option-${this.id}-${itemIndex + 1}" value="${
-                      item.value || item.title
-                    }" data-label="${item.title}">
-                    <label for="option-${this.id}-${itemIndex + 1}">
-                        ${
-                          this.variant === DROPDOWN_VARIANTS.ANCHOR
-                            ? `<a class="title" href=${item.value} >${item.title}</a>`
-                            : `<span class="title">${item.title}</span>`
-                        }
-                        ${item.description ? `<span class="description">${item.description}</span>` : ''}
-                        <span class="icon icon-checked"></span>
-                    </label>
-                    </div>`,
+              <input type="checkbox" id="option-${this.id}-${itemIndex + 1}" value="${item.value || item.title}" data-label="${item.title}">
+              <label for="option-${this.id}-${itemIndex + 1}">
+                <span class="title">${item.title}</span>
+                ${item.description ? `<span class="description">${item.description}</span>` : ''}
+                <span class="icon icon-checked"></span>
+              </label>
+          </div>`,
       );
-      decorateIcons(dropdownitem);
-      dropdownContent.appendChild(dropdownitem);
+      decorateIcons(dropdownItem);
+      dropdownContent.appendChild(dropdownItem);
     });
 
     this.parentFormElement.appendChild(dropdown);
   }
 }
 
-// Static property to check if the click handler has been added
+// Static property to track if the click handler has been added
 Dropdown.isClickHandlerAdded = false;

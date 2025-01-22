@@ -67,13 +67,16 @@ export default async function decorate(block) {
     block.querySelector('.upcoming-events-products-dropdown'),
     `${filterLabelElement?.innerHTML}`,
     productsList,
+    '', // Specify the variant if needed
+    null, // Use auto-generated ID
+    true // Enable multi-select mode
   );
 
   const contentDiv = document.createElement('div');
   contentDiv.classList.add('browse-cards-block-content');
 
   const parameters = {
-    contentType: CONTENT_TYPES.UPCOMING_EVENT.MAPPING_KEY,
+    contentType: CONTENT_TYPES.LIVE_EVENT.MAPPING_KEY,
   };
 
   const buildCardsShimmer = new BrowseCardShimmer();
