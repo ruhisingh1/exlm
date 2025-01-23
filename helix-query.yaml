@@ -461,9 +461,9 @@ indices:
       - '/en/docs/experience-cloud-kcs/**'
       - '/en/docs/experience-manager-learn/**'
       - '/en/docs/experience-manager-cloud-service/**'
-      - '/en/placeholders.json'
-      - '/en/top-products.json'
-      - '/en/fragments.json'
+      - '/en/placeholders**'
+      - '/en/top-products**'
+      - '/en/fragments**'
     properties:
       robots:
         select: head > meta[name="robots"]
