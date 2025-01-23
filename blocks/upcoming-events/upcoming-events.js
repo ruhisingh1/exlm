@@ -58,7 +58,7 @@ export default async function decorate(block) {
   `);
 
   block.appendChild(headerDiv);
-  
+
   const products = await getListofProducts();
   const productsList = [];
   products.forEach((product) => {
