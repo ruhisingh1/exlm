@@ -1,5 +1,5 @@
 import BrowseCardsDelegate from '../../scripts/browse-card/browse-cards-delegate.js';
-import { htmlToElement, getConfig } from '../../scripts/scripts.js';
+import { fetchLanguagePlaceholders, htmlToElement, getConfig } from '../../scripts/scripts.js';
 import { buildCard } from '../../scripts/browse-card/browse-card.js';
 import BrowseCardShimmer from '../../scripts/browse-card/browse-card-shimmer.js';
 import { CONTENT_TYPES } from '../../scripts/data-service/coveo/coveo-exl-pipeline-constants.js';
@@ -34,6 +34,14 @@ async function getListofProducts() {
 }
 
 export default async function decorate(block) {
+  let placeholders = {};
+  try {
+    placeholders = await fetchLanguagePlaceholders();
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('Error fetching placeholders:', err);
+  }
+
   const [headingElement, descriptionElement, filterLabelElement] = [...block.children].map(
     (row) => row.firstElementChild,
   );
@@ -42,18 +50,16 @@ export default async function decorate(block) {
   block.classList.add('upcoming-events-block');
 
   const headerDiv = htmlToElement(`
-    <div class="upcoming-events-block-header">
-      <div class="upcoming-events-block-heading">
-        <div class="upcoming-events-block-title">
+    <div class="browse-cards-block-header">
+        <div class="browse-cards-block-title">
           ${headingElement?.innerHTML || ''}
         </div>
-        <div class="upcoming-events-block-description">
+        <div class="browse-card-description-text">
           ${descriptionElement?.innerHTML || ''}
         </div>
-      </div>
-      <div class="upcoming-events-block-filter">
-      <form class="upcoming-events-products-dropdown"></form>
-      </div>
+      <form class="browse-card-dropdown">
+      <label>${filterLabelElement?.innerHTML}</label>
+      </form>
     </div>
   `);
 
@@ -70,8 +76,8 @@ export default async function decorate(block) {
 
   // Initialize the dropdown with product options
   const productDropdown = new Dropdown(
-    block.querySelector('.upcoming-events-products-dropdown'),
-    `${filterLabelElement?.innerHTML}`,
+    block.querySelector('.browse-card-dropdown'),
+    `${placeholders?.filterProductLabel || 'Product'}`,
     productsList,
     'multi-select',
   );
@@ -85,9 +91,9 @@ export default async function decorate(block) {
 
   const buildCardsShimmer = new BrowseCardShimmer();
   buildCardsShimmer.addShimmer(block);
-
+  let browseCardsContent;
   try {
-    const browseCardsContent = await BrowseCardsDelegate.fetchCardData(parameters);
+    browseCardsContent = await BrowseCardsDelegate.fetchCardData(parameters);
     // eslint-disable-next-line no-use-before-define
     const filteredLiveEventsData = fetchFilteredCardData(browseCardsContent, []);
 
@@ -101,26 +107,29 @@ export default async function decorate(block) {
       });
       block.appendChild(contentDiv);
     }
-
-    productDropdown.handleOnChange((selectedValues) => {
-      const selectedFilters = Array.isArray(selectedValues)
-        ? selectedValues
-        : selectedValues.split(',').map((item) => item.trim());
-      // eslint-disable-next-line no-use-before-define
-      const updatedData = fetchFilteredCardData(browseCardsContent, selectedFilters);
-
-      contentDiv.innerHTML = ''; // Clear previous cards
-      updatedData.forEach((cardData) => {
-        const cardDiv = document.createElement('div');
-        buildCard(contentDiv, cardDiv, cardData);
-        contentDiv.appendChild(cardDiv);
-      });
-    });
   } catch (err) {
     buildCardsShimmer.removeShimmer();
     // eslint-disable-next-line no-console
     console.error('Error loading upcoming event cards:', err);
   }
+
+  productDropdown.handleOnChange((selectedValues) => {
+    const selectedFilters = Array.isArray(selectedValues)
+      ? selectedValues.filter((item) => item.trim() !== '')
+      : selectedValues
+          .split(',')
+          .map((item) => item.trim())
+          .filter((item) => item !== '');
+    // eslint-disable-next-line no-use-before-define
+    const updatedData = fetchFilteredCardData(browseCardsContent, selectedFilters);
+
+    contentDiv.innerHTML = ''; // Clear previous cards
+    updatedData.forEach((cardData) => {
+      const cardDiv = document.createElement('div');
+      buildCard(contentDiv, cardDiv, cardData);
+      contentDiv.appendChild(cardDiv);
+    });
+  });
 
   /**
    * Fetches filtered card data based on selected parameters.
