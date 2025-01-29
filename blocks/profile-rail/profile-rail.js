@@ -96,50 +96,90 @@ export default async function ProfileRail(block) {
 
   // generate jump to section links dynamically
   const jumpLinksContainer = document.querySelector('.profile-rail-links.jump-to-section');
+  if (!jumpLinksContainer) return; // Ensure the container exists
+
+  let isAnchorScroll = false;
   const sections = [];
+  let activeLink = null;
 
   // Find all elements with recommended-content-header and recently-reviewed-header classes
   document.querySelectorAll('.recommended-content-header, .recently-reviewed-header').forEach((header) => {
-    // Create a unique ID for each header if it doesn't already exist
     if (!header.id) {
       header.id = header.textContent.trim().toLowerCase().replace(/\s+/g, '-');
     }
 
-    // Push the header and its id into the sections array
     sections.push({
       text: header.textContent,
       id: header.id,
+      element: header
     });
   });
 
-  // Generate the jump links dynamically and append them to the existing <ul>
+  // Generate jump links dynamically
   if (sections.length > 0) {
-    const jumpLinksHTML = sections.map((section) => `<li><a href="#${section.id}">${section.text}</a></li>`).join('');
+    const jumpLinksHTML = sections.map((section) => {
+      return `<li><a href="#${section.id}">${section.text}</a></li>`;
+    }).join('');
 
     jumpLinksContainer.insertAdjacentHTML('beforeend', jumpLinksHTML);
   }
 
-  // Smooth scrolling behavior
-  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+  const anchors = document.querySelectorAll('.jump-to-section a');
+
+  // Function to highlight active link
+  function highlightActiveLink() {
+    if (isAnchorScroll) return;
+
+    let scrollPosition = window.scrollY + 100; // Adjust for header offset
+
+    let activeSection = sections.find(({ element }) => {
+      return element.offsetTop <= scrollPosition && element.offsetTop + element.offsetHeight > scrollPosition;
+    });
+
+    if (activeSection) {
+      anchors.forEach((a) => a.classList.remove('is-active'));
+      let newActiveLink = [...anchors].find(a => a.hash === `#${activeSection.id}`);
+      if (newActiveLink) {
+        newActiveLink.classList.add('is-active');
+        activeLink = newActiveLink;
+      }
+    }
+  }
+
+  // Smooth scrolling and active link handling
+  anchors.forEach((anchor) => {
     anchor.addEventListener('click', (e) => {
       e.preventDefault();
       const targetId = anchor.getAttribute('href').substring(1);
       const targetElement = document.getElementById(targetId);
+
       if (targetElement) {
+        isAnchorScroll = true;
         window.scrollTo({
-          top: targetElement.offsetTop - 20, // Optional offset for visibility
+          top: targetElement.offsetTop - 20,
           behavior: 'smooth',
         });
 
-        // Highlight the target section briefly
-        targetElement.style.transition = 'background 0.5s ease-in-out';
-        targetElement.style.background = '#ffff99'; // Light yellow highlight
+        anchors.forEach((a) => a.classList.remove('is-active'));
+        anchor.classList.add('is-active');
+
         setTimeout(() => {
-          targetElement.style.background = ''; // Remove highlight
+          isAnchorScroll = false;
         }, 1000);
       }
     });
   });
+
+  // Debounced scroll event for active section highlighting
+  function debounce(func, wait) {
+    let timeout;
+    return function () {
+      clearTimeout(timeout);
+      timeout = setTimeout(func, wait);
+    };
+  }
+
+  window.addEventListener('scroll', debounce(highlightActiveLink, 10));
   
   const inActiveLinks = block.querySelectorAll('.profile-rail-links > li > a:not(.active)');
   const profileRailOverlay = document.createElement('div');
