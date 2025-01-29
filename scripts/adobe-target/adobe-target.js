@@ -306,9 +306,10 @@ class AdobeTargetClient {
     } else {
       const containerSection = document.createElement('div');
       containerSection.classList.add('section', 'profile-section');
-      const profileRailSection = main.querySelector('.profile-rail-section');
-      if (profileRailSection) {
-        main.insertBefore(containerSection, profileRailSection);
+     // const profileRailSection = main.querySelector('.profile-rail-section');
+      const profileLastSection = main.querySelector('.profile-last-section');
+      if (profileLastSection) {
+        main.insertBefore(containerSection, profileLastSection);
       } else {
         main.appendChild(containerSection);
       }

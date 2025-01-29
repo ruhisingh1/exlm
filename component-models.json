@@ -3249,6 +3249,21 @@
     ]
   },
   {
+    "id": "profile-last-section",
+    "fields": [
+      {
+        "component": "select",
+        "name": "style",
+        "value": "",
+        "label": "Style",
+        "description": "The section style",
+        "valueType": "string",
+        "hidden": true,
+        "options": []
+      }
+    ]
+  },
+  {
     "id": "sign-up-flow-section",
     "fields": [
       {

@@ -170,6 +170,23 @@
           }
         },
         {
+          "title": "Profile Last Section",
+          "id": "profile-last-section",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/section/v1/section",
+                "template": {
+                  "name": "Profile Last Section",
+                  "model": "profile-last-section",
+                  "style": "profile-last-section",
+                  "filter": "profile-last-section"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Section",
           "id": "section",
           "plugins": {
