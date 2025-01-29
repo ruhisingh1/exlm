@@ -74,6 +74,10 @@ export default async function ProfileRail(block) {
     }
   });
 
+  const dynamicLinks = 
+  `<p class="profile-rail-heading">JUMP TO SECTION</p>
+  <ul class="profile-rail-links jump-to-section">
+  </ul>`;
   const staticLinks =
     `<p class="profile-rail-heading">ALL LEARNING RESOURCES</p>
     <ul class="profile-rail-links">
@@ -85,9 +89,10 @@ export default async function ProfileRail(block) {
     </ul>`;
   const profileRailLinks = block.querySelectorAll('.profile-home-page .profile-rail-links');
   if (profileRailLinks.length > 0) {
+    profileRailLinks[profileRailLinks.length - 1].insertAdjacentHTML('afterend', dynamicLinks);
     profileRailLinks[profileRailLinks.length - 1].insertAdjacentHTML('afterend', staticLinks);
   }
-  
+
   const inActiveLinks = block.querySelectorAll('.profile-rail-links > li > a:not(.active)');
   const profileRailOverlay = document.createElement('div');
   profileRailOverlay.classList.add('profile-rail-overlay', 'hidden');
