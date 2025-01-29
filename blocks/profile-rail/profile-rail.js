@@ -74,6 +74,11 @@ export default async function ProfileRail(block) {
     }
   });
 
+  const customLinks = '<p class="profile-rail-heading">My Profile</p><ul class="profile-rail-links"><li><a href="/en/home/profile-settings" title="Profile Settings">Profile Settings</a></li></ul>';
+  const profileRailLinks = block.querySelectorAll('.profile-rail-links');
+if (profileRailLinks.length > 0) {
+  profileRailLinks[profileRailLinks.length - 1].insertAdjacentHTML('afterend', customLinks);
+}
   const inActiveLinks = block.querySelectorAll('.profile-rail-links > li > a:not(.active)');
   const profileRailOverlay = document.createElement('div');
   profileRailOverlay.classList.add('profile-rail-overlay', 'hidden');

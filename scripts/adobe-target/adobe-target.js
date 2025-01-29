@@ -306,10 +306,12 @@ class AdobeTargetClient {
     } else {
       const containerSection = document.createElement('div');
       containerSection.classList.add('section', 'profile-section');
-     // const profileRailSection = main.querySelector('.profile-rail-section');
-      const profileLastSection = main.querySelector('.profile-last-section');
-      if (profileLastSection) {
-        main.insertBefore(containerSection, profileLastSection);
+      const profileRailSection = main.querySelector('.profile-rail-section');
+      const profileLastSections = main.querySelectorAll('.profile-last-section');
+      if (profileLastSections.length > 0) {
+        main.insertBefore(containerSection, profileLastSections[0]); // Insert before the first one
+      } else if (profileRailSection) {
+        main.insertBefore(containerSection, profileRailSection);
       } else {
         main.appendChild(containerSection);
       }
