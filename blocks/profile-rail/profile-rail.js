@@ -74,11 +74,20 @@ export default async function ProfileRail(block) {
     }
   });
 
-  const customLinks = '<p class="profile-rail-heading">My Profile</p><ul class="profile-rail-links"><li><a href="/en/home/profile-settings" title="Profile Settings">Profile Settings</a></li></ul>';
-  const profileRailLinks = block.querySelectorAll('.profile-rail-links');
-if (profileRailLinks.length > 0) {
-  profileRailLinks[profileRailLinks.length - 1].insertAdjacentHTML('afterend', customLinks);
-}
+  const staticLinks =
+    `<p class="profile-rail-heading">ALL LEARNING RESOURCES</p>
+    <ul class="profile-rail-links">
+    <li><a target="_blank" href="/en/docs/home-tutorials" title="Tutorials">Tutorials</a></li>
+    <li><a target="_blank" href="/en/docs/home-tutorials" title="Documentation">Documentation</a></li>
+    <li><a target="_blank" href="/en/docs/home-tutorials" title="Community">Community</a></li>
+    <li><a target="_blank" href="/en/docs/home-tutorials" title="Events">Events</a></li>
+    <li><a target="_blank" href="/en/docs/home-tutorials" title="Certifications">Certifications</a></li>
+    </ul>`;
+  const profileRailLinks = block.querySelectorAll('.profile-home-page .profile-rail-links');
+  if (profileRailLinks.length > 0) {
+    profileRailLinks[profileRailLinks.length - 1].insertAdjacentHTML('afterend', staticLinks);
+  }
+  
   const inActiveLinks = block.querySelectorAll('.profile-rail-links > li > a:not(.active)');
   const profileRailOverlay = document.createElement('div');
   profileRailOverlay.classList.add('profile-rail-overlay', 'hidden');
