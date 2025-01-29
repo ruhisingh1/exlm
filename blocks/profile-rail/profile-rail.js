@@ -94,6 +94,53 @@ export default async function ProfileRail(block) {
     profileRailLinks[profileRailLinks.length - 1].insertAdjacentHTML('afterend', dynamicLinks);
   }
 
+  // generate jump to section links dynamically
+  const jumpLinksContainer = document.querySelector('.profile-rail-links.jump-to-section');
+  const sections = [];
+
+  // Find all elements with recommended-content-header and recently-reviewed-header classes
+  document.querySelectorAll('.recommended-content-header, .recently-reviewed-header').forEach((header) => {
+    // Create a unique ID for each header if it doesn't already exist
+    if (!header.id) {
+      header.id = header.textContent.trim().toLowerCase().replace(/\s+/g, '-');
+    }
+
+    // Push the header and its id into the sections array
+    sections.push({
+      text: header.textContent,
+      id: header.id,
+    });
+  });
+
+  // Generate the jump links dynamically and append them to the existing <ul>
+  if (sections.length > 0) {
+    const jumpLinksHTML = sections.map((section) => `<li><a href="#${section.id}">${section.text}</a></li>`).join('');
+
+    jumpLinksContainer.insertAdjacentHTML('beforeend', jumpLinksHTML);
+  }
+
+  // Smooth scrolling behavior
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = anchor.getAttribute('href').substring(1);
+      const targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        window.scrollTo({
+          top: targetElement.offsetTop - 20, // Optional offset for visibility
+          behavior: 'smooth',
+        });
+
+        // Highlight the target section briefly
+        targetElement.style.transition = 'background 0.5s ease-in-out';
+        targetElement.style.background = '#ffff99'; // Light yellow highlight
+        setTimeout(() => {
+          targetElement.style.background = ''; // Remove highlight
+        }, 1000);
+      }
+    });
+  });
+  
   const inActiveLinks = block.querySelectorAll('.profile-rail-links > li > a:not(.active)');
   const profileRailOverlay = document.createElement('div');
   profileRailOverlay.classList.add('profile-rail-overlay', 'hidden');
