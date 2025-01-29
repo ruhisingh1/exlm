@@ -522,11 +522,11 @@ export function decorateMain(main) {
   decorateSections(main);
   decorateBlocks(main);
   buildSectionBasedAutoBlocks(main);
-  const lastSection = main.querySelector(".section[last-section='true']");
+  const lastSection = main.querySelector(".section[data-last-section='true']");
   const profileRailSection = main.querySelector('.profile-rail-section');
-  if (profileRailSection) {
+  if (profileRailSection && lastSection) {
     main.insertBefore(lastSection, profileRailSection);
-  } else {
+  } else if (lastSection) {
     main.appendChild(lastSection);
   }
 }
