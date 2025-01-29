@@ -13,6 +13,7 @@ import BrowseCardShimmer from '../../scripts/browse-card/browse-card-shimmer.js'
 import ResponsiveList from '../../scripts/responsive-list/responsive-list.js';
 import defaultAdobeTargetClient from '../../scripts/adobe-target/adobe-target.js';
 import BrowseCardsTargetDataAdapter from '../../scripts/browse-card/browse-cards-target-data-adapter.js';
+import { hideTooltipOnScroll } from '../../scripts/browse-card/browse-card-tooltip.js';
 
 let placeholders = {};
 try {
@@ -31,7 +32,6 @@ const seeMoreConfig = {
   minWidth: 1024,
   noOfRows: 2,
 };
-
 const UEAuthorMode = window.hlx.aemRoot || window.location.href.includes('.html');
 
 // Event for target data change (Updating the block based on target data)
@@ -73,9 +73,14 @@ function calculateNumberOfCardsToRender(container) {
         section.style.visibility = 'visible';
       }
     }
-
-    if (!cardsWidth) cardsWidth = cardsContainer?.offsetWidth || 256;
-    if (!cardsGap) cardsGap = parseInt(getComputedStyle(cardsContainer).gap, 10) || 24;
+    const DEFAULT_CARD_WIDTH = 256;
+    const DEFAULT_CARD_GAP = 24;
+    if (!cardsWidth) cardsWidth = cardsContainer?.offsetWidth || DEFAULT_CARD_WIDTH;
+    if (!cardsGap) {
+      cardsGap = cardsContainer
+        ? parseInt(getComputedStyle(cardsContainer).gap, 10) || DEFAULT_CARD_GAP
+        : DEFAULT_CARD_GAP;
+    }
     const visibleItems = Math.floor((containerWidth + cardsGap) / (cardsWidth + cardsGap));
     if (visibleItems) {
       DEFAULT_NUM_CARDS = visibleItems;
@@ -353,6 +358,7 @@ export default async function decorate(block) {
     `);
   const tempContentSection = tempWrapper.querySelector('.recommended-content-block-section');
   block.appendChild(tempWrapper);
+  calculateNumberOfCardsToRender(block);
   countNumberAsArray(DEFAULT_NUM_CARDS).forEach(() => {
     const { shimmer: shimmerInstance, wrapper } = renderCardPlaceholders(tempWrapper);
     shimmerInstance.addShimmer(wrapper);
@@ -364,7 +370,7 @@ export default async function decorate(block) {
   const cardIdsToExclude = [];
   const allMyProductsCardModels = [];
   const dataConfiguration = {};
-
+  let isTooltipListenerAdded = false;
   resizeObserved = false;
 
   function calculateNumberOfCardsOnResize(fetchDataAndRenderBlock) {
@@ -612,7 +618,7 @@ export default async function decorate(block) {
           if (!data[index + DEFAULT_NUM_CARDS] && !block.dataset.browseCardRows) {
             const btn = block.querySelector('.recommended-content-see-more-btn');
             if (btn) {
-              btn.style.display = 'none';
+              btn.classList.add('hide');
             }
           }
           if (!data[index + DEFAULT_NUM_CARDS] && block.dataset.browseCardRows) {
@@ -676,7 +682,7 @@ export default async function decorate(block) {
       ) => {
         const btn = block.querySelector('.recommended-content-see-more-btn');
         if (btn) {
-          btn.style.display = 'flex';
+          btn.classList.remove('hide');
         }
 
         let contentTypes = contentTypesEl?.map((contentTypeEL) => contentTypeEL?.innerText?.trim()).reverse() || [];
@@ -914,6 +920,10 @@ export default async function decorate(block) {
             if (cardsCount !== 0) {
               calculateNumberOfCardsOnResize(fetchDataAndRenderBlock);
               createSeeMoreButton(block, contentDiv, fetchDataAndRenderBlock);
+              if (!isTooltipListenerAdded) {
+                hideTooltipOnScroll(contentDiv);
+                isTooltipListenerAdded = true;
+              }
             }
             if (cardsCount === 0) {
               Array.from(contentDiv.querySelectorAll('.browse-card-shimmer')).forEach((shimmerEl) => {
@@ -964,6 +974,13 @@ export default async function decorate(block) {
 
       const defaultOption = defaultFilterOption ? convertToTitleCase(defaultFilterOption) : null;
 
+      function renderButtonPlaceholder() {
+        const btn = block.querySelector('.recommended-content-see-more-btn > button');
+        if (btn) {
+          btn.innerHTML = placeholders?.recommendedContentSeeMoreButtonText || 'See more Recommendations';
+        }
+      }
+
       // eslint-disable-next-line no-new
       new ResponsiveList({
         wrapper: blockHeader,
@@ -971,6 +988,7 @@ export default async function decorate(block) {
         defaultSelected: defaultOption,
         onInitCallback: () => {
           /* Reused the existing method */
+          renderButtonPlaceholder();
           renderCardBlock(block);
           fetchDataAndRenderBlock(defaultOption);
           if (containsAllAdobeProductsTab && defaultOption !== ALL_ADOBE_OPTIONS_KEY) {
@@ -982,6 +1000,7 @@ export default async function decorate(block) {
         onSelectCallback: (selectedItem) => {
           /* Reused the existing method */
           if (selectedItem) {
+            renderButtonPlaceholder();
             fetchDataAndRenderBlock(selectedItem, { renderCards: true, createRow: false, clearSeeMoreRows: true });
           }
         },
