@@ -522,15 +522,15 @@ export function decorateMain(main) {
   decorateSections(main);
   decorateBlocks(main);
   buildSectionBasedAutoBlocks(main);
-  if (!(window.hlx.aemRoot || window.location.href.includes('.html'))) {
-  const lastSection = main.querySelector(".section[data-last-section='true']");
-  const profileRailSection = main.querySelector('.profile-rail-section');
-  if (profileRailSection && lastSection) {
-    main.insertBefore(lastSection, profileRailSection);
-  } else if (lastSection) {
-    main.appendChild(lastSection);
-  }
-}
+//   if (!(window.hlx.aemRoot || window.location.href.includes('.html'))) {
+//   const lastSection = main.querySelector(".section[data-last-section='true']");
+//   const profileRailSection = main.querySelector('.profile-rail-section');
+//   if (profileRailSection && lastSection) {
+//     main.insertBefore(lastSection, profileRailSection);
+//   } else if (lastSection) {
+//     main.appendChild(lastSection);
+//   }
+// }
 }
 
 /**
