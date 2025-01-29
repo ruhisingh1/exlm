@@ -89,8 +89,9 @@ export default async function ProfileRail(block) {
     </ul>`;
   const profileRailLinks = block.querySelectorAll('.profile-home-page .profile-rail-links');
   if (profileRailLinks.length > 0) {
-    profileRailLinks[profileRailLinks.length - 1].insertAdjacentHTML('afterend', dynamicLinks);
+   
     profileRailLinks[profileRailLinks.length - 1].insertAdjacentHTML('afterend', staticLinks);
+    profileRailLinks[profileRailLinks.length - 1].insertAdjacentHTML('afterend', dynamicLinks);
   }
 
   const inActiveLinks = block.querySelectorAll('.profile-rail-links > li > a:not(.active)');
