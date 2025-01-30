@@ -3235,8 +3235,12 @@
             "value": "default"
           },
           {
-            "name": "highlight",
-            "value": "highlight"
+            "name": "Highlight - Dark grey",
+            "value": "highlight-dark-bg"
+          },
+          {
+            "name": "Highlight - Light grey",
+            "value": "highlight-light-bg"
           }
         ]
       },
