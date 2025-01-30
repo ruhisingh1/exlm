@@ -647,13 +647,6 @@
         "name": "always-show",
         "label": "Do NOT hide on browse filter results?",
         "description": "When browse-filter block is used, on browse-filter results, all sections below the browse-filter is hidden. Above toggle makes an exception to show this section even if the browse filter results are displayed."
-      },
-      {
-        "component": "boolean",
-        "valueType": "boolean",
-        "name": "last-section",
-        "label": "Make this section as last section of the page?",
-        "description": "Make this section as last section of the page"
       }
     ]
   },
@@ -3236,8 +3229,16 @@
         "label": "Style",
         "description": "The section style",
         "valueType": "string",
-        "hidden": true,
-        "options": []
+        "options": [
+          {
+            "name": "default",
+            "value": "default"
+          },
+          {
+            "name": "highlight",
+            "value": "highlight"
+          }
+        ]
       },
       {
         "component": "boolean",
@@ -3245,21 +3246,6 @@
         "name": "two-column-layout",
         "label": "Enable two-column layout for this section?",
         "description": "This will enable two-column layout for this particular section."
-      }
-    ]
-  },
-  {
-    "id": "profile-last-section",
-    "fields": [
-      {
-        "component": "select",
-        "name": "style",
-        "value": "",
-        "label": "Style",
-        "description": "The section style",
-        "valueType": "string",
-        "hidden": true,
-        "options": []
       }
     ]
   },
@@ -4768,7 +4754,7 @@
     ]
   },
   {
-    "id": "upcoming-events",
+    "id": "upcoming-event",
     "fields": [
       {
         "component": "text",
