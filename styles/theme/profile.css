@@ -65,7 +65,7 @@ body.profile-home-page .section:not(.sign-up-flow-section) {
 }
 
 body.profile .section.highlight-dark-bg {
-  background-color: var(--highlighted-text-color);
+  background-color: var(--non-spectrum-dark-gray);
 }
 
 body.profile .section.highlight-light-bg {
