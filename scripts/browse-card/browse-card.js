@@ -348,8 +348,6 @@ export async function buildCard(container, element, model) {
     const laptopKeyboard = document.createElement('div');
     laptopContainer.append(laptopScreen, laptopKeyboard);
 
-    cardFigure.appendChild(laptopContainer);
-
     const img = document.createElement('img');
     img.src = thumbnail;
     img.loading = 'lazy';
@@ -360,10 +358,12 @@ export async function buildCard(container, element, model) {
     img.addEventListener('error', () => {
       img.style.display = 'none';
       laptopContainer.style.display = 'none';
+      card.classList.add('thumbnail-not-loaded');
     });
     img.addEventListener('load', () => {
       cardFigure.classList.add('img-custom-height');
       card.classList.add('thumbnail-loaded');
+      cardFigure.appendChild(laptopContainer);
       if (
         VIDEO_THUMBNAIL_FORMAT.test(thumbnail) ||
         type === CONTENT_TYPES.PLAYLIST.MAPPING_KEY ||
@@ -376,6 +376,8 @@ export async function buildCard(container, element, model) {
         decorateIcons(playButton);
       }
     });
+  } else {
+    card.classList.add('thumbnail-not-loaded');
   }
   if (badgeTitle || failedToLoad) {
     const bannerElement = createTag('h3', { class: 'browse-card-banner' });

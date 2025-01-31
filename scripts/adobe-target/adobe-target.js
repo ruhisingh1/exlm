@@ -307,9 +307,9 @@ class AdobeTargetClient {
       const containerSection = document.createElement('div');
       containerSection.classList.add('section', 'profile-section');
       const profileRailSection = main.querySelector('.profile-rail-section');
-      const profileLastSections = main.querySelectorAll('.profile-last-section');
-      if (profileLastSections.length > 0) {
-        main.insertBefore(containerSection, profileLastSections[0]); // Insert before the first one
+      const profileBottomSections = main.querySelectorAll('.profile-bottom-section');
+      if (profileBottomSections.length) {
+        main.insertBefore(containerSection, profileBottomSections[0]);
       } else if (profileRailSection) {
         main.insertBefore(containerSection, profileRailSection);
       } else {

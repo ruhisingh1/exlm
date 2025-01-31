@@ -162,8 +162,25 @@
                 "template": {
                   "name": "Profile Section",
                   "model": "profile-section",
-                  "style": "profile-section default",
+                  "style": "profile-section",
                   "filter": "profile-section"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Profile Bottom Section",
+          "id": "profile-bottom-section",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/section/v1/section",
+                "template": {
+                  "name": "Profile Bottom Section",
+                  "model": "profile-bottom-section",
+                  "style": ["profile-bottom-section", "default"],
+                  "filter": "profile-bottom-section"
                 }
               }
             }

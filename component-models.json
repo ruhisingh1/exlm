@@ -3229,20 +3229,8 @@
         "label": "Style",
         "description": "The section style",
         "valueType": "string",
-        "options": [
-          {
-            "name": "default",
-            "value": "default"
-          },
-          {
-            "name": "Highlight - Dark grey",
-            "value": "highlight-dark-bg"
-          },
-          {
-            "name": "Highlight - Light grey",
-            "value": "highlight-light-bg"
-          }
-        ]
+        "hidden": true,
+        "options": []
       },
       {
         "component": "boolean",
@@ -3250,6 +3238,29 @@
         "name": "two-column-layout",
         "label": "Enable two-column layout for this section?",
         "description": "This will enable two-column layout for this particular section."
+      }
+    ]
+  },
+  {
+    "id": "profile-bottom-section",
+    "fields": [
+      {
+        "component": "select",
+        "name": "style",
+        "value": "",
+        "label": "Style",
+        "description": "The section style",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "default",
+            "value": "default"
+          },
+          {
+            "name": "highlight",
+            "value": "highlight"
+          }
+        ]
       }
     ]
   },
