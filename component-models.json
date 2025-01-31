@@ -3254,11 +3254,11 @@
         "options": [
           {
             "name": "default",
-            "value": "default"
+            "value": "profile-bottom-section default"
           },
           {
             "name": "highlight",
-            "value": "highlight"
+            "value": "profile-bottom-section highlight"
           }
         ]
       }
