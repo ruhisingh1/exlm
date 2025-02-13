@@ -19,32 +19,32 @@ function decorateButtons(...buttons) {
 function removeStorageKeys() {
   const browserStorage = ['localStorage', 'sessionStorage'];
   browserStorage.forEach((storage) => {
-    window[storage].removeItem('hideSitewideBanner');
+    window[storage].removeItem('hideSiteWideBanner');
   });
 }
 
 // Function to hide a sitewideBanner and update the key in the browser storage
-function hidesitewideBanner(block, storage = 'sessionStorage') {
+function hideSiteWideBanner(block, storage = 'sessionStorage') {
   block.style.display = 'none';
   removeStorageKeys();
-  window[storage].setItem('hideSitewideBanner', 'true');
+  window[storage].setItem('hideSiteWideBanner', 'true');
 }
 
 // Function to check browser storage and hide the sitewideBanner if it was previously closed
-function issitewideBannerHidden(storage = 'sessionStorage') {
-  return window[storage].getItem('hideSitewideBanner') === 'true';
+function isSiteWideBannerHidden(storage = 'sessionStorage') {
+  return window[storage].getItem('hideSiteWideBanner') === 'true';
 }
 
 export default async function decorate(block) {
   const [image, description, firstCta, storage, bgColor] = [...block.children].map((row) => row.firstElementChild);
   // The `storage` value will be either 'localStorage' or 'sessionStorage',
   // as defined in the `components-models.json` file.
-  if (issitewideBannerHidden(storage?.textContent)) {
+  if (isSiteWideBannerHidden(storage?.textContent)) {
     block.style.display = 'none';
     return;
   }
 
-  description?.classList.add('sitewide-banner-description');
+  description?.classList.add('site-wide-banner-description');
   let bgColorVariable;
   if (bgColor.innerHTML.includes('bg-')) {
     const bgSpectrumColor = bgColor.innerHTML.substr(3); // Remove 'bg-' prefix
@@ -52,14 +52,14 @@ export default async function decorate(block) {
   }
 
   const sitewideBannerDom = document.createRange().createContextualFragment(`
-  <div class="sitewideBanner-image">
+  <div class="site-wide-banner-image">
   ${image ? image.outerHTML : ''}
   </div>
-  <div class="sitewideBanner-content-container">
-    <div class="sitewideBanner-default-content">
+  <div class="site-wide-banner-content-container">
+    <div class="site-wide-banner-default-content">
       ${description ? description.outerHTML : ''}
     </div>
-    <div class="sitewideBanner-button-container">
+    <div class="site-wide-banner-button-container">
       ${decorateButtons(firstCta)}
     </div>
     </div>
@@ -88,7 +88,7 @@ export default async function decorate(block) {
   ['.icon-close-black', '.icon-close-light'].forEach((selectedIcon) => {
     const closeIcon = block.querySelector(selectedIcon);
     if (closeIcon && !window.location.href.includes('.html')) {
-      closeIcon.addEventListener('click', () => hidesitewideBanner(block, storage?.textContent));
+      closeIcon.addEventListener('click', () => hideSiteWideBanner(block, storage?.textContent));
     }
   });
 }

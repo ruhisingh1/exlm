@@ -212,7 +212,7 @@ async function displaySitewideBanner(main) {
   let blockContent = '';
 
   try {
-    const response = await fetch(`/${lang}/sitewide-banner.plain.html`);
+    const response = await fetch(`/${lang}/site-wide-banner.plain.html`);
     if (response.ok) {
       blockContent = await response.text();
     }
@@ -221,8 +221,8 @@ async function displaySitewideBanner(main) {
   }
 
   if (blockContent) {
-    const sitewideBannerBlock = buildBlock('sitewide-banner', blockContent);
-    const sitewideBanner = sitewideBannerBlock.querySelector('.sitewide-banner');
+    const sitewideBannerBlock = buildBlock('site-wide-banner', blockContent);
+    const sitewideBanner = sitewideBannerBlock.querySelector('.site-wide-banner');
     if (sitewideBanner) {
       main.parentNode.insertBefore(sitewideBanner, main);
       // main.prepend(sitewideBanner);
@@ -297,7 +297,7 @@ function buildAutoBlocks(main) {
     if (isProfilePage) {
       addProfileRail(main);
     }
-    if (isFeatureEnabled('sitewide-banner')) {
+    if (isFeatureEnabled('site-wide-banner')) {
       displaySitewideBanner(main);
     }
   } catch (error) {

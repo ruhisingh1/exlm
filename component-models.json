@@ -4882,7 +4882,7 @@
     ]
   },
   {
-    "id": "sitewide-banner",
+    "id": "site-wide-banner",
     "fields": [
       {
         "component": "reference",
