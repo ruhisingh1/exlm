@@ -4963,8 +4963,8 @@
         "valueType": "string",
         "name": "sessionVariable",
         "value": "",
-        "label": "Session variable name",
-        "description": "Sets the session variable name in session/local storage. Should be incremented for every new banner. E.g. banner-X"
+        "label": "Session variable value",
+        "description": "Sets the session variable value in session/local storage. Should be incremented for every new banner. E.g. banner-X"
       },
       {
         "component": "select",
