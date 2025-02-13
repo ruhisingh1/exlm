@@ -11,6 +11,8 @@ import {
   decorateTemplateAndTheme,
   waitForLCP,
   loadBlocks,
+  loadBlock,
+  updateSectionsStatus,
   loadCSS,
   decorateButtons,
   getMetadata,
@@ -20,6 +22,7 @@ import {
   createOptimizedPicture,
   toClassName,
 } from './lib-franklin.js';
+import isFeatureEnabled from './utils/feature-flag-utils.js';
 
 /**
  * please do not import any other modules here, as this file is used in the critical path.
@@ -204,6 +207,32 @@ function addMiniToc(main) {
   main.append(tocSection);
 }
 
+async function displaySitewideBanner(main) {
+  const { lang } = getPathDetails();
+  let blockContent = '';
+
+  try {
+    const response = await fetch(`/${lang}/sitewide-banner.plain.html`);
+    if (response.ok) {
+      blockContent = await response.text();
+    }
+  } catch (err) {
+    console.error('Error fetching notification banner:', err);
+  }
+
+  if (blockContent) {
+    const sitewideBannerBlock = buildBlock('sitewide-banner', blockContent);
+    const sitewideBanner = sitewideBannerBlock.querySelector('.sitewide-banner');
+    if (sitewideBanner) {
+      main.parentNode.insertBefore(sitewideBanner, main);
+      // main.prepend(sitewideBanner);
+      decorateBlock(sitewideBanner);
+      await loadBlock(sitewideBanner);
+      updateSectionsStatus(main);
+    }
+  }
+}
+
 /**
  * Tabbed layout for Tab section
  * @param {HTMLElement} main
@@ -267,6 +296,9 @@ function buildAutoBlocks(main) {
     }
     if (isProfilePage) {
       addProfileRail(main);
+    }
+    if (isFeatureEnabled('sitewide-banner')) {
+      displaySitewideBanner(main);
     }
   } catch (error) {
     // eslint-disable-next-line no-console
@@ -522,15 +554,6 @@ export function decorateMain(main) {
   decorateSections(main);
   decorateBlocks(main);
   buildSectionBasedAutoBlocks(main);
-//   if (!(window.hlx.aemRoot || window.location.href.includes('.html'))) {
-//   const lastSection = main.querySelector(".section[data-last-section='true']");
-//   const profileRailSection = main.querySelector('.profile-rail-section');
-//   if (profileRailSection && lastSection) {
-//     main.insertBefore(lastSection, profileRailSection);
-//   } else if (lastSection) {
-//     main.appendChild(lastSection);
-//   }
-// }
 }
 
 /**
