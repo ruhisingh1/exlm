@@ -36,7 +36,7 @@ function isSiteWideBannerHidden(storage = 'sessionStorage') {
 }
 
 export default async function decorate(block) {
-  const [image, description, firstCta, storage, bgColor] = [...block.children].map((row) => row.firstElementChild);
+  const [image, description, cta, storage, sessionVariable, bgColor] = [...block.children].map((row) => row.firstElementChild);
   // The `storage` value will be either 'localStorage' or 'sessionStorage',
   // as defined in the `components-models.json` file.
   if (isSiteWideBannerHidden(storage?.textContent)) {
@@ -44,6 +44,7 @@ export default async function decorate(block) {
     return;
   }
 
+  
   description?.classList.add('site-wide-banner-description');
   let bgColorVariable;
   if (bgColor.innerHTML.includes('bg-')) {
@@ -60,7 +61,7 @@ export default async function decorate(block) {
       ${description ? description.outerHTML : ''}
     </div>
     <div class="site-wide-banner-button-container">
-      ${decorateButtons(firstCta)}
+      ${decorateButtons(cta)}
     </div>
     </div>
     <span class="icon icon-close-black"></span>
