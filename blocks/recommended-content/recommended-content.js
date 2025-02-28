@@ -6,8 +6,9 @@ import {
   convertToTitleCase,
   extractCapability,
   removeProductDuplicates,
+  formatId,
 } from '../../scripts/browse-card/browse-card-utils.js';
-import { defaultProfileClient } from '../../scripts/auth/profile.js';
+import { isSignedInUser, defaultProfileClient } from '../../scripts/auth/profile.js';
 import getEmitter from '../../scripts/events.js';
 import BrowseCardShimmer from '../../scripts/browse-card/browse-card-shimmer.js';
 import ResponsiveList from '../../scripts/responsive-list/responsive-list.js';
@@ -24,6 +25,7 @@ try {
   console.error('Error fetching placeholders:', err);
 }
 
+const REMOVE_DUPLICATES_BY_EXCLUSION = false;
 const ALL_ADOBE_OPTIONS_KEY = placeholders?.allAdobeProducts || 'All Adobe Products';
 let DEFAULT_NUM_CARDS = 4;
 let resizeObserved;
@@ -102,10 +104,10 @@ function ensureDataSaveConfigExists(dataConfiguration, lowercaseOptionType, ctTy
 }
 
 function getSavedCardsCount(dataConfiguration, optionType) {
-  return Object.values(dataConfiguration.savedCardsResponse[optionType] || {}).reduce(
-    (acc, curr) => acc + curr.models.length,
-    0,
-  );
+  return Object.values(dataConfiguration.savedCardsResponse[optionType] || {}).reduce((acc, curr) => {
+    const availableModels = curr.models.filter((model) => !model.markedForReplacement);
+    return acc + availableModels.length;
+  }, 0);
 }
 
 function restoreSavedCardsModelState(dataConfiguration, optionType) {
@@ -347,11 +349,16 @@ const renderCardPlaceholders = (contentDiv, renderCardsFlag = true) => {
  * @param {HTMLElement} block - The block of data to process.
  */
 export default async function decorate(block) {
+  isSignedInUser().then((isUserSignedIn) => {
+    if (!isUserSignedIn && !UEAuthorMode) {
+      block.parentElement.style.display = 'none';
+    }
+  });
   // Extracting elements from the block
   const htmlElementData = [...block.children].map((row) => row.firstElementChild);
   const [headingElement, descriptionElement, filterSectionElement, ...remainingElements] = htmlElementData;
   const recommendedContentShimmer = `
-  <div class="recommended-content-header">${generateLoadingShimmer([[50, 14]])}</div>
+  <div class="recommended-content-header rec-block-header">${generateLoadingShimmer([[50, 14]])}</div>
   <div class="recommended-content-description">${generateLoadingShimmer([[50, 10]])}</div>
 `;
   // Clearing the block's content and adding CSS class
@@ -425,6 +432,9 @@ export default async function decorate(block) {
 
   const getCardsData = (payload) =>
     new Promise((resolve) => {
+      if (payload.feature?.length) {
+        payload.feature = null;
+      }
       BrowseCardsDelegate.fetchCardData(payload)
         .then((data) => {
           const [ct] = payload.contentType || [''];
@@ -601,6 +611,7 @@ export default async function decorate(block) {
       }
       if (coveoFlowDetection) {
         headerContainer.innerHTML = headingElement.innerHTML;
+        headerContainer.id = formatId(headingElement.innerHTML);
         descriptionContainer.innerHTML = descriptionElement.innerHTML;
         setCoveoAnalyticsAttribute(block);
         block.style.display = 'block';
@@ -866,7 +877,10 @@ export default async function decorate(block) {
           role: role?.length ? role : profileRoles,
           sortCriteria,
           noOfResults: numberOfResults,
-          aq: !showDefaultOptions && cardIdsToExclude.length ? prepareExclusionQuery(cardIdsToExclude) : undefined,
+          aq:
+            !showDefaultOptions && cardIdsToExclude.length && REMOVE_DUPLICATES_BY_EXCLUSION
+              ? prepareExclusionQuery(cardIdsToExclude)
+              : undefined,
           context: showDefaultOptions ? {} : { interests: [interest], experience: [expLevel], role: profileRoles },
         };
 
@@ -906,6 +920,7 @@ export default async function decorate(block) {
                   }
                   if (resp?.data) {
                     updateCopyFromTarget(resp, headerContainer, descriptionContainer, linkEl, resultTextEl);
+                    headerContainer.id = formatId(headerContainer.innerHTML);
                     block.style.display = 'block';
                     setTargetDataAsBlockAttribute(block, resp);
                   }
@@ -959,9 +974,11 @@ export default async function decorate(block) {
               contentDiv,
             };
             return new Promise((resolve) => {
-              const savedCardModels = dataConfiguration.savedCardsResponse[lowercaseOptionType]?.[
-                payloadContentType
-              ]?.models?.filter((model) => model.markedForReplacement !== true);
+              const savedCardModels = seeMoreConfig.prefetchCards
+                ? false
+                : dataConfiguration.savedCardsResponse[lowercaseOptionType]?.[payloadContentType]?.models?.filter(
+                    (model) => model.markedForReplacement !== true,
+                  );
               let promise;
               if (Array.isArray(savedCardModels)) {
                 promise = Promise.resolve({
@@ -1050,7 +1067,7 @@ export default async function decorate(block) {
               });
               buildNoResultsContent(contentDiv, false);
               buildNoResultsContent(contentDiv, true);
-              recommendedContentNoResults(contentDiv);
+              recommendedContentNoResults();
 
               if (!targetSupport) {
                 if (!block.dataset.browseCardRows) {
@@ -1111,7 +1128,7 @@ export default async function decorate(block) {
             const cardsBlockCount = contentDiv.querySelectorAll('.browse-card').length;
             if (cardsBlockCount === 0) {
               buildNoResultsContent(contentDiv, true);
-              recommendedContentNoResults(contentDiv);
+              recommendedContentNoResults();
             } else {
               // In the unlikely scenario that some card promises were successfully resolved, while some others failed. Try to show the rendered cards.
               Array.from(contentDiv.querySelectorAll('.browse-card-shimmer')).forEach((element) => {

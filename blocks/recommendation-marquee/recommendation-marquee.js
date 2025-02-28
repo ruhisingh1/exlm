@@ -6,8 +6,9 @@ import {
   convertToTitleCase,
   extractCapability,
   removeProductDuplicates,
+  formatId,
 } from '../../scripts/browse-card/browse-card-utils.js';
-import { defaultProfileClient } from '../../scripts/auth/profile.js';
+import { isSignedInUser, defaultProfileClient } from '../../scripts/auth/profile.js';
 import getEmitter from '../../scripts/events.js';
 import BrowseCardShimmer from '../../scripts/browse-card/browse-card-shimmer.js';
 import ResponsivePillList from '../../scripts/responsive-pill-list/responsive-pill-list.js';
@@ -19,6 +20,7 @@ import { setTargetDataAsBlockAttribute, setCoveoAnalyticsAttribute } from '../..
 const targetEventEmitter = getEmitter('loadTargetBlocks');
 const UEAuthorMode = window.hlx.aemRoot || window.location.href.includes('.html');
 const DEFAULT_NUM_CARDS = 5;
+const REMOVE_DUPLICATES_BY_EXCLUSION = false;
 let seeMoreFlag = false;
 const seeMoreConfig = {
   minWidth: 1024,
@@ -61,10 +63,10 @@ function ensureDataSaveConfigExists(dataConfiguration, lowercaseOptionType, ctTy
 }
 
 function getSavedCardsCount(dataConfiguration, optionType) {
-  return Object.values(dataConfiguration.savedCardsResponse[optionType] || {}).reduce(
-    (acc, curr) => acc + curr.models.length,
-    0,
-  );
+  return Object.values(dataConfiguration.savedCardsResponse[optionType] || {}).reduce((acc, curr) => {
+    const availableModels = curr.models.filter((model) => !model.markedForReplacement);
+    return acc + availableModels.length;
+  }, 0);
 }
 
 function restoreSavedCardsModelState(dataConfiguration, optionType) {
@@ -294,6 +296,12 @@ const renderCardPlaceholders = (contentDiv, renderCardsFlag = true) => {
  * @param {HTMLElement} block - The block of data to process.
  */
 export default async function decorate(block) {
+  isSignedInUser().then((isUserSignedIn) => {
+    if (!isUserSignedIn && !UEAuthorMode) {
+      block.parentElement.style.display = 'none';
+    }
+  });
+
   try {
     placeholders = await fetchLanguagePlaceholders();
   } catch (err) {
@@ -317,7 +325,7 @@ export default async function decorate(block) {
   const [headingElement, descriptionElement, ...contentTypesEl] = restOfEl.reverse();
   const headingElementNode = htmlToElement(headingElement.innerHTML);
   const recommendedContentShimmer = `
-  <div class="recommendation-marquee-header">${generateLoadingShimmer([[50, 14]])}</div>
+  <div class="recommendation-marquee-header rec-block-header">${generateLoadingShimmer([[50, 14]])}</div>
   <div class="recommendation-marquee-description">${generateLoadingShimmer([[50, 10]])}</div>
 `;
   // Clearing the block's content and adding CSS class
@@ -360,6 +368,9 @@ export default async function decorate(block) {
 
   const getCardsData = (payload) =>
     new Promise((resolve) => {
+      if (payload.feature?.length) {
+        payload.feature = null;
+      }
       BrowseCardsDelegate.fetchCardData(payload)
         .then((data) => {
           const [ct] = payload.contentType || [''];
@@ -545,6 +556,7 @@ export default async function decorate(block) {
       }
       if (coveoFlowDetection) {
         headerContainer.innerHTML = headingElement.innerHTML;
+        headerContainer.id = formatId(headingElement.innerHTML);
         descriptionContainer.innerHTML = descriptionElement.innerHTML;
         setCoveoAnalyticsAttribute(block);
         block.style.display = 'block';
@@ -818,7 +830,10 @@ export default async function decorate(block) {
           role: role?.length ? role : profileRoles,
           sortCriteria,
           noOfResults: numberOfResults,
-          aq: !showDefaultOptions && cardIdsToExclude.length ? prepareExclusionQuery(cardIdsToExclude) : undefined,
+          aq:
+            !showDefaultOptions && cardIdsToExclude.length && REMOVE_DUPLICATES_BY_EXCLUSION
+              ? prepareExclusionQuery(cardIdsToExclude)
+              : undefined,
           context: showDefaultOptions ? {} : { interests: [interest], experience: [expLevel], role: profileRoles },
         };
 
@@ -858,6 +873,7 @@ export default async function decorate(block) {
                   }
                   if (resp?.data) {
                     updateCopyFromTarget(resp, headerContainer, descriptionContainer, linkEl, resultTextEl);
+                    headerContainer.id = formatId(headerContainer.innerHTML);
                     block.style.display = 'block';
                     setTargetDataAsBlockAttribute(block, resp);
                   }
@@ -1063,7 +1079,7 @@ export default async function decorate(block) {
               });
               buildNoResultsContent(contentDiv, false);
               buildNoResultsContent(contentDiv, true);
-              recommendedContentNoResults(contentDiv);
+              recommendedContentNoResults();
 
               if (!targetSupport) {
                 const savedCardsCount = seeMoreConfig.prefetchCards
@@ -1125,7 +1141,7 @@ export default async function decorate(block) {
             const cardsBlockCount = contentDiv.querySelectorAll('.browse-card').length;
             if (cardsBlockCount === 0) {
               buildNoResultsContent(contentDiv, true);
-              recommendedContentNoResults(contentDiv);
+              recommendedContentNoResults();
             } else {
               // In the unlikely scenario that some card promises were successfully resolved, while some others failed. Try to show the rendered cards.
               Array.from(contentDiv.querySelectorAll('.browse-card-shimmer')).forEach((element) => {

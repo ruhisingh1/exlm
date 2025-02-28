@@ -773,6 +773,9 @@ export const URL_SPECIAL_CASE_LOCALES = new Map([
 ]);
 
 export async function loadIms() {
+  // if adobe IMS was loaded already, return. Especially useful when embedding this code outside this site.
+  // eg. embedding header in community which has it's own IMS setup.
+  if (!window.imsLoaded && window.adobeIMS) return Promise.resolve();
   const { ims } = getConfig();
   window.imsLoaded =
     window.imsLoaded ||
@@ -1029,14 +1032,20 @@ export async function getLanguageCode() {
  * @param {function} onRejected callback function to execute when the placeholder is rejected/error
  * @returns {HTMLSpanElement}
  */
-export function createPlaceholderSpan(placeholderKey, fallbackText, onResolved, onRejected) {
+export function createPlaceholderSpan(placeholderKey, fallbackText, onResolved, onRejected, lang) {
   const span = document.createElement('span');
   span.setAttribute('data-placeholder', placeholderKey);
   span.setAttribute('data-placeholder-fallback', fallbackText);
   span.style.setProperty('--placeholder-width', `${fallbackText.length}ch`);
-  fetchLanguagePlaceholders()
+  fetchLanguagePlaceholders(lang)
     .then((placeholders) => {
-      span.textContent = placeholders[placeholderKey] || fallbackText;
+      if (placeholders[placeholderKey]) {
+        span.textContent = placeholders[placeholderKey];
+        span.setAttribute('data-placeholder-resolved-key', placeholderKey);
+      } else {
+        span.textContent = fallbackText;
+        span.setAttribute('data-placeholder-resolved-fallback-text', 'fallback');
+      }
       span.removeAttribute('data-placeholder');
       span.removeAttribute('data-placeholder-fallback');
       span.style.removeProperty('--placeholder-width');
@@ -1052,11 +1061,12 @@ export function createPlaceholderSpan(placeholderKey, fallbackText, onResolved, 
 /**
  * decorates placeholder spans in a given element
  * @param {HTMLElement} element
+ * @param {string} lang
  */
-export function decoratePlaceholders(element) {
+export function decoratePlaceholders(element, lang) {
   const placeholdersEls = [...element.querySelectorAll('[data-placeholder]')];
   placeholdersEls.forEach((el) => {
-    el.replaceWith(createPlaceholderSpan(el.dataset.placeholder, el.textContent));
+    el.replaceWith(createPlaceholderSpan(el.dataset.placeholder, el.textContent, undefined, undefined, lang));
   });
 }
 
