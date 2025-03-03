@@ -4,7 +4,7 @@ import { buildCard } from '../../scripts/browse-card/browse-card.js';
 import BrowseCardShimmer from '../../scripts/browse-card/browse-card-shimmer.js';
 import { CONTENT_TYPES } from '../../scripts/data-service/coveo/coveo-exl-pipeline-constants.js';
 import Dropdown from '../../scripts/dropdown/dropdown.js';
-import { decorateIcons } from '../../scripts/lib-franklin.js';
+import { decorateIcons, decorateSections, decorateBlocks, loadBlocks } from '../../scripts/lib-franklin.js';
 
 /**
  * Retrieves a list of unique product focus items from live events data.
@@ -52,7 +52,7 @@ export default async function decorate(block) {
     console.error('Error fetching placeholders:', err);
   }
 
-  const [headingElement, descriptionElement, filterLabelElement] = [...block.children].map(
+  const [headingElement, descriptionElement, filterLabelElement, fragmentEl] = [...block.children].map(
     (row) => row.firstElementChild,
   );
 
@@ -79,6 +79,23 @@ export default async function decorate(block) {
 
   block.appendChild(headerDiv);
 
+  const fragmentURL = fragmentEl.textContent.trim();
+  const fragmentPath = fragmentURL ? new URL(fragmentURL, window.location).pathname : '';
+  const currentPath = window.location.pathname?.replace('.html', '');
+  if (currentPath.endsWith(fragmentPath)) {
+    return; // do not load fragment if it is the same as the current page
+  }
+  if (fragmentURL) {
+    const preMain = htmlToElement(
+      `<aside><div><div class="fragment"><a href="${fragmentURL}"></a></div></div></aside>`,
+    );
+    // add fragment as first section in preMain
+    block.appendChild(preMain);
+    decorateSections(preMain);
+    decorateBlocks(preMain);
+    loadBlocks(preMain);
+  }
+  
   const products = await getListofProducts();
   const productsList = [];
   products.forEach((product) => {
