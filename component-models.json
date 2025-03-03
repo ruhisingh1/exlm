@@ -6415,7 +6415,7 @@
         "description": "Sets the text for Products filter label in dropdown."
       },
       {
-        "component": "aem-content",
+        "component": "text",
         "valueType": "string",
         "name": "fragmentURL",
         "value": "",
