@@ -6413,6 +6413,14 @@
         "value": "",
         "label": "Filter Label",
         "description": "Sets the text for Products filter label in dropdown."
+      },
+      {
+        "component": "aem-content",
+        "valueType": "string",
+        "name": "fragmentURL",
+        "value": "",
+        "label": "Fragment URL",
+        "description": "Events Fragment URL"
       }
     ]
   }
