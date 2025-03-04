@@ -6438,121 +6438,13 @@
         "description": "Sets the text for Products filter label in dropdown."
       },
       {
-        "component": "text",
+        "component": "aem-content",
         "valueType": "string",
-        "name": "fragmentURL",
-        "value": "",
-        "label": "Fragment URL",
-        "description": "Events Fragment URL"
-      }
-    ]
-  },
-  {
-    "id": "site-wide-banner",
-    "fields": [
-      {
-        "component": "reference",
-        "valueType": "string",
-        "name": "iconImage",
-        "label": "Icon Image",
-        "description": "Sets the Icon Image",
-        "multi": false
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "iconImageAlt",
-        "label": "Icon Image Alt Text",
-        "description": "Sets the icon image's alternative text"
-      },
-      {
-        "component": "richtext",
-        "valueType": "string",
-        "name": "description",
-        "value": "",
-        "label": "Description"
-      },
-      {
-        "component": "select",
-        "name": "ctaType",
-        "value": "primary",
-        "label": "CTA Type",
-        "description": "'Primary' will render button filled, 'Secondary' with an outline.",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Primary",
-            "value": "primary"
-          },
-          {
-            "name": "Secondary",
-            "value": "secondary"
-          }
-        ]
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "ctaText",
-        "value": "",
-        "label": "CTA Text",
-        "description": "Text to be shown inside button."
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "cta",
-        "value": "",
-        "label": "CTA Link",
-        "description": "What link to open when clicking the button."
-      },
-      {
-        "component": "radio-group",
-        "name": "dismissalTime",
-        "value": "",
-        "label": "Banner Dismissal Time",
-        "description": "Hide the banner based on Session or Local storage",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Session storage",
-            "value": "sessionStorage"
-          },
-          {
-            "name": "Local storage",
-            "value": "localStorage"
-          }
-        ]
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "sessionVariable",
-        "value": "",
-        "label": "Session variable value",
-        "description": "Sets the session variable value in session/local storage. Should be incremented for every new banner. E.g. banner-X"
-      },
-      {
-        "component": "select",
-        "name": "backgroundColor",
-        "value": "",
-        "label": "Background Color",
-        "description": "The sitewide banner background color",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Blue",
-            "value": "bg-spectrum-blue-700"
-          },
-          {
-            "name": "Black",
-            "value": "bg-spectrum-black-700"
-          },
-          {
-            "name": "Red",
-            "value": "bg-spectrum-red-700"
-          }
-        ]
+        "name": "eventFragmentURL",
+        "label": "Event Banner Fragment URL",
+        "validation": {
+          "rootPath": "/content/exlm/global/en/events"
+        }
       }
     ]
   },
