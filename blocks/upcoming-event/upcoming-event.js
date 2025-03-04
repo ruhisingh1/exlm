@@ -1,5 +1,5 @@
 import BrowseCardsDelegate from '../../scripts/browse-card/browse-cards-delegate.js';
-import { fetchLanguagePlaceholders, htmlToElement, getConfig } from '../../scripts/scripts.js';
+import { fetchLanguagePlaceholders, htmlToElement, getConfig, getLink} from '../../scripts/scripts.js';
 import { buildCard } from '../../scripts/browse-card/browse-card.js';
 import BrowseCardShimmer from '../../scripts/browse-card/browse-card-shimmer.js';
 import { CONTENT_TYPES } from '../../scripts/data-service/coveo/coveo-exl-pipeline-constants.js';
@@ -45,7 +45,7 @@ async function getListofProducts() {
 }
 
 function showEventsBanner(block, urlEl) {
-  const fragmentURL = urlEl.textContent.trim();
+  const fragmentURL = getLink(urlEl.textContent.trim());
   const fragmentPath = fragmentURL ? new URL(fragmentURL, window.location).pathname : '';
   const currentPath = window.location.pathname?.replace('.html', '');
   if (currentPath.endsWith(fragmentPath)) {
