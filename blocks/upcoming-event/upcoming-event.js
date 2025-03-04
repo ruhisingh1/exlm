@@ -1,5 +1,5 @@
 import BrowseCardsDelegate from '../../scripts/browse-card/browse-cards-delegate.js';
-import { fetchLanguagePlaceholders, htmlToElement, getConfig, getLink} from '../../scripts/scripts.js';
+import { fetchLanguagePlaceholders, htmlToElement, getConfig, getLink } from '../../scripts/scripts.js';
 import { buildCard } from '../../scripts/browse-card/browse-card.js';
 import BrowseCardShimmer from '../../scripts/browse-card/browse-card-shimmer.js';
 import { CONTENT_TYPES } from '../../scripts/data-service/coveo/coveo-exl-pipeline-constants.js';
@@ -44,22 +44,26 @@ async function getListofProducts() {
   }
 }
 
-function showEventsBanner(block, urlEl) {
-  const fragmentURL = getLink(urlEl.textContent.trim());
-  const fragmentPath = fragmentURL ? new URL(fragmentURL, window.location).pathname : '';
-  const currentPath = window.location.pathname?.replace('.html', '');
-  if (currentPath.endsWith(fragmentPath)) {
-    return;
-  }
+async function showEventsBanner(block, urlEl) {
+  let fragmentURL = urlEl?.textContent?.trim();
   if (fragmentURL) {
+    if (fragmentURL?.startsWith('/content')) {
+      fragmentURL = fragmentURL.replace(/^\/content\/[^\/]+\/global/, '');
+    }
+    const fragmentPath = new URL(fragmentURL, window.location).pathname;
+    const currentPath = window.location.pathname?.replace('.html', '');
+    if (currentPath.endsWith(fragmentPath)) {
+      return;
+    }
+
     const eventBanner = htmlToElement(
-      `<aside><div><div class="fragment"><a href="${fragmentURL}"></a></div></div></aside>`,
+      `<div><div><div class="fragment"><a href="${fragmentURL}"></a></div></div></div>`,
     );
     block.appendChild(eventBanner);
     decorateSections(eventBanner);
     decorateBlocks(eventBanner);
-    loadBlocks(eventBanner);
-    block.querySelector('.fragment-container')?.classList.remove('section');
+    await loadBlocks(eventBanner);
+    eventBanner.querySelector('.fragment-container')?.classList.remove('section');
   }
 }
 
@@ -109,7 +113,7 @@ export default async function decorate(block) {
     const profileData = await defaultProfileClient.getMergedProfile();
     const email = profileData?.email || '';
     if (email?.includes('@adobe.com')) {
-      showEventsBanner(block, linkElement);
+      await showEventsBanner(block, linkElement);
     }
   }
 
