@@ -48,7 +48,7 @@ async function showEventsBanner(block, urlEl) {
   let fragmentURL = urlEl?.textContent?.trim();
   if (fragmentURL) {
     if (fragmentURL?.startsWith('/content')) {
-      fragmentURL = fragmentURL.replace(/^\/content\/[^\/]+\/global/, '');
+      fragmentURL = fragmentURL.replace(/^\/content\/[^/]+\/global/, '');
     }
     const fragmentPath = new URL(fragmentURL, window.location).pathname;
     const currentPath = window.location.pathname?.replace('.html', '');
