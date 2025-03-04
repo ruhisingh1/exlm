@@ -94,6 +94,7 @@ export default async function decorate(block) {
     decorateSections(preMain);
     decorateBlocks(preMain);
     loadBlocks(preMain);
+    block.querySelector('.fragment-container')?.classList.remove('section');
   }
   
   const products = await getListofProducts();

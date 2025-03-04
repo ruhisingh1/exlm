@@ -63,7 +63,11 @@
       "announcement-ribbon",
       "qualtrics",
       "upcoming-event",
+<<<<<<< HEAD
       "site-wide-banner"
+=======
+      "notification-banner"
+>>>>>>> d5b238ba802c62f7e586d8bfc069b2c56675983c
     ]
   },
   {

@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-/* eslint-disable no-bitwise */
+
 import {
   buildBlock,
   loadHeader,
@@ -280,22 +280,24 @@ async function buildTabSection(main) {
  * Builds all synthetic blocks in a container element.
  * @param {Element} main The container element
  */
-function buildAutoBlocks(main) {
+function buildAutoBlocks(main, isFragment = false) {
   try {
     buildSyntheticBlocks(main);
     if (!isProfilePage && !isDocPage && !isSignUpPage) {
       buildTabSection(main);
     }
-    // if we are on a product browse page
-    if (isBrowsePage) {
-      addBrowseBreadCrumb(main);
-      addBrowseRail(main);
-    }
-    if (isPerspectivePage) {
-      addMiniToc(main);
-    }
-    if (isProfilePage) {
-      addProfileRail(main);
+    if (!isFragment) {
+      // if we are on a product browse page
+      if (isBrowsePage) {
+        addBrowseBreadCrumb(main);
+        addBrowseRail(main);
+      }
+      if (isPerspectivePage) {
+        addMiniToc(main);
+      }
+      if (isProfilePage) {
+        addProfileRail(main);
+      }
     }
     if (isFeatureEnabled('site-wide-banner')) {
       displaySitewideBanner(main);
@@ -537,11 +539,45 @@ export function decorateInlineAttributes(element) {
 }
 
 /**
+ * Helper function that converts an AEM path into an EDS path.
+ */
+export function getEDSLink(aemPath) {
+  return window.hlx.aemRoot ? aemPath.replace(window.hlx.aemRoot, '').replace('.html', '') : aemPath;
+}
+
+/** Helper function that adapts the path to work on EDS and AEM rendering */
+export function getLink(edsPath) {
+  return window.hlx.aemRoot && !edsPath.startsWith(window.hlx.aemRoot) && edsPath.indexOf('.html') === -1
+    ? `${window.hlx.aemRoot}${edsPath}.html`
+    : edsPath;
+}
+
+/** @param {HTMLMapElement} main */
+async function buildPreMain(main) {
+  const fragmentUrl = getMetadata('fragment');
+  const fragmentPath = fragmentUrl ? new URL(fragmentUrl, window.location).pathname : '';
+  const currentPath = window.location.pathname?.replace('.html', '');
+  if (currentPath.endsWith(fragmentPath)) {
+    return; // do not load fragment if it is the same as the current page
+  }
+  if (fragmentUrl) {
+    const preMain = htmlToElement(
+      `<aside><div><div class="fragment"><a href="${fragmentUrl}"></a></div></div></aside>`,
+    );
+    // add fragment as first section in preMain
+    main.before(preMain);
+    decorateSections(preMain);
+    decorateBlocks(preMain);
+    loadBlocks(preMain);
+  }
+}
+
+/**
  * Decorates the main element.
  * @param {Element} main The main element
  */
 // eslint-disable-next-line import/prefer-default-export
-export function decorateMain(main) {
+export function decorateMain(main, isFragment = false) {
   // docs pages do not use buttons, only links
   if (!isDocPage) {
     decorateButtons(main);
@@ -550,7 +586,7 @@ export function decorateMain(main) {
   decorateIcons(main);
   decorateInlineAttributes(main);
   decorateExternalLinks(main);
-  buildAutoBlocks(main);
+  buildAutoBlocks(main, isFragment);
   decorateSections(main);
   decorateBlocks(main);
   buildSectionBasedAutoBlocks(main);
@@ -564,6 +600,7 @@ async function loadEager(doc) {
   decorateTemplateAndTheme();
   const main = doc.querySelector('main');
   if (main) {
+    buildPreMain(main);
     decorateMain(main);
     document.body.classList.add('appear');
     await waitForLCP(LCP_BLOCKS);
@@ -952,20 +989,6 @@ async function showSignupDialog() {
 
   const { default: initSignupFlowHandler } = await import('./signup-flow/signup-flow-handler.js');
   await initSignupFlowHandler(signUpFlowConfigDate, modalReDisplayDuration);
-}
-
-/**
- * Helper function that converts an AEM path into an EDS path.
- */
-export function getEDSLink(aemPath) {
-  return window.hlx.aemRoot ? aemPath.replace(window.hlx.aemRoot, '').replace('.html', '') : aemPath;
-}
-
-/** Helper function that adapts the path to work on EDS and AEM rendering */
-export function getLink(edsPath) {
-  return window.hlx.aemRoot && !edsPath.startsWith(window.hlx.aemRoot) && edsPath.indexOf('.html') === -1
-    ? `${window.hlx.aemRoot}${edsPath}.html`
-    : edsPath;
 }
 
 /** fetch first path, if non 200, fetch the second */

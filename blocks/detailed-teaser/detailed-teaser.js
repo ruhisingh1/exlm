@@ -48,10 +48,18 @@ export function generateDetailedTeaserDOM(props, classes) {
   return teaserDOM;
 }
 
-export default function decorate(block) {
+export default async function decorate(block) {
   // get the first and only cell from each row
-  const props = [...block.children].map((row) => row.firstElementChild);
-  const teaserDOM = generateDetailedTeaserDOM(props, block.classList);
+  const [imageElement, hideInlineBannerElement, ...props] = [...block.children].map((row) => row.firstElementChild);
+  const teaserDOM = generateDetailedTeaserDOM([imageElement, ...props], block.classList);
   block.textContent = '';
+  if (block.classList.contains('inline-banner')) {
+    const hideInlineBanner = hideInlineBannerElement?.textContent?.trim();
+    const { isSignedInUser } = await import('../../scripts/auth/profile.js');
+    const isSignedIn = await isSignedInUser();
+    if (hideInlineBanner === 'true' && isSignedIn) {
+      block.classList.add('hide-inline-banner');
+    }
+  }
   block.append(teaserDOM);
 }
