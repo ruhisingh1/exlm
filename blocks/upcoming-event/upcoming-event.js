@@ -106,15 +106,8 @@ export default async function decorate(block) {
   block.appendChild(headerDiv);
 
   const isSignedIn = await isSignedInUser();
-  if (UEAuthorMode) {
-    showEventsBanner(block, linkElement);
-  }
-  if (isSignedIn) {
-    const profileData = await defaultProfileClient.getMergedProfile();
-    const email = profileData?.email || '';
-    if (email?.includes('@adobe.com')) {
-      await showEventsBanner(block, linkElement);
-    }
+  if (UEAuthorMode || (isSignedIn && (await defaultProfileClient.getMergedProfile())?.email?.includes('@adobe.com'))) {
+    await showEventsBanner(block, linkElement);
   }
 
   const products = await getListofProducts();
