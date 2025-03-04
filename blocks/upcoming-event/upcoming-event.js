@@ -108,7 +108,7 @@ export default async function decorate(block) {
   if (isSignedIn) {
     const profileData = await defaultProfileClient.getMergedProfile();
     const email = profileData?.email || '';
-    if (email?.contains('@adobe.com')) {
+    if (email?.includes('@adobe.com')) {
       showEventsBanner(block, linkElement);
     }
   }
