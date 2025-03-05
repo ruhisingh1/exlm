@@ -11,8 +11,6 @@ import {
   decorateTemplateAndTheme,
   waitForLCP,
   loadBlocks,
-  loadBlock,
-  updateSectionsStatus,
   loadCSS,
   decorateButtons,
   getMetadata,
@@ -22,7 +20,6 @@ import {
   createOptimizedPicture,
   toClassName,
 } from './lib-franklin.js';
-import isFeatureEnabled from './utils/feature-flag-utils.js';
 
 /**
  * please do not import any other modules here, as this file is used in the critical path.
@@ -207,32 +204,6 @@ function addMiniToc(main) {
   main.append(tocSection);
 }
 
-async function displaySitewideBanner(main) {
-  const { lang } = getPathDetails();
-  let blockContent = '';
-
-  try {
-    const response = await fetch(`/${lang}/site-wide-banner.plain.html`);
-    if (response.ok) {
-      blockContent = await response.text();
-    }
-  } catch (err) {
-    console.error('Error fetching notification banner:', err);
-  }
-
-  if (blockContent) {
-    const sitewideBannerBlock = buildBlock('site-wide-banner', blockContent);
-    const sitewideBanner = sitewideBannerBlock.querySelector('.site-wide-banner');
-    if (sitewideBanner) {
-      main.parentNode.insertBefore(sitewideBanner, main);
-      // main.prepend(sitewideBanner);
-      decorateBlock(sitewideBanner);
-      await loadBlock(sitewideBanner);
-      updateSectionsStatus(main);
-    }
-  }
-}
-
 /**
  * Tabbed layout for Tab section
  * @param {HTMLElement} main
@@ -298,9 +269,6 @@ function buildAutoBlocks(main, isFragment = false) {
       if (isProfilePage) {
         addProfileRail(main);
       }
-    }
-    if (isFeatureEnabled('site-wide-banner')) {
-      displaySitewideBanner(main);
     }
   } catch (error) {
     // eslint-disable-next-line no-console
@@ -1229,6 +1197,25 @@ function handleRedirects() {
   const redirects = ['/#feedback:/home#feedback'].map((p) => p.split(':').map((s) => new URL(s, window.location.href)));
   const redirect = redirects.find(([from]) => window.location.href === from.href);
   if (redirect) window.location.href = redirect[1].href;
+}
+
+export async function loadFragment(block, fragmentURL) {
+  if (fragmentURL) {
+    if (fragmentURL?.startsWith('/content')) {
+      fragmentURL = fragmentURL.replace(/^\/content\/[^/]+\/global/, '');
+    }
+    const fragmentPath = new URL(fragmentURL, window.location).pathname;
+    const currentPath = window.location.pathname?.replace('.html', '');
+    if (currentPath.endsWith(fragmentPath)) {
+      return;
+    }
+
+    const fragmentEl = htmlToElement(`<div><div><div class="fragment"><a href="${fragmentURL}"></a></div></div></div>`);
+    block.appendChild(fragmentEl);
+    decorateSections(fragmentEl);
+    decorateBlocks(fragmentEl);
+    await loadBlocks(fragmentEl);
+  }
 }
 
 async function loadPage() {
