@@ -1200,17 +1200,20 @@ function handleRedirects() {
 }
 
 export async function loadFragment(block, fragmentURL) {
-  if (fragmentURL) {
-    if (fragmentURL?.startsWith('/content')) {
-      fragmentURL = fragmentURL.replace(/^\/content\/[^/]+\/global/, '');
+  let fragmentLink = fragmentURL;
+  if (fragmentLink) {
+    if (fragmentLink?.startsWith('/content')) {
+      fragmentLink = fragmentLink.replace(/^\/content\/[^/]+\/global/, '');
     }
-    const fragmentPath = new URL(fragmentURL, window.location).pathname;
+    const fragmentPath = new URL(fragmentLink, window.location).pathname;
     const currentPath = window.location.pathname?.replace('.html', '');
     if (currentPath.endsWith(fragmentPath)) {
       return;
     }
 
-    const fragmentEl = htmlToElement(`<div><div><div class="fragment"><a href="${fragmentURL}"></a></div></div></div>`);
+    const fragmentEl = htmlToElement(
+      `<div><div><div class="fragment"><a href="${fragmentLink}"></a></div></div></div>`,
+    );
     block.appendChild(fragmentEl);
     decorateSections(fragmentEl);
     decorateBlocks(fragmentEl);
