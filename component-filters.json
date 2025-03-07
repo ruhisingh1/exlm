@@ -298,8 +298,6 @@
       "sr_script": ["superscript", "subscript"],
       "list": ["bullist", "numlist"],
       "insert": ["link"],
-      "advanced": [],
-      "extensions": [],
       "editor": []
     }
   },
