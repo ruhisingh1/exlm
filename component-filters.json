@@ -307,15 +307,15 @@
     "id": "notification-banner",
     "components": [],
     "rte": {
-      "format": [],
+      "format": ["bold", "italic"],
       "alignment": [],
       "indentation": [],
-      "sr_script": [],
-      "list": [],
-      "insert": [],
+      "sr_script": ["superscript", "subscript"],
+      "list": ["bullist", "numlist"],
+      "insert": ["link"],
       "advanced": [],
       "extensions": [],
-      "editor": [],
+      "editor": ["removeformat"],
       "blocks": []
     }
   },
