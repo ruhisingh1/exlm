@@ -6583,7 +6583,7 @@
       {
         "component": "richtext",
         "valueType": "string",
-        "name": "description",
+        "name": "Text",
         "value": "",
         "label": "Description"
       },
