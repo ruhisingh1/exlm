@@ -306,12 +306,6 @@
   {
     "id": "notification-banner",
     "rte": {
-      "format": ["bold", "italic"],
-      "alignment": [],
-      "indentation": [],
-      "sr_script": ["superscript", "subscript"],
-      "insert": ["link"],
-      "editor": ["removeformat"]
     }
   },
   {
