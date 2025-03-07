@@ -305,7 +305,7 @@
   },
   {
     "id": "notification-banner",
-    "rte": {
+    "description": {
       "format": [],
       "alignment": [],
       "indentation": [],
