@@ -295,9 +295,9 @@
       "format": [],
       "alignment": [],
       "indentation": [],
-      "sr_script": ["superscript", "subscript"],
-      "list": ["bullist", "numlist"],
-      "insert": ["link"],
+      "sr_script": [],
+      "list": [],
+      "insert": [],
       "editor": []
     }
   },
