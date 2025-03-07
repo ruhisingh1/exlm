@@ -305,16 +305,16 @@
   },
   {
     "id": "notification-banner",
-    "text": {
-      "format": ["bold"],
+    "rte": {
+      "format": [],
       "alignment": [],
       "indentation": [],
-      "sr_script": ["superscript", "subscript"],
+      "sr_script": [],
       "list": [],
-      "insert": ["link"],
+      "insert": [],
       "advanced": [],
       "extensions": [],
-      "editor": ["removeformat"]
+      "editor": []
     }
   },
   {
