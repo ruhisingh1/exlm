@@ -28,7 +28,7 @@ export async function signOut() {
   );
   const { lang } = getPathDetails();
 
-  if (window.location.pathname === `${lang}${personalizedHomeLink}`) {
+  if (window.location.pathname === `/${lang}${personalizedHomeLink}`) {
     window.location.pathname = lang === 'en' ? '' : `${lang}`;
   }
 
