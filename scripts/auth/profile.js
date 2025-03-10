@@ -27,9 +27,8 @@ export async function signOut() {
     sessionStorage.removeItem(key),
   );
   const { lang } = getPathDetails();
-  const referrerPath = new URL(document.referrer)?.pathname || '';
 
-  if (referrerPath === `${lang}${personalizedHomeLink}`) {
+  if (window.location.pathname === `${lang}${personalizedHomeLink}`) {
     window.location.pathname = lang === 'en' ? '' : `${lang}`;
   }
 
