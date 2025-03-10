@@ -1,4 +1,4 @@
-import { fetchLanguagePlaceholders, htmlToElement } from '../../scripts/scripts.js';
+import { fetchLanguagePlaceholders, htmlToElement, getPathDetails } from '../../scripts/scripts.js';
 import { isMobile, registerHeaderResizeHandler, simplifySingleCellBlock } from './header-utils.js';
 import { decorateIcons } from '../../scripts/lib-franklin.js';
 
@@ -170,6 +170,11 @@ export default class ProfileMenu extends HTMLElement {
       signoutLink.dataset.id = 'sign-out';
       signoutLink.addEventListener('click', async () => {
         this.decoratorOptions.onSignOut();
+        const { lang } = getPathDetails();
+
+  if (window.location.pathname === `/${lang}/home`) {
+    window.location.pathname = lang === 'en' ? '' : `${lang}`;
+  }
       });
       profileMenuBlock.append(signoutLink);
 

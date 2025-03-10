@@ -1,12 +1,12 @@
 // eslint-disable-next-line import/no-cycle, max-classes-per-file
-import { getConfig, loadIms, getPathDetails } from '../scripts.js';
+import { getConfig, loadIms } from '../scripts.js';
 // eslint-disable-next-line import/no-cycle
 import loadJWT from './jwt.js';
 import csrf from './csrf.js';
 
 // NOTE: to keep this viatl utility small, please do not increase the number of imports or use dynamic imports when needed.
 
-const { profileUrl, JWTTokenUrl, ppsOrigin, ims, khorosProfileDetailsUrl, personalizedHomeLink } = getConfig();
+const { profileUrl, JWTTokenUrl, ppsOrigin, ims, khorosProfileDetailsUrl } = getConfig();
 
 const override = /^(recommended|votes)$/;
 
@@ -26,12 +26,6 @@ export async function signOut() {
   ['JWT', 'coveoToken', 'attributes', 'exl-profile', 'profile', 'pps-profile'].forEach((key) =>
     sessionStorage.removeItem(key),
   );
-  const { lang } = getPathDetails();
-
-  if (window.location.pathname === `/${lang}${personalizedHomeLink}`) {
-    window.location.pathname = lang === 'en' ? '' : `${lang}`;
-  }
-
   window.adobeIMS?.signOut();
 }
 
@@ -203,7 +197,7 @@ class ProfileClient {
     const accountId = (await window.adobeIMS.getProfile()).userId;
 
     try {
-      const response = await fetch(`${khorosProfileDetailsUrl}?user=${accountId}`, {
+      const response = await fetch(`${khorosProfileDetailsUrl}&user=${accountId}`, {
         method: 'GET',
         headers: {
           'x-ims-token': await window.adobeIMS?.getAccessToken().token,
