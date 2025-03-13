@@ -468,6 +468,7 @@
                 "template": {
                   "name": "Block Quote",
                   "model": "block-quote",
+                  "filter": "rte-options",
                   "title": "Block Quote"
                 }
               }
