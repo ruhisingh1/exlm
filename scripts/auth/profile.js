@@ -3,6 +3,7 @@ import { getConfig, loadIms } from '../scripts.js';
 // eslint-disable-next-line import/no-cycle
 import loadJWT from './jwt.js';
 import csrf from './csrf.js';
+import { getMetadata } from '../lib-franklin.js';
 
 // NOTE: to keep this viatl utility small, please do not increase the number of imports or use dynamic imports when needed.
 
