@@ -32,6 +32,10 @@ export async function signOut(signoutOptions) {
   ['JWT', 'coveoToken', 'attributes', 'exl-profile', 'profile', 'pps-profile'].forEach((key) =>
     sessionStorage.removeItem(key),
   );
+  const signOutRedirectUrl = getMetadata('signout-redirect-url');
+  if(signOutRedirectUrl){
+    signoutOptions.redirect_uri = signOutRedirectUrl;
+  }
   if (signoutOptions) {
     window.adobeIMS?.signOut(signoutOptions);
   } else {
