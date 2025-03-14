@@ -63,7 +63,8 @@
       "announcement-ribbon",
       "qualtrics",
       "upcoming-event",
-      "notification-banner"
+      "notification-banner",
+      "note"
     ]
   },
   {
@@ -304,14 +305,14 @@
     }
   },
   {
-    "id": "notification-banner",
+    "id": "rte-options",
     "components": [],
     "rte": {
-      "format": ["bold", "italic"],
+      "format": ["bold", "italic", "underline"],
       "alignment": [],
       "indentation": [],
       "sr_script": ["superscript", "subscript"],
-      "list": ["bullist", "numlist"],
+      "list": [],
       "insert": ["link"],
       "advanced": [],
       "extensions": [],

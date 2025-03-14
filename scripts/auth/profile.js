@@ -22,11 +22,25 @@ export async function isSignedInUser() {
   }
 }
 
-export async function signOut() {
+/**
+ * @see: https://git.corp.adobe.com/IMS/imslib2.js#documentation
+ * @see: https://wiki.corp.adobe.com/display/ims/IMS+API+-+logout#IMSApi-logout-signout_options
+ * @param {Object} [signoutOptions]
+ * @param {string} [signoutOptions.redirect_uri] - A URL to which the user agent is redirected on successful logout.
+ */
+export async function signOut(signoutOptions) {
   ['JWT', 'coveoToken', 'attributes', 'exl-profile', 'profile', 'pps-profile'].forEach((key) =>
     sessionStorage.removeItem(key),
   );
-  window.adobeIMS?.signOut();
+  const signOutRedirectUrl = getMetadata('signout-redirect-url');
+  if(signOutRedirectUrl){
+    signoutOptions.redirect_uri = signOutRedirectUrl;
+  }
+  if (signoutOptions) {
+    window.adobeIMS?.signOut(signoutOptions);
+  } else {
+    window.adobeIMS?.signOut();
+  }
 }
 
 // A store that saves promises and their results in sessionStorage
