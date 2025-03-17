@@ -46,8 +46,8 @@ export default async function decorate(block) {
       }
     }
 
-    if (displayBlock) {
-      block.parentElement.style.display = 'block';
+    if (!displayBlock) {
+      block.parentElement.remove();
     }
   }
   // The `storage` value will be either 'localStorage' or 'sessionStorage',
