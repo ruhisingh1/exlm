@@ -327,6 +327,7 @@
                 "template": {
                   "name": "Announcement Ribbon",
                   "model": "announcement-ribbon",
+                  "filter": "rte-custom-options",
                   "title": "Announcement Ribbon Title",
                   "titleType": "h3",
                   "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt",
@@ -340,7 +341,8 @@
                   "cta2_customBgHexCode": "000000",
                   "customHexCode": "FFFFFF",
                   "classes": "light",
-                  "dismissalTime": "sessionStorage"
+                  "dismissalTime": "sessionStorage",
+                  "isAdobeOnlyBanner": false
                 }
               }
             }
@@ -468,7 +470,6 @@
                 "template": {
                   "name": "Block Quote",
                   "model": "block-quote",
-                  "filter": "rte-options",
                   "title": "Block Quote"
                 }
               }
@@ -762,7 +763,7 @@
                     "sling:resourceType": "core/franklin/components/block/v1/block/item",
                     "name": "Icon Card",
                     "model": "icon-card",
-                    "filter": "rte-options",
+                    "filter": "rte-custom-options",
                     "cardIcon": "/content/dam/exlm/icons/S_ExperienceManager_24_N.svg",
                     "cardHeading": "Default Heading",
                     "cardHeadingType": "h3",
@@ -774,7 +775,7 @@
                     "sling:resourceType": "core/franklin/components/block/v1/block/item",
                     "name": "Icon Card",
                     "model": "icon-card",
-                    "filter": "rte-options",
+                    "filter": "rte-custom-options",
                     "cardIcon": "/content/dam/exlm/icons/S_ExperienceManager_24_N.svg",
                     "cardHeading": "Default Heading",
                     "cardHeadingType": "h3",
@@ -786,7 +787,7 @@
                     "sling:resourceType": "core/franklin/components/block/v1/block/item",
                     "name": "Icon Card",
                     "model": "icon-card",
-                    "filter": "rte-options",
+                    "filter": "rte-custom-options",
                     "cardIcon": "/content/dam/exlm/icons/S_ExperienceManager_24_N.svg",
                     "cardHeading": "Default Heading",
                     "cardHeadingType": "h3",
@@ -809,7 +810,7 @@
                 "template": {
                   "name": "Icon Card",
                   "model": "icon-card",
-                  "filter": "rte-options",
+                  "filter": "rte-custom-options",
                   "cardIcon": "/content/dam/exlm/icons/S_ExperienceManager_24_N.svg",
                   "cardHeading": "Default Heading",
                   "cardHeadingType": "h3",
@@ -918,8 +919,7 @@
                 "resourceType": "core/franklin/components/block/v1/block",
                 "template": {
                   "name": "Note",
-                  "model": "note",
-                  "filter": "rte-options"
+                  "model": "note"
                 }
               }
             }
@@ -935,7 +935,7 @@
                 "template": {
                   "name": "Notification Banner",
                   "model": "notification-banner",
-                  "filter": "rte-options",
+                  "filter": "rte-custom-options",
                   "bannerId": "banner-1",
                   "title": "Notification Banner Title",
                   "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt"
@@ -1131,21 +1131,6 @@
                   "title": "Sign up Title",
                   "titleType": "h3",
                   "longDescr": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Site Wide Banner",
-          "id": "site-wide-banner",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "Site Wide Banner",
-                  "model": "site-wide-banner"
                 }
               }
             }
