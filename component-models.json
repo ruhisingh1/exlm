@@ -6567,46 +6567,26 @@
     "id": "notification-banner",
     "fields": [
       {
-        "component": "container",
-        "name": "classes",
-        "label": "Block Options",
-        "description": "Options that affect block appearance and behavior.",
-        "valueType": "string",
-        "fields": [
-          {
-            "component": "select",
-            "name": "Background Color",
-            "options": [
-              {
-                "name": "Dark Gray",
-                "value": "bg-dark-gray"
-              },
-              {
-                "name": "Blue (default)",
-                "value": "bg-blue"
-              },
-              {
-                "name": "Red",
-                "value": "bg-red"
-              }
-            ]
-          },
-          {
-            "component": "select",
-            "name": "Dismissable",
-            "options": [
-              {
-                "name": "Yes",
-                "value": "dismissable"
-              },
-              {
-                "name": "No",
-                "value": "non-dismissable"
-              }
-            ]
-          }
-        ]
-      },
+      "component": "container",
+      "label": "Container",
+      "name": "classes",
+      "valueType": "string",
+      "collapsible": true,
+      "fields": [
+        {
+          "component": "text-input",
+          "label": "Simple Text 1",
+          "name": "text",
+          "valueType": "string"
+        },
+        {
+          "component": "text-input",
+          "label": "Simple Text 2",
+          "name": "text2",
+          "valueType": "string"
+        }
+      ]
+    },
       {
         "component": "text",
         "valueType": "string",
