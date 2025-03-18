@@ -575,7 +575,7 @@
                 "template": {
                   "name": "Code",
                   "model": "code",
-                  "classes": "language-json"
+                  "classes": "language-none"
                 }
               }
             }
