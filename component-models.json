@@ -4177,37 +4177,6 @@
       }
     ]
   },
-    {
-    "id": "code",
-    "fields": [
-      {
-        "component": "select",
-        "name": "classes",
-        "value": "",
-        "label": "Theme",
-        "description": "Select light or dark theme",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "json",
-            "value": "language-json"
-          },
-          {
-            "name": "html",
-            "value": "language-html"
-          }
-        ]
-      },
-      {
-        "component": "richtext",
-        "valueType": "string",
-        "name": "code",
-        "value": "",
-        "label": "Code",
-        "description": "Sets the code text"
-      }
-    ]
-  },
   {
     "id": "callout",
     "fields": [
@@ -6567,26 +6536,46 @@
     "id": "notification-banner",
     "fields": [
       {
-      "component": "container",
-      "label": "Container",
-      "name": "classes",
-      "valueType": "string",
-      "collapsible": true,
-      "fields": [
-        {
-          "component": "text-input",
-          "label": "Simple Text 1",
-          "name": "text",
-          "valueType": "string"
-        },
-        {
-          "component": "text-input",
-          "label": "Simple Text 2",
-          "name": "text2",
-          "valueType": "string"
-        }
-      ]
-    },
+        "component": "multiselect",
+        "name": "classes",
+        "label": "Block Options",
+        "description": "Options that affect block appearance and behavior.",
+        "valueType": "string",
+        "required": true,
+        "maxSize": 2,
+        "options": [
+          {
+            "name": "Background Color",
+            "children": [
+              {
+                "name": "Dark Gray",
+                "value": "bg-dark-gray"
+              },
+              {
+                "name": "Blue (default)",
+                "value": "bg-blue"
+              },
+              {
+                "name": "Red",
+                "value": "bg-red"
+              }
+            ]
+          },
+          {
+            "name": "Dismissable",
+            "children": [
+              {
+                "name": "Yes",
+                "value": "dismissable"
+              },
+              {
+                "name": "No",
+                "value": "non-dismissable"
+              }
+            ]
+          }
+        ]
+      },
       {
         "component": "text",
         "valueType": "string",
