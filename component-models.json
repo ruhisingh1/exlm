@@ -4177,6 +4177,19 @@
       }
     ]
   },
+    {
+    "id": "code",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "code",
+        "value": "",
+        "label": "Code",
+        "description": "Sets the code text"
+      }
+    ]
+  },
   {
     "id": "callout",
     "fields": [
