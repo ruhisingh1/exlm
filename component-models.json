@@ -6567,17 +6567,16 @@
     "id": "notification-banner",
     "fields": [
       {
-        "component": "multiselect",
+        "component": "container",
         "name": "classes",
         "label": "Block Options",
         "description": "Options that affect block appearance and behavior.",
         "valueType": "string",
-        "required": true,
-        "maxSize": 2,
-        "options": [
+        "fields": [
           {
+            "component": "select",
             "name": "Background Color",
-            "children": [
+            "options": [
               {
                 "name": "Dark Gray",
                 "value": "bg-dark-gray"
@@ -6593,8 +6592,9 @@
             ]
           },
           {
+            "component": "select",
             "name": "Dismissable",
-            "children": [
+            "options": [
               {
                 "name": "Yes",
                 "value": "dismissable"
