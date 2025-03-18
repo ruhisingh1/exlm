@@ -4181,6 +4181,24 @@
     "id": "code",
     "fields": [
       {
+        "component": "select",
+        "name": "classes",
+        "value": "",
+        "label": "Theme",
+        "description": "Select light or dark theme",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "json",
+            "value": "language-json"
+          },
+          {
+            "name": "html",
+            "value": "language-html"
+          }
+        ]
+      },
+      {
         "component": "richtext",
         "valueType": "string",
         "name": "code",
