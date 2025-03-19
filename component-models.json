@@ -5971,6 +5971,7 @@
         "label": "Block options",
         "valueType": "string",
         "required": true,
+        "maxSize": 2,
         "options": [
           {
             "name": "Theme",
@@ -5989,12 +5990,8 @@
             "name": "Toggle Options",
             "children": [
               {
-                "name": "Adobe Employee Only Banner",
-                "value": "isAdobeOnlyBanner"
-              },
-              {
-                "name": "Dismissable",
-                "value": "dismissable"
+                "name": "Banner for Adobe employee only?",
+                "value": "internal-banner"
               }
             ]
           }
