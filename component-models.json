@@ -6624,7 +6624,7 @@
     ]
   },
   {
-    "id": "notification-banner",
+    "id": "code",
     "fields": [
       {
         "component": "multiselect",
