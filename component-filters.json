@@ -272,7 +272,8 @@
       "inline-survey",
       "featured-content",
       "note",
-      "qualtrics"
+      "qualtrics",
+      "code"
     ]
   },
   {
@@ -347,6 +348,22 @@
       "extensions": [],
       "editor": ["removeformat"],
       "blocks": []
+    }
+  },
+  {
+    "id": "code",
+    "components": [],
+    "rte": {
+      "format": ["bold", "italic", "underline"],
+      "alignment": [],
+      "indentation": [],
+      "sr_script": ["superscript", "subscript"],
+      "list": [],
+      "insert": ["link"],
+      "advanced": [],
+      "extensions": [],
+      "editor": ["removeformat"],
+      "blocks": ["pre"]
     }
   }
 ]

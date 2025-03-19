@@ -6622,5 +6622,45 @@
         "description": "URL to open when the button is clicked."
       }
     ]
+  },
+  {
+    "id": "notification-banner",
+    "fields": [
+      {
+        "component": "multiselect",
+        "name": "classes",
+        "label": "Block Options",
+        "description": "Options that affect block appearance and behavior.",
+        "valueType": "string",
+        "required": true,
+        "maxSize": 1,
+        "options": [
+          {
+            "name": "Code Type",
+            "children": [
+              {
+                "name": "None",
+                "value": "language-none"
+              },
+              {
+                "name": "JSON",
+                "value": "language-json"
+              },
+              {
+                "name": "HTML",
+                "value": "language-html"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "value": "",
+        "label": "Code"
+      }
+    ]
   }
 ]
