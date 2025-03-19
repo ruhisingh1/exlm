@@ -6633,7 +6633,7 @@
         "description": "Options that affect block appearance and behavior.",
         "valueType": "string",
         "required": true,
-        "maxSize": 1,
+        "maxSize": 2,
         "options": [
           {
             "name": "Code Type",
@@ -6647,8 +6647,25 @@
                 "value": "language-json"
               },
               {
+                "name": "Javascript",
+                "value": "language-javascript"
+              },
+              {
+                "name": "Markdown",
+                "value": "language-markdown"
+              },
+              {
                 "name": "HTML",
                 "value": "language-html"
+              }
+            ]
+          },
+          {
+            "name": "Attributes",
+            "children": [
+              {
+                "name": "Line numbers",
+                "value": "line-numbers"
               }
             ]
           }
