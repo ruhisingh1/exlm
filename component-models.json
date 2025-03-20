@@ -6636,7 +6636,7 @@
         "maxSize": 2,
         "options": [
           {
-            "name": "Code Type",
+            "name": "Code Language",
             "children": [
               {
                 "name": "None",
@@ -6661,10 +6661,10 @@
             ]
           },
           {
-            "name": "Attributes",
+            "name": "Toggle Options",
             "children": [
               {
-                "name": "Line numbers",
+                "name": "Enable line numbering",
                 "value": "line-numbers"
               }
             ]
@@ -6676,7 +6676,24 @@
         "valueType": "string",
         "name": "description",
         "value": "",
-        "label": "Code"
+        "label": "Code",
+        "description": "Enter the code."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "start-line",
+        "value": "",
+        "label": "Line numbering",
+        "description": "Add a number to start the numbering on a number other than 1."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "highlight",
+        "value": "",
+        "label": "Line highlighting",
+        "description": "Add number to highlight rows within a code block. E.g. 1-3, 6 will highlight lines 1 through 3 and 6."
       }
     ]
   }
