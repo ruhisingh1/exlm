@@ -64,7 +64,12 @@
       "qualtrics",
       "upcoming-event",
       "notification-banner",
-      "code"
+      "code",
+      "footer-breadcrumb",
+      "footer-item",
+      "footer-language-selector",
+      "social",
+      "footer-copyrights"
     ]
   },
   {
