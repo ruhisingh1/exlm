@@ -1,6 +1,6 @@
 import { isSignedInUser } from '../../scripts/auth/profile.js';
 import { decorateIcons } from '../../scripts/lib-franklin.js';
-import { getPathDetails, fetchFragment } from '../../scripts/scripts.js';
+import { getPathDetails, fetchGlobalFragment } from '../../scripts/scripts.js';
 import LanguageBlock from '../language/language.js';
 
 /**
@@ -225,7 +225,9 @@ function handleLoginFunctionality(footer) {
 export default async function decorate(block) {
   // fetch footer content
   const { lang } = getPathDetails();
-  const footerFragment = await fetchFragment('footer/footer', lang);
+  const footerMeta = 'footer-fragment';
+  const fallback = '/en/global-fragments/footer';
+  const footerFragment = await fetchGlobalFragment(footerMeta, fallback, lang);
 
   if (footerFragment) {
     // decorate footer DOM
