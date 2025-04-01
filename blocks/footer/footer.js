@@ -99,7 +99,7 @@ function extractDomain(domain) {
 
 async function decorateSocial(footer) {
   // create the divs to acomodate the social icons and the language selector
-  const languageSelector = footer.querySelector('.footer-language-selector');
+  const languageSelector = footer.querySelector('.language-selector');
   const groupDiv = document.createElement('div');
   groupDiv.classList.add('footer-lang-social');
   groupDiv.appendChild(languageSelector);
@@ -175,7 +175,7 @@ function decorateCopyrightsMenu(footer) {
   copyRightWrapper.classList.add('footer-copyrights-element');
   const footerMenu = document.querySelector('.footer-menu');
   footerMenu.parentElement.appendChild(footerLastRow);
-  const languageSelector = footer.querySelector('.footer-language-selector');
+  const languageSelector = footer.querySelector('.language-selector');
   const languageBlock = new LanguageBlock({
     position: 'top',
     popoverId: 'language-picker-popover-footer',
