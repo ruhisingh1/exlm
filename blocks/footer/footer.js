@@ -151,7 +151,7 @@ function decorateCopyrightsMenu(footer) {
   if (adChoice?.href?.includes('#interest-based-ads')) {
     adChoice.classList.add('footer-adchoice-wrapper');
     adChoice.target = '_blank';
-    adChoice.innerHTML = `<span class="icon icon-adchoices-small"></span> ${adChoice.textContent.trim()}`;
+    adChoice.innerHTML = `<span class="icon icon-adchoices-small"></span> ${adChoice?.textContent?.trim()}`;
   }
   copyRightWrapper.innerHTML = copyRightWrapper.innerHTML.replaceAll(/\s\/\s/g, '<span class="footer-slash">/</span>');
   if (copyRightWrapper?.firstChild instanceof Text) {
