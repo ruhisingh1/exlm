@@ -7004,19 +7004,6 @@
     ]
   },
   {
-    "id": "footer-language-selector",
-    "fields": [
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "change-region-text",
-        "value": "Change Region",
-        "label": "Change Region Text",
-        "description": "The text for the change region button."
-      }
-    ]
-  },
-  {
     "id": "social",
     "fields": [
       {

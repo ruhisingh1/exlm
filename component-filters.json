@@ -65,13 +65,7 @@
       "upcoming-event",
       "notification-banner",
       "code",
-      "footer-breadcrumb",
-      "footer-item",
-      "footer-language-selector",
-      "social",
-      "footer-copyrights",
-      "test-block",
-      "language-selector"
+      "test-block"
     ]
   },
   {
@@ -222,6 +216,16 @@
       "sign-in",
       "profile-menu",
       "product-grid"
+    ]
+  },
+  {
+    "id": "section-footer",
+    "components": [
+      "footer-breadcrumb",
+      "footer-item",
+      "social",
+      "footer-copyrights",
+      "language-selector"
     ]
   },
   {
