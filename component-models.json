@@ -7040,5 +7040,35 @@
         "label": "Footer copyrights"
       }
     ]
+  },
+  {
+    "id": "test-block",
+    "fields": [
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "classes",
+        "label": "Test Block source",
+        "value": "",
+        "options": [
+          {
+            "name": "Adobe",
+            "value": "adobe"
+          },
+          {
+            "name": "External",
+            "value": "external"
+          }
+        ]
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "test-block",
+        "value": "",
+        "label": "Text",
+        "description": "Sets the text"
+      }
+    ]
   }
 ]
