@@ -137,8 +137,9 @@ function decorateBreadcrumb(footer) {
 }
 
 function decorateCopyrightsMenu(footer) {
-  const footerLastRow = footer.querySelector('.footer-last-row');
+  const footerLastRow = footer.querySelector('footer .footer-last-row');
   const footerRights = document.querySelector('.footer-copyrights');
+  footerLastRow.appendChild(footerRights);
   const firstFooterAnchor = footerRights.querySelector('a');
   const copyRightWrapper = firstFooterAnchor.parentElement;
   Array.from(copyRightWrapper.querySelectorAll('a')).forEach((anchor) => {
@@ -163,7 +164,6 @@ function decorateCopyrightsMenu(footer) {
   copyRightWrapper.classList.add('footer-copyrights-element');
   const footerMenu = document.querySelector('.footer-menu');
   footerMenu.parentElement.appendChild(footerLastRow);
-  footerLastRow.appendChild(footerRights);
   const languageSelector = footer.querySelector('.language-selector');
   const languageBlock = new LanguageBlock({
     position: 'top',
