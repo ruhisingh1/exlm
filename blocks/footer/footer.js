@@ -1,23 +1,21 @@
 import { isSignedInUser } from '../../scripts/auth/profile.js';
 import { decorateIcons } from '../../scripts/lib-franklin.js';
-import { getPathDetails, fetchGlobalFragment } from '../../scripts/scripts.js';
+import { getPathDetails, fetchGlobalFragment, htmlToElement } from '../../scripts/scripts.js';
 import LanguageBlock from '../language/language.js';
 
-/**
- * Adds attributes to <a> tags based on special keys in the URL.
- *
- * If a URL contains '@auth-only', it adds auth-only="true".
- * Example:
- * <a href="https://example.com@auth-only"> → <a href="https://example.com" auth-only="true">
- *
- * @param {HTMLElement} block
- */
-const decorateFooterLinks = (block) => {
-  block.querySelectorAll('a[href*="@auth-only"]').forEach((link) => {
-    link.href = link.href.replace('@auth-only', '');
-    link.setAttribute('auth-only', 'true');
+/** @param {HTMLElement} block  */
+export function decorateFooterLinks(block) {
+  const links = block.querySelectorAll('a[href*="@newtab"]');
+  links.forEach((link) => {
+    link.href = link.href.replace('@newtab', '');
+    link.setAttribute('target', '_blank');
+    link.setAttribute('rel', 'noopener noreferrer');
+    // insert before first text child node
+    const icon = htmlToElement('<span class="icon icon-link-out"></span>');
+    link.firstChild.after(icon);
+    decorateIcons(link);
   });
-};
+}
 
 async function decorateMenu(footer) {
   const isSignedIn = await isSignedInUser();
@@ -35,23 +33,6 @@ async function decorateMenu(footer) {
         divPair.setAttribute('class', 'footer-item-list');
         divPair.appendChild(h2Element);
         const ulElement = ulElements[index];
-        const anchorLinks = Array.from(ulElement.querySelectorAll('a') ?? []);
-        const containsAuthOnlyLink = !!anchorLinks.find((a) => a.getAttribute('auth-only'));
-        if (containsAuthOnlyLink) {
-          const loginLink = anchorLinks.find((a) => a.getAttribute('auth-only') !== 'true');
-          if (loginLink) {
-            loginLink.href = '';
-            loginLink.classList.add('footer-login-link');
-          }
-          anchorLinks.forEach((a) => {
-            const authOnlyAttribute = a.getAttribute('auth-only');
-            const isSignedInAndUnAuthenticatedLink = isSignedIn && authOnlyAttribute !== 'true';
-            const isNotSignedInAndAuthenticatedLink = !isSignedIn && authOnlyAttribute === 'true';
-            if (isSignedInAndUnAuthenticatedLink || isNotSignedInAndAuthenticatedLink) {
-              a.classList.add('footer-link-hidden');
-            }
-          });
-        }
         divPair.appendChild(ulElement);
         divWrapper.appendChild(divPair);
       });
@@ -199,14 +180,6 @@ function handleSocialIconStyles(footer) {
   });
 }
 
-function handleLoginFunctionality(footer) {
-  const loginLink = footer.querySelector('.footer-login-link');
-  loginLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    window.adobeIMS.signIn();
-  });
-}
-
 /**
  * loads and decorates the footer
  * @param {Element} block The footer block element
@@ -228,6 +201,5 @@ export default async function decorate(block) {
     await decorateMenu(footer);
     decorateCopyrightsMenu(footer);
     handleSocialIconStyles(footer);
-    handleLoginFunctionality(footer);
   }
 }

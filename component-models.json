@@ -6985,7 +6985,7 @@
         "component": "richtext",
         "valueType": "string",
         "name": "text",
-        "value": "<a href='/' title='Home'></a><a data-id='footer-breadcrumb' href='/'>Experience League</a>",
+        "value": "<a href='/'>Home</a><a data-id='footer-breadcrumb' href='/'>Experience League</a>",
         "label": "Footer Breadcrumb"
       }
     ]

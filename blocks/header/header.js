@@ -11,6 +11,7 @@ import {
   getLink,
   getPathDetails,
   fetchGlobalFragment,
+  decorateNewTabLinks,
 } from '../../scripts/scripts.js';
 import getProducts from '../../scripts/utils/product-utils.js';
 import {
@@ -632,18 +633,6 @@ const adobeLogoDecorator = async (adobeLogoBlock) => {
   adobeLogoBlock.querySelector('a').setAttribute('title', 'logo');
   decorateIcons(adobeLogoBlock);
   return adobeLogoBlock;
-};
-
-/** @param {HTMLElement} block  */
-const decorateNewTabLinks = (block) => {
-  const links = block.querySelectorAll('a[target="_blank"]');
-  links.forEach((link) => {
-    link.setAttribute('rel', 'noopener noreferrer');
-    // insert before first text child node
-    const icon = htmlToElement('<span class="icon icon-link-out"></span>');
-    link.firstChild.after(icon);
-    decorateIcons(link);
-  });
 };
 
 /**
