@@ -7057,5 +7057,17 @@
         "description": "Sets the text"
       }
     ]
+  },
+  {
+    "id": "playlist-browse",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "value": "",
+        "label": "Marquee Content"
+      }
+    ]
   }
 ]
