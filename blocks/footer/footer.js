@@ -1,10 +1,9 @@
-import { isSignedInUser } from '../../scripts/auth/profile.js';
 import { decorateIcons } from '../../scripts/lib-franklin.js';
 import { getPathDetails, fetchGlobalFragment, htmlToElement } from '../../scripts/scripts.js';
 import LanguageBlock from '../language/language.js';
 
 /** @param {HTMLElement} block  */
-export function decorateFooterLinks(block) {
+const decorateFooterLinks = (block) => {
   const links = block.querySelectorAll('a[href*="@newtab"]');
   links.forEach((link) => {
     link.href = link.href.replace('@newtab', '');
@@ -15,10 +14,9 @@ export function decorateFooterLinks(block) {
     link.firstChild.after(icon);
     decorateIcons(link);
   });
-}
+};
 
 async function decorateMenu(footer) {
-  const isSignedIn = await isSignedInUser();
   const childElements = footer.querySelectorAll('.footer-item');
   const groupDiv = document.createElement('div');
   groupDiv.classList.add('footer-menu');
@@ -118,7 +116,7 @@ function decorateBreadcrumb(footer) {
 }
 
 function decorateCopyrightsMenu(footer) {
-  const footerLastRow = footer.querySelector('footer .footer-last-row');
+  const footerLastRow = footer.querySelector('.footer-last-row');
   const footerRights = document.querySelector('.footer-copyrights');
   footerLastRow.appendChild(footerRights);
   const firstFooterAnchor = footerRights.querySelector('a');
