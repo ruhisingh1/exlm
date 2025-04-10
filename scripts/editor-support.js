@@ -146,7 +146,7 @@ function updateUEInstrumentation() {
     setUEFilter(section, 'section-header');
   }
 
-  // ----- if header, identified by theme
+  // ----- if footer, identified by theme
   if (document.querySelector('body[class^=footer]') || getMetadata('theme') === 'footer') {
     // update available sections
     setUEFilter(main, 'empty');

@@ -197,6 +197,7 @@ export default async function decorate(block) {
     await decorateSocial(footer);
     decorateBreadcrumb(footer);
     await decorateMenu(footer);
+    handleSocialIconStyles(footer);
     decorateCopyrightsMenu(footer);
     handleSocialIconStyles(footer);
   }
