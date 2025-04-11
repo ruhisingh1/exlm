@@ -1,21 +1,22 @@
-import { isSignedInUser } from "../../scripts/auth/profile.js";
-// const certificationUrl = "";
+// import { isSignedInUser } from "../../scripts/auth/profile.js";
+
+const certificationUrl = "/api/action/rockwell/certifications";
 
 
-/**
- * Fetch the user's email from adobeIms.
- * @returns {Promise<string>} The user's email address.
- */
-const getUserEmail = async () => {
-    try {
-      // Assuming adobeIMS is globally available
-      const userProfile = await window?.adobeIMS?.getProfile();
-      return userProfile.email || 'Email not available';
-    } catch (error) {
-      console.error('Error fetching user email:', error);
-      return 'Error fetching email';
-    }
-  }
+// /**
+//  * Fetch the user's email from adobeIms.
+//  * @returns {Promise<string>} The user's email address.
+//  */
+// const getUserEmail = async () => {
+//     try {
+//       // Assuming adobeIMS is globally available
+//       const userProfile = await window?.adobeIMS?.getProfile();
+//       return userProfile.email || 'Email not available';
+//     } catch (error) {
+//       console.error('Error fetching user email:', error);
+//       return 'Error fetching email';
+//     }
+//   }
 
 /**
  * Render a list of certifications by fetching data from a JSON file.
@@ -33,21 +34,23 @@ export default async function decorate(block) {
     block.appendChild(descriptionElement);
     
     try {
-    let response;
-      if (profileContext?.textContent.trim().toLowerCase() === "true") {
-        const signedIn = await isSignedInUser();
-        if (signedIn) {
-          const email = await getUserEmail();
-          console.log("User Email:", email);
-        //   const response = await fetch(`https://example.com/api/certifications?email=${email}`);
-        } else {
-         block.innerHTML += `<p class="error">Please sign in to get profile specific certificates</p>`;
-          console.log("User is not signed in.");
-        }
-      } else {
+    //   if (profileContext?.textContent.trim().toLowerCase() === "true") {
+    //     const signedIn = await isSignedInUser();
+    //     if (signedIn) {
+    //       const email = await getUserEmail();
+    //       console.log("User Email:", email);
+    //       const response = await fetch(`${certificationUrl}?email=${email}`);
+    //     } else {
+    //      block.innerHTML += `<p class="error">Please sign in to get profile specific certificates</p>`;
+    //       console.log("User is not signed in.");
+    //     }
+    //   } else {
+        // if(ModifiedAfterFilter.trim())
         // Dynamically import the JSON data
-        response = await import("./certification-data.js");
-      }
+        const res = await fetch(`${certificationUrl}?modifiedBefore=2024-01-01 00:00:00`);
+        console.log(res.status);
+        const response = await res.json();
+    //   }
 
       if(response) {
         
