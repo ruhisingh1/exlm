@@ -1,0 +1,48 @@
+/* Style the container to display items in a grid */
+.certification-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 0;
+  list-style: none;
+  margin: 20px 0;
+}
+
+/* Style individual certification items as cards */
+.certification-item {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgb(0 0 0 / 10%);
+  padding: 20px;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+/* Add hover effect for cards */
+.certification-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 10px rgb(0 0 0 / 15%);
+}
+
+/* Style the title of the certification */
+.certification-item h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* Style the details of the certification */
+.certification-item p {
+  margin: 5px 0;
+  font-size: 1rem;
+  color: #555;
+}
+
+/* Optional: Add some spacing for the block container */
+.certification-list-block {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
