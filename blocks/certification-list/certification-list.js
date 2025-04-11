@@ -1,19 +1,6 @@
+import { isSignedInUser } from "../../scripts/auth/profile.js";
 // const certificationUrl = "";
 
-/**
- * Check if the user is signed in.
- * @returns {Promise<boolean>} True if the user is signed in, false otherwise.
- */
-const isUserSignedIn = async () => {
-    try {
-      // Assuming adobeIMS is globally available
-      const status = await window?.adobeIMS?.isSignedInUser();
-      return status;
-    } catch (error) {
-      console.error('Error checking user sign-in status:', error);
-      return false;
-    }
-  };
 
 /**
  * Fetch the user's email from adobeIms.
@@ -48,7 +35,7 @@ export default async function decorate(block) {
     try {
     let response;
       if (profileContext?.textContent.trim().toLowerCase() === "true") {
-        const signedIn = await isUserSignedIn();
+        const signedIn = await isSignedInUser();
         if (signedIn) {
           const email = await getUserEmail();
           console.log("User Email:", email);
