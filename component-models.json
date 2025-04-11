@@ -6767,6 +6767,14 @@
         "description": "Sets the description for the certification list"
       },
       {
+        "component": "text",
+        "valueType": "string",
+        "name": "modifiedAfter",
+        "value": "",
+        "label": "Modified After",
+        "description": "Show certifications that are modifed After this date. format - 2025-05-05 00:00:00"
+      },
+      {
         "component": "boolean",
         "valueType": "boolean",
         "name": "Profile-specific",
