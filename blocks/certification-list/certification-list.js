@@ -1,22 +1,6 @@
-// import { isSignedInUser } from "../../scripts/auth/profile.js";
+import { isSignedInUser } from "../../scripts/auth/profile.js";
 
-const certificationUrl = "/api/action/rockwell/certifications";
-
-
-// /**
-//  * Fetch the user's email from adobeIms.
-//  * @returns {Promise<string>} The user's email address.
-//  */
-// const getUserEmail = async () => {
-//     try {
-//       // Assuming adobeIMS is globally available
-//       const userProfile = await window?.adobeIMS?.getProfile();
-//       return userProfile.email || 'Email not available';
-//     } catch (error) {
-//       console.error('Error fetching user email:', error);
-//       return 'Error fetching email';
-//     }
-//   }
+const certificationUrl = "https://51837-converter-dev.adobeioruntime.net/api/v1/web/main/rockwell/certifications";
 
 /**
  * Render a list of certifications by fetching data from a JSON file.
@@ -24,38 +8,33 @@ const certificationUrl = "/api/action/rockwell/certifications";
  */
 export default async function decorate(block) {
     // Extracting elements from the block
-    const [headingElement, descriptionElement, ModifiedAfterFilter, profileContext] = [...block.children].map(
+    const [headingElement, descriptionElement] = [...block.children].map(
       (row) => row.firstElementChild,
     );
     block.textContent = "";
-    console.log(headingElement, descriptionElement, profileContext, ModifiedAfterFilter);
 
     block.appendChild(headingElement);
     block.appendChild(descriptionElement);
     
     try {
-    //   if (profileContext?.textContent.trim().toLowerCase() === "true") {
-    //     const signedIn = await isSignedInUser();
-    //     if (signedIn) {
-    //       const email = await getUserEmail();
-    //       console.log("User Email:", email);
-    //       const response = await fetch(`${certificationUrl}?email=${email}`);
-    //     } else {
-    //      block.innerHTML += `<p class="error">Please sign in to get profile specific certificates</p>`;
-    //       console.log("User is not signed in.");
-    //     }
-    //   } else {
-        // if(ModifiedAfterFilter.trim())
-        // Dynamically import the JSON data
-        const res = await fetch(`${certificationUrl}?modifiedBefore=2024-01-01 00:00:00`);
-        console.log(res.status);
-        const response = await res.json();
-    //   }
-
-      if(response) {
+      let res;
+      if(await isSignedInUser()) {
+         res = await fetch(certificationUrl, {
+            headers: {
+            "x-ims-token": await window.adobeIMS?.getAccessToken().token
+          }
+         })
+      } else {
+        res = await fetch(`${certificationUrl}?modifiedBefore=2024-01-01%2000:00:00`)
+      }
+      res = await res.json();
+      console.log(res)
+      
+      if(res) {
+        
         
       // limiting to 30 results as there is no pagination
-      const data = response.default.data.slice(0, 30);
+      const data = res.data.slice(0, 100);
   
       // Create a container for the list
       const listContainer = document.createElement("ul");
