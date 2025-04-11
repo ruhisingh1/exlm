@@ -6759,7 +6759,7 @@
         ]
       },
       {
-        "component": "boolean",
+        "component": "richtext",
         "valueType": "string",
         "name": "description",
         "value": "",
