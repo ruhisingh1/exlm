@@ -23,7 +23,7 @@ export default async function decorate(block) {
         },
       });
     } else {
-      res = await fetch(`${certificationUrl}`);
+      res = await fetch(`${certificationUrl}?modifiedBefore=2024-01-01%2000:00:00`);
     }
     res = await res.json();
     // eslint-disable-next-line no-console
