@@ -65,7 +65,7 @@
       "upcoming-event",
       "notification-banner",
       "code",
-      "playlist-browse"
+      "certification-list"
     ]
   },
   {
@@ -366,22 +366,6 @@
       "extensions": [],
       "editor": ["removeformat"],
       "blocks": []
-    }
-  },
-  {
-    "id": "code",
-    "components": [],
-    "rte": {
-      "format": [],
-      "alignment": [],
-      "indentation": [],
-      "sr_script": [],
-      "list": [],
-      "insert": [],
-      "advanced": [],
-      "extensions": [],
-      "editor": [],
-      "blocks": ["pre"]
     }
   }
 ]
