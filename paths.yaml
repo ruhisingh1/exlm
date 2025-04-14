@@ -1,12 +1,6 @@
 mmappings:
   - /content/exlm-ruhis/global/:/
   - /content/exlm-ruhis/global/en:/
-  - /content/exlm-ruhis/global/zh-CN:/zh-hans
-  - /content/exlm-ruhis/global/zh-CN/:/zh-hans/
-  - /content/exlm-ruhis/global/zh-TW:/zh-hant
-  - /content/exlm-ruhis/global/zh-TW/:/zh-hant/
-  - /content/exlm-ruhis/global/pt-BR:/pt-br
-  - /content/exlm-ruhis/global/pt-BR/:/pt-br/
   - /content/exlm-ruhis/metadata:/metadata.json
   # spreadsheets
   - /content/exlm-ruhis/redirects:/redirects.json
