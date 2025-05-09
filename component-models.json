@@ -4237,7 +4237,8 @@
       },
       {
         "component": "aem-content",
-        "valueType": "string",
+        "valueType": "string[]",
+        "value": ["/content/exlm/global/en/perspectives/authors/template-author-example"],
         "name": "author-bio-page",
         "multi": true,
         "label": "Author Bio page URL",
