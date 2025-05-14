@@ -595,10 +595,11 @@
                 "template": {
                   "name": "Carousel",
                   "model": "carousel",
-                  "filter": "teaser",
+                  "filter": "carousel",
                   "teaser": {
                     "name": "Teaser",
                     "model": "teaser",
+                    "filter": "teaser",
                     "fileReference": "/content/dam/default-teaser-banner.png",
                     "title": "Teaser Title",
                     "titleType": "h3",
@@ -1454,6 +1455,7 @@
                 "template": {
                   "name": "Teaser",
                   "model": "teaser",
+                  "filter": "teaser",
                   "fileReference": "/content/dam/default-teaser-banner.png",
                   "title": "Teaser Title",
                   "titleType": "h3",
