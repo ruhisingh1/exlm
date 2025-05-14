@@ -1468,7 +1468,12 @@
                   "cta2_Type": "primary",
                   "cta2_customBgColor": "--spectrum-gray-700",
                   "cta2_textColor": "white",
-                  "cta2_customBgHexCode": "000000"
+                  "cta2_customBgHexCode": "000000",
+                  "image": {
+                    "name": "Image",
+                    "model": "image",
+                    "fileReference": "/content/dam/default-teaser-banner.png",
+                  }
                 }
               }
             }
