@@ -339,7 +339,7 @@
   },
   {
     "id": "teaser",
-    "components": ["image"]
+    "components": ["icon-card"]
   },
   {
     "id": "accordion",
