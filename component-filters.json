@@ -334,8 +334,12 @@
     "components": ["icon-card"]
   },
   {
-    "id": "teaser",
+    "id": "carousel",
     "components": ["teaser", "detailed-teaser"]
+  },
+  {
+    "id": "teaser",
+    "components": ["image"]
   },
   {
     "id": "accordion",
