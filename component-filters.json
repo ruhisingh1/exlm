@@ -65,7 +65,8 @@
       "upcoming-event",
       "notification-banner",
       "code",
-      "certification-list"
+      "playlist-browse",
+      "atomic-search"
     ]
   },
   {
@@ -333,8 +334,12 @@
     "components": ["icon-card"]
   },
   {
-    "id": "teaser",
+    "id": "carousel",
     "components": ["teaser", "detailed-teaser"]
+  },
+  {
+    "id": "teaser",
+    "components": ["icon-card"]
   },
   {
     "id": "accordion",
