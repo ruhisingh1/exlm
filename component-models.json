@@ -7105,5 +7105,24 @@
   {
     "id": "atomic-search",
     "fields": []
+  },
+  {
+    "id": "mpc-video",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "videoImg",
+        "label": "Image",
+        "description": "The MPC video poster"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "video",
+        "value": "",
+        "label": "MPC Video URL"
+      }
+    ]
   }
 ]
