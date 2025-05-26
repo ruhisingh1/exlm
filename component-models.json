@@ -1837,6 +1837,9 @@
         "description": "Enter the custom hex code, such as FFFFFF (without the # symbol)."
       },
       {
+        "condition": {
+          "some": [{ "var": "classes" }, { "!==": [{ "var": "" }, "bg-video"] }]
+        },
         "component": "reference",
         "valueType": "string",
         "name": "fileReference",
@@ -1845,6 +1848,9 @@
         "multi": false
       },
       {
+        "condition": {
+          "some": [{ "var": "classes" }, { "!==": [{ "var": "" }, "bg-video"] }]
+        },
         "component": "text",
         "valueType": "string",
         "name": "fileReferenceAlt",
@@ -1853,6 +1859,9 @@
         "description": "A descriptive text of the image will be shown as tooltip."
       },
       {
+        "condition": {
+          "some": [{ "var": "classes" }, { "===": [{ "var": "" }, "bg-video"] }]
+        },
         "component": "text",
         "valueType": "string",
         "name": "link",
