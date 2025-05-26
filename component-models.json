@@ -1866,7 +1866,8 @@
         "valueType": "string",
         "name": "link",
         "value": "",
-        "label": "Video URL"
+        "label": "Video URL",
+        "description": "MPC Video Link."
       },
       {
         "component": "text",
