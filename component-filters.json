@@ -149,7 +149,8 @@
       "topic-results",
       "article-tags",
       "qualtrics",
-      "code"
+      "code",
+      "announcement-ribbon"
     ]
   },
   {
@@ -200,7 +201,8 @@
       "recommendation-marquee",
       "block-quote",
       "callout",
-      "qualtrics"
+      "qualtrics",
+      "announcement-ribbon"
     ]
   },
   {
@@ -293,7 +295,8 @@
       "featured-content",
       "note",
       "qualtrics",
-      "code"
+      "code",
+      "announcement-ribbon"
     ]
   },
   {
