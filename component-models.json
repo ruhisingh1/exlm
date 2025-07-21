@@ -6165,6 +6165,14 @@
       {
         "component": "text",
         "valueType": "string",
+        "name": "videoTitle",
+        "value": "",
+        "label": "Video Title",
+        "description": "Video Display Title."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
         "name": "videoUrl",
         "value": "",
         "label": "Video URL",
