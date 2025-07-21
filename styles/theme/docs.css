@@ -93,7 +93,6 @@
   font-weight: var(--font-weight-normal);
   font-style: normal;
   line-height: 24px;
-  color: var(--non-spectrum-grey);
   margin-top: 1em;
   margin-bottom: 2em;
 }
@@ -149,11 +148,43 @@
   }
 }
 
+.docs table:not(.code table, .table table) a {
+  color: var(--non-spectrum-link);
+}
+
+.docs table:not(.code table, .table table) a:hover {
+  color: var(--non-spectrum-custom-dark);
+}
+
 .docs main > div {
   box-sizing: border-box;
   width: 100%;
   max-width: 100%;
   min-width: 0;
+
+  /* docs content area */
+  div.section {
+    .accordion-wrapper,
+    .default-content-wrapper,
+    .related-articles-wrapper,
+    .table-wrapper,
+    .note-wrapper,
+    .list-wrapper {
+      ul > li,
+      ol > li {
+        line-height: 1.4;
+        margin: 0.6em 0;
+
+        p {
+          margin-bottom: unset;
+        }
+
+        a:any-link {
+          line-height: 1.4;
+        }
+      }
+    }
+  }
 }
 
 .docs main > div:nth-last-child(2) {
@@ -261,14 +292,6 @@
   width: auto;
 }
 
-.docs table:not(.code table, .table table) a {
-  color: var(--non-spectrum-link);
-}
-
-.docs table:not(.code table, .table table) a:hover {
-  color: var(--non-spectrum-custom-dark);
-}
-
 .docs table:not(.code table, .table table) a strong {
   color: currentcolor;
 }
@@ -333,4 +356,12 @@
 .docs .badge.neutral,
 .docs .badge.caution {
   background-color: var(--spectrum-gray-600);
+}
+
+/* adds a line separator after the last article metadata block
+we have to do this because we have many different article metadata blocks, but we should only have one that combines them all.. future enhancement */
+.docs .section > div[class^='article-metadata-']:not(:has(+ div[class^='article-metadata-'])) {
+  margin-bottom: 1.2em;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 1.2em;
 }

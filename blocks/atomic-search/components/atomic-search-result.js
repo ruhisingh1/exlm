@@ -5,7 +5,6 @@ import {
   debounce,
   CUSTOM_EVENTS,
   isMobile,
-  handleHeaderSearchVisibility,
   disconnectShadowObserver,
   observeShadowRoot,
 } from './atomic-search-utils.js';
@@ -15,6 +14,7 @@ import { htmlToElement, getConfig } from '../../../scripts/scripts.js';
 import { INITIAL_ATOMIC_RESULT_CHILDREN_COUNT } from './atomic-result-children.js';
 
 const { communityTopicsUrl } = getConfig();
+const MAX_HYDRATION_ATTEMPTS = 10;
 
 export const atomicResultStyles = `
                   <style>
@@ -27,12 +27,8 @@ export const atomicResultStyles = `
                       --content-type-troubleshooting-color: #ffa213;
                       --content-type-event-color: #ff709f;
                       --content-type-perspective-color: #c844dc;
-                      --content-type-default-color: #000000
-                    }
-                    .result-root {
-                      @media(max-width: 1024px) {
-                        max-width: calc(100% - 40px);
-                      }
+                      --content-type-default-color: #000000;
+                      --search-visited-link-color: #93219E;
                     }
 
                     .result-description atomic-result-multi-value-text::part(result-multi-value-text-list) {
@@ -61,8 +57,117 @@ export const atomicResultStyles = `
                       gap: 2px;
                       margin-left: 0;
                     }
+                    .atomic-search-result-item.mobile-only .result-field.result-thumbnail {
+                      margin-top: 10px;
+                    }
                     .result-root.recommendation-badge {
                           margin: 40px 0px 0px;
+                    }
+                    .atomic-search-result-item .result-field.text-thumbnail {
+                      display: flex;
+                      gap: 18px;
+                    }
+                    .atomic-search-result-item .result-field.text-thumbnail:not(:has(.result-thumbnail)) {
+                      gap: 0;
+                    }
+                    .atomic-search-result-item .result-field.text-thumbnail:has(.result-thumbnail) .result-text {
+                      flex: 0 0 56%;
+                    }
+                    .atomic-search-result-item.result-item .thumbnail-wrapper {
+                      position: relative;
+                      display: inline-block;
+                      cursor: pointer;
+                    } 
+                    .atomic-search-result-item.result-item .thumbnail-img {
+                      display: block;
+                    }
+                    .atomic-search-result-item.result-item .thumbnail-wrapper .icon-play-outline-white {
+                      position: absolute;
+                      left: 50%;
+                      top: 50%;
+                      transform: translate(-50%, -50%);
+                      pointer-events: none;
+                    }
+                    .atomic-search-result-item.result-item .thumbnail-wrapper .icon-play-outline-white img {
+                      width: 40px;
+                      height: 40px;
+                    }
+                    .atomic-search-result-item .result-product .result-field-multi {
+                      display: flex;
+                      gap: 6px;
+                      align-items: center;
+                    }
+                    .atomic-search-result-item .result-product .hidden {
+                      display: none;
+                    }
+                    .atomic-search-result-item .result-product .result-field-title {
+                      font-size: var(--spectrum-font-size-75);
+                      text-transform: capitalize;
+                    }
+                    .atomic-search-result-item .tooltip-placeholder {
+                      line-height: 0;
+                      margin-top: 2px;
+                    }
+                    .atomic-search-result-item .tooltip {
+                      display: inline;
+                      position: relative;
+                      margin: 2px 0 0 5px;
+                    }
+                    .atomic-search-result-item .tooltip .icon-info {
+                      width: 14px;
+                      height: 14px;
+                    }
+                    .atomic-search-result-item .tooltip svg {
+                      pointer-events: none;
+                    }
+                    .atomic-search-result-item .tooltip .tooltip-text {
+                      background-color: var(--non-spectrum-dim-gray);
+                      border-radius: 4px;
+                      color: var(--spectrum-gray-50);
+                      display: inline-block;
+                      font-size: var(--spectrum-font-size-50);
+                      font-weight: normal;
+                      line-height: var(--spectrum-line-height-xs);
+                      margin-left: 10px;
+                      opacity: 0;
+                      padding: 4px 9px 5px 10px;
+                      position: absolute;
+                      top: 0;
+                      transition: opacity 0.3s;
+                      visibility: hidden;
+                      width: max-content;
+                      max-width: 155px;
+                      z-index: 11;
+                    }
+                    .atomic-search-result-item .tooltip-top .tooltip-text {
+                      transform: translateX(-50%);
+                      top: unset;
+                      left: 50%;
+                      bottom: 100%;
+                      margin: 0 0 2px;
+                    }
+                    .atomic-search-result-item .tooltip .tooltip-text::before {
+                      border-color: transparent var(--non-spectrum-dim-gray) transparent transparent;
+                      border-style: solid;
+                      border-width: 4px;
+                      content: '';
+                      display: inline-block;
+                      margin-top: -4px;
+                      position: absolute;
+                      right: 100%;
+                      top: 50%;
+                    }
+                    .atomic-search-result-item .tooltip-top .tooltip-text::before {
+                      margin-top: 0;
+                      right: unset;
+                      top: unset;
+                      left: calc(50% - 7px);
+                      bottom: -7px;
+                      transform: rotate(-90deg);
+                    }
+                    .atomic-search-result-item .tooltip:hover .tooltip-text {
+                      visibility: visible;
+                      opacity: 1;
                     }
                     @media(min-width: 1024px) {
                       .result-item.desktop-only {
@@ -73,6 +178,9 @@ export const atomicResultStyles = `
                       }
                       .result-item.mobile-only {
                         display: none;
+                      }
+                      .atomic-search-result-item .result-product .result-field-title {
+                        font-size: var(--spectrum-font-size-100);
                       }
                     }
                     .result-title {
@@ -94,7 +202,7 @@ export const atomicResultStyles = `
                       max-width: 90vw;
                     }
                     atomic-result-section-excerpt atomic-result-text {
-                      color: #959595;
+                      color: #505050;
                       font-size: var(--spectrum-font-size-75);
                     }
                     .result-title atomic-result-text, .mobile-result-title atomic-result-text {
@@ -139,40 +247,20 @@ export const atomicResultStyles = `
                       white-space: pre;
                       white-space: nowrap;
                     }
-
-                    @media(min-width: 1024px) {
-                      .result-content-type atomic-result-multi-value-text::part(result-multi-value-text-value) {
-                        border: 1px solid var(--content-type-default-color);
-                        border-radius: 4px;
-                        padding: 4px 8px;
-                        color: var(--content-type-default-color);
-                        display: flex;
-                        align-items: center;
-                        flex-direction: row-reverse;
-                        gap: 4px;
-                        border: 1px solid #959595;
-                        color: var(--non-spectrum-grey-updated);
-                      }
-                    }
-                    
                     .result-content-type atomic-result-multi-value-text::part(result-multi-value-text-separator) {
                       display: none;
                     }
-                    .result-product atomic-result-multi-value-text::part(result-multi-value-text-value) {
+                    .result-product > atomic-result-multi-value-text::part(result-multi-value-text-value) {
                       font-size: var(--spectrum-font-size-100);
                       color: var(--non-spectrum-web-gray);
                       display: block;
                     }
-                    .result-product atomic-result-multi-value-text::part(result-multi-value-text-list) {
+                    .result-product > atomic-result-multi-value-text::part(result-multi-value-text-list) {
                       flex-wrap: wrap;
                       gap: 4px;
                     }
-                    .result-product atomic-result-multi-value-text::part(result-multi-value-text-separator) {
-                      display: none;
-                    }
                     .result-updated {
-                      font-size: var(--spectrum-font-size-100);
-                      color: var(--non-spectrum-web-gray);
+                      font-size: var(--spectrum-font-size-75);
                       text-align: left;
                     }
                     atomic-result-link {
@@ -181,9 +269,23 @@ export const atomicResultStyles = `
                       font-size: var(--spectrum-font-size-50);
                       cursor: pointer;
                     }
+                    atomic-result-link a {
+                      text-decoration: none !important;
+                    }
                     atomic-result-link > a:not([slot="label"]) {
-                      position: absolute;
                       left: 0;
+                    }
+                    .result-title atomic-result-link:has(a), .mobile-result-title atomic-result-link:has(a) {
+                      width: 100%;
+                      overflow: hidden;
+                      max-width: 90vw;
+                      display: -webkit-box;
+                      -webkit-line-clamp: 2; 
+                      -webkit-box-orient: vertical;
+                      text-overflow: ellipsis;
+                    }
+                    .result-title atomic-result-link a:visited > atomic-result-text {
+                      color:  var(--search-visited-link-color);
                     }
                     atomic-result-link > a img {
                       display: inline-block;
@@ -192,8 +294,8 @@ export const atomicResultStyles = `
                       height: 14px;
                       width: 14px;
                     }
-                    atomic-result-link > a > atomic-result-text {
-                      visibility: hidden
+                    atomic-result-link .icon-external-link {
+                      display: none;
                     }
                     .result-icons-wrapper {
                       display: flex;
@@ -218,17 +320,21 @@ export const atomicResultStyles = `
                       display: flex;
                       align-items: center;
                       gap: 12px;
+                      justify-content: flex-start;
                     }
                     .mobile-result-title {
                         position: relative;
-                     }
+                     }    
+                    .result-item.mobile-only .mobile-result-title atomic-result-link a:visited > atomic-result-text {
+                      color:  var(--search-visited-link-color);
+                    }
                     .result-item.mobile-only .mobile-result-title atomic-result-text {
                       font-size: var(--spectrum-font-size-200);
                       font-weight: bold;
                       color: var(--non-spectrum-dark-gray);
                     }
-                    .mobile-result-info .result-field atomic-result-multi-value-text, .mobile-result-info .atomic-result-date, .mobile-result-info .result-product atomic-result-multi-value-text::part(result-multi-value-text-value) {
-                      color: var(--non-spectrum-web-gray);
+                    .mobile-result-info .result-field atomic-result-multi-value-text, .mobile-result-info .atomic-result-date, 
+                    .mobile-result-info .result-product > atomic-result-multi-value-text::part(result-multi-value-text-value) {
                       font-size: var(--spectrum-font-size-75);
                     }
                     .mobile-result-info .result-content-type atomic-result-multi-value-text::part(result-multi-value-text-value) {
@@ -236,18 +342,34 @@ export const atomicResultStyles = `
                     }
                     .mobile-description atomic-result-section-excerpt atomic-result-text {
                       font-size: var(--spectrum-font-size-75);
-                      color: #959595;
+                      color: #505050;
                     }
-
-                     .result-title .atomic-recommendation-badge, .mobile-result-title .atomic-recommendation-badge {
-                        position: absolute;
-                        background-color: var(--non-spectrum-dim-gray);
-                        padding: 2px 8px;
+                    .result-title .atomic-recommendation-badge, .mobile-result-title .atomic-recommendation-badge {
+                      position: absolute;
+                      background-color: var(--non-spectrum-dim-gray);
+                      padding: 2px 8px;
+                      border-radius: 4px;
+                      font-size: var(--spectrum-font-size-75);
+                      color: var(--spectrum-gray-50);
+                      top: -28px;
+                    }
+                    @media(min-width: 1024px) {
+                      .result-content-type atomic-result-multi-value-text::part(result-multi-value-text-value) {
+                        border: 1px solid var(--content-type-default-color);
                         border-radius: 4px;
-                        font-size: var(--spectrum-font-size-75);
-                        color: var(--spectrum-gray-50);
-                        top: -28px;
-                     }
+                        padding: 4px 8px;
+                        color: var(--content-type-default-color);
+                        display: flex;
+                        align-items: center;
+                        flex-direction: row-reverse;
+                        gap: 4px;
+                        border: 1px solid #959595;
+                        color: var(--non-spectrum-grey-updated);
+                      }
+                      .result-updated {
+                        font-size: var(--spectrum-font-size-100);
+                      }
+                    }
                   </style>
 `;
 
@@ -380,7 +502,6 @@ export default function atomicResultHandler(block, placeholders) {
   const skeletonWrapper = htmlToElement(`<div class="skeleton-wrapper" part="skeleton"></div>`);
   skeletonWrapper.innerHTML = renderAtomicSekeletonUI();
   container.parentElement.appendChild(skeletonWrapper);
-  handleHeaderSearchVisibility();
 
   function onClearBtnClick() {
     const atomicBreadBox = document.querySelector('atomic-breadbox');
@@ -411,6 +532,15 @@ export default function atomicResultHandler(block, placeholders) {
         element.shadowRoot.removeChild(shimmer);
       }
     }, 200);
+  }
+
+  function removeBlockSkeleton() {
+    const skeleton = container.parentElement.querySelector('.skeleton-wrapper');
+    if (skeleton) {
+      container.style.cssText = '';
+      baseElement.classList.remove('list-wrap-skeleton');
+      container.parentElement.removeChild(skeleton);
+    }
   }
 
   function decorateChildrenSection({ btn, element }) {
@@ -462,7 +592,9 @@ export default function atomicResultHandler(block, placeholders) {
         }
         const elements = childrenRoot.querySelectorAll('.result-component');
         elements.forEach(decorateAtomicChildResult);
-        const countString = element.parentElement?.querySelector('.child-result-count')?.textContent?.trim();
+        const countString = element.parentElement?.parentElement
+          ?.querySelector('.child-result-count')
+          ?.textContent?.trim();
         const childrenCount = countString && !Number.isNaN(countString) ? +countString : 0;
 
         if (childrenCount <= INITIAL_ATOMIC_RESULT_CHILDREN_COUNT) {
@@ -517,15 +649,62 @@ export default function atomicResultHandler(block, placeholders) {
     isListenerAdded = true;
   }
 
+  function openVideoModal(videoUrl) {
+    document.body.style.overflow = 'hidden';
+
+    const parentBlock = document.querySelector('.atomic-search');
+    if (!parentBlock) return;
+    let modal = parentBlock.querySelector('.video-modal-wrapper');
+    let iframeContainer;
+
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.classList.add('video-modal-wrapper');
+
+      const modalContent = document.createElement('div');
+      modalContent.classList.add('video-modal-container');
+
+      const closeBtn = document.createElement('span');
+      closeBtn.classList.add('icon', 'icon-close-light');
+      closeBtn.addEventListener('click', () => {
+        document.body.style.overflow = '';
+        modal.style.display = 'none';
+        if (iframeContainer) iframeContainer.innerHTML = '';
+      });
+
+      iframeContainer = document.createElement('div');
+      iframeContainer.classList.add('video-modal');
+
+      modalContent.appendChild(closeBtn);
+      modalContent.appendChild(iframeContainer);
+      modal.appendChild(modalContent);
+      decorateIcons(modal);
+      parentBlock.appendChild(modal);
+    } else {
+      iframeContainer = modal.querySelector('.video-modal');
+      modal.style.display = 'flex';
+    }
+
+    if (iframeContainer && videoUrl) {
+      iframeContainer.innerHTML = `<iframe src="${videoUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+    }
+  }
+
   const updateAtomicResultUI = () => {
     const results = container.querySelectorAll('atomic-result');
     const isMobileView = isMobile();
     container.dataset.view = isMobileView ? 'mobile' : 'desktop';
-    results.forEach((resultEl) => {
-      const hydrateResult = () => {
+    results.forEach((resultElement) => {
+      const hydrateResult = (resultEl) => {
         const resultShadow = resultEl.shadowRoot;
         if (!resultShadow) {
-          waitForChildElement(resultEl, hydrateResult, 25);
+          waitForChildElement(
+            resultEl,
+            () => {
+              hydrateResult(resultEl);
+            },
+            25,
+          );
           return;
         }
 
@@ -533,8 +712,10 @@ export default function atomicResultHandler(block, placeholders) {
         const resultContentType = resultItem?.querySelector('.result-content-type');
         const contentTypeElWrap = resultContentType?.firstElementChild?.shadowRoot;
 
-        if (!resultItem || !contentTypeElWrap) {
-          waitFor(hydrateResult, 20);
+        if (!resultItem) {
+          waitFor(() => {
+            hydrateResult(resultEl);
+          }, 50);
           return;
         }
 
@@ -543,9 +724,42 @@ export default function atomicResultHandler(block, placeholders) {
           block.removeChild(blockLevelSkeleton);
         }
 
+        const resultFieldMulti = resultItem?.querySelector('.result-product .result-field-multi');
+        const resultFieldValue = resultItem?.querySelector('.result-product .result-field-value');
+        const productList = resultFieldValue?.firstElementChild?.shadowRoot?.querySelectorAll('li');
+        const productCount = productList ? productList.length : 0;
+        if (productCount > 1) {
+          resultFieldMulti?.classList.remove('hidden');
+          resultFieldValue?.classList.add('hidden');
+        } else {
+          resultFieldMulti?.classList.add('hidden');
+          resultFieldValue?.classList.remove('hidden');
+        }
+
+        const recommendationBadgeExists = !!resultItem.querySelector('.atomic-recommendation-badge');
+        if (recommendationBadgeExists) {
+          const resultRoot = resultShadow.querySelector('.result-root');
+          resultRoot.classList.add('recommendation-badge');
+        }
+        const currentHydrationCount = +(resultEl.dataset.hydration || '0');
+        if (currentHydrationCount >= MAX_HYDRATION_ATTEMPTS) {
+          removeBlockSkeleton();
+          return; // Return to avoid repeated hydrations endlessly.
+        }
+        resultEl.dataset.hydration = `${currentHydrationCount + 1}`;
+
+        if (!contentTypeElWrap) {
+          waitFor(() => {
+            hydrateResult(resultEl);
+          }, 50);
+          return;
+        }
+
         const contentTypeElParent = contentTypeElWrap?.querySelector('ul');
         if (!contentTypeElParent) {
-          waitFor(hydrateResult, 20);
+          waitFor(() => {
+            hydrateResult(resultEl);
+          }, 20);
           return;
         }
         if (!resultItem.dataset.decorated) {
@@ -554,21 +768,10 @@ export default function atomicResultHandler(block, placeholders) {
         }
 
         // Remove skeleton
-        const skeleton = container.parentElement.querySelector('.skeleton-wrapper');
-        if (skeleton) {
-          container.style.cssText = '';
-          baseElement.classList.remove('list-wrap-skeleton');
-          container.parentElement.removeChild(skeleton);
-        }
+        removeBlockSkeleton();
 
         const atomicResultChildren = resultItem.querySelector('atomic-result-children');
         handleAtomicResultChildrenUI(atomicResultChildren);
-
-        const recommendationBadgeExists = !!resultItem.querySelector('.atomic-recommendation-badge');
-        if (recommendationBadgeExists) {
-          const resultRoot = resultShadow.querySelector('.result-root');
-          resultRoot.classList.add('recommendation-badge');
-        }
 
         const productElWrap = resultItem?.querySelector('.result-product')?.firstElementChild?.shadowRoot;
         const productElements = productElWrap?.querySelectorAll('li') || [];
@@ -647,8 +850,54 @@ export default function atomicResultHandler(block, placeholders) {
           decorateExternalLink(anchorTag);
           decorateIcons(anchorTag);
         }
+
+        const videoUrlEl = resultShadow?.querySelector('atomic-result-text[field="video_url"]');
+        const titleEl = resultShadow?.querySelector('atomic-result-text[field="title"]');
+
+        const VIDEO_THUMBNAIL_FORMAT = /^https:\/\/video\.tv\.adobe\.com\/v\/\w+/;
+
+        if (videoUrlEl) {
+          const videoUrl = videoUrlEl?.textContent?.trim() || '';
+          if (!videoUrl) return;
+          const thumbnailAlt = titleEl?.textContent || '';
+          const cleanUrl = videoUrl.split('?')[0];
+
+          if (!VIDEO_THUMBNAIL_FORMAT.test(cleanUrl)) {
+            const thumbnail = resultShadow.querySelector('.result-thumbnail');
+            if (thumbnail) thumbnail.style.display = 'none';
+            return;
+          }
+
+          const imgUrl = `${cleanUrl}?format=jpeg`;
+          const thumbnailWrapper = isMobileView
+            ? resultShadow?.querySelector('.atomic-search-result-item.mobile-only .result-field.result-thumbnail')
+            : resultShadow?.querySelector('.atomic-search-result-item.desktop-only .result-field.result-thumbnail');
+          if (thumbnailWrapper) {
+            let img = thumbnailWrapper.querySelector('img');
+            if (!img) {
+              img = document.createElement('img');
+              img.classList.add('thumbnail-img');
+              img.alt = thumbnailAlt;
+              img.loading = 'lazy';
+              const wrapper = document.createElement('span');
+              wrapper.classList.add('thumbnail-wrapper');
+              const playButton = document.createElement('span');
+              playButton.classList.add('icon', 'icon-play-outline-white');
+              wrapper.appendChild(img);
+              wrapper.appendChild(playButton);
+              decorateIcons(wrapper);
+              thumbnailWrapper.appendChild(wrapper);
+              wrapper.addEventListener('click', () => {
+                openVideoModal(cleanUrl);
+              });
+            }
+            img.src = imgUrl || '';
+          }
+        }
       };
-      hydrateResult();
+
+      resultElement.dataset.hydration = '0';
+      hydrateResult(resultElement);
     });
 
     const layoutSectionEl = block.querySelector('atomic-layout-section[section="results"]');

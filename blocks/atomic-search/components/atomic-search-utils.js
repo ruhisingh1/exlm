@@ -17,6 +17,7 @@ export const COMMUNITY_CONTENT_TYPES = [
   'Community|Blogs',
   'Community|Discussions',
   'Community|Ideas',
+  'Community|User',
 ];
 
 export const COMMUNITY_SUPPORTED_SORT_ELEMENTS = ['el_view_status', 'el_kudo_status', 'el_reply_status'];
@@ -110,20 +111,6 @@ export const updateHash = (filterCondition, joinWith = '&') => {
   const currentHash = fragment();
   const updatedParts = currentHash.split('&').filter(filterCondition);
   window.location.hash = updatedParts.join(joinWith);
-};
-
-export const handleHeaderSearchVisibility = () => {
-  const exlHeader = document.querySelector('exl-header');
-  if (exlHeader) {
-    const searchElement = exlHeader.shadowRoot.querySelector('.search');
-    if (searchElement) {
-      searchElement.style.visibility = 'hidden';
-    }
-    exlHeader.addEventListener('search-decorated', () => {
-      const element = exlHeader.shadowRoot.querySelector('.search');
-      element.style.visibility = 'hidden';
-    });
-  }
 };
 
 export function observeShadowRoot(host, { onEmpty, onPopulate, onClear, onMutation, waitForElement = false } = {}) {

@@ -1706,6 +1706,7 @@
         "label": "Style",
         "valueType": "string",
         "required": true,
+        "maxSize": 6,
         "options": [
           {
             "name": "Size Variant",
@@ -1745,8 +1746,8 @@
                 "value": "fill-background"
               },
               {
-                "name": "Use background video",
-                "value": "bg-video"
+                "name": "Select to insert a video as background",
+                "value": "video"
               }
             ]
           },
@@ -1822,6 +1823,19 @@
                 "value": "custom"
               }
             ]
+          },
+          {
+            "name": "Text Color",
+            "children": [
+              {
+                "name": "Black",
+                "value": "text-spectrum-gray-900"
+              },
+              {
+                "name": "White",
+                "value": "text-spectrum-gray-50"
+              }
+            ]
           }
         ]
       },
@@ -1836,10 +1850,19 @@
         "label": "Custom Background Color",
         "description": "Enter the custom hex code, such as FFFFFF (without the # symbol)."
       },
+
       {
         "condition": {
-          "some": [{ "var": "classes" }, { "!==": [{ "var": "" }, "bg-video"] }]
+          "some": [{ "var": "classes" }, { "===": [{ "var": "" }, "video"] }]
         },
+        "component": "text",
+        "valueType": "string",
+        "name": "videoUrl",
+        "value": "",
+        "label": "Video URL",
+        "description": "Enter the MPC-hosted video URL (applicable only for style variant :straight and size variant : large)"
+      },
+      {
         "component": "reference",
         "valueType": "string",
         "name": "fileReference",
@@ -1848,26 +1871,12 @@
         "multi": false
       },
       {
-        "condition": {
-          "some": [{ "var": "classes" }, { "!==": [{ "var": "" }, "bg-video"] }]
-        },
         "component": "text",
         "valueType": "string",
         "name": "fileReferenceAlt",
         "value": "",
         "label": "Subject Image Description",
         "description": "A descriptive text of the image will be shown as tooltip."
-      },
-      {
-        "condition": {
-          "some": [{ "var": "classes" }, { "===": [{ "var": "" }, "bg-video"] }]
-        },
-        "component": "text",
-        "valueType": "string",
-        "name": "link",
-        "value": "",
-        "label": "Video URL",
-        "description": "MPC Video Link."
       },
       {
         "component": "text",
@@ -6105,6 +6114,60 @@
     ]
   },
   {
+    "id": "video-clips",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "heading",
+        "value": "",
+        "label": "Heading",
+        "description": "Sets the heading."
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "headingType",
+        "value": "h2",
+        "label": "Heading Type",
+        "options": [
+          {
+            "name": "H1",
+            "value": "h1"
+          },
+          {
+            "name": "H2",
+            "value": "h2"
+          },
+          {
+            "name": "H3",
+            "value": "h3"
+          },
+          {
+            "name": "H4",
+            "value": "h4"
+          },
+          {
+            "name": "H5",
+            "value": "h5"
+          },
+          {
+            "name": "H6",
+            "value": "h6"
+          }
+        ]
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "value": "",
+        "label": "Video Links",
+        "description": "Author the list of links to videos."
+      }
+    ]
+  },
+  {
     "id": "personalized-content-placeholder",
     "fields": [
       {
@@ -6747,7 +6810,7 @@
     ]
   },
   {
-    "id": "certification-list",
+    "id": "upcoming-event-v2",
     "fields": [
       {
         "component": "text",
@@ -6755,7 +6818,7 @@
         "name": "heading",
         "value": "",
         "label": "Heading",
-        "description": "Sets the headline for certification list"
+        "description": "Sets the headline for Upcoming events."
       },
       {
         "component": "select",
@@ -6796,7 +6859,15 @@
         "name": "description",
         "value": "",
         "label": "Description",
-        "description": "Sets the description for the certification list"
+        "description": "Sets the description for the Upcoming Events."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "filterLabel",
+        "value": "",
+        "label": "Filter Label",
+        "description": "Sets the text for Products filter label in dropdown."
       }
     ]
   },
@@ -6918,7 +6989,7 @@
         "component": "richtext",
         "valueType": "string",
         "name": "link",
-        "value": "<a href=\"/search.html\">Search</a>",
+        "value": "<a href=\"/en/search\">Search</a>",
         "label": "Seach Link/Text",
         "description": "Should be a link to the search page. The text should be the search label."
       },
@@ -7002,7 +7073,7 @@
         "description": "Options that affect block appearance and behavior.",
         "valueType": "string",
         "required": true,
-        "maxSize": 2,
+        "maxSize": 3,
         "options": [
           {
             "name": "Code Language",
@@ -7030,6 +7101,58 @@
               {
                 "name": "Java",
                 "value": "language-java"
+              },
+              {
+                "name": "CSS",
+                "value": "language-css"
+              },
+              {
+                "name": "Python",
+                "value": "language-python"
+              },
+              {
+                "name": "Markup",
+                "value": "language-markup"
+              },
+              {
+                "name": "JSON5",
+                "value": "language-json5"
+              },
+              {
+                "name": "JSONP",
+                "value": "language-jsonp"
+              },
+              {
+                "name": "Git",
+                "value": "language-git"
+              },
+              {
+                "name": "GraphQL",
+                "value": "language-graphql"
+              },
+              {
+                "name": "HTTP",
+                "value": "language-http"
+              },
+              {
+                "name": "HTTP Pulbic-Key-Pins",
+                "value": "language-hpkp"
+              },
+              {
+                "name": "HTTPS",
+                "value": "language-https"
+              },
+              {
+                "name": "R",
+                "value": "language-r"
+              },
+              {
+                "name": "React JSX",
+                "value": "language-jsx"
+              },
+              {
+                "name": "React TSX",
+                "value": "language-tsx"
               }
             ]
           },
@@ -7039,6 +7162,10 @@
               {
                 "name": "Enable line numbering",
                 "value": "line-numbers"
+              },
+              {
+                "name": "Enable adjustable code block height",
+                "value": "expandable"
               }
             ]
           }
@@ -7067,6 +7194,17 @@
         "value": "",
         "label": "Line highlighting",
         "description": "Add number to highlight rows within a code block. E.g. 1-3, 6 will highlight lines 1 through 3 and 6."
+      },
+      {
+        "condition": {
+          "some": [{ "var": "classes" }, { "===": [{ "var": "" }, "expandable"] }]
+        },
+        "component": "text",
+        "valueType": "string",
+        "name": "initial-code-lines",
+        "value": "",
+        "label": "Default code lines to display",
+        "description": "Set how many code lines are visible before expanding to show more."
       }
     ]
   },
@@ -7126,24 +7264,5 @@
   {
     "id": "atomic-search",
     "fields": []
-  },
-  {
-    "id": "mpc-video",
-    "fields": [
-      {
-        "component": "reference",
-        "valueType": "string",
-        "name": "videoImg",
-        "label": "Image",
-        "description": "The MPC video poster"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "video",
-        "value": "",
-        "label": "MPC Video URL"
-      }
-    ]
   }
 ]

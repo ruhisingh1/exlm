@@ -331,6 +331,7 @@ export function decorateExternalLinks(main) {
     const href = a.getAttribute('href');
     if (!href) return;
     if (href.includes('#_blank')) {
+      a.setAttribute('href', href.replace('#_blank', ''));
       a.setAttribute('target', '_blank');
     } else if (!href.startsWith('#')) {
       if (a.hostname !== window.location.hostname) {
@@ -748,7 +749,7 @@ export function getConfig() {
       ? 'https://platform.cloud.coveo.com/rest/search/v2'
       : 'https://adobesystemsincorporatednonprod1.org.coveo.com/rest/search/v2',
     coveoOrganizationId: isProd ? 'adobev2prod9e382h1q' : 'adobesystemsincorporatednonprod1',
-    coveoToken: 'xxcfe1b6e9-3628-49b5-948d-ed50d3fa6c99',
+    coveoToken: isProd ? 'xx937144af-8882-494f-8a5e-96460f4f25d4' : 'xxcfe1b6e9-3628-49b5-948d-ed50d3fa6c99',
     upcomingEventsUrl: `${prodAssetsCdnOrigin}/thumb/upcoming-events.json`,
     adlsUrl: 'https://learning.adobe.com/courses.result.json',
     industryUrl: `${cdnOrigin}/api/industries?page_size=200&sort=Order&lang=${lang}`,
@@ -1021,7 +1022,7 @@ export async function fetchFragment(rePath, lang) {
 
 /** fetch fragment relative to /${lang}/global-fragments/ */
 export async function fetchGlobalFragment(metaName, fallback, lang) {
-  const fragmentPath = getMetadata(metaName);
+  const fragmentPath = getMetadata(metaName) ?? fallback;
   const fragmentUrl = fragmentPath?.startsWith('/en/') ? fragmentPath.replace('/en/', `/${lang}/`) : fallback;
   const path = `${window.hlx.codeBasePath}${fragmentUrl}.plain.html`;
   const fallbackPath = `${window.hlx.codeBasePath}${fallback}.plain.html`;
@@ -1286,7 +1287,9 @@ async function loadPage() {
   await loadLazy(document);
   loadDelayed();
   await showSignupDialog();
-
+  if (window.hlx.aemRoot || window.location.href.includes('.html')) {
+    loadDefaultModule(`${window.hlx.codeBasePath}/scripts/editor-support-seo.js`);
+  }
   if (isDocPage) {
     // load prex/next buttons
     loadDefaultModule(`${window.hlx.codeBasePath}/scripts/prev-next-btn.js`);
@@ -1344,6 +1347,10 @@ async function loadPage() {
     } else {
       const signedIn = await isUserSignedIn();
       if (signedIn) {
+        // Applying data-cs-mask for signed-in profile-settings page
+        if (window.location.pathname === `/${lang}/home/profile-settings`) {
+          document.body.setAttribute('data-cs-mask', '');
+        }
         loadPage();
         loadTarget(signedIn);
       } else {
