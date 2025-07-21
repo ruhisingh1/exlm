@@ -6114,7 +6114,7 @@
     ]
   },
   {
-    "id": "video-clips",
+    "id": "video-clips-widget",
     "fields": [
       {
         "component": "text",
@@ -6156,14 +6156,27 @@
             "value": "h6"
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "video-clip",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "videoUrl",
+        "value": "",
+        "label": "Video URL",
+        "description": "Video URL to load in modal."
       },
       {
-        "component": "richtext",
+        "component": "text",
         "valueType": "string",
-        "name": "description",
+        "name": "sourceUrl",
         "value": "",
-        "label": "Video Links",
-        "description": "Author the list of links to videos."
+        "label": "Source URL",
+        "description": "Source URL of the full video."
       }
     ]
   },
