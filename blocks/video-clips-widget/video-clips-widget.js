@@ -1,7 +1,7 @@
 import { fetchLanguagePlaceholders, htmlToElement } from '../../scripts/scripts.js';
 import { decorateIcons } from '../../scripts/lib-franklin.js';
 
-function openVideoModal(block, placeholders, title, videoUrl, sourceUrl) {
+function openVideoModal(block, placeholders, videoUrl, sourceUrl, sourcePageTitle) {
   document.body.style.overflow = 'hidden';
 
   let modal = block.querySelector('.video-modal-wrapper');
@@ -39,7 +39,7 @@ function openVideoModal(block, placeholders, title, videoUrl, sourceUrl) {
     iframeContainer.innerHTML = `<iframe src="${videoUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
     iframeContainer.appendChild(
       htmlToElement(`<div class="video-meta">
-          <p class="clipped-from">${placeholders?.clippedFrom || 'Clipped from'} <em>${title}</em></p>
+          <p class="clipped-from">${placeholders?.clippedFrom || 'Clipped from'} <em>${sourcePageTitle}</em></p>
           <a class="watch-full-video" href="${sourceUrl}" target="_blank" rel="noopener noreferrer">${
             placeholders?.watchFullVideo || 'Watch full video'
           }</a>
@@ -63,10 +63,11 @@ export default async function decorate(block) {
   [...block.children].forEach((column, index) => {
     if (index === 0) return; // Skip heading row
 
-    const [videoTitleEl, videoUrlEl, sourceUrlEl] = column.children;
+    const [videoTitleEl, videoUrlEl, sourceUrlEl, sourceTitleEl] = column.children;
     const title = videoTitleEl?.textContent?.trim();
     const videoUrl = videoUrlEl?.querySelector('a')?.href;
     const sourceUrl = sourceUrlEl?.querySelector('a')?.href;
+    const sourcePageTitle = sourceTitleEl?.textContent?.trim();
 
     if (!title || !videoUrl || !sourceUrl) return;
 
@@ -83,7 +84,7 @@ export default async function decorate(block) {
 
     li.querySelector('a').addEventListener('click', (e) => {
       e.preventDefault();
-      openVideoModal(block, placeholders, title, videoUrl, sourceUrl);
+      openVideoModal(block, placeholders, videoUrl, sourceUrl, sourcePageTitle);
     });
 
     ul.appendChild(li);
