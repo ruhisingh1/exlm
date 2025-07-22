@@ -91,6 +91,6 @@ export default async function decorate(block) {
   });
 
   // Clear block and add new content
-  block.innerHTML = '';
-  block.appendChild(ul);
+ // block.innerHTML = '';
+  block.replaceChildren(ul);
 }
