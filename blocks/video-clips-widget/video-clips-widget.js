@@ -15,7 +15,7 @@ function openVideoModal(block, placeholders, videoUrl, sourceUrl, sourcePageTitl
     modalContent.classList.add('video-modal-container');
 
     const closeBtn = document.createElement('span');
-    closeBtn.classList.add('icon', 'icon-close-light');
+    closeBtn.classList.add('icon', 'icon-close-black');
     closeBtn.addEventListener('click', () => {
       document.body.style.overflow = '';
       modal.style.display = 'none';
@@ -60,8 +60,7 @@ export default async function decorate(block) {
   const ul = document.createElement('ul');
   ul.classList.add('video-list');
 
-  [...block.children].forEach((column, index) => {
-    if (index === 0) return; // Skip heading row
+  [...block.children].forEach((column) => {
 
     const [videoTitleEl, videoUrlEl, sourceUrlEl, sourceTitleEl] = column.children;
     const title = videoTitleEl?.textContent?.trim();
@@ -90,7 +89,10 @@ export default async function decorate(block) {
     ul.appendChild(li);
   });
 
-  // Clear block and add new content
- // block.innerHTML = '';
-  block.replaceChildren(ul);
+  // Clone original content and append new list
+  const originalContent = [...block.children].map((child) => child.cloneNode(true));
+  originalContent.forEach((child) => {
+    child.style.display = 'none';
+  });
+  block.replaceChildren(...originalContent, ul);
 }
