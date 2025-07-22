@@ -49,6 +49,7 @@ function openVideoModal(block, placeholders, videoUrl, sourceUrl, sourcePageTitl
 }
 
 export default async function decorate(block) {
+  const UEAuthorMode = window.hlx.aemRoot || window.location.href.includes('.html');
   let placeholders = {};
   try {
     placeholders = await fetchLanguagePlaceholders();
@@ -89,10 +90,27 @@ export default async function decorate(block) {
     ul.appendChild(li);
   });
 
-  // Clone original content and append new list
+  // Check for block heading in first row
+  const firstRow = block.children[0];
+  const heading = firstRow?.children[0];
+
+  // Clone original content and append heading + list
   const originalContent = [...block.children].map((child) => child.cloneNode(true));
-  originalContent.forEach((child) => {
-    child.style.display = 'none';
-  });
-  block.replaceChildren(...originalContent, ul);
+  
+  // In author mode, hide original content; in non-author mode, exclude it
+  const contentToKeep = [];
+  
+  if (UEAuthorMode) {
+    originalContent.forEach((child) => {
+      child.style.display = 'none';
+    });
+    contentToKeep.push(...originalContent);
+  }
+  
+  if (heading) {
+    contentToKeep.push(heading);
+  }
+  contentToKeep.push(ul);
+  
+  block.replaceChildren(...contentToKeep);
 }
