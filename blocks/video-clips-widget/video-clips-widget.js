@@ -49,7 +49,6 @@ function openVideoModal(block, placeholders, videoUrl, sourceUrl, sourcePageTitl
 }
 
 export default async function decorate(block) {
-  const UEAuthorMode = window.hlx.aemRoot || window.location.href.includes('.html');
   let placeholders = {};
   try {
     placeholders = await fetchLanguagePlaceholders();
@@ -57,60 +56,63 @@ export default async function decorate(block) {
     // eslint-disable-next-line no-console
     console.error('Error fetching placeholders:', err);
   }
+  const firstRow = block.querySelector(':scope > div'); // only the first direct div
 
-  const ul = document.createElement('ul');
-  ul.classList.add('video-list');
+if (firstRow) {
+  const heading = firstRow.querySelector(':scope > *'); // get the first element inside firstRow
 
-  [...block.children].forEach((column) => {
+  if (heading) {
+    const newHeadingWrapper = document.createElement('div');
+    newHeadingWrapper.className = 'video-clips-heading';
 
-    const [videoTitleEl, videoUrlEl, sourceUrlEl, sourceTitleEl] = column.children;
-    const title = videoTitleEl?.textContent?.trim();
+    // Add only one icon
+    const icon = document.createElement('span');
+    icon.className = 'icon icon-Smock_VideoOutline_18_N';
+
+    newHeadingWrapper.appendChild(icon);
+    newHeadingWrapper.appendChild(heading); // move heading in before replacing
+
+    block.replaceChild(newHeadingWrapper, firstRow);
+  }
+}
+
+ [...block.children].forEach((row) => {
+    const [titleEl, videoUrlEl, sourceUrlEl, sourceTitleEl] = row.children;
+
+    const title = titleEl?.textContent?.trim();
     const videoUrl = videoUrlEl?.querySelector('a')?.href;
     const sourceUrl = sourceUrlEl?.querySelector('a')?.href;
     const sourcePageTitle = sourceTitleEl?.textContent?.trim();
+ 
+
 
     if (!title || !videoUrl || !sourceUrl) return;
 
-    const id = title
-      .toLowerCase()
-      .replace(/\s+/g, '-')
-      .replace(/[^\w-]/g, '');
+    const cleanTitle = title.replace(/\s*\(\d+ min\)/, '');
 
-    const li = htmlToElement(`
-      <li>
-        <a id="${id}" class="video-modal-trigger" href="#">${title}</a>
-      </li>
-    `);
+    // Clear the row and rebuild it
+    row.innerHTML = '';
 
-    li.querySelector('a').addEventListener('click', (e) => {
+    const card = document.createElement('div');
+    card.className = 'video-clip';
+
+    card.innerHTML = `
+      <div class="icon-wrapper">
+        <span class="icon icon-play-outline"></span>
+      </div>
+      <div class="text-wrapper">
+          <a href="#" class="video-modal-trigger">${cleanTitle}</a>
+        </div>
+      </div>
+    `;
+
+    card.querySelector('.video-modal-trigger').addEventListener('click', (e) => {
       e.preventDefault();
       openVideoModal(block, placeholders, videoUrl, sourceUrl, sourcePageTitle);
     });
 
-    ul.appendChild(li);
+    row.appendChild(card);
   });
 
-  // Check for block heading in first row
-  const firstRow = block.children[0];
-  const heading = firstRow?.children[0];
-
-  // Clone original content and append heading + list
-  const originalContent = [...block.children].map((child) => child.cloneNode(true));
-  
-  // In author mode, hide original content; in non-author mode, exclude it
-  const contentToKeep = [];
-  
-  if (UEAuthorMode) {
-    originalContent.forEach((child) => {
-      child.style.display = 'none';
-    });
-    contentToKeep.push(...originalContent);
-  }
-  
-  if (heading) {
-    contentToKeep.push(heading);
-  }
-  contentToKeep.push(ul);
-  
-  block.replaceChildren(...contentToKeep);
+  decorateIcons(block);
 }
