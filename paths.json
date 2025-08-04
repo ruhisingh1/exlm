@@ -92,7 +92,7 @@
     "/content/exlm-ruhis.resource/sv/playlists.json:/sv/playlists.json",
     "/content/exlm-ruhis.resource/zh-CN/playlists.json:/zh-hans/playlists.json",
     "/content/exlm-ruhis.resource/zh-TW/playlists.json:/zh-hant/playlists.json",
-    "/content/exlm-ruhis.resource/en/lc.json:/en/lc.json",
+    "/content/exlm-ruhis.resource/en/lc-index.json:/en/lc-index.json",
     "/content/exlm-ruhis.resource/en/query-index.json:/en/query-index.json",
     "/content/exlm-ruhis.resource/fr/query-index.json:/fr/query-index.json",
     "/content/exlm-ruhis.resource/de/query-index.json:/de/query-index.json",

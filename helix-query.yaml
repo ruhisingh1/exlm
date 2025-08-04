@@ -852,11 +852,9 @@ indices:
         value: attribute(el, "content")
 
   lc-en: &base-lc
-    target: /en/lc.json
+    target: /en/lc-index.json
     include:
       - '/en/learning-collections-home/**'
-    exclude:
-      - '/en/learning-collections-home'
     properties:
       title:
         select: head > meta[property="og:title"]
