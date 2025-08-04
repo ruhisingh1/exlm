@@ -110,6 +110,8 @@ mmappings:
   - /content/exlm.resource/zh-CN/playlists.json:/zh-hans/playlists.json
   - /content/exlm.resource/zh-TW/playlists.json:/zh-hant/playlists.json
 
+  - /content/exlm-ruhis.resource/en/learning-collections.json:/en/learning-collections.json
+
   # site indices - for sitemaps
   - /content/exlm-ruhis.resource/en/query-index.json:/en/query-index.json
   - /content/exlm-ruhis.resource/fr/query-index.json:/fr/query-index.json
