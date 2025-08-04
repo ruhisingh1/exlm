@@ -90,6 +90,7 @@
     "/content/exlm-ruhis.resource/ko/playlists.json:/ko/playlists.json",
     "/content/exlm-ruhis.resource/ja/playlists.json:/ja/playlists.json",
     "/content/exlm-ruhis.resource/sv/playlists.json:/sv/playlists.json",
+    "/content/exlm-ruhis.resource/en/learning-collections.json:/en/learning-collections.json",
     "/content/exlm-ruhis.resource/zh-CN/playlists.json:/zh-hans/playlists.json",
     "/content/exlm-ruhis.resource/zh-TW/playlists.json:/zh-hant/playlists.json",
     "/content/exlm-ruhis.resource/en/query-index.json:/en/query-index.json",
@@ -103,9 +104,7 @@
     "/content/exlm-ruhis.resource/ja/query-index.json:/ja/query-index.json",
     "/content/exlm-ruhis.resource/sv/query-index.json:/sv/query-index.json",
     "/content/exlm-ruhis.resource/zh-CN/query-index.json:/zh-hans/query-index.json",
-    "/content/exlm-ruhis.resource/zh-TW/query-index.json:/zh-hant/query-index.json",
-    "/content/exlm-ruhis.resource/en/learning-collections.json:/en/learning-collections.json"
-
+    "/content/exlm-ruhis.resource/zh-TW/query-index.json:/zh-hant/query-index.json"
   ],
   "includes": ["/content/exlm-ruhis/"]
 }
