@@ -850,3 +850,17 @@ indices:
       description:
         select: head > meta[property="og:description"]
         value: attribute(el, "content")
+
+  lc-en: &base-lc
+    target: /en/lc.json
+    include:
+      - '/en/learning-collections-home/**'
+    exclude:
+      - '/en/learning-collections-home'
+    properties:
+      title:
+        select: head > meta[property="og:title"]
+        value: attribute(el, "content")
+      description:
+        select: head > meta[property="og:description"]
+        value: attribute(el, "content")

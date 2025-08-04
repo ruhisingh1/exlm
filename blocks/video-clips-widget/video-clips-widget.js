@@ -15,7 +15,7 @@ function openVideoModal(block, placeholders, videoUrl, sourceUrl, sourcePageTitl
     modalContent.classList.add('video-modal-container');
 
     const closeBtn = document.createElement('span');
-    closeBtn.classList.add('icon', 'icon-close-black');
+    closeBtn.classList.add('icon', 'icon-close-light');
     closeBtn.addEventListener('click', () => {
       document.body.style.overflow = '';
       modal.style.display = 'none';
