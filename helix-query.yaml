@@ -837,8 +837,8 @@ indices:
     exclude:
       - '/zh-hant/playlists'
 
-  learning-collections-en: &base-learning-collections
-    target: /en/learning-collections.json
+  learning-collections-en: &base-learning
+    target: /en/learning.json
     include:
       - '/en/learning-collections-home/**'
     exclude:
