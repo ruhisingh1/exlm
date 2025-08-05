@@ -1359,6 +1359,21 @@
           }
         },
         {
+          "title": "Multi Content",
+          "id": "multi-content",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Multi Content",
+                  "model": "multi-content"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Social Share",
           "id": "social-share",
           "plugins": {
