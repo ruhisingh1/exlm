@@ -7293,5 +7293,22 @@
   {
     "id": "atomic-search",
     "fields": []
+  },
+  {
+    "id": "multi-content",
+    "fields": [
+    {
+        "component": "aem-content",
+        "valueType": "string[]",
+        "value": [],
+        "name": "content",
+        "multi": true,
+        "label": "Page URL",
+        "validation": {
+          "rootPath": "/content/exlm/global/en"
+        }
+      }
+      ]
+  }
   }
 ]
