@@ -4268,17 +4268,6 @@
         "description": "Sets the title of the page in page meta."
       },
       {
-        "component": "aem-content",
-        "valueType": "string[]",
-        "value": [],
-        "name": "author-bio-page",
-        "multi": true,
-        "label": "Author Bio page URL",
-        "validation": {
-          "rootPath": "/content/exlm/global/en/perspectives/authors"
-        }
-      },
-      {
         "component": "aem-tag",
         "valueType": "string",
         "name": "coveo-solution",
@@ -4373,6 +4362,18 @@
         "valueType": "string",
         "rootPath": "/content/cq:tags/exl/experience-level",
         "description": "Sets the level(s) in page meta."
+      }
+    ]
+  },
+  {
+    "id": "author-metadata",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "jcr:title",
+        "label": "Page Title",
+        "description": "Sets the title of the page in page meta."
       }
     ]
   },
