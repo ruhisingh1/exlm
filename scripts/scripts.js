@@ -27,7 +27,14 @@ import { initiateCoveoAtomicSearch } from './load-atomic-search-scripts.js';
  * Load files async using import() if you must.
  */
 
-const LCP_BLOCKS = ['video-embed', 'marquee', 'article-marquee', 'personalized-content-placeholder', 'atomic-search']; // add your LCP blocks to the list
+const LCP_BLOCKS = [
+  'video-embed',
+  'marquee',
+  'article-marquee',
+  'personalized-content-placeholder',
+  'atomic-search',
+  'slides',
+]; // add your LCP blocks to the list
 
 /**
  * load fonts.css and set a session storage flag
@@ -158,6 +165,7 @@ export const isPerspectivePage = matchesAnyTheme(/articles/);
 export const isProfilePage = matchesAnyTheme(/^profile.*/);
 export const isBrowsePage = matchesAnyTheme(/^browse-.*/);
 export const isSignUpPage = matchesAnyTheme(/^signup.*/);
+export const isLearningCollectionStep = matchesAnyTheme(/learning-collections-step/);
 
 /**
  * add a section for the left rail when on a browse page.
@@ -213,6 +221,34 @@ function addMiniToc(main) {
   tocSection.append(miniTocBlock);
   miniTocBlock.style.display = 'none';
   main.append(tocSection);
+}
+
+/**
+ * Add skill track info block to learning collection step pages.
+ * @param {HTMLElement} main
+ */
+function addSkillTrackInfo(main) {
+  // Check if skill-track-info block already exists
+  if (!main.querySelector('.skill-track-info.block')) {
+    const skillTrackInfoSection = document.createElement('div');
+    skillTrackInfoSection.classList.add('skill-track-info-section');
+    skillTrackInfoSection.append(buildBlock('skill-track-info', []));
+    main.prepend(skillTrackInfoSection);
+  }
+}
+
+/**
+ * Add skill track navigation block to learning collection step pages.
+ * @param {HTMLElement} main
+ */
+function addSkillTrackNav(main) {
+  // Check if skill-track-nav block already exists
+  if (!main.querySelector('.skill-track-nav.block')) {
+    const skillTrackNavSection = document.createElement('div');
+    skillTrackNavSection.classList.add('skill-track-nav-section');
+    skillTrackNavSection.append(buildBlock('skill-track-nav', []));
+    main.append(skillTrackNavSection);
+  }
 }
 
 /**
@@ -279,6 +315,11 @@ function buildAutoBlocks(main, isFragment = false) {
       }
       if (isProfilePage) {
         addProfileRail(main);
+      }
+      // if we are on a learning collection step page
+      if (isLearningCollectionStep) {
+        addSkillTrackInfo(main);
+        addSkillTrackNav(main);
       }
     }
   } catch (error) {
@@ -444,9 +485,7 @@ export function decorateInlineText(textNode) {
   if (textContent.includes('[') && textContent.includes(']{')) {
     const span = document.createElement('span');
     span.innerHTML = getDecoratedInlineHtml(textContent);
-    window.requestAnimationFrame(() => {
-      textNode.replaceWith(...span.childNodes);
-    });
+    textNode.replaceWith(...span.childNodes);
   }
 }
 
@@ -509,14 +548,22 @@ export function decoratePreviousImage(textNode) {
 export function decorateInlineAttributes(element) {
   const ignoredElements = ['pre', 'code', 'script', 'style'];
   const isParentIgnored = (node) => ignoredElements.includes(node?.parentElement?.tagName?.toLowerCase());
+
+  // Collect all text nodes first to avoid TreeWalker issues when DOM changes
+  const textNodes = [];
   const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, (node) =>
     isParentIgnored(node) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT,
   );
+
   while (walker.nextNode()) {
-    const { currentNode } = walker;
-    decorateInlineText(currentNode);
-    decoratePreviousImage(currentNode);
+    textNodes.push(walker.currentNode);
   }
+
+  // Process all collected text nodes
+  textNodes.forEach((textNode) => {
+    decorateInlineText(textNode);
+    decoratePreviousImage(textNode);
+  });
 }
 
 /**
@@ -639,24 +686,24 @@ export function getConfig() {
       env: 'PROD',
       cdn: 'experienceleague.adobe.com',
       authorUrl: 'author-p122525-e1219150.adobeaemcloud.com',
-      hlxPreview: 'main--exlm-prod--adobe-experience-league.hlx.page',
-      hlxLive: 'main--exlm-prod--adobe-experience-league.hlx.live',
+      hlxPreview: /^([a-z0-9-]+)--exlm-prod--adobe-experience-league.hlx.page$/,
+      hlxLive: /^([a-z0-9-]+)--exlm-prod--adobe-experience-league.hlx.live$/,
       community: 'experienceleaguecommunities.adobe.com',
     },
     {
       env: 'STAGE',
       cdn: 'experienceleague-stage.adobe.com',
       authorUrl: 'author-p122525-e1219192.adobeaemcloud.com',
-      hlxPreview: 'main--exlm-stage--adobe-experience-league.hlx.page',
-      hlxLive: 'main--exlm-stage--adobe-experience-league.live',
+      hlxPreview: /^([a-z0-9-]+)--exlm-stage--adobe-experience-league.(hlx|aem).page$/,
+      hlxLive: /^([a-z0-9-]+)--exlm-stage--adobe-experience-league.(hlx|aem).live$/,
       community: 'experienceleaguecommunities-dev.adobe.com',
     },
     {
       env: 'DEV',
       cdn: 'experienceleague-dev.adobe.com',
       authorUrl: 'author-p122525-e1200861.adobeaemcloud.com',
-      hlxPreview: 'main--exlm--adobe-experience-league.hlx.page',
-      hlxLive: 'main--exlm--adobe-experience-league.hlx.live',
+      hlxPreview: /^([a-z0-9-]+)--exlm--adobe-experience-league.(hlx|aem).page$/,
+      hlxLive: /^([a-z0-9-]+)--exlm--adobe-experience-league.(hlx|aem).live$/,
       community: 'experienceleaguecommunities-dev.adobe.com',
     },
   ];
@@ -697,7 +744,9 @@ export function getConfig() {
 
   const currentHost = window.location.hostname;
   const defaultEnv = HOSTS.find((hostObj) => hostObj.env === 'DEV');
-  const currentEnv = HOSTS.find((hostObj) => Object.values(hostObj).includes(currentHost));
+  const currentEnv = HOSTS.find((hostObj) =>
+    Object.values(hostObj).some((val) => (val instanceof RegExp ? val.test(currentHost) : val === currentHost)),
+  );
   const cdnHost = currentEnv?.cdn || defaultEnv.cdn;
   const communityHost = currentEnv?.community || defaultEnv.community;
   const cdnOrigin = `https://${cdnHost}`;
@@ -833,6 +882,7 @@ export async function loadIms() {
       window.adobeid = {
         scope:
           'AdobeID,additional_info.company,additional_info.ownerOrg,avatar,openid,read_organizations,read_pc,session,account_cluster.read,pps.read',
+        autoValidateToken: true,
         locale: locales.get(document.querySelector('html').lang) || locales.get('en'),
         ...ims,
         onReady: () => {
@@ -1032,7 +1082,17 @@ export async function fetchGlobalFragment(metaName, fallback, lang) {
 
 /* fetch language specific placeholders, fallback to english */
 export async function fetchLanguagePlaceholders(lang) {
-  const langCode = lang || getPathDetails()?.lang || 'en';
+  const { communityHost } = getConfig();
+  const isCommunityDomain = window.location.origin.includes(communityHost);
+  const communityLang = new Map([['pt', 'pt-br']]);
+
+  const langCode =
+    lang ||
+    (isCommunityDomain
+      ? communityLang.get(document.documentElement.lang?.toLowerCase()) || document.documentElement.lang?.toLowerCase()
+      : getPathDetails()?.lang) ||
+    'en';
+
   try {
     // Try fetching placeholders with the specified language
     return await fetchPlaceholders(`${window.hlx.codeBasePath}/${langCode}`);

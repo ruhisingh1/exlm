@@ -24,6 +24,10 @@
     "components": ["sign-up-flow-section"]
   },
   {
+    "id": "main-learning-collections",
+    "components": ["section", "learning-collections-page-section", "tab-section"]
+  },
+  {
     "id": "section",
     "components": [
       "text",
@@ -68,7 +72,12 @@
       "notification-banner",
       "code",
       "playlist-browse",
-      "atomic-search"
+      "atomic-search",
+      "skill-track-meta",
+      "skill-track",
+      "quiz",
+      "drill-in",
+      "flip-card"
     ]
   },
   {
@@ -258,6 +267,21 @@
     ]
   },
   {
+    "id": "learning-collections-page-section",
+    "components": [
+      "text",
+      "title",
+      "button",
+      "image",
+      "announcement-ribbon",
+      "skill-track-meta",
+      "skill-track",
+      "quiz",
+      "drill-in",
+      "flip-card"
+    ]
+  },
+  {
     "id": "sign-up-flow-section",
     "components": [
       "text",
@@ -366,6 +390,22 @@
   {
     "id": "topic-results",
     "components": []
+  },
+  {
+    "id": "skill-track",
+    "components": ["step"]
+  },
+  {
+    "id": "quiz",
+    "components": ["question"]
+  },
+  {
+    "id": "drill-in",
+    "components": ["drill-in-callout"]
+  },
+  {
+    "id": "flip-card",
+    "components": ["flip-card-item"]
   },
   {
     "id": "rte-custom-options",

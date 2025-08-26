@@ -10,6 +10,7 @@ export const type = document.querySelector('meta[name="type"]')?.content?.toLowe
 
 const fullSolution = document.querySelector('meta[name="solution"]')?.content || '';
 const feature = document.querySelector('meta[name="feature"]')?.content.toLowerCase() || '';
+const featureAttribute = document.querySelector('meta[name="feature-attribute"]')?.content.toLowerCase() || '';
 const subSolution = document.querySelector('meta[name="sub-solution"]')?.content || '';
 const solutionVersion = document.querySelector('meta[name="version"]')?.content || '';
 const role = document.querySelector('meta[name="role"]')?.content || '';
@@ -154,6 +155,7 @@ export async function pushPageDataLayer(language) {
         type,
         fullSolution,
         feature,
+        featureAttribute,
       },
     },
     user,
@@ -344,6 +346,54 @@ export function pushProductInterestsEvent(id, title, selectionType) {
       productTitle: title,
       productSelectionType: selectionType,
       timestamp: new Date().toISOString(),
+    },
+  });
+}
+
+/**
+ * Used to push a guide play event to the data layer
+ * @param {Object} guide - Guide information
+ * @param {string} guide.title - Guide title in format "guide title:step number:slide title"
+ * @param {string} guide.trigger - Action that triggered the event (play, next, previous, autoplay)
+ * @param {string} guide.steps - Total number of slides in the guide
+ * @param {boolean} audioOn - Whether audio is on or off
+ */
+export function pushGuidePlayEvent(guide, audioOn) {
+  window.adobeDataLayer = window.adobeDataLayer || [];
+
+  const audioStatus = audioOn ? 'audio on' : 'audio off';
+
+  window.adobeDataLayer.push({
+    event: 'guidePlay',
+    guide: {
+      title: guide.title,
+      trigger: `${guide.trigger}:${audioStatus}`,
+      steps: guide.steps,
+    },
+  });
+}
+
+/**
+ * Used to push a guide autoplay event to the data layer
+ * @param {Object} guide - Guide information
+ * @param {string} guide.title - Guide title in format "guide title:step number:slide title"
+ * @param {string} guide.trigger - Action that triggered the event (play, next, previous, autoplay)
+ * @param {string} guide.steps - Total number of slides in the guide
+ * @param {boolean} audioOn - Whether audio is on or off
+ * @param {string} stepIndex - Current step index
+ * @param {string} blockId - Block identifier for the slides component
+ */
+export function pushGuideAutoPlayEvent(guide, audioOn) {
+  window.adobeDataLayer = window.adobeDataLayer || [];
+
+  const audioStatus = audioOn ? 'audio on' : 'audio off';
+
+  window.adobeDataLayer.push({
+    event: 'guideAutoPlay',
+    guide: {
+      title: guide.title,
+      trigger: `${guide.trigger}:${audioStatus}`,
+      steps: guide.steps,
     },
   });
 }
