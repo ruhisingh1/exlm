@@ -7534,7 +7534,7 @@
         "label": "Recap URL",
         "description": "URL to recap",
         "validation": {
-          "rootPath": "/content/exlm/global/en/courses/"
+          "rootPath": "/content/exlm/global/en/courses"
         }
       },
       {
@@ -7545,7 +7545,7 @@
         "label": "Quiz page URL",
         "description": "URL to the quiz page",
         "validation": {
-          "rootPath": "/content/exlm/global/en/courses/"
+          "rootPath": "/content/exlm/global/en/courses"
         }
       },
       {
@@ -7572,7 +7572,7 @@
         "label": "Step Page URL",
         "description": "URL to the step",
         "validation": {
-          "rootPath": "/content/exlm/global/en/courses/"
+          "rootPath": "/content/exlm/global/en/courses"
         }
       },
       {
@@ -7888,7 +7888,7 @@
         "label": "Skill Track Page URL",
         "description": "URL to the Skill track",
         "validation": {
-          "rootPath": "/content/exlm/global/en/courses/"
+          "rootPath": "/content/exlm/global/en/courses"
         }
       }
     ]
