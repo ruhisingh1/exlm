@@ -134,10 +134,9 @@ export default async function decorate(block) {
       gradientColor = '#FFFFFF';
     }
 
-    block.style.background = gradientColor;
-  } else {
-    block.style.backgroundColor = bgColor;
-  }
+    block.style.background = bgColor;
+    block.querySelector('img').style.background = gradientColor;
+  } 
 
   const textColor = textColorCls ? `var(--${textColorCls.substring(5)})` : `var(--spectrum-gray-900)`;
   const eyebrowText = eyebrow?.textContent?.trim() || '';

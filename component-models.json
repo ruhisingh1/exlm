@@ -1922,7 +1922,6 @@
         "label": "Custom Background Color",
         "description": "Enter the custom hex code, such as FFFFFF (without the # symbol). For gradient, enter hex code with comma separated."
       },
-
       {
         "condition": {
           "some": [{ "var": "classes" }, { "===": [{ "var": "" }, "video"] }]
