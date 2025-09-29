@@ -112,7 +112,33 @@ export default async function decorate(block) {
   const marqueeVideoVariant = isVideoVariant && isLargeVariant && isStraightVariant;
   const bgColorCls = [...block.classList].find((cls) => cls.startsWith('bg-'));
   const textColorCls = [...block.classList].find((cls) => cls.startsWith('text-'));
-  const bgColor = bgColorCls ? `var(--${bgColorCls.substr(3)})` : `#${customBgColor?.textContent?.trim() || 'FFFFFF'}`;
+
+  const customColor = customBgColor?.textContent?.trim() || '';
+  const colors = customColor
+    .split(',')
+    .map((c) => `#${c.trim()}`)
+    .filter(Boolean);
+
+  // Default background (non-gradient)
+  const bgColor = bgColorCls ? `var(--${bgColorCls.slice(3)})` : colors[0] || '#FFFFFF';
+
+  if (block.classList.contains('fill-gradient')) {
+    let gradientColor;
+
+    if (colors.length >= 2) {
+      const [first, second] = colors;
+      gradientColor = `linear-gradient(to right, ${first} 0%, ${first} 55%, ${second} 100%)`;
+    } else if (colors.length === 1) {
+      gradientColor = `linear-gradient(to right, ${colors[0]} 0%, ${colors[0]} 100%)`;
+    } else {
+      gradientColor = '#FFFFFF';
+    }
+
+    block.style.background = gradientColor;
+  } else {
+    block.style.backgroundColor = bgColor;
+  }
+
   const textColor = textColorCls ? `var(--${textColorCls.substring(5)})` : `var(--spectrum-gray-900)`;
   const eyebrowText = eyebrow?.textContent?.trim() || '';
 
