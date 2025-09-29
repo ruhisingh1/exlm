@@ -788,6 +788,7 @@ export function getConfig() {
     modalReDisplayDuration,
     cookieConsentName,
     targetCriteriaIds,
+    quizPassingCriteria: 0.65, // 65% passing criteria for quizzes
     khorosProfileUrl: `${cdnOrigin}/api/action/khoros/profile-menu-list`,
     khorosProfileDetailsUrl: `${cdnOrigin}/api/action/khoros/profile-details`,
     profileUrl: `${cdnOrigin}/api/profile?lang=${lang}`,
@@ -1272,6 +1273,10 @@ export async function fetchJson(url, fallbackUrl) {
     .then((response) => (!response.ok && fallbackUrl ? fetch(fallbackUrl) : response))
     .then((response) => (response.ok ? response.json() : null))
     .then((json) => json?.data || []);
+}
+
+export function xssSanitizeQueryParamValue(value) {
+  return value?.replace(/[^a-zA-Z0-9\s.]/g, '');
 }
 
 export function getCookie(cookieName) {
