@@ -1814,6 +1814,10 @@
                 "value": "fill-background"
               },
               {
+                "name": "Fill marquee with gradient",
+                "value": "fill-gradient"
+              },
+              {
                 "name": "Select to insert a video as background",
                 "value": "video"
               }
@@ -1909,14 +1913,14 @@
       },
       {
         "condition": {
-          "some": [{ "var": "classes" }, { "===": [{ "var": "" }, "custom"] }]
+          "some": [{ "var": "classes" }, { "in": [{ "var": "" }, ["custom", "fill-gradient"]] }]
         },
         "component": "text",
         "valueType": "string",
         "name": "customHexCode",
         "value": "",
         "label": "Custom Background Color",
-        "description": "Enter the custom hex code, such as FFFFFF (without the # symbol)."
+        "description": "Enter the custom hex code, such as FFFFFF (without the # symbol). For gradient, enter hex code with comma separated."
       },
 
       {
@@ -4519,6 +4523,64 @@
         "extensionId": "exl-ue-extension"
       },
       {
+        "component": "custom-aem-tag",
+        "name": "tq-subfeatures",
+        "label": "Sub Feature(s)",
+        "valueType": "string",
+        "description": "Sets the subfeature(s) in page meta.",
+        "dataSource": {
+          "type": "action",
+          "config": {
+            "name": "getTQTags",
+            "params": {
+              "taxonomyType": "subfeature"
+            }
+          }
+        },
+        "options": {
+          "dependentField": {
+            "name": "tq-features",
+            "taxonomyType": "feature"
+          },
+          "requiredTagsToEnable": ["tq-features"]
+        },
+        "extensionId": "exl-ue-extension"
+      },
+      {
+        "component": "custom-aem-tag",
+        "name": "tq-industries",
+        "label": "Industries",
+        "valueType": "string",
+        "description": "Sets the industries in page meta.",
+        "dataSource": {
+          "type": "action",
+          "config": {
+            "name": "getTQTags",
+            "params": {
+              "taxonomyType": "industry"
+            }
+          }
+        },
+        "extensionId": "exl-ue-extension"
+      },
+      {
+        "component": "custom-aem-tag",
+        "name": "tq-topics",
+        "label": "Topic(s)",
+        "valueType": "string",
+        "description": "Sets the topic(s) in page meta.",
+        "dataSource": {
+          "type": "action",
+          "config": {
+            "name": "getTQTags",
+            "params": {
+              "taxonomyType": "topic"
+            }
+          }
+        },
+        "extensionId": "exl-ue-extension"
+      },
+      {
         "component": "aem-content",
         "valueType": "string",
         "name": "signout-redirect-url",
@@ -4538,38 +4600,6 @@
         "name": "jcr:title",
         "label": "Page Title",
         "description": "Sets the title of the page in page meta."
-      },
-      {
-        "component": "aem-tag",
-        "valueType": "string",
-        "name": "coveo-solution",
-        "label": "Solution(s)",
-        "rootPath": "/content/cq:tags/exl/solution",
-        "description": "Sets the Coveo Solution(s) in page meta."
-      },
-      {
-        "component": "aem-tag",
-        "valueType": "string",
-        "name": "feature",
-        "label": "Feature(s)",
-        "rootPath": "/content/cq:tags/exl/feature",
-        "description": "Sets the Coveo Feature(s) in page meta."
-      },
-      {
-        "component": "aem-tag",
-        "name": "role",
-        "label": "Role(s)",
-        "valueType": "string",
-        "rootPath": "/content/cq:tags/exl/role",
-        "description": "Sets the role(s) in page meta."
-      },
-      {
-        "component": "aem-tag",
-        "name": "level",
-        "label": "Experience Level(s)",
-        "valueType": "string",
-        "rootPath": "/content/cq:tags/exl/experience-level",
-        "description": "Sets the level(s) in page meta."
       },
       {
         "component": "aem-content",
