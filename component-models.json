@@ -1514,9 +1514,9 @@
       },
       {
         "component": "multiselect",
-        "valueType": "string",
         "name": "classes",
         "label": "Block Options",
+        "valueType": "string",
         "required": true,
         "maxSize": 2,
         "options": [
@@ -1524,13 +1524,13 @@
             "name": "Style Type",
             "children": [
               {
-            "name": "Default",
-            "value": ""
-          },
-          {
-            "name": "Border w/ alternating rows",
-            "value": "b-alt-row"
-          }
+                "name": "Default",
+                "value": ""
+              },
+              {
+                "name": "Border w/ alternating rows",
+                "value": "b-alt-row"
+              }
             ]
           },
           {
