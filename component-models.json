@@ -1513,18 +1513,38 @@
         "label": "Rows"
       },
       {
-        "component": "select",
+        "component": "multiselect",
         "valueType": "string",
         "name": "classes",
-        "label": "Style Type",
+        "label": "Block Options",
+        "required": true,
+        "maxSize": 2,
         "options": [
           {
+            "name": "Style Type",
+            "children": [
+              {
             "name": "Default",
             "value": ""
           },
           {
             "name": "Border w/ alternating rows",
             "value": "b-alt-row"
+          }
+            ]
+          },
+          {
+            "name": "Cell alignment",
+            "children": [
+              {
+                "name": "Top(default)",
+                "value": ""
+              },
+              {
+                "name": "Middle",
+                "value": "middle"
+              }
+            ]
           }
         ]
       }

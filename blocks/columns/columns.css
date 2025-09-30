@@ -6,7 +6,9 @@
   line-height: var(--spectrum-line-height-l);
   color: var(--spectrum-gray-800);
 }
-
+.columns.middle > div {
+  align-items: center;
+}
 .columns > div {
   display: grid;
   grid-template-columns: 1fr;
