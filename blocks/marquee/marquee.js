@@ -121,22 +121,19 @@ export default async function decorate(block) {
 
   // Default background (non-gradient)
   const bgColor = bgColorCls ? `var(--${bgColorCls.slice(3)})` : colors[0] || '#FFFFFF';
-
+  let gradientColor;
   if (block.classList.contains('fill-gradient')) {
-    let gradientColor;
-
     if (colors.length >= 2) {
       const [first, second] = colors;
       gradientColor = `linear-gradient(to right, ${first} 0%, ${first} 55%, ${second} 100%)`;
     } else if (colors.length === 1) {
-      gradientColor = `linear-gradient(to right, ${colors[0]} 0%, ${colors[0]} 100%)`;
+      gradientColor = `${colors[0]}`;
     } else {
-      gradientColor = '#FFFFFF';
+      gradientColor = bgColorCls ? `var(--${bgColorCls.slice(3)})` : '#FFFFFF';
     }
-
-    block.style.background = bgColor;
+    block.style.backgroundColor = bgColor;
     block.querySelector('img').style.background = gradientColor;
-  } 
+  }
 
   const textColor = textColorCls ? `var(--${textColorCls.substring(5)})` : `var(--spectrum-gray-900)`;
   const eyebrowText = eyebrow?.textContent?.trim() || '';

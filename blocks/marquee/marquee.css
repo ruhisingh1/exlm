@@ -127,7 +127,8 @@ div.marquee-wrapper {
   display: none;
 }
 
-.marquee.fill-background .marquee-text {
+.marquee.fill-background .marquee-text,
+.marquee.fill-gradient .marquee-text {
   background-color: transparent;
 }
 
@@ -555,10 +556,7 @@ div.marquee-wrapper {
 }
 
 .course-hub .marquee .marquee-subject img,
-.course-hub .marquee .marquee-subject picture {
-  object-fit: contain;
-}
-
+.course-hub .marquee .marquee-subject picture,
 .course-hub .marquee.no-subject > .marquee-background img {
   object-fit: contain;
 }
