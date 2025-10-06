@@ -1513,38 +1513,18 @@
         "label": "Rows"
       },
       {
-        "component": "multiselect",
-        "name": "classes",
-        "label": "Block Options",
+        "component": "select",
         "valueType": "string",
-        "required": true,
-        "maxSize": 2,
+        "name": "classes",
+        "label": "Style Type",
         "options": [
           {
-            "name": "Style Type",
-            "children": [
-              {
-                "name": "Default",
-                "value": ""
-              },
-              {
-                "name": "Border w/ alternating rows",
-                "value": "b-alt-row"
-              }
-            ]
+            "name": "Default",
+            "value": ""
           },
           {
-            "name": "Cell alignment",
-            "children": [
-              {
-                "name": "Top(default)",
-                "value": ""
-              },
-              {
-                "name": "Middle",
-                "value": "middle"
-              }
-            ]
+            "name": "Border w/ alternating rows",
+            "value": "b-alt-row"
           }
         ]
       }
@@ -1834,7 +1814,7 @@
                 "value": "fill-background"
               },
               {
-                "name": "Fill marquee with gradient",
+                "name": "Fill marquee with given gradient colors",
                 "value": "fill-gradient"
               },
               {
@@ -1939,8 +1919,8 @@
         "valueType": "string",
         "name": "customHexCode",
         "value": "",
-        "label": "Custom Background Color",
-        "description": "Enter the custom hex code, such as FFFFFF (without the # symbol). For gradient, enter hex code with comma separated."
+        "label": "Custom Background & Gradient Colors",
+        "description": "Enter a custom hex code (e.g., FFFFFF, without the #). For gradients, enter multiple hex codes separated by commas."
       },
       {
         "condition": {
@@ -4467,6 +4447,38 @@
         }
       },
       {
+        "component": "aem-tag",
+        "valueType": "string",
+        "name": "coveo-solution",
+        "label": "Solution(s)",
+        "rootPath": "/content/cq:tags/exl/solution",
+        "description": "Sets the Coveo Solution(s) in page meta."
+      },
+      {
+        "component": "aem-tag",
+        "valueType": "string",
+        "name": "feature",
+        "label": "Legacy Feature(s)",
+        "rootPath": "/content/cq:tags/exl/feature",
+        "description": "Sets the Coveo Feature(s) in page meta."
+      },
+      {
+        "component": "aem-tag",
+        "name": "role",
+        "label": "Legacy Role(s)",
+        "valueType": "string",
+        "rootPath": "/content/cq:tags/exl/role",
+        "description": "Sets the role(s) in page meta."
+      },
+      {
+        "component": "aem-tag",
+        "name": "level",
+        "label": "Legacy Experience Level(s)",
+        "valueType": "string",
+        "rootPath": "/content/cq:tags/exl/experience-level",
+        "description": "Sets the level(s) in page meta."
+      },
+      {
         "component": "custom-aem-tag",
         "name": "tq-roles",
         "label": "Role(s)",
@@ -6424,89 +6436,6 @@
     ]
   },
   {
-    "id": "video-clips-widget",
-    "fields": [
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "heading",
-        "value": "",
-        "label": "Heading",
-        "description": "Sets the heading."
-      },
-      {
-        "component": "select",
-        "valueType": "string",
-        "name": "headingType",
-        "value": "h2",
-        "label": "Heading Type",
-        "options": [
-          {
-            "name": "H1",
-            "value": "h1"
-          },
-          {
-            "name": "H2",
-            "value": "h2"
-          },
-          {
-            "name": "H3",
-            "value": "h3"
-          },
-          {
-            "name": "H4",
-            "value": "h4"
-          },
-          {
-            "name": "H5",
-            "value": "h5"
-          },
-          {
-            "name": "H6",
-            "value": "h6"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "video-clip",
-    "fields": [
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "videoTitle",
-        "value": "",
-        "label": "Video Title",
-        "description": "Video Display Title."
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "videoUrl",
-        "value": "",
-        "label": "Video URL",
-        "description": "Video URL to load in modal."
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "sourceUrl",
-        "value": "",
-        "label": "Source URL",
-        "description": "Source URL of the full video."
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "sourceTitle",
-        "value": "",
-        "label": "Source Page Title",
-        "description": "Source Page Title."
-      }
-    ]
-  },
-  {
     "id": "personalized-content-placeholder",
     "fields": [
       {
@@ -8368,14 +8297,6 @@
         "value": "",
         "label": "Description",
         "description": "Sets the description for the course completion block."
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "shareButtonText",
-        "value": "",
-        "label": "Button Text for Share",
-        "description": "Label for the share button"
       },
       {
         "component": "text",
