@@ -1336,7 +1336,7 @@ export function updateTQTagsForCoveo() {
  * Update TQ Tags metadata
  * @param {Document} document
  */
-export function updateTQTagsMetadata(document) {
+export function updateTQTagsMetadata() {
   const keysToUpdate = [
     'tq-roles',
     'tq-levels',
@@ -1348,7 +1348,7 @@ export function updateTQTagsMetadata(document) {
   ];
 
   keysToUpdate.forEach((key) => {
-    const metaTag = getMetadata(document, key);
+    const metaTag = getMetadata(key);
     if (!metaTag) return;
 
     try {
