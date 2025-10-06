@@ -1361,7 +1361,7 @@ export function updateTQTagsMetadata(document) {
           .filter(Boolean)
           .join(', ');
         if (updatedTags) {
-          setMetadata(document, `${key}`, updatedTags);
+          setMetadata(`${key}`, updatedTags);
           // Extract labels (the part after |) and join by comma
           const labels = updatedTags
             .split(',')
@@ -1369,7 +1369,7 @@ export function updateTQTagsMetadata(document) {
             .filter(Boolean)
             .join(', ');
 
-          setMetadata(document, `${key}-labels`, labels);
+          setMetadata(`${key}-labels`, labels);
         }
       }
     } catch (e) {
