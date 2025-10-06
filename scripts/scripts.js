@@ -1361,7 +1361,15 @@ export function updateTQTagsMetadata(document) {
           .filter(Boolean)
           .join(', ');
         if (updatedTags) {
-          setMetadata(document, `${key}-labels`, updatedTags);
+          setMetadata(document, `${key}`, updatedTags);
+          // Extract labels (the part after |) and join by comma
+          const labels = updatedTags
+            .split(',')
+            .map((tag) => tag.split('|')[1]?.trim())
+            .filter(Boolean)
+            .join(', ');
+
+          setMetadata(document, `${key}-labels`, labels);
         }
       }
     } catch (e) {
