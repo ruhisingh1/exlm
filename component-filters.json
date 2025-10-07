@@ -87,7 +87,8 @@
       "course-completion",
       "browse-courses",
       "course-recap",
-      "quiz-scorecard"
+      "quiz-scorecard",
+      "slides"
     ]
   },
   {
@@ -346,7 +347,8 @@
       "note",
       "qualtrics",
       "code",
-      "announcement-ribbon"
+      "announcement-ribbon",
+      "slides"
     ]
   },
   {

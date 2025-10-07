@@ -7016,6 +7016,19 @@
     ]
   },
   {
+    "id": "slides",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "slidesId",
+        "value": "",
+        "label": "Slides ID",
+        "description": "Enter the 'Slides Id'."
+      }
+    ]
+  },
+  {
     "id": "upcoming-event",
     "fields": [
       {
