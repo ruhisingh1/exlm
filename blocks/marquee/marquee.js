@@ -2,17 +2,20 @@
 import { decorateIcons } from '../../scripts/lib-franklin.js';
 import decorateCustomButtons from '../../scripts/utils/button-utils.js';
 import {
-  getConfig,
+  // getConfig,
   getPathDetails,
 } from '../../scripts/scripts.js';
 
 async function fetchLOCVideoId(videoId, lang) {
-  const { mpcVideoIdUrl } = getConfig();
+  // const { mpcVideoIdUrl } = getConfig();
   try {
-    const response = await fetch(`${mpcVideoIdUrl}?videoId=${videoId}&lang=${lang}`);
+    const response = await fetch(
+      `https://51837-657fuchsiazebra-test.adobeioruntime.net/api/v1/web/main/videos?videoId=${videoId}&lang=${lang}`,
+    );
     const json = await response.json();
     return json.data?.localizedvideoId;
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error fetching localized video ID', error);
     return null;
   }
@@ -29,6 +32,7 @@ async function replaceVideoUrl(url, lang) {
   if (localizedId && localizedId !== originalId) {
     // Replace the video URL with the localized ID
     const newUrl = url.replace(`/v/${originalId}`, `/v/${localizedId}`);
+    // eslint-disable-next-line no-console
     console.log(`Updated video URL: ${newUrl}`);
     return newUrl;
   }
@@ -36,7 +40,6 @@ async function replaceVideoUrl(url, lang) {
   // If no localized ID found, return the original
   return url;
 }
-
 
 const getDefaultEmbed = (url) => `
   <div class="video-frame" style="position: absolute; inset: 0; width: 100%; height: 100%;">
