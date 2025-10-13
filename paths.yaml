@@ -97,18 +97,18 @@ mmappings:
   - /content/exlm-ruhis.resource/zh-TW/perspective-index.json:/zh-hant/perspective-index.json
 
   # course indices
-  - /content/exlm.resource/en/course-index.json:/en/course-index.json
-  - /content/exlm.resource/fr/course-index.json:/fr/course-index.json
-  - /content/exlm.resource/de/course-index.json:/de/course-index.json
-  - /content/exlm.resource/es/course-index.json:/es/course-index.json
-  - /content/exlm.resource/it/course-index.json:/it/course-index.json
-  - /content/exlm.resource/nl/course-index.json:/nl/course-index.json
-  - /content/exlm.resource/pt-BR/course-index.json:/pt-br/course-index.json
-  - /content/exlm.resource/ko/course-index.json:/ko/course-index.json
-  - /content/exlm.resource/ja/course-index.json:/ja/course-index.json
-  - /content/exlm.resource/sv/course-index.json:/sv/course-index.json
-  - /content/exlm.resource/zh-CN/course-index.json:/zh-hans/course-index.json
-  - /content/exlm.resource/zh-TW/course-index.json:/zh-hant/course-index.json
+  - /content/exlm-ruhis.resource/en/course-index.json:/en/course-index.json
+  - /content/exlm-ruhis.resource/fr/course-index.json:/fr/course-index.json
+  - /content/exlm-ruhis.resource/de/course-index.json:/de/course-index.json
+  - /content/exlm-ruhis.resource/es/course-index.json:/es/course-index.json
+  - /content/exlm-ruhis.resource/it/course-index.json:/it/course-index.json
+  - /content/exlm-ruhis.resource/nl/course-index.json:/nl/course-index.json
+  - /content/exlm-ruhis.resource/pt-BR/course-index.json:/pt-br/course-index.json
+  - /content/exlm-ruhis.resource/ko/course-index.json:/ko/course-index.json
+  - /content/exlm-ruhis.resource/ja/course-index.json:/ja/course-index.json
+  - /content/exlm-ruhis.resource/sv/course-index.json:/sv/course-index.json
+  - /content/exlm-ruhis.resource/zh-CN/course-index.json:/zh-hans/course-index.json
+  - /content/exlm-ruhis.resource/zh-TW/course-index.json:/zh-hant/course-index.json
 
   # playlists inidices
   - /content/exlm-ruhis.resource/en/playlists.json:/en/playlists.json
