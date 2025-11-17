@@ -85,6 +85,8 @@
       "course-breakdown",
       "course-marquee",
       "course-completion",
+      "course-awards",
+      "inprogress-courses",
       "browse-courses",
       "course-recap",
       "quiz-scorecard",
@@ -267,6 +269,7 @@
       "product-experience-level",
       "bookmarks",
       "awards",
+      "course-awards",
       "profile-welcome",
       "recommended-content",
       "recommendation-marquee",
@@ -293,14 +296,25 @@
       "course-breakdown",
       "course-marquee",
       "course-completion",
+      "course-awards",
       "course-recap",
+      "inprogress-courses",
       "browse-courses",
       "quiz-scorecard"
     ]
   },
   {
     "id": "course-hub-section",
-    "components": ["text", "title", "button", "image", "announcement-ribbon", "marquee", "browse-courses"]
+    "components": [
+      "text",
+      "title",
+      "button",
+      "image",
+      "announcement-ribbon",
+      "marquee",
+      "inprogress-courses",
+      "browse-courses"
+    ]
   },
   {
     "id": "sign-up-flow-section",
@@ -395,7 +409,7 @@
   },
   {
     "id": "teaser",
-    "components": ["teaser", "detailed-teaser"]
+    "components": ["teaser", "detailed-teaser", "media"]
   },
   {
     "id": "accordion",

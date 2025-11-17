@@ -1,5 +1,12 @@
+.courses.course-step .section.quiz-scorecard-container {
+  padding: 0;
+}
+
+.quiz-scorecard-wrapper {
+  width: 100%;
+}
+
 .quiz-scorecard {
-  max-width: 800px;
   margin: 0 auto;
   padding: var(--spectrum-spacing-500);
   border-radius: 16px;
@@ -8,6 +15,7 @@
 }
 
 .quiz-scorecard-container {
+  padding: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -91,11 +99,5 @@
 @media (min-width: 600px) {
   .quiz-scorecard-cta-container {
     flex-direction: row;
-  }
-}
-
-@media (min-width: 900px) {
-  .quiz-scorecard {
-    width: 728px;
   }
 }

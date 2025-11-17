@@ -8265,6 +8265,17 @@
         "value": "",
         "label": "Course info Description",
         "description": "Description for the course Breadown info section"
+      },
+      {
+        "component": "aem-content",
+        "valueType": "string",
+        "name": "courseCompletionPage",
+        "value": "",
+        "label": "Course Completion Page",
+        "description": "URL to the course completion page",
+        "validation": {
+          "rootPath": "/content/exlm/global/en/courses"
+        }
       }
     ]
   },
@@ -8389,6 +8400,52 @@
         "value": "",
         "label": "Filter Label",
         "description": "Sets the text for Products filter label in dropdown."
+      }
+    ]
+  },
+  {
+    "id": "inprogress-courses",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "heading",
+        "value": "",
+        "label": "Title",
+        "description": "Sets the heading for the inprogress courses block."
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "headingType",
+        "value": "h3",
+        "label": "Title Heading Type",
+        "options": [
+          {
+            "name": "H1",
+            "value": "h1"
+          },
+          {
+            "name": "H2",
+            "value": "h2"
+          },
+          {
+            "name": "H3",
+            "value": "h3"
+          },
+          {
+            "name": "H4",
+            "value": "h4"
+          },
+          {
+            "name": "H5",
+            "value": "h5"
+          },
+          {
+            "name": "H6",
+            "value": "h6"
+          }
+        ]
       }
     ]
   },

@@ -72,6 +72,8 @@ if (!contentType) {
 
   if (url.includes(`/${lang}/certification-home`)) {
     contentType = 'Certification';
+  } else if (url.includes(`/${lang}/courses`)) {
+    contentType = 'Course';
   }
 }
 
@@ -308,7 +310,7 @@ export default class Search {
   }
 
   onSearchInputClick(e) {
-    if (!this.searchInput.value && this.savedDefaultSuggestions) {
+    if (!this.searchInput.value && this.savedDefaultSuggestions?.completions?.length > 0) {
       this.renderSearchSuggestions(this.savedDefaultSuggestions);
       this.onShowSearchSuggestions(e);
     }

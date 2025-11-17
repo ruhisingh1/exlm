@@ -166,6 +166,7 @@ export const isProfilePage = matchesAnyTheme(/^profile.*/);
 export const isBrowsePage = matchesAnyTheme(/^browse-.*/);
 export const isSignUpPage = matchesAnyTheme(/^signup.*/);
 export const isCourseStep = matchesAnyTheme(/course-step/);
+export const isCertificatePage = () => !!document.querySelector('.course-completion'); // Checking for presence of course-completion block
 
 /**
  * add a section for the left rail when on a browse page.
@@ -252,6 +253,20 @@ function addModuleNav(main) {
 }
 
 /**
+ * Add course breadcrumb block to course step pages.
+ * @param {HTMLElement} main
+ */
+function addCourseBreadcrumb(main) {
+  // Check if course-breadcrumb block already exists
+  if (!main.querySelector('.course-breadcrumb.block')) {
+    const courseBreadcrumbSection = document.createElement('div');
+    courseBreadcrumbSection.classList.add('course-breadcrumb-section');
+    courseBreadcrumbSection.append(buildBlock('course-breadcrumb', []));
+    main.prepend(courseBreadcrumbSection);
+  }
+}
+
+/**
  * Tabbed layout for Tab section
  * @param {HTMLElement} main
  */
@@ -305,21 +320,22 @@ function buildAutoBlocks(main, isFragment = false) {
       buildTabSection(main);
     }
     if (!isFragment) {
-      // if we are on a product browse page
+      // Determine page type and add appropriate blocks
       if (isBrowsePage) {
         addBrowseBreadCrumb(main);
         addBrowseRail(main);
-      }
-      if (isPerspectivePage) {
+      } else if (isPerspectivePage) {
         addMiniToc(main);
-      }
-      if (isProfilePage) {
+      } else if (isProfilePage) {
         addProfileRail(main);
-      }
-      // if we are on a course step page
-      if (isCourseStep) {
+      } else if (isCourseStep) {
+        // if we are on a course step page
         addModuleInfo(main);
+        addCourseBreadcrumb(main);
         addModuleNav(main);
+      } else if (isCertificatePage()) {
+        // if we are on a certificate page
+        addCourseBreadcrumb(main);
       }
     }
   } catch (error) {
@@ -828,6 +844,8 @@ export function getConfig() {
     communityTopicsUrl: isProd
       ? `https://experienceleaguecommunities.adobe.com//t5/custom/page/page-id/Community-TopicsPage?profile.language=${communityLocale}&topic=`
       : `https://experienceleaguecommunities-dev.adobe.com//t5/custom/page/page-id/Community-TopicsPage?profile.language=${communityLocale}&topic=`,
+    // MPC API Base
+    mpcApiBase: `https://api.tv.adobe.com/videos`,
   };
   return window.exlm.config;
 }
@@ -908,14 +926,19 @@ const loadMartech = async (headerPromise, footerPromise) => {
   // start datalayer work early
   // eslint-disable-next-line import/no-cycle
   const libAnalyticsPromise = import('./analytics/lib-analytics.js');
-  libAnalyticsPromise.then((libAnalyticsModule) => {
-    const { pushPageDataLayer, pushLinkClick, pageName } = libAnalyticsModule;
+  libAnalyticsPromise.then(async (libAnalyticsModule) => {
+    const { pushPageDataLayer, pushLinkClick } = libAnalyticsModule;
     const { lang } = getPathDetails();
-    pushPageDataLayer(lang)
-      // eslint-disable-next-line no-console
-      .catch((e) => console.error('Error getting pageLoadModel:', e));
-    localStorage.setItem('prevPage', pageName(lang));
 
+    try {
+      await pushPageDataLayer(lang);
+      // Signal that analytics is ready and process queued events
+      const { signalReadyforAnalyticsEvents } = await import('./analytics/analytics-queue.js');
+      signalReadyforAnalyticsEvents();
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error('Error getting pageLoadModel:', e);
+    }
     Promise.allSettled([headerPromise, footerPromise]).then(() => {
       const linkClicked = document.querySelectorAll('a,.view-more-less span, .language-selector-popover span');
       const clickHandler = (e) => {
