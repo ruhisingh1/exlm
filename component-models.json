@@ -2644,6 +2644,16 @@
     "id": "video-embed",
     "fields": [
       {
+        "component": "select",
+        "name": "classes",
+        "value": "",
+        "label": "Class",
+        "description": "Block class",
+        "valueType": "string",
+        "hidden": true,
+        "options": []
+      },
+      {
         "component": "text",
         "valueType": "string",
         "name": "videoUrl",
