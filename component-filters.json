@@ -5,15 +5,15 @@
   },
   {
     "id": "main",
-    "components": ["section", "tab-section"]
+    "components": ["section", "tab-section", "list-section"]
   },
   {
     "id": "main-browse",
-    "components": ["section", "browse-rail-section", "tab-section"]
+    "components": ["section", "browse-rail-section", "tab-section", "list-section"]
   },
   {
     "id": "main-article",
-    "components": ["article-content-section", "article-header-section", "section", "tab-section"]
+    "components": ["article-content-section", "article-header-section", "section", "tab-section", "list-section"]
   },
   {
     "id": "main-profile",
@@ -25,11 +25,11 @@
   },
   {
     "id": "main-courses",
-    "components": ["section", "courses-section", "tab-section"]
+    "components": ["section", "courses-section", "tab-section", "list-section"]
   },
   {
     "id": "main-course-hub",
-    "components": ["section", "course-hub-section", "tab-section"]
+    "components": ["section", "course-hub-section", "tab-section", "list-section"]
   },
   {
     "id": "section",
@@ -89,8 +89,8 @@
       "inprogress-courses",
       "browse-courses",
       "course-recap",
-      "quiz-scorecard",
-      "slides"
+      "slides",
+      "quiz-scorecard"
     ]
   },
   {
@@ -196,6 +196,10 @@
       "callout",
       "note"
     ]
+  },
+  {
+    "id": "list-section",
+    "components": ["list-item"]
   },
   {
     "id": "section-browse",
@@ -384,16 +388,27 @@
   {
     "id": "text",
     "rte": {
-      "format": ["bold", "italic"],
-      "alignment": [],
-      "indentation": [],
-      "sr_script": ["superscript", "subscript"],
-      "list": ["bullist", "numlist"],
-      "insert": ["link"],
-      "advanced": [],
-      "extensions": [],
-      "editor": ["removeformat"]
-    }
+      "toolbar": {
+        "format": ["bold", "italic"],
+        "alignment": [],
+        "indentation": [],
+        "sr_script": ["superscript", "subscript"],
+        "list": ["bullet_list", "ordered_list"],
+        "insert": ["link"],
+        "advanced": [],
+        "extensions": [],
+        "editor": ["removeformat"]
+      },
+      "actions": {
+        "bullet_list": {
+          "wrapInParagraphs": true
+        },
+        "ordered_list": {
+          "wrapInParagraphs": true
+        }
+      }
+    },
+    "components": ["richtext"]
   },
   {
     "id": "cards",
@@ -446,6 +461,10 @@
   {
     "id": "course-breakdown",
     "components": ["course-breakdown-item"]
+  },
+  {
+    "id": "list-item",
+    "components": ["list-content", "code", "note", "video-embed"]
   },
   {
     "id": "rte-custom-options",

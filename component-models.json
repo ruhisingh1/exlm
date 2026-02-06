@@ -1246,6 +1246,13 @@
         "name": "always-show",
         "label": "Do NOT hide on browse filter results?",
         "description": "When browse-filter block is used, on browse-filter results, all sections below the browse-filter is hidden. Above toggle makes an exception to show this section even if the browse filter results are displayed."
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "new-tab",
+        "label": "Open Links in a New Tab?",
+        "description": "Enabling this option will open all links in the blocks within this section in a new tab."
       }
     ]
   },
@@ -1268,6 +1275,76 @@
         "name": "title",
         "value": "",
         "label": "Tab heading"
+      }
+    ]
+  },
+  {
+    "id": "list-section",
+    "fields": [
+      {
+        "component": "select",
+        "name": "list-type",
+        "value": "",
+        "label": "List Type",
+        "description": "Type of list to display",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Unordered List",
+            "value": "ul"
+          },
+          {
+            "name": "Ordered List",
+            "value": "ol"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "list-item",
+    "fields": []
+  },
+  {
+    "id": "list-content",
+    "fields": [
+      {
+        "component": "select",
+        "name": "classes",
+        "value": "text",
+        "label": "Type of content",
+        "description": "Type of the list content",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Text",
+            "value": "text"
+          },
+          {
+            "name": "Image",
+            "value": "image"
+          }
+        ]
+      },
+      {
+        "condition": {
+          "===": [{ "var": "classes" }, "text"]
+        },
+        "component": "richtext",
+        "valueType": "string",
+        "name": "richtext",
+        "value": "",
+        "label": "Text Content"
+      },
+      {
+        "condition": {
+          "===": [{ "var": "classes" }, "image"]
+        },
+        "component": "reference",
+        "valueType": "string",
+        "name": "fileReference",
+        "label": "List image content",
+        "multi": false
       }
     ]
   },
@@ -1664,6 +1741,10 @@
           {
             "name": "Tutorials",
             "value": "tutorial"
+          },
+          {
+            "name": "Upcoming Event",
+            "value": "upcoming-event"
           }
         ]
       },
@@ -2640,6 +2721,15 @@
     "id": "video-embed",
     "fields": [
       {
+        "component": "select",
+        "valueType": "string",
+        "name": "classes",
+        "label": "Classes",
+        "value": "",
+        "options": [],
+        "hidden": true
+      },
+      {
         "component": "text",
         "valueType": "string",
         "name": "videoUrl",
@@ -3391,6 +3481,10 @@
           {
             "name": "Tutorials",
             "value": "tutorial"
+          },
+          {
+            "name": "Upcoming Event",
+            "value": "upcoming-event"
           }
         ]
       }
@@ -4176,6 +4270,10 @@
           {
             "name": "On-Demand Events",
             "value": "event"
+          },
+          {
+            "name": "Upcoming Event",
+            "value": "upcoming-event"
           },
           {
             "name": "Community Posts",
@@ -5404,6 +5502,15 @@
       {
         "component": "select",
         "valueType": "string",
+        "name": "classes",
+        "label": "Classes",
+        "value": "",
+        "options": [],
+        "hidden": true
+      },
+      {
+        "component": "select",
+        "valueType": "string",
         "name": "note-type",
         "label": "Note Type",
         "value": "",
@@ -5913,6 +6020,10 @@
           {
             "name": "Tutorials",
             "value": "tutorial"
+          },
+          {
+            "name": "Upcoming Event",
+            "value": "upcoming-event"
           }
         ]
       },
@@ -5963,6 +6074,10 @@
           {
             "name": "Tutorials",
             "value": "tutorial"
+          },
+          {
+            "name": "Upcoming Event",
+            "value": "upcoming-event"
           }
         ]
       },
@@ -6013,6 +6128,10 @@
           {
             "name": "Tutorials",
             "value": "tutorial"
+          },
+          {
+            "name": "Upcoming Event",
+            "value": "upcoming-event"
           }
         ]
       },
@@ -6063,6 +6182,10 @@
           {
             "name": "Tutorials",
             "value": "tutorial"
+          },
+          {
+            "name": "Upcoming Event",
+            "value": "upcoming-event"
           }
         ]
       },
@@ -6341,6 +6464,10 @@
           {
             "name": "Tutorials",
             "value": "tutorial"
+          },
+          {
+            "name": "Upcoming Event",
+            "value": "upcoming-event"
           }
         ]
       },
@@ -6391,6 +6518,10 @@
           {
             "name": "Tutorials",
             "value": "tutorial"
+          },
+          {
+            "name": "Upcoming Event",
+            "value": "upcoming-event"
           }
         ]
       },
@@ -6441,6 +6572,10 @@
           {
             "name": "Tutorials",
             "value": "tutorial"
+          },
+          {
+            "name": "Upcoming Event",
+            "value": "upcoming-event"
           }
         ]
       },
@@ -6491,6 +6626,10 @@
           {
             "name": "Tutorials",
             "value": "tutorial"
+          },
+          {
+            "name": "Upcoming Event",
+            "value": "upcoming-event"
           }
         ]
       },
@@ -7313,14 +7452,6 @@
         "value": "",
         "label": "Description",
         "description": "Sets the description for the Upcoming Events."
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "filterLabel",
-        "value": "",
-        "label": "Filter Label",
-        "description": "Sets the text for Products filter label in dropdown."
       }
     ]
   },
@@ -8607,6 +8738,19 @@
         "value": "",
         "label": "Description",
         "description": "Sets the description of course summary from the current module. Make sure all the take aways are mentioned as bullet points."
+      }
+    ]
+  },
+  {
+    "id": "slides",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "slideId",
+        "value": "",
+        "label": "Slide ID",
+        "description": "ID of the slide to render. Use the ID of the slide from the URL."
       }
     ]
   }

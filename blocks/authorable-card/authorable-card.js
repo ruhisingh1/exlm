@@ -4,8 +4,6 @@ import BrowseCardShimmer from '../../scripts/browse-card/browse-card-shimmer.js'
 import { getCardData } from '../../scripts/browse-card/browse-card-utils.js';
 import { decorateIcons } from '../../scripts/lib-franklin.js';
 import { isSignedInUser } from '../../scripts/auth/profile.js';
-import { getCurrentCourses } from '../../scripts/courses/course-profile.js';
-import BrowseCardsCourseEnricher from '../../scripts/browse-card/browse-cards-course-enricher.js';
 import { CONTENT_TYPES } from '../../scripts/data-service/coveo/coveo-exl-pipeline-constants.js';
 
 /**
@@ -56,11 +54,7 @@ export default async function decorate(block) {
     // eslint-disable-next-line no-console
     console.error('Error fetching placeholders:', err);
   }
-
-  // Check if user is signed in and get course data for enrichment
   const isUserSignedIn = await isSignedInUser();
-  const userCourses = isUserSignedIn ? await getCurrentCourses() : [];
-
   const cardLoading$ = Promise.all(
     linksContainer.map(async (linkContainer) => {
       let link = linkContainer.textContent?.trim();
@@ -73,16 +67,26 @@ export default async function decorate(block) {
         try {
           let cardData = await getCardData(link, placeholders);
 
-          // Enrich course cards with status information for signed-in users
-          if (
-            isUserSignedIn &&
-            cardData?.contentType?.toLowerCase() === CONTENT_TYPES.COURSE.MAPPING_KEY.toLowerCase()
-          ) {
-            const [enrichedCard] = BrowseCardsCourseEnricher.enrichCardsWithCourseStatus([cardData], userCourses);
-            cardData = enrichedCard;
-          }
+          if (cardData) {
+            // Enrich course cards with status information for signed-in users
+            if (
+              isUserSignedIn &&
+              cardData?.contentType?.toLowerCase() === CONTENT_TYPES.COURSE.MAPPING_KEY.toLowerCase()
+            ) {
+              const { getCurrentCourses } = await import('../../scripts/courses/course-profile.js');
+              const { default: BrowseCardsCourseEnricher } = await import(
+                '../../scripts/browse-card/browse-cards-course-enricher.js'
+              );
+              const currentCourses = await getCurrentCourses();
+              const [enrichedCard] = BrowseCardsCourseEnricher.enrichCardsWithCourseStatus([cardData], currentCourses);
+              cardData = enrichedCard;
+            }
 
-          await buildCard(contentDiv, linkContainer, cardData);
+            await buildCard(linkContainer, cardData);
+          } else {
+            // eslint-disable-next-line no-console
+            console.warn(`Failed to load card data for link: ${link}`);
+          }
         } catch (err) {
           // eslint-disable-next-line no-console
           console.error(err);
