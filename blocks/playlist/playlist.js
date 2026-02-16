@@ -333,10 +333,9 @@ playlist.onVideoChange((videos, vIndex) => {
  * @param {HTMLElement} block
  */
 export default async function decorate(block) {
+  const playlistSection = block.closest('.section');
   const playlistId = block.childElementCount === 1 ? block.firstElementChild.textContent?.trim() : '';
   let jsonLdArray = [];
-
-  const playlistSection = block.closest('.section');
   if (playlistId) {
     block.classList.add('hide-playlist');
 
@@ -400,22 +399,6 @@ export default async function decorate(block) {
     playerContainer = htmlToElement('<div class="playlist-player-container" data-playlist-player-container></div>');
     playlistSection.parentElement.prepend(playerContainer);
   }
-
-  const playlistOptions = htmlToElement(`<div class="playlist-options">
-    <div class="playlist-options-autoplay">
-        <input type="checkbox" id="playlist-options-autoplay" checked=${playlist?.options?.autoplayNext || true}>
-        <label for="playlist-options-autoplay">
-          <span data-placeholder="${LABELS.autoPlayNextVideo}">Auto Play Next Video</span>
-        </label>
-    </div>
-  </div>`);
-  decoratePlaceholders(playlistOptions);
-  // bottom options
-  block.parentElement.append(playlistOptions);
-
-  document.querySelector('#playlist-options-autoplay').addEventListener('change', (event) => {
-    playlist.updateOptions({ autoplayNext: event.target.checked });
-  });
 
   const activeVideoIndex = getQueryStringParameter('video') || 0;
 
@@ -502,6 +485,26 @@ export default async function decorate(block) {
   });
 
   decorateIcons(playlistSection);
+
+  // Only show playlist options if there are videos in the playlist
+  if (playlist.length > 0) {
+    const playlistOptions = htmlToElement(`<div class="playlist-options">
+      <div class="playlist-options-autoplay">
+          <input type="checkbox" id="playlist-options-autoplay" checked=${playlist?.options?.autoplayNext || true}>
+          <label for="playlist-options-autoplay">
+            <span data-placeholder="${LABELS.autoPlayNextVideo}">Auto Play Next Video</span>
+          </label>
+      </div>
+    </div>`);
+    decoratePlaceholders(playlistOptions);
+    // bottom options
+    block.parentElement.append(playlistOptions);
+
+    document.querySelector('#playlist-options-autoplay').addEventListener('change', (event) => {
+      playlist.updateOptions({ autoplayNext: event.target.checked });
+    });
+  }
+
   playlist.activateVideoByIndex(activeVideoIndex);
 
   // handle browser back within history changes
