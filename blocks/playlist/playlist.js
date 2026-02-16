@@ -10,7 +10,7 @@ import {
 import { Playlist, LABELS } from './playlist-utils.js';
 import { updateTranscript, transcriptLoading } from '../video-transcript/video-transcript.js';
 
-const isUniversalEditorMode = window.hlx?.aemRoot || window.location.href.includes('.html');
+const UEAuthorMode = window.hlx?.aemRoot || window.location.href.includes('.html');
 
 async function fetchPlaylistById(playlistId) {
   const { lang } = getPathDetails();
@@ -196,7 +196,7 @@ function newPlayer(playlist) {
   const iframe = player.querySelector('iframe');
 
   // Don't autoplay if in Universal Editor mode (authoring)
-  if (!isUniversalEditorMode) {
+  if (!UEAuthorMode) {
     iframe.addEventListener('load', () => {
       iframe.contentWindow.postMessage({ type: 'mpcAction', action: 'play' }, '*');
     });
@@ -341,18 +341,6 @@ playlist.onVideoChange((videos, vIndex) => {
  */
 export default async function decorate(block) {
   const playlistSection = block.closest('.section');
-
-  // clean up injected UI if block is deleted in UE
-  if (!block.children.length && isUniversalEditorMode) {
-    const parent = playlistSection?.parentElement;
-
-    parent?.querySelector('[data-playlist-player-container]')?.remove();
-    parent?.querySelector('.playlist-options')?.remove();
-    document.querySelector('main')?.classList.remove('playlist-page');
-
-    return;
-  }
-
   const playlistId = block.childElementCount === 1 ? block.firstElementChild.textContent?.trim() : '';
   let jsonLdArray = [];
   if (playlistId) {
@@ -525,6 +513,26 @@ export default async function decorate(block) {
   }
 
   playlist.activateVideoByIndex(activeVideoIndex);
+
+  // In Universal Editor mode, watch for block deletion and clean up
+  if (UEAuthorMode && block.parentElement) {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        [...mutation.removedNodes].forEach((node) => {
+          if (node === block || (node.contains && node.contains(block))) {
+            // Block was deleted, clean up injected UI
+            const parent = playlistSection?.parentElement;
+            parent?.querySelector('[data-playlist-player-container]')?.remove();
+            parent?.querySelector('.playlist-options')?.remove();
+            document.querySelector('main')?.classList.remove('playlist-page');
+            observer.disconnect();
+          }
+        });
+      });
+    });
+
+    observer.observe(block.parentElement, { childList: true });
+  }
 
   // handle browser back within history changes
   window.addEventListener('popstate', (event) => {
