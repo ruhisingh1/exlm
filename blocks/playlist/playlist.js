@@ -192,9 +192,16 @@ function newPlayer(playlist) {
   decoratePlaceholders(player);
 
   const iframe = player.querySelector('iframe');
-  iframe.addEventListener('load', () => {
-    iframe.contentWindow.postMessage({ type: 'mpcAction', action: 'play' }, '*');
-  });
+
+  // Check if we're in Universal Editor mode - don't autoplay if editing
+  const UEAuthorMode = window.hlx.aemRoot || window.location.href.includes('.html');
+
+  if (!UEAuthorMode) {
+    iframe.addEventListener('load', () => {
+      iframe.contentWindow.postMessage({ type: 'mpcAction', action: 'play' }, '*');
+    });
+  }
+
   return player;
 }
 
