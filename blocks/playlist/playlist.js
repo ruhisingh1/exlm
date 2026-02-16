@@ -10,6 +10,8 @@ import {
 import { Playlist, LABELS } from './playlist-utils.js';
 import { updateTranscript, transcriptLoading } from '../video-transcript/video-transcript.js';
 
+const isUniversalEditorMode = window.hlx?.aemRoot || window.location.href.includes('.html');
+
 async function fetchPlaylistById(playlistId) {
   const { lang } = getPathDetails();
   const { cdnOrigin } = getConfig();
@@ -193,10 +195,8 @@ function newPlayer(playlist) {
 
   const iframe = player.querySelector('iframe');
 
-  // Check if we're in Universal Editor mode - don't autoplay if editing
-  const UEAuthorMode = window.hlx.aemRoot || window.location.href.includes('.html');
-
-  if (!UEAuthorMode) {
+  // Don't autoplay if in Universal Editor mode (authoring)
+  if (!isUniversalEditorMode) {
     iframe.addEventListener('load', () => {
       iframe.contentWindow.postMessage({ type: 'mpcAction', action: 'play' }, '*');
     });
@@ -340,10 +340,21 @@ playlist.onVideoChange((videos, vIndex) => {
  * @param {HTMLElement} block
  */
 export default async function decorate(block) {
+  const playlistSection = block.closest('.section');
+
+  // clean up injected UI if block is deleted in UE
+  if (!block.children.length && isUniversalEditorMode) {
+    const parent = playlistSection?.parentElement;
+
+    parent?.querySelector('[data-playlist-player-container]')?.remove();
+    parent?.querySelector('.playlist-options')?.remove();
+    document.querySelector('main')?.classList.remove('playlist-page');
+
+    return;
+  }
+
   const playlistId = block.childElementCount === 1 ? block.firstElementChild.textContent?.trim() : '';
   let jsonLdArray = [];
-
-  const playlistSection = block.closest('.section');
   if (playlistId) {
     block.classList.add('hide-playlist');
 
