@@ -10,8 +10,6 @@ import {
 import { Playlist, LABELS } from './playlist-utils.js';
 import { updateTranscript, transcriptLoading } from '../video-transcript/video-transcript.js';
 
-const UEAuthorMode = window.hlx?.aemRoot || window.location.href.includes('.html');
-
 async function fetchPlaylistById(playlistId) {
   const { lang } = getPathDetails();
   const { cdnOrigin } = getConfig();
@@ -194,13 +192,9 @@ function newPlayer(playlist) {
   decoratePlaceholders(player);
 
   const iframe = player.querySelector('iframe');
-
-  // Don't autoplay if in Universal Editor mode (authoring)
-  if (!UEAuthorMode) {
-    iframe.addEventListener('load', () => {
-      iframe.contentWindow.postMessage({ type: 'mpcAction', action: 'play' }, '*');
-    });
-  }
+  iframe.addEventListener('load', () => {
+    iframe.contentWindow.postMessage({ type: 'mpcAction', action: 'play' }, '*');
+  });
 
   return player;
 }
@@ -513,26 +507,6 @@ export default async function decorate(block) {
   }
 
   playlist.activateVideoByIndex(activeVideoIndex);
-
-  // In Universal Editor mode, watch for block deletion and clean up
-  if (UEAuthorMode && block.parentElement) {
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        [...mutation.removedNodes].forEach((node) => {
-          if (node === block || (node.contains && node.contains(block))) {
-            // Block was deleted, clean up injected UI
-            const parent = playlistSection?.parentElement;
-            parent?.querySelector('[data-playlist-player-container]')?.remove();
-            parent?.querySelector('.playlist-options')?.remove();
-            document.querySelector('main')?.classList.remove('playlist-page');
-            observer.disconnect();
-          }
-        });
-      });
-    });
-
-    observer.observe(block.parentElement, { childList: true });
-  }
 
   // handle browser back within history changes
   window.addEventListener('popstate', (event) => {
