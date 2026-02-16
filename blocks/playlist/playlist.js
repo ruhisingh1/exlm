@@ -195,7 +195,6 @@ function newPlayer(playlist) {
   iframe.addEventListener('load', () => {
     iframe.contentWindow.postMessage({ type: 'mpcAction', action: 'play' }, '*');
   });
-
   return player;
 }
 
