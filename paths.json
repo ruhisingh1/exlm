@@ -117,5 +117,5 @@
     "/content/exlm-ruhis.resource/zh-CN/query-index.json:/zh-hans/query-index.json",
     "/content/exlm-ruhis.resource/zh-TW/query-index.json:/zh-hant/query-index.json"
   ],
-  "includes": ["/content/exlm-ruhis/"]
+  "includes": ["/content/exlm-ruhis/", "/content/dam/exlm/"]
 }
