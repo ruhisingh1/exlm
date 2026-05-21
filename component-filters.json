@@ -5,19 +5,34 @@
   },
   {
     "id": "main",
-    "components": ["section", "tab-section", "list-section"]
+    "components": ["section", "tab-section", "list-section", "sticky-nav-section", "premium-learning-section"]
   },
   {
     "id": "main-browse",
-    "components": ["section", "browse-rail-section", "tab-section", "list-section"]
+    "components": [
+      "section",
+      "browse-rail-section",
+      "tab-section",
+      "list-section",
+      "sticky-nav-section",
+      "premium-learning-section"
+    ]
   },
   {
     "id": "main-article",
-    "components": ["article-content-section", "article-header-section", "section", "tab-section", "list-section"]
+    "components": [
+      "article-content-section",
+      "article-header-section",
+      "section",
+      "tab-section",
+      "list-section",
+      "sticky-nav-section",
+      "premium-learning-section"
+    ]
   },
   {
     "id": "main-profile",
-    "components": ["section", "profile-section", "profile-bottom-section"]
+    "components": ["section", "profile-section", "profile-bottom-section", "premium-learning-section"]
   },
   {
     "id": "main-signup",
@@ -25,11 +40,25 @@
   },
   {
     "id": "main-courses",
-    "components": ["section", "courses-section", "tab-section", "list-section"]
+    "components": [
+      "section",
+      "courses-section",
+      "tab-section",
+      "list-section",
+      "sticky-nav-section",
+      "premium-learning-section"
+    ]
   },
   {
     "id": "main-course-hub",
-    "components": ["section", "course-hub-section", "tab-section", "list-section"]
+    "components": [
+      "section",
+      "course-hub-section",
+      "tab-section",
+      "list-section",
+      "sticky-nav-section",
+      "premium-learning-section"
+    ]
   },
   {
     "id": "section",
@@ -41,8 +70,14 @@
       "columns",
       "icon-block",
       "curated-cards",
+      "premium-learning-active-content",
+      "premium-learning-suggested-content",
+      "premium-learning-browse-cards",
+      "premium-learning-recommended-content",
+      "premium-learning-search",
       "teaser",
       "detailed-teaser",
+      "marquee-video-full-bleed",
       "marquee",
       "carousel",
       "sign-up",
@@ -52,9 +87,12 @@
       "secondary-search",
       "accordion-group",
       "media",
+      "media-panel",
       "authorable-card",
+      "events",
       "featured-cards",
       "events-cards",
+      "events-search",
       "adls-cards",
       "tabbed-cards",
       "tabs",
@@ -90,7 +128,10 @@
       "browse-courses",
       "course-recap",
       "slides",
-      "quiz-scorecard"
+      "quiz-scorecard",
+      "grid-cards",
+      "playlist-embed",
+      "premium-learning-profile-badges"
     ]
   },
   {
@@ -105,6 +146,7 @@
       "curated-cards",
       "teaser",
       "detailed-teaser",
+      "marquee-video-full-bleed",
       "marquee",
       "carousel",
       "sign-up",
@@ -114,7 +156,9 @@
       "secondary-search",
       "accordion-group",
       "media",
+      "media-panel",
       "authorable-card",
+      "events",
       "featured-cards",
       "events-cards",
       "adls-cards",
@@ -149,6 +193,7 @@
       "curated-cards",
       "teaser",
       "detailed-teaser",
+      "marquee-video-full-bleed",
       "marquee",
       "carousel",
       "sign-up",
@@ -156,7 +201,9 @@
       "secondary-search",
       "accordion-group",
       "media",
+      "media-panel",
       "authorable-card",
+      "events",
       "featured-cards",
       "events-cards",
       "adls-cards",
@@ -176,7 +223,8 @@
       "article-tags",
       "qualtrics",
       "code",
-      "announcement-ribbon"
+      "announcement-ribbon",
+      "playlist-embed"
     ]
   },
   {
@@ -192,6 +240,7 @@
       "detailed-teaser",
       "video-embed",
       "media",
+      "media-panel",
       "block-quote",
       "callout",
       "note"
@@ -200,6 +249,10 @@
   {
     "id": "list-section",
     "components": ["list-item"]
+  },
+  {
+    "id": "sticky-nav-section",
+    "components": ["sticky-nav"]
   },
   {
     "id": "section-browse",
@@ -213,13 +266,16 @@
       "curated-cards",
       "teaser",
       "detailed-teaser",
+      "marquee-video-full-bleed",
       "marquee",
       "sign-up",
       "video-embed",
       "secondary-search",
       "accordion-group",
       "media",
+      "media-panel",
       "authorable-card",
+      "events",
       "browse-filters",
       "featured-cards",
       "events-cards",
@@ -281,7 +337,8 @@
       "personalized-content-placeholder",
       "announcement-ribbon",
       "recently-reviewed",
-      "qualtrics"
+      "qualtrics",
+      "premium-learning-profile-badges"
     ]
   },
   {
@@ -304,7 +361,8 @@
       "course-recap",
       "inprogress-courses",
       "browse-courses",
-      "quiz-scorecard"
+      "quiz-scorecard",
+      "playlist-embed"
     ]
   },
   {
@@ -315,6 +373,7 @@
       "button",
       "image",
       "announcement-ribbon",
+      "marquee-video-full-bleed",
       "marquee",
       "inprogress-courses",
       "browse-courses"
@@ -349,11 +408,13 @@
       "curated-cards",
       "teaser",
       "detailed-teaser",
+      "marquee-video-full-bleed",
       "marquee",
       "carousel",
       "sign-up",
       "video-embed",
       "media",
+      "media-panel",
       "block-quote",
       "callout",
       "article-tags",
@@ -366,7 +427,8 @@
       "qualtrics",
       "code",
       "announcement-ribbon",
-      "slides"
+      "slides",
+      "playlist-embed"
     ]
   },
   {
@@ -376,6 +438,22 @@
   {
     "id": "article-header-section",
     "components": []
+  },
+  {
+    "id": "premium-learning-section",
+    "components": [
+      "text",
+      "title",
+      "button",
+      "image",
+      "premium-learning-search",
+      "premium-learning-browse-cards",
+      "premium-learning-active-content",
+      "premium-learning-suggested-content",
+      "premium-learning-recommended-content",
+      "premium-learning-bookmarks",
+      "premium-learning-profile-badges"
+    ]
   },
   {
     "id": "columns",
@@ -415,6 +493,10 @@
     "components": ["card"]
   },
   {
+    "id": "grid-cards",
+    "components": ["grid-card"]
+  },
+  {
     "id": "icon-block",
     "components": ["icon-card"]
   },
@@ -425,6 +507,10 @@
   {
     "id": "teaser",
     "components": ["teaser", "detailed-teaser", "media"]
+  },
+  {
+    "id": "media-panel",
+    "components": []
   },
   {
     "id": "accordion",
@@ -459,12 +545,20 @@
     "components": ["flip-card-item"]
   },
   {
+    "id": "events",
+    "components": ["event-item"]
+  },
+  {
     "id": "course-breakdown",
     "components": ["course-breakdown-item"]
   },
   {
     "id": "list-item",
     "components": ["list-content", "code", "note", "video-embed"]
+  },
+  {
+    "id": "sticky-nav",
+    "components": ["sticky-nav-item"]
   },
   {
     "id": "rte-custom-options",
@@ -480,6 +574,30 @@
       "extensions": [],
       "editor": ["removeformat"],
       "blocks": []
+    }
+  },
+  {
+    "id": "rte-no-headings",
+    "components": [],
+    "rte": {
+      "toolbar": {
+        "format": ["bold", "italic", "underline"],
+        "blocks": ["paragraph"],
+        "alignment": [],
+        "indentation": [],
+        "sr_script": ["superscript", "subscript"],
+        "list": ["bullet_list", "ordered_list"],
+        "insert": ["link"],
+        "editor": ["removeformat"]
+      },
+      "actions": {
+        "bullet_list": {
+          "wrapInParagraphs": true
+        },
+        "ordered_list": {
+          "wrapInParagraphs": true
+        }
+      }
     }
   }
 ]

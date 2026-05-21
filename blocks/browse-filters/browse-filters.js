@@ -2,6 +2,7 @@ import { decorateIcons, getMetadata } from '../../scripts/lib-franklin.js';
 import {
   createTag,
   htmlToElement,
+  getv2TagLabels,
   getPathDetails,
   fetchLanguagePlaceholders,
   matchesAnyTheme,
@@ -28,7 +29,6 @@ import BrowseCardsCoveoDataAdaptor from '../../scripts/browse-card/browse-cards-
 import { buildCard } from '../../scripts/browse-card/browse-card.js';
 import BrowseCardShimmer from '../../scripts/browse-card/browse-card-shimmer.js';
 import {
-  assetInteractionModel,
   pushBrowseFilterSearchEvent,
   pushBrowseFilterSearchClearEvent,
 } from '../../scripts/analytics/lib-analytics.js';
@@ -46,7 +46,10 @@ import {
 } from './browse-topics.js';
 import { isSignedInUser } from '../../scripts/auth/profile.js';
 import { CONTENT_TYPES } from '../../scripts/data-service/coveo/coveo-exl-pipeline-constants.js';
-import BrowseCardsDelegate, { normalizeUpcomingEventModel } from '../../scripts/browse-card/browse-cards-delegate.js';
+import BrowseCardsDelegate, {
+  normalizeUpcomingEventModel,
+  normalizeOnDemandEventModel,
+} from '../../scripts/browse-card/browse-cards-delegate.js';
 
 let placeholders = {};
 try {
@@ -754,73 +757,6 @@ function renderSearchQuerySummary() {
 }
 
 /**
- * Retrieves selected dropdown labels based on the field type.
- * @param {HTMLElement} block - The parent element containing the dropdowns.
- * @param {string} field - The type of field to retrieve labels for.
- * @returns {string} - The selected labels separated by '|', or an empty string if no selection.
- */
-function getSelectedDropdownLabels(block, field) {
-  const fieldSelectors = {
-    el_role: '.filter-dropdown[data-filter-type="el_role"] .custom-checkbox input[type="checkbox"]:checked',
-    el_contenttype:
-      '.filter-dropdown[data-filter-type="el_contenttype"] .custom-checkbox input[type="checkbox"]:checked',
-    el_level: '.filter-dropdown[data-filter-type="el_level"] .custom-checkbox input[type="checkbox"]:checked',
-    el_event_series:
-      '.filter-dropdown[data-filter-type="el_event_series"] .custom-checkbox input[type="checkbox"]:checked',
-    search: '.filter-input-search .search-input',
-    topics: '.browse-topics .browse-topics-item-active',
-  };
-
-  // Select appropriate elements based on the field type
-  const fieldSelector = fieldSelectors[field];
-
-  if (fieldSelector) {
-    if (field === 'search') {
-      const element = block.querySelector(fieldSelector);
-      return element.value;
-    }
-    const elements = block.querySelectorAll(fieldSelector);
-    return [...elements].map((el) => el.dataset.label).join('|');
-  }
-  return null;
-}
-
-/**
- * Generates analytics filters based on selected dropdown values.
- * @param {HTMLElement} block - The parent element containing the dropdowns.
- * @param {String} totalCount - The total count.
- * @returns {Object|null} - The analytics filters object or null if no non-empty values.
- */
-function generateAnalyticsFilters(block, totalCount) {
-  const filterFields = {
-    el_role: 'Role',
-    el_contenttype: 'ContentType',
-    el_level: 'ExperienceLevel',
-    el_event_series: 'EventSeries',
-    search: 'KeywordSearch',
-    topics: 'BrowseByTopic',
-  };
-  const filterKeys = Object.keys(filterFields);
-  const filters = {};
-  let hasNonEmptyValue = false;
-  for (let i = 0; i < filterKeys.length; i += 1) {
-    const field = filterKeys[i];
-    const selectedValue = getSelectedDropdownLabels(block, field);
-    if (selectedValue !== '') {
-      filters[filterFields[field]] = selectedValue;
-      hasNonEmptyValue = true;
-    }
-  }
-
-  if (hasNonEmptyValue) {
-    filters.BrowseResults = totalCount;
-    return filters;
-  }
-
-  return null;
-}
-
-/**
  * Determines the search type based on active filters and search input.
  *
  * @param {HTMLElement} block - The container block element
@@ -920,11 +856,17 @@ async function handleSearchEngineSubscription(block, isUserSignedIn) {
   if (results.length > 0) {
     try {
       let cardsData = await BrowseCardsCoveoDataAdaptor.mapResultsToCardsData(results);
-      cardsData = cardsData.map((model) =>
-        model?.contentType?.toLowerCase() === CONTENT_TYPES.UPCOMING_EVENT.MAPPING_KEY
-          ? normalizeUpcomingEventModel(model)
-          : model,
-      );
+      cardsData = cardsData.map((model) => {
+        // Normalize upcoming events
+        if (model?.contentType?.toLowerCase() === CONTENT_TYPES.UPCOMING_EVENT_V2.MAPPING_KEY.toLowerCase()) {
+          return normalizeUpcomingEventModel(model);
+        }
+        // Normalize on-demand events
+        if (model?.contentType?.toLowerCase() === CONTENT_TYPES.ON_DEMAND_EVENT.MAPPING_KEY.toLowerCase()) {
+          return normalizeOnDemandEventModel(model);
+        }
+        return model;
+      });
       // Enrich cards with course status information for signed-in users
       const hasCourseCard = cardsData?.some(
         (card) => card?.contentType?.toLowerCase() === CONTENT_TYPES.COURSE.MAPPING_KEY.toLowerCase(),
@@ -947,15 +889,6 @@ async function handleSearchEngineSubscription(block, isUserSignedIn) {
         return;
       }
 
-      /* Analytics */
-      filterResultsEl.classList.remove('analytics-interaction');
-      if (!filterResultsEl.classList.contains('browse-hide-section')) {
-        const analyticsFilters = generateAnalyticsFilters(block, response.totalCount);
-        if (analyticsFilters) {
-          assetInteractionModel(null, 'Browse Filters', { filters: analyticsFilters });
-        }
-      }
-
       filterResultsEl.innerHTML = '';
       cardsData.forEach((cardData) => {
         const cardDiv = document.createElement('div');
@@ -975,18 +908,6 @@ async function handleSearchEngineSubscription(block, isUserSignedIn) {
   }
 
   if (results.length === 0) {
-    /* Analytics */
-    if (
-      !filterResultsEl.classList.contains('no-results') &&
-      !filterResultsEl.classList.contains('browse-hide-section') &&
-      !filterResultsEl.classList.contains('analytics-interaction')
-    ) {
-      const analyticsFilters = generateAnalyticsFilters(block, response.totalCount);
-      if (analyticsFilters) {
-        assetInteractionModel(null, 'Browse Filters', { filters: analyticsFilters });
-        filterResultsEl.classList.add('analytics-interaction');
-      }
-    }
     const communityOptionIsSelected = browseFilterForm.querySelector(`input[value="Community"]`)?.checked === true;
     let noResultsText = placeholders.noResultsTextBrowse || 'No Results';
     if (
@@ -1576,33 +1497,93 @@ function renderSortContainer(block) {
  */
 function decorateBrowseTopics(block) {
   const { lang } = getPathDetails();
-  const [...configs] = [...block.children].map((row) => row.firstElementChild);
+  const allDivs = [...block.children].map((row) => row.firstElementChild);
+
+  // Handle both new blocks (with v2 elements) and already authored blocks (without v2 elements)
+  if (allDivs.length <= 6) {
+    allDivs.splice(4, 0, ...Array(3));
+  } else if (allDivs.length === 7) {
+    // Old v2 blocks authored before featuresv2 was introduced
+    allDivs.splice(5, 0, undefined);
+  }
+
   // 'customElement' can either be a Form Element or localized tag values returned by the converter.
-  const [solutionsElement, headingElement, topicsElement, contentTypeElement, customElement] = configs.map(
-    (cell) => cell,
-  );
-  const [solutionsContent, headingContent, topicsContent, contentTypeContent] = configs.map(
-    (cell) => cell?.textContent?.trim() ?? '',
-  );
+  const [
+    solutionsElement,
+    headingElement,
+    topicsElement,
+    contentTypeElement,
+    solutionsv2Element,
+    featuresv2Element,
+    topicsv2Element,
+    customElement,
+  ] = allDivs;
+
+  const solutionsContent = solutionsElement?.textContent?.trim() ?? '';
+  const headingContent = headingElement?.textContent?.trim() ?? '';
+  const topicsContent = topicsElement?.textContent?.trim() ?? '';
+  const solutionsv2Content = solutionsv2Element?.textContent?.trim() ?? '';
+  const featuresv2Content = featuresv2Element?.textContent?.trim() ?? '';
+  const topicsv2Content = topicsv2Element?.textContent?.trim() ?? '';
+  const contentTypeContent = contentTypeElement?.textContent?.trim() ?? '';
   const isFormElement = customElement?.classList?.contains('browse-filters-input-container');
   const localizedTopicsContent = isFormElement ? '' : customElement?.textContent?.trim() ?? '';
-  // eslint-disable-next-line no-unused-vars
-  const allSolutionsTags = solutionsContent !== '' ? formattedTags(solutionsContent) : [];
-  const allTopicsTags = topicsContent !== '' ? formattedTags(topicsContent) : [];
+  let allSolutionsTags;
+  let allTopicsTags;
+  // When TQ tags are authored and FF is enabled.
+  if (isFeatureEnabled('isV2TagsEnabled') && solutionsv2Content) {
+    const solutionsv2Labels = getv2TagLabels(solutionsv2Content);
+    allSolutionsTags = solutionsv2Labels ? solutionsv2Labels.split(',').map((p) => p.trim()) : [];
+
+    // Handle features v2 and topics v2 logic
+    const featuresv2Labels = featuresv2Content ? getv2TagLabels(featuresv2Content) : '';
+    const topicsv2Labels = topicsv2Content ? getv2TagLabels(topicsv2Content) : '';
+
+    // Merge features and topics v2 tags; Set deduplicates if both fields contain overlapping labels.
+    const featuresv2Array = featuresv2Labels ? featuresv2Labels.split(',').map((p) => p.trim()) : [];
+    const topicsv2Array = topicsv2Labels ? topicsv2Labels.split(',').map((p) => p.trim()) : [];
+
+    allTopicsTags = [...new Set([...featuresv2Array, ...topicsv2Array])];
+  } else {
+    // Legacy tags
+    // eslint-disable-next-line no-unused-vars
+    allSolutionsTags = solutionsContent !== '' ? formattedTags(solutionsContent) : [];
+    allTopicsTags = topicsContent !== '' ? formattedTags(topicsContent) : [];
+  }
+  // Parse localized tags content into a structured object
   const localizedTopicsTags = localizedTopicsContent
     ? localizedTopicsContent.split(',')?.reduce((acc, pair) => {
-        const [key, value] = pair.split(':').map((str) => str.trim());
-        if (key) acc[key] = value || '';
+        const trimmedPair = pair.trim();
+
+        // TQ format: tq/{uuid}/{englishLabel}:{translatedLabel}
+        // Legacy format: {key}/{tag}:{translatedTag} or {key}/{solution}/{tag}:{translatedTag}
+        const lastColonIndex = trimmedPair.lastIndexOf(':');
+        if (lastColonIndex > -1) {
+          const keyPart = trimmedPair.substring(0, lastColonIndex);
+          const translatedPart = trimmedPair.substring(lastColonIndex + 1);
+          // Extract English tag (last part before colon)
+          const keySegments = keyPart.split('/');
+          const englishTag = keySegments[keySegments.length - 1];
+          acc[keyPart] = { english: englishTag, translated: translatedPart };
+        }
         return acc;
       }, {})
-    : '';
+    : {};
 
   const supportedProducts = [];
   if (allSolutionsTags.length) {
-    const { query: additionalQuery, products, productKey } = getParsedSolutionsQuery(allSolutionsTags);
-    products.forEach((p) => supportedProducts.push(p));
-    window.headlessSolutionProductKey = productKey;
-    window.headlessBaseSolutionQuery = `(${window.headlessBaseSolutionQuery} AND ${additionalQuery})`;
+    if (isFeatureEnabled('isV2TagsEnabled') && solutionsv2Content) {
+      // V2 tags are plain text labels, construct query directly
+      const productsQuery = allSolutionsTags.map((product) => `@el_product="${product}"`).join(' OR ');
+      window.headlessBaseSolutionQuery = `(${window.headlessBaseSolutionQuery} AND (${productsQuery}))`;
+      allSolutionsTags.forEach((p) => supportedProducts.push(p));
+    } else {
+      // Legacy tags use the old format
+      const { query: additionalQuery, products, productKey } = getParsedSolutionsQuery(allSolutionsTags);
+      products.forEach((p) => supportedProducts.push(p));
+      window.headlessSolutionProductKey = productKey;
+      window.headlessBaseSolutionQuery = `(${window.headlessBaseSolutionQuery} AND ${additionalQuery})`;
+    }
   }
 
   if (contentTypeContent.length) {
@@ -1630,22 +1611,53 @@ function decorateBrowseTopics(block) {
   const browseFiltersSection = document.querySelector('.browse-filters-form');
 
   if (allTopicsTags.length > 0) {
+    const isV2Enabled = isFeatureEnabled('isV2TagsEnabled') && (featuresv2Content || topicsv2Content);
+    const stripParens = (s) => s.replace(/\s*\([^)]+\)\s*$/, '').trim();
+    let v2LocalizedMap = {};
+    if (isV2Enabled) {
+      v2LocalizedMap = Object.fromEntries(
+        Object.entries(localizedTopicsTags)
+          .filter(([, v]) => v.english)
+          .map(([, v]) => [stripParens(v.english), v]),
+      );
+    }
     allTopicsTags
       .filter((value) => value !== undefined)
       .forEach((topicsButtonTitle) => {
-        const parts = topicsButtonTitle.split('/');
-        const topicName = parts[parts.length - 1];
+        // v2 tags are plain text labels
+        const topicName = isV2Enabled ? topicsButtonTitle : topicsButtonTitle.split('/').pop();
         const topicsButtonDiv = createTag('button', { class: 'browse-topics browse-topics-item' });
         topicsButtonDiv.dataset.topicname = topicsButtonTitle;
         topicsButtonDiv.dataset.label = topicName;
-        if (lang === 'en' || window.location.href.includes('.html') || localizedTopicsTags === '') {
+
+        if (lang === 'en' || window.location.href.includes('.html') || Object.keys(localizedTopicsTags).length === 0) {
           topicsButtonDiv.innerHTML = topicName;
         } else {
-          const topicTag = topicsButtonTitle.slice(4); // Remove "exl:" prefix
-          topicsButtonDiv.innerHTML =
-            localizedTopicsTags[topicTag] && localizedTopicsTags[topicTag] !== 'undefined'
-              ? localizedTopicsTags[topicTag]
-              : topicName;
+          let displayLabel = topicName;
+          let tagInfo = null;
+
+          if (isV2Enabled) {
+            tagInfo = localizedTopicsTags[topicsButtonTitle] ?? v2LocalizedMap[stripParens(topicsButtonTitle)];
+          } else {
+            // For legacy tags, try exact match first
+            tagInfo = localizedTopicsTags[topicsButtonTitle];
+
+            if (!tagInfo) {
+              // Try matching with or without 'exl:' prefix
+              const lookupKey = topicsButtonTitle.startsWith('exl:') ? topicsButtonTitle.slice(4) : topicsButtonTitle;
+
+              tagInfo = localizedTopicsTags[lookupKey];
+            }
+          }
+
+          if (tagInfo?.translated && tagInfo.translated !== 'undefined') {
+            displayLabel = tagInfo.translated;
+          } else if (tagInfo?.english) {
+            // Use English label when translation is missing
+            displayLabel = tagInfo.english;
+          }
+
+          topicsButtonDiv.innerHTML = displayLabel;
         }
 
         contentDiv.appendChild(topicsButtonDiv);
@@ -1687,12 +1699,29 @@ function decorateBrowseTopics(block) {
     const filtersFormEl = block.querySelector('.browse-filters-form');
     filtersFormEl.insertBefore(div, filtersFormEl.children[4]);
   }
-  (solutionsElement.parentNode || solutionsElement).remove();
-  (headingElement.parentNode || headingElement).remove();
-  (topicsElement.parentNode || topicsElement).remove();
-  (contentTypeElement.parentNode || contentTypeElement).remove();
-  if (!isFormElement) {
-    (customElement?.parentNode || customElement)?.remove();
+  if (solutionsElement) {
+    (solutionsElement.parentNode || solutionsElement).remove();
+  }
+  if (headingElement) {
+    (headingElement.parentNode || headingElement).remove();
+  }
+  if (topicsElement) {
+    (topicsElement.parentNode || topicsElement).remove();
+  }
+  if (contentTypeElement) {
+    (contentTypeElement.parentNode || contentTypeElement).remove();
+  }
+  if (!isFormElement && customElement) {
+    (customElement.parentNode || customElement).remove();
+  }
+  if (solutionsv2Element) {
+    (solutionsv2Element.parentNode || solutionsv2Element).remove();
+  }
+  if (featuresv2Element) {
+    (featuresv2Element.parentNode || featuresv2Element).remove();
+  }
+  if (topicsv2Element) {
+    (topicsv2Element.parentNode || topicsv2Element).remove();
   }
 }
 

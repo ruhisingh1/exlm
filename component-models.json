@@ -1212,6 +1212,14 @@
     "id": "section",
     "fields": [
       {
+        "component": "text",
+        "valueType": "string",
+        "name": "section-id",
+        "value": "",
+        "label": "Section ID (Optional)",
+        "description": "Optional. A unique identifier for this section used for anchor links and navigation."
+      },
+      {
         "component": "select",
         "name": "style",
         "value": "",
@@ -1376,15 +1384,15 @@
         "options": [
           {
             "name": "Default",
-            "value": ["courses-section", "default"]
+            "value": "courses-section,default"
           },
           {
             "name": "White",
-            "value": ["courses-section", "bg-white"]
+            "value": "courses-section,bg-white"
           },
           {
             "name": "Dark Gray",
-            "value": ["courses-section", "bg-dark-gray"]
+            "value": "courses-section,bg-dark-gray"
           }
         ]
       },
@@ -1410,15 +1418,15 @@
         "options": [
           {
             "name": "Default",
-            "value": ["course-hub-section", "default"]
+            "value": "course-hub-section,default"
           },
           {
             "name": "White",
-            "value": ["course-hub-section", "bg-white"]
+            "value": "course-hub-section,bg-white"
           },
           {
             "name": "Dark Gray",
-            "value": ["course-hub-section", "bg-dark-gray"]
+            "value": "course-hub-section,bg-dark-gray"
           }
         ]
       },
@@ -1459,15 +1467,15 @@
         "options": [
           {
             "name": "Default",
-            "value": "default"
+            "value": "article-content-section,default"
           },
           {
             "name": "White",
-            "value": "bg-white"
+            "value": "article-content-section,bg-white"
           },
           {
             "name": "Dark Gray",
-            "value": "bg-dark-gray"
+            "value": "article-content-section,bg-dark-gray"
           }
         ]
       },
@@ -1724,7 +1732,7 @@
           },
           {
             "name": "On-Demand Event",
-            "value": "event"
+            "value": "Event|On Demand Event"
           },
           {
             "name": "Perspectives",
@@ -1744,14 +1752,14 @@
           },
           {
             "name": "Upcoming Event",
-            "value": "upcoming-event"
+            "value": "Event|Upcoming Event"
           }
         ]
       },
       {
         "component": "aem-tag",
         "name": "tags",
-        "label": "Solution(s) or Feature(s)",
+        "label": "Legacy Solution(s) or Feature(s)",
         "valueType": "string",
         "rootPath": "/content/cq:tags/exl",
         "description": "Optional - all are included if no selection is made."
@@ -1759,7 +1767,7 @@
       {
         "component": "multiselect",
         "name": "roles",
-        "label": "Role(s)",
+        "label": "Legacy Role(s)",
         "valueType": "string",
         "description": "Sets the Role(s).",
         "options": [
@@ -1784,7 +1792,7 @@
       {
         "component": "multiselect",
         "name": "experienceLevels",
-        "label": "Experience Level(s)",
+        "label": "Legacy Experience Level(s)",
         "valueType": "string",
         "description": "Sets the Experience Level(s).",
         "options": [
@@ -1841,6 +1849,400 @@
           {
             "name": "Most popular",
             "value": "MOST_POPULAR"
+          }
+        ]
+      },
+      {
+        "component": "custom-aem-tag",
+        "name": "tq-product",
+        "label": "Product(s) v2",
+        "valueType": "string",
+        "description": "Optional - all are included if no selection is made.",
+        "dataSource": {
+          "type": "action",
+          "config": {
+            "name": "getTQTags",
+            "params": {
+              "taxonomyType": "product"
+            }
+          }
+        },
+        "extensionId": "exl-ue-extension"
+      },
+      {
+        "component": "custom-aem-tag",
+        "name": "tq-feature",
+        "label": "Feature(s) v2",
+        "valueType": "string",
+        "description": "Optional - all are included if no selection is made.",
+        "dataSource": {
+          "type": "action",
+          "config": {
+            "name": "getTQTags",
+            "params": {
+              "taxonomyType": "feature"
+            }
+          }
+        },
+        "options": {
+          "dependentField": {
+            "name": "tq-product",
+            "taxonomyType": "product"
+          },
+          "requiredTagsToEnable": ["tq-product"]
+        },
+        "extensionId": "exl-ue-extension"
+      },
+      {
+        "component": "custom-aem-tag",
+        "name": "tq-subfeature",
+        "label": "Sub Feature(s) v2",
+        "valueType": "string",
+        "description": "Optional - all are included if no selection is made.",
+        "dataSource": {
+          "type": "action",
+          "config": {
+            "name": "getTQTags",
+            "params": {
+              "taxonomyType": "subfeature"
+            }
+          }
+        },
+        "options": {
+          "dependentField": {
+            "name": "tq-feature",
+            "taxonomyType": "feature"
+          },
+          "requiredTagsToEnable": ["tq-feature"]
+        },
+        "extensionId": "exl-ue-extension"
+      },
+      {
+        "component": "custom-aem-tag",
+        "name": "tq-role",
+        "label": "Role(s) v2",
+        "valueType": "string",
+        "description": "Optional - all are included if no selection is made.",
+        "dataSource": {
+          "type": "action",
+          "config": {
+            "name": "getTQTags",
+            "params": {
+              "taxonomyType": "role"
+            }
+          }
+        },
+        "extensionId": "exl-ue-extension"
+      },
+      {
+        "component": "custom-aem-tag",
+        "name": "tq-level",
+        "label": "Experience Level(s) v2",
+        "valueType": "string",
+        "description": "Optional - all are included if no selection is made.",
+        "dataSource": {
+          "type": "action",
+          "config": {
+            "name": "getTQTags",
+            "params": {
+              "taxonomyType": "level"
+            }
+          }
+        },
+        "extensionId": "exl-ue-extension"
+      }
+    ]
+  },
+  {
+    "id": "premium-learning-search",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "value": "",
+        "label": "Title",
+        "description": "Sets the title for the Premium learning block."
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "titleType",
+        "value": "h3",
+        "label": "Title Heading Type",
+        "options": [
+          {
+            "name": "H1",
+            "value": "h1"
+          },
+          {
+            "name": "H2",
+            "value": "h2"
+          },
+          {
+            "name": "H3",
+            "value": "h3"
+          },
+          {
+            "name": "H4",
+            "value": "h4"
+          },
+          {
+            "name": "H5",
+            "value": "h5"
+          },
+          {
+            "name": "H6",
+            "value": "h6"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "cta1_Type",
+        "value": "primary",
+        "label": "First CTA Type",
+        "description": "'Primary' will render a filled blue CTA, 'Secondary' will render a white CTA with a black border and black text",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Primary",
+            "value": "primary"
+          },
+          {
+            "name": "Secondary",
+            "value": "secondary"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "cta1_linkText",
+        "value": "",
+        "label": "First CTA Text",
+        "description": "Text to be shown inside button."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "cta1_link",
+        "value": "",
+        "label": "First CTA Link",
+        "description": "What link to open when clicking the button."
+      },
+      {
+        "component": "multiselect",
+        "valueType": "string",
+        "name": "contentType",
+        "value": "premium-learning-course",
+        "label": "Content Type",
+        "description": "Select which premium learning content type(s) to display",
+        "required": true,
+        "options": [
+          {
+            "name": "Premium Learning Course",
+            "value": "premium-learning-course"
+          },
+          {
+            "name": "Premium Learning Cohort",
+            "value": "premium-learning-cohort"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "premium-learning-recommended-content",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "value": "",
+        "label": "Title",
+        "description": "Sets the heading text for the Recommended Learning block."
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "titleType",
+        "value": "h2",
+        "label": "Title Heading Type",
+        "options": [
+          { "name": "H1", "value": "h1" },
+          { "name": "H2", "value": "h2" },
+          { "name": "H3", "value": "h3" },
+          { "name": "H4", "value": "h4" },
+          { "name": "H5", "value": "h5" },
+          { "name": "H6", "value": "h6" }
+        ]
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "value": "",
+        "label": "Description",
+        "description": "Subtitle text shown below the heading, e.g. 'Recommended learning based on your activity and progress.'"
+      },
+      {
+        "component": "select",
+        "name": "cta1_Type",
+        "value": "primary",
+        "label": "First CTA Type",
+        "description": "'Primary' will render a filled blue CTA, 'Secondary' will render a white CTA with a black border and black text",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Primary",
+            "value": "primary"
+          },
+          {
+            "name": "Secondary",
+            "value": "secondary"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "cta1_linkText",
+        "value": "",
+        "label": "First CTA Text",
+        "description": "Text to be shown inside button."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "cta1_link",
+        "value": "",
+        "label": "First CTA Link",
+        "description": "What link to open when clicking the button."
+      },
+      {
+        "component": "multiselect",
+        "valueType": "string",
+        "name": "contentType",
+        "value": "premium-learning-cohort",
+        "label": "Learning Type",
+        "description": "Select which premium learning learning type(s) to display",
+        "required": true,
+        "options": [
+          {
+            "name": "Premium Learning Course",
+            "value": "premium-learning-course"
+          },
+          {
+            "name": "Premium Learning Cohort",
+            "value": "premium-learning-cohort"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "premium-learning-suggested-content",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "value": "",
+        "label": "Title",
+        "description": "Sets the title for the Premium learning suggested content block."
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "titleType",
+        "value": "h3",
+        "label": "Title Heading Type",
+        "options": [
+          {
+            "name": "H1",
+            "value": "h1"
+          },
+          {
+            "name": "H2",
+            "value": "h2"
+          },
+          {
+            "name": "H3",
+            "value": "h3"
+          },
+          {
+            "name": "H4",
+            "value": "h4"
+          },
+          {
+            "name": "H5",
+            "value": "h5"
+          },
+          {
+            "name": "H6",
+            "value": "h6"
+          }
+        ]
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "value": "",
+        "label": "Description",
+        "description": "Description text displayed below the heading."
+      },
+      {
+        "component": "select",
+        "name": "cta1_Type",
+        "value": "primary",
+        "label": "First CTA Type",
+        "description": "'Primary' will render a filled blue CTA, 'Secondary' will render a white CTA with a black border and black text",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Primary",
+            "value": "primary"
+          },
+          {
+            "name": "Secondary",
+            "value": "secondary"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "cta1_linkText",
+        "value": "",
+        "label": "First CTA Text",
+        "description": "Text to be shown inside button."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "cta1_link",
+        "value": "",
+        "label": "First CTA Link",
+        "description": "What link to open when clicking the button."
+      },
+      {
+        "component": "multiselect",
+        "valueType": "string",
+        "name": "contentType",
+        "value": "premium-learning-cohort",
+        "label": "Learning Type",
+        "description": "Select which premium learning learning type(s) to display",
+        "required": true,
+        "options": [
+          {
+            "name": "Premium Learning Course",
+            "value": "premium-learning-course"
+          },
+          {
+            "name": "Premium Learning Cohort",
+            "value": "premium-learning-cohort"
           }
         ]
       }
@@ -2438,6 +2840,381 @@
             "value": "signin"
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "marquee-video-full-bleed",
+    "fields": [
+      {
+        "component": "multiselect",
+        "name": "classes",
+        "label": "Block options",
+        "valueType": "string",
+        "required": true,
+        "options": [
+          {
+            "name": "Theme",
+            "children": [
+              {
+                "name": "Light",
+                "value": "light"
+              },
+              {
+                "name": "Dark",
+                "value": "dark"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "value": "",
+        "label": "Title",
+        "description": "Sets the main title of the marquee-video-full-bleed block."
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "value": "",
+        "label": "Description",
+        "description": "Sets the description text."
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "videoFile",
+        "label": "Video File (MP4)",
+        "description": "Select MP4 video file from DAM for desktop and tablet devices.",
+        "multi": false
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "mobileImage",
+        "label": "Image (Mobile)",
+        "description": "Background image shown on mobile devices.",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "mobileImageAlt",
+        "value": "",
+        "label": "Image (Mobile) Alt Text",
+        "description": "A descriptive text of the mobile image."
+      },
+      {
+        "component": "select",
+        "name": "primaryCta_Type",
+        "value": "primary",
+        "label": "Primary CTA Type",
+        "description": "'Primary' will render a filled blue CTA, 'Secondary' will render a white CTA with a black border and black text, 'Tertiary' will render a filled black CTA, and 'Custom' will render a CTA with a custom hex color background.",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Primary",
+            "value": "primary"
+          },
+          {
+            "name": "Secondary",
+            "value": "secondary"
+          },
+          {
+            "name": "Tertiary",
+            "value": "tertiary"
+          },
+          {
+            "name": "Custom",
+            "value": "custom"
+          }
+        ]
+      },
+      {
+        "condition": {
+          "===": [{ "var": "primaryCta_Type" }, "custom"]
+        },
+        "component": "select",
+        "name": "primaryCta_customBgColor",
+        "value": "",
+        "label": "Primary CTA Background Color",
+        "description": "Select Primary CTA background color. Select 'Custom Hexcode' to enter the custom color",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Gray",
+            "value": "--spectrum-gray-700"
+          },
+          {
+            "name": "Blue",
+            "value": "--spectrum-blue-700"
+          },
+          {
+            "name": "Green",
+            "value": "--spectrum-green-700"
+          },
+          {
+            "name": "Orange",
+            "value": "--spectrum-orange-700"
+          },
+          {
+            "name": "Red",
+            "value": "--spectrum-red-700"
+          },
+          {
+            "name": "Celery",
+            "value": "--spectrum-celery-700"
+          },
+          {
+            "name": "Chartreuse",
+            "value": "--spectrum-chartreuse-700"
+          },
+          {
+            "name": "Cyan",
+            "value": "--spectrum-cyan-700"
+          },
+          {
+            "name": "Fuchsia",
+            "value": "--spectrum-fuchsia-700"
+          },
+          {
+            "name": "Indigo",
+            "value": "--spectrum-indigo-700"
+          },
+          {
+            "name": "Magenta",
+            "value": "--spectrum-magenta-700"
+          },
+          {
+            "name": "Purple",
+            "value": "--spectrum-purple-700"
+          },
+          {
+            "name": "Seafoam",
+            "value": "--spectrum-seafoam-700"
+          },
+          {
+            "name": "Yellow",
+            "value": "--spectrum-yellow-700"
+          },
+          {
+            "name": "Adobe Red",
+            "value": "--non-spectrum-adobe-red"
+          },
+          {
+            "name": "Custom Hexcode",
+            "value": "custom-hexcode"
+          }
+        ]
+      },
+      {
+        "condition": {
+          "and": [
+            { "===": [{ "var": "primaryCta_customBgColor" }, "custom-hexcode"] },
+            { "===": [{ "var": "primaryCta_Type" }, "custom"] }
+          ]
+        },
+        "component": "text",
+        "valueType": "string",
+        "name": "primaryCta_customBgHexCode",
+        "value": "",
+        "label": "Primary CTA Custom Background Hexcode",
+        "description": "Enter the custom hex code, such as FFFFFF (without the # symbol). Please ensure to follow the Adobe style guides when selecting CTA Colors"
+      },
+      {
+        "condition": {
+          "===": [{ "var": "primaryCta_Type" }, "custom"]
+        },
+        "component": "select",
+        "valueType": "string",
+        "name": "primaryCta_textColor",
+        "value": "white",
+        "label": "Primary CTA Text Color",
+        "description": "Select the text color",
+        "options": [
+          {
+            "name": "White",
+            "value": "white"
+          },
+          {
+            "name": "Black",
+            "value": "black"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "primaryCta_linkText",
+        "value": "",
+        "label": "Primary CTA Text",
+        "description": "Text to be shown inside primary button."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "primaryCta_link",
+        "value": "",
+        "label": "Primary CTA Link",
+        "description": "Link for primary CTA. Use #SECTION-ID for jump links."
+      },
+      {
+        "component": "select",
+        "name": "secondaryCta_Type",
+        "value": "secondary",
+        "label": "Secondary CTA Type",
+        "description": "'Primary' will render a filled blue CTA, 'Secondary' will render a white CTA with a black border and black text, 'Tertiary' will render a filled black CTA, and 'Custom' will render a CTA with a custom hex color background.",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Primary",
+            "value": "primary"
+          },
+          {
+            "name": "Secondary",
+            "value": "secondary"
+          },
+          {
+            "name": "Tertiary",
+            "value": "tertiary"
+          },
+          {
+            "name": "Custom",
+            "value": "custom"
+          }
+        ]
+      },
+      {
+        "condition": {
+          "===": [{ "var": "secondaryCta_Type" }, "custom"]
+        },
+        "component": "select",
+        "name": "secondaryCta_customBgColor",
+        "value": "",
+        "label": "Secondary CTA Background Color",
+        "description": "Select Secondary CTA background color. Select 'Custom Hexcode' to enter the custom color",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Gray",
+            "value": "--spectrum-gray-700"
+          },
+          {
+            "name": "Blue",
+            "value": "--spectrum-blue-700"
+          },
+          {
+            "name": "Green",
+            "value": "--spectrum-green-700"
+          },
+          {
+            "name": "Orange",
+            "value": "--spectrum-orange-700"
+          },
+          {
+            "name": "Red",
+            "value": "--spectrum-red-700"
+          },
+          {
+            "name": "Celery",
+            "value": "--spectrum-celery-700"
+          },
+          {
+            "name": "Chartreuse",
+            "value": "--spectrum-chartreuse-700"
+          },
+          {
+            "name": "Cyan",
+            "value": "--spectrum-cyan-700"
+          },
+          {
+            "name": "Fuchsia",
+            "value": "--spectrum-fuchsia-700"
+          },
+          {
+            "name": "Indigo",
+            "value": "--spectrum-indigo-700"
+          },
+          {
+            "name": "Magenta",
+            "value": "--spectrum-magenta-700"
+          },
+          {
+            "name": "Purple",
+            "value": "--spectrum-purple-700"
+          },
+          {
+            "name": "Seafoam",
+            "value": "--spectrum-seafoam-700"
+          },
+          {
+            "name": "Yellow",
+            "value": "--spectrum-yellow-700"
+          },
+          {
+            "name": "Adobe Red",
+            "value": "--non-spectrum-adobe-red"
+          },
+          {
+            "name": "Custom Hexcode",
+            "value": "custom-hexcode"
+          }
+        ]
+      },
+      {
+        "condition": {
+          "and": [
+            { "===": [{ "var": "secondaryCta_customBgColor" }, "custom-hexcode"] },
+            { "===": [{ "var": "secondaryCta_Type" }, "custom"] }
+          ]
+        },
+        "component": "text",
+        "valueType": "string",
+        "name": "secondaryCta_customBgHexCode",
+        "value": "",
+        "label": "Secondary CTA Custom Background Hexcode",
+        "description": "Enter the custom hex code, such as FFFFFF (without the # symbol). Please ensure to follow the Adobe style guides when selecting CTA Colors"
+      },
+      {
+        "condition": {
+          "===": [{ "var": "secondaryCta_Type" }, "custom"]
+        },
+        "component": "select",
+        "valueType": "string",
+        "name": "secondaryCta_textColor",
+        "value": "white",
+        "label": "Secondary CTA Text Color",
+        "description": "Select the text color",
+        "options": [
+          {
+            "name": "White",
+            "value": "white"
+          },
+          {
+            "name": "Black",
+            "value": "black"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "secondaryCta_linkText",
+        "value": "",
+        "label": "Secondary CTA Text",
+        "description": "Text to be shown inside secondary button."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "secondaryCta_link",
+        "value": "",
+        "label": "Secondary CTA Link",
+        "description": "Link for secondary CTA.Use #SECTION-ID for jump links."
       }
     ]
   },
@@ -3273,6 +4050,255 @@
     ]
   },
   {
+    "id": "media-panel",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "fileReference",
+        "label": "Image",
+        "description": "The media panel image."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "fileReferenceAlt",
+        "value": "",
+        "label": "Image Description",
+        "description": "A descriptive text of the image."
+      },
+      {
+        "component": "multiselect",
+        "name": "classes",
+        "label": "Style",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Layout",
+            "children": [
+              {
+                "name": "Left",
+                "value": "left"
+              },
+              {
+                "name": "Right",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "name": "Variant",
+            "children": [
+              {
+                "name": "Podcast Card",
+                "value": "podcast-card"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "eyebrow",
+        "value": "",
+        "label": "Eyebrow Text",
+        "description": "Sets the small pre-title above the heading."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "value": "",
+        "label": "Heading",
+        "description": "Sets the main heading."
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "value": "",
+        "label": "Description"
+      },
+      {
+        "component": "select",
+        "name": "cta_Type",
+        "value": "primary",
+        "label": "CTA Type",
+        "description": "'Primary' will render a filled blue CTA, 'Secondary' will render a white CTA with a black border and black text, 'Tertiary' will render a filled black CTA, and 'Custom' will render a CTA with a custom hex color background.",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Primary",
+            "value": "primary"
+          },
+          {
+            "name": "Secondary",
+            "value": "secondary"
+          },
+          {
+            "name": "Tertiary",
+            "value": "tertiary"
+          },
+          {
+            "name": "Custom",
+            "value": "custom"
+          }
+        ]
+      },
+      {
+        "condition": {
+          "===": [{ "var": "cta_Type" }, "custom"]
+        },
+        "component": "select",
+        "name": "cta_customBgColor",
+        "value": "",
+        "label": "CTA Background Color",
+        "description": "Select CTA background color. Select 'Custom Hexcode' to enter the custom color",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Gray",
+            "value": "--spectrum-gray-700"
+          },
+          {
+            "name": "Blue",
+            "value": "--spectrum-blue-700"
+          },
+          {
+            "name": "Green",
+            "value": "--spectrum-green-700"
+          },
+          {
+            "name": "Orange",
+            "value": "--spectrum-orange-700"
+          },
+          {
+            "name": "Red",
+            "value": "--spectrum-red-700"
+          },
+          {
+            "name": "Celery",
+            "value": "--spectrum-celery-700"
+          },
+          {
+            "name": "Chartreuse",
+            "value": "--spectrum-chartreuse-700"
+          },
+          {
+            "name": "Cyan",
+            "value": "--spectrum-cyan-700"
+          },
+          {
+            "name": "Fuchsia",
+            "value": "--spectrum-fuchsia-700"
+          },
+          {
+            "name": "Indigo",
+            "value": "--spectrum-indigo-700"
+          },
+          {
+            "name": "Magenta",
+            "value": "--spectrum-magenta-700"
+          },
+          {
+            "name": "Purple",
+            "value": "--spectrum-purple-700"
+          },
+          {
+            "name": "Seafoam",
+            "value": "--spectrum-seafoam-700"
+          },
+          {
+            "name": "Yellow",
+            "value": "--spectrum-yellow-700"
+          },
+          {
+            "name": "Adobe Red",
+            "value": "--non-spectrum-adobe-red"
+          },
+          {
+            "name": "Custom Hexcode",
+            "value": "custom-hexcode"
+          }
+        ]
+      },
+      {
+        "condition": {
+          "and": [
+            { "===": [{ "var": "cta_customBgColor" }, "custom-hexcode"] },
+            { "===": [{ "var": "cta_Type" }, "custom"] }
+          ]
+        },
+        "component": "text",
+        "valueType": "string",
+        "name": "cta_customBgHexCode",
+        "value": "",
+        "label": "CTA Custom Background Hexcode",
+        "description": "Enter the custom hex code, such as FFFFFF (without the # symbol). Please ensure to follow the Adobe style guides when selecting CTA Colors"
+      },
+      {
+        "condition": {
+          "===": [{ "var": "cta_Type" }, "custom"]
+        },
+        "component": "select",
+        "valueType": "string",
+        "name": "cta_textColor",
+        "value": "white",
+        "label": "CTA Text Color",
+        "description": "Select the text color",
+        "options": [
+          {
+            "name": "White",
+            "value": "white"
+          },
+          {
+            "name": "Black",
+            "value": "black"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "cta_linkText",
+        "value": "",
+        "label": "CTA Text",
+        "description": "Text to be shown on the CTA button or link."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "cta_link",
+        "value": "",
+        "label": "CTA Link",
+        "description": "URL to open when the CTA is clicked."
+      },
+      {
+        "condition": {
+          "some": [{ "var": "classes" }, { "===": [{ "var": "" }, "podcast-card"] }]
+        },
+        "component": "text",
+        "valueType": "string",
+        "name": "podcastCardHeading",
+        "value": "",
+        "label": "Podcast Card Heading",
+        "description": "Heading for the podcast card variant."
+      },
+      {
+        "condition": {
+          "some": [{ "var": "classes" }, { "===": [{ "var": "" }, "podcast-card"] }]
+        },
+        "component": "richtext",
+        "valueType": "string",
+        "name": "podcastCardDescription",
+        "value": "",
+        "label": "Podcast Card Description",
+        "description": "Description for the  podcast card variant."
+      }
+    ]
+  },
+  {
     "id": "authorable-card",
     "fields": [
       {
@@ -3385,7 +4411,7 @@
       {
         "component": "aem-tag",
         "name": "solutions",
-        "label": "Results solution filter",
+        "label": "Results legacy solution filter",
         "valueType": "string",
         "rootPath": "/content/cq:tags/exl/solution",
         "description": "Optional - filter results to specific solution(s)."
@@ -3434,7 +4460,7 @@
       {
         "component": "aem-tag",
         "name": "tags",
-        "label": "Topics buttons",
+        "label": "Legacy Topics buttons",
         "valueType": "string",
         "rootPath": "/content/cq:tags/exl",
         "description": "Select up to 15 topics or features."
@@ -3464,7 +4490,7 @@
           },
           {
             "name": "On-Demand Event",
-            "value": "event"
+            "value": "Event|On Demand Event"
           },
           {
             "name": "Perspectives",
@@ -3484,9 +4510,67 @@
           },
           {
             "name": "Upcoming Event",
-            "value": "upcoming-event"
+            "value": "Event|Upcoming Event"
           }
         ]
+      },
+      {
+        "component": "custom-aem-tag",
+        "name": "v2-products",
+        "label": "Product(s) v2",
+        "valueType": "string",
+        "description": "Optional - all are included if no selection is made.",
+        "dataSource": {
+          "type": "action",
+          "config": {
+            "name": "getTQTags",
+            "params": {
+              "taxonomyType": "product"
+            }
+          }
+        },
+        "extensionId": "exl-ue-extension"
+      },
+      {
+        "component": "custom-aem-tag",
+        "name": "v2-features",
+        "label": "Feature(s) v2",
+        "valueType": "string",
+        "description": "Select up to 15 features.",
+        "dataSource": {
+          "type": "action",
+          "config": {
+            "name": "getTQTags",
+            "params": {
+              "taxonomyType": "feature"
+            }
+          }
+        },
+        "options": {
+          "dependentField": {
+            "name": "v2-products",
+            "taxonomyType": "product"
+          },
+          "requiredTagsToEnable": ["v2-products"]
+        },
+        "extensionId": "exl-ue-extension"
+      },
+      {
+        "component": "custom-aem-tag",
+        "name": "v2-topics",
+        "label": "Topic(s) v2",
+        "valueType": "string",
+        "description": "Select up to 15 topics.",
+        "dataSource": {
+          "type": "action",
+          "config": {
+            "name": "getTQTags",
+            "params": {
+              "taxonomyType": "topic"
+            }
+          }
+        },
+        "extensionId": "exl-ue-extension"
       }
     ]
   },
@@ -3567,7 +4651,7 @@
           },
           {
             "name": "On-Demand Event",
-            "value": "event"
+            "value": "Event|On Demand Event"
           },
           {
             "name": "Perspectives",
@@ -3939,10 +5023,199 @@
       {
         "component": "aem-tag",
         "name": "tags",
-        "label": "Solution(s)",
+        "label": "Legacy Solution(s)",
         "valueType": "string",
         "rootPath": "/content/cq:tags/exl/solution",
         "description": "Optional - all are included if no selection is made."
+      },
+      {
+        "component": "custom-aem-tag",
+        "name": "products-v2",
+        "label": "Product(s) v2",
+        "valueType": "string",
+        "description": "Optional - all are included if no selection is made.",
+        "dataSource": {
+          "type": "action",
+          "config": {
+            "name": "getTQTags",
+            "params": {
+              "taxonomyType": "product"
+            }
+          }
+        },
+        "extensionId": "exl-ue-extension"
+      }
+    ]
+  },
+  {
+    "id": "events",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "eyebrowText",
+        "value": "",
+        "label": "Eyebrow Text",
+        "description": "Optional small label displayed above the block title."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "blockTitle",
+        "value": "",
+        "label": "Block Title",
+        "description": "Section title for the whole block, displayed above the featured card."
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "blockDescription",
+        "value": "",
+        "label": "Block Description",
+        "description": "Section description for the whole block, displayed above the featured card."
+      }
+    ]
+  },
+  {
+    "id": "event-item",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "tagText",
+        "value": "",
+        "label": "Tag Text",
+        "description": "Tag text for the event card."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "dateText",
+        "value": "",
+        "label": "Date Text",
+        "description": "Date text for the event."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "eventTypeText",
+        "value": "",
+        "label": "Type of Event",
+        "description": "Type of event text."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "value": "",
+        "label": "Title",
+        "description": "Title for the event card item."
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "value": "",
+        "label": "Description",
+        "description": "Description for the event card item."
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "fileReference",
+        "label": "Image",
+        "description": "Card image (used for the featured card).",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "fileReferenceAlt",
+        "value": "",
+        "label": "Image Description",
+        "description": "A descriptive text of the image."
+      },
+      {
+        "component": "select",
+        "name": "cta1_Type",
+        "value": "primary",
+        "label": "CTA Type",
+        "description": "'Primary' will render a filled blue CTA, 'Secondary' will render a white CTA with a black border and black text, 'Tertiary' will render a filled black CTA, and 'Custom' will render a CTA with a custom hex color background.",
+        "valueType": "string",
+        "options": [
+          { "name": "Primary", "value": "primary" },
+          { "name": "Secondary", "value": "secondary" },
+          { "name": "Tertiary", "value": "tertiary" },
+          { "name": "Custom", "value": "custom" }
+        ]
+      },
+      {
+        "condition": { "===": [{ "var": "cta1_Type" }, "custom"] },
+        "component": "select",
+        "name": "cta1_customBgColor",
+        "value": "",
+        "label": "CTA Background Color",
+        "valueType": "string",
+        "options": [
+          { "name": "Gray", "value": "--spectrum-gray-700" },
+          { "name": "Blue", "value": "--spectrum-blue-700" },
+          { "name": "Green", "value": "--spectrum-green-700" },
+          { "name": "Orange", "value": "--spectrum-orange-700" },
+          { "name": "Red", "value": "--spectrum-red-700" },
+          { "name": "Celery", "value": "--spectrum-celery-700" },
+          { "name": "Chartreuse", "value": "--spectrum-chartreuse-700" },
+          { "name": "Cyan", "value": "--spectrum-cyan-700" },
+          { "name": "Fuchsia", "value": "--spectrum-fuchsia-700" },
+          { "name": "Indigo", "value": "--spectrum-indigo-700" },
+          { "name": "Magenta", "value": "--spectrum-magenta-700" },
+          { "name": "Purple", "value": "--spectrum-purple-700" },
+          { "name": "Seafoam", "value": "--spectrum-seafoam-700" },
+          { "name": "Yellow", "value": "--spectrum-yellow-700" },
+          { "name": "Adobe Red", "value": "--non-spectrum-adobe-red" },
+          { "name": "Custom Hexcode", "value": "custom-hexcode" }
+        ]
+      },
+      {
+        "condition": {
+          "and": [
+            { "===": [{ "var": "cta1_customBgColor" }, "custom-hexcode"] },
+            { "===": [{ "var": "cta1_Type" }, "custom"] }
+          ]
+        },
+        "component": "text",
+        "valueType": "string",
+        "name": "cta1_customBgHexCode",
+        "value": "",
+        "label": "CTA Custom Background Hexcode",
+        "description": "Enter the custom hex code, such as FFFFFF (without the # symbol)."
+      },
+      {
+        "condition": { "===": [{ "var": "cta1_Type" }, "custom"] },
+        "component": "select",
+        "valueType": "string",
+        "name": "cta1_textColor",
+        "value": "white",
+        "label": "CTA Text Color",
+        "options": [
+          { "name": "White", "value": "white" },
+          { "name": "Black", "value": "black" }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "cta1_linkText",
+        "value": "",
+        "label": "CTA Text",
+        "description": "Text to be shown inside button."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "cta1_link",
+        "value": "",
+        "label": "CTA Link",
+        "description": "What link to open when clicking the button."
       }
     ]
   },
@@ -4269,11 +5542,11 @@
           },
           {
             "name": "On-Demand Events",
-            "value": "event"
+            "value": "Event|On Demand Event"
           },
           {
             "name": "Upcoming Event",
-            "value": "upcoming-event"
+            "value": "Event|Upcoming Event"
           },
           {
             "name": "Community Posts",
@@ -4453,6 +5726,14 @@
         "description": "Sets the title of the page in page meta."
       },
       {
+        "component": "date-time",
+        "valueType": "date-time",
+        "name": "content-modified-time",
+        "label": "Custom Last Updated Date",
+        "description": "Overrides the last content update date of the page in page metadata.",
+        "placeholder": "YYYY-MM-DD HH:mm:ss"
+      },
+      {
         "component": "aem-content",
         "valueType": "string",
         "name": "signout-redirect-url",
@@ -4488,7 +5769,7 @@
         "component": "aem-tag",
         "valueType": "string",
         "name": "coveo-solution",
-        "label": "Solution(s)",
+        "label": "Legacy Solution(s)",
         "rootPath": "/content/cq:tags/exl/solution",
         "description": "Sets the Coveo Solution(s) in page meta."
       },
@@ -4518,16 +5799,45 @@
       },
       {
         "component": "custom-aem-tag",
-        "name": "tq-roles",
-        "label": "Role(s)",
+        "name": "tq-products",
+        "label": "Product(s) v2",
         "valueType": "string",
-        "description": "Sets the role(s) in page meta.",
+        "description": "Sets the Top Quadrant products(s) tags in page meta.",
         "dataSource": {
           "type": "action",
           "config": {
             "name": "getTQTags",
             "params": {
-              "taxonomyType": "role"
+              "taxonomyType": "product",
+              "validation": true
+            }
+          }
+        },
+        "extensionId": "exl-ue-extension"
+      },
+      {
+        "component": "tq-action-button",
+        "name": "generateTQTags",
+        "label": "Generate TQ Tags",
+        "valueType": "string",
+        "extensionId": "exl-ue-extension",
+        "options": {
+          "requiredTagsToEnable": ["tq-products"]
+        }
+      },
+      {
+        "component": "custom-aem-tag",
+        "name": "tq-roles",
+        "label": "Role(s) v2",
+        "valueType": "string",
+        "description": "Sets the Top Quadrant role(s) tags in page meta.",
+        "dataSource": {
+          "type": "action",
+          "config": {
+            "name": "getTQTags",
+            "params": {
+              "taxonomyType": "role",
+              "validation": true
             }
           }
         },
@@ -4536,32 +5846,16 @@
       {
         "component": "custom-aem-tag",
         "name": "tq-levels",
-        "label": "Experience Level(s)",
+        "label": "Experience Level(s) v2",
         "valueType": "string",
-        "description": "Sets the level(s) in page meta.",
+        "description": "Sets the Top Quadrant level(s) tags in page meta.",
         "dataSource": {
           "type": "action",
           "config": {
             "name": "getTQTags",
             "params": {
-              "taxonomyType": "level"
-            }
-          }
-        },
-        "extensionId": "exl-ue-extension"
-      },
-      {
-        "component": "custom-aem-tag",
-        "name": "tq-products",
-        "label": "Product(s)",
-        "valueType": "string",
-        "description": "Sets the products(s) in page meta.",
-        "dataSource": {
-          "type": "action",
-          "config": {
-            "name": "getTQTags",
-            "params": {
-              "taxonomyType": "product"
+              "taxonomyType": "level",
+              "validation": true
             }
           }
         },
@@ -4570,15 +5864,16 @@
       {
         "component": "custom-aem-tag",
         "name": "tq-features",
-        "label": "Feature(s)",
+        "label": "Feature(s) v2",
         "valueType": "string",
-        "description": "Sets the feature(s) in page meta.",
+        "description": "Sets the Top Quadrant feature(s) tags in page meta.",
         "dataSource": {
           "type": "action",
           "config": {
             "name": "getTQTags",
             "params": {
-              "taxonomyType": "feature"
+              "taxonomyType": "feature",
+              "validation": true
             }
           }
         },
@@ -4594,15 +5889,16 @@
       {
         "component": "custom-aem-tag",
         "name": "tq-subfeatures",
-        "label": "Sub Feature(s)",
+        "label": "Sub Feature(s) v2",
         "valueType": "string",
-        "description": "Sets the subfeature(s) in page meta.",
+        "description": "Sets the Top Quadrant subfeature(s) tags in page meta.",
         "dataSource": {
           "type": "action",
           "config": {
             "name": "getTQTags",
             "params": {
-              "taxonomyType": "subfeature"
+              "taxonomyType": "subfeature",
+              "validation": true
             }
           }
         },
@@ -4618,15 +5914,16 @@
       {
         "component": "custom-aem-tag",
         "name": "tq-industries",
-        "label": "Industries",
+        "label": "Industries v2",
         "valueType": "string",
-        "description": "Sets the industries in page meta.",
+        "description": "Sets the Top Quadrant industries tags in page meta.",
         "dataSource": {
           "type": "action",
           "config": {
             "name": "getTQTags",
             "params": {
-              "taxonomyType": "industry"
+              "taxonomyType": "industry",
+              "validation": true
             }
           }
         },
@@ -4635,19 +5932,28 @@
       {
         "component": "custom-aem-tag",
         "name": "tq-topics",
-        "label": "Topic(s)",
+        "label": "Topic(s) v2",
         "valueType": "string",
-        "description": "Sets the topic(s) in page meta.",
+        "description": "Sets the Top Quadrant topic(s) tags in page meta.",
         "dataSource": {
           "type": "action",
           "config": {
             "name": "getTQTags",
             "params": {
-              "taxonomyType": "topic"
+              "taxonomyType": "topic",
+              "validation": true
             }
           }
         },
         "extensionId": "exl-ue-extension"
+      },
+      {
+        "component": "date-time",
+        "valueType": "date-time",
+        "name": "content-modified-time",
+        "label": "Custom Last Updated Date",
+        "description": "Overrides the last content update date of the page in page metadata.",
+        "placeholder": "YYYY-MM-DD HH:mm:ss"
       },
       {
         "component": "aem-content",
@@ -4697,7 +6003,7 @@
         "component": "aem-tag",
         "valueType": "string",
         "name": "coveo-solution",
-        "label": "Solution(s)",
+        "label": "Legacy Solution(s)",
         "rootPath": "/content/cq:tags/exl/solution",
         "description": "Sets the Coveo Solution(s) in page meta."
       },
@@ -4727,16 +6033,45 @@
       },
       {
         "component": "custom-aem-tag",
-        "name": "tq-roles",
-        "label": "Role(s)",
+        "name": "tq-products",
+        "label": "Product(s) v2",
         "valueType": "string",
-        "description": "Sets the role(s) in page meta.",
+        "description": "Sets the Top Quadrant products(s) tags in page meta.",
         "dataSource": {
           "type": "action",
           "config": {
             "name": "getTQTags",
             "params": {
-              "taxonomyType": "role"
+              "taxonomyType": "product",
+              "validation": true
+            }
+          }
+        },
+        "extensionId": "exl-ue-extension"
+      },
+      {
+        "component": "tq-action-button",
+        "name": "generateTQTags",
+        "label": "Generate TQ Tags",
+        "valueType": "string",
+        "extensionId": "exl-ue-extension",
+        "options": {
+          "requiredTagsToEnable": ["tq-products"]
+        }
+      },
+      {
+        "component": "custom-aem-tag",
+        "name": "tq-roles",
+        "label": "Role(s) v2",
+        "valueType": "string",
+        "description": "Sets the Top Quadrant role(s) tags in page meta.",
+        "dataSource": {
+          "type": "action",
+          "config": {
+            "name": "getTQTags",
+            "params": {
+              "taxonomyType": "role",
+              "validation": true
             }
           }
         },
@@ -4745,32 +6080,16 @@
       {
         "component": "custom-aem-tag",
         "name": "tq-levels",
-        "label": "Experience Level(s)",
+        "label": "Experience Level(s) v2",
         "valueType": "string",
-        "description": "Sets the level(s) in page meta.",
+        "description": "Sets the Top Quadrant level(s) tags in page meta.",
         "dataSource": {
           "type": "action",
           "config": {
             "name": "getTQTags",
             "params": {
-              "taxonomyType": "level"
-            }
-          }
-        },
-        "extensionId": "exl-ue-extension"
-      },
-      {
-        "component": "custom-aem-tag",
-        "name": "tq-products",
-        "label": "Product(s)",
-        "valueType": "string",
-        "description": "Sets the products(s) in page meta.",
-        "dataSource": {
-          "type": "action",
-          "config": {
-            "name": "getTQTags",
-            "params": {
-              "taxonomyType": "product"
+              "taxonomyType": "level",
+              "validation": true
             }
           }
         },
@@ -4779,15 +6098,16 @@
       {
         "component": "custom-aem-tag",
         "name": "tq-features",
-        "label": "Feature(s)",
+        "label": "Feature(s) v2",
         "valueType": "string",
-        "description": "Sets the feature(s) in page meta.",
+        "description": "Sets the Top Quadrant feature(s) tags in page meta.",
         "dataSource": {
           "type": "action",
           "config": {
             "name": "getTQTags",
             "params": {
-              "taxonomyType": "feature"
+              "taxonomyType": "feature",
+              "validation": true
             }
           }
         },
@@ -4803,15 +6123,16 @@
       {
         "component": "custom-aem-tag",
         "name": "tq-subfeatures",
-        "label": "Sub Feature(s)",
+        "label": "Sub Feature(s) v2",
         "valueType": "string",
-        "description": "Sets the subfeature(s) in page meta.",
+        "description": "Sets the Top Quadrant subfeature(s) tags in page meta.",
         "dataSource": {
           "type": "action",
           "config": {
             "name": "getTQTags",
             "params": {
-              "taxonomyType": "subfeature"
+              "taxonomyType": "subfeature",
+              "validation": true
             }
           }
         },
@@ -4827,15 +6148,16 @@
       {
         "component": "custom-aem-tag",
         "name": "tq-industries",
-        "label": "Industries",
+        "label": "Industries v2",
         "valueType": "string",
-        "description": "Sets the industries in page meta.",
+        "description": "Sets the Top Quadrant industries tags in page meta.",
         "dataSource": {
           "type": "action",
           "config": {
             "name": "getTQTags",
             "params": {
-              "taxonomyType": "industry"
+              "taxonomyType": "industry",
+              "validation": true
             }
           }
         },
@@ -4844,19 +6166,28 @@
       {
         "component": "custom-aem-tag",
         "name": "tq-topics",
-        "label": "Topic(s)",
+        "label": "Topic(s) v2",
         "valueType": "string",
-        "description": "Sets the topic(s) in page meta.",
+        "description": "Sets the Top Quadrant topic(s) tags in page meta.",
         "dataSource": {
           "type": "action",
           "config": {
             "name": "getTQTags",
             "params": {
-              "taxonomyType": "topic"
+              "taxonomyType": "topic",
+              "validation": true
             }
           }
         },
         "extensionId": "exl-ue-extension"
+      },
+      {
+        "component": "date-time",
+        "valueType": "date-time",
+        "name": "content-modified-time",
+        "label": "Custom Last Updated Date",
+        "description": "Overrides the last content update date of the page in page metadata.",
+        "placeholder": "YYYY-MM-DD HH:mm:ss"
       },
       {
         "component": "aem-content",
@@ -4878,6 +6209,14 @@
         "name": "jcr:title",
         "label": "Page Title",
         "description": "Sets the title of the page in page meta."
+      },
+      {
+        "component": "date-time",
+        "valueType": "date-time",
+        "name": "content-modified-time",
+        "label": "Custom Last Updated Date",
+        "description": "Overrides the last content update date of the page in page metadata.",
+        "placeholder": "YYYY-MM-DD HH:mm:ss"
       },
       {
         "component": "aem-content",
@@ -5044,6 +6383,10 @@
         "description": "Sets the social link url for author"
       }
     ]
+  },
+  {
+    "id": "events-search",
+    "fields": []
   },
   {
     "id": "featured-authors",
@@ -5280,15 +6623,15 @@
         "options": [
           {
             "name": "Default",
-            "value": ["profile-section", "default"]
+            "value": "profile-section,default"
           },
           {
             "name": "White",
-            "value": ["profile-section", "bg-white"]
+            "value": "profile-section,bg-white"
           },
           {
             "name": "Dark Gray",
-            "value": ["profile-section", "bg-dark-gray"]
+            "value": "profile-section,bg-dark-gray"
           }
         ]
       },
@@ -5321,15 +6664,15 @@
         "options": [
           {
             "name": "Default",
-            "value": ["profile-bottom-section", "default"]
+            "value": "profile-bottom-section,default"
           },
           {
             "name": "White",
-            "value": ["profile-bottom-section", "bg-white"]
+            "value": "profile-bottom-section,bg-white"
           },
           {
             "name": "Dark Gray",
-            "value": ["profile-bottom-section", "bg-dark-gray"]
+            "value": "profile-bottom-section,bg-dark-gray"
           }
         ]
       },
@@ -5366,6 +6709,40 @@
             "value": "bg-dark-gray"
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "premium-learning-section",
+    "fields": [
+      {
+        "component": "select",
+        "name": "style",
+        "value": "",
+        "label": "Background Color",
+        "description": "Section background color",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Default",
+            "value": "premium-learning-section,default"
+          },
+          {
+            "name": "White",
+            "value": "premium-learning-section,bg-white"
+          },
+          {
+            "name": "Dark Gray",
+            "value": "premium-learning-section,bg-dark-gray"
+          }
+        ]
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "center-aligned",
+        "label": "Align the default blocks in this section to the center.",
+        "description": "Enabling this option will align the default blocks in this section to the center."
       }
     ]
   },
@@ -6003,7 +7380,7 @@
           },
           {
             "name": "On-Demand Event",
-            "value": "event"
+            "value": "Event|On Demand Event"
           },
           {
             "name": "Playlists",
@@ -6023,7 +7400,7 @@
           },
           {
             "name": "Upcoming Event",
-            "value": "upcoming-event"
+            "value": "Event|Upcoming Event"
           }
         ]
       },
@@ -6057,7 +7434,7 @@
           },
           {
             "name": "On-Demand Event",
-            "value": "event"
+            "value": "Event|On Demand Event"
           },
           {
             "name": "Playlists",
@@ -6077,7 +7454,7 @@
           },
           {
             "name": "Upcoming Event",
-            "value": "upcoming-event"
+            "value": "Event|Upcoming Event"
           }
         ]
       },
@@ -6111,7 +7488,7 @@
           },
           {
             "name": "On-Demand Event",
-            "value": "event"
+            "value": "Event|On Demand Event"
           },
           {
             "name": "Playlists",
@@ -6131,7 +7508,7 @@
           },
           {
             "name": "Upcoming Event",
-            "value": "upcoming-event"
+            "value": "Event|Upcoming Event"
           }
         ]
       },
@@ -6165,7 +7542,7 @@
           },
           {
             "name": "On-Demand Event",
-            "value": "event"
+            "value": "Event|On Demand Event"
           },
           {
             "name": "Playlists",
@@ -6185,7 +7562,7 @@
           },
           {
             "name": "Upcoming Event",
-            "value": "upcoming-event"
+            "value": "Event|Upcoming Event"
           }
         ]
       },
@@ -6216,7 +7593,7 @@
         },
         "component": "aem-tag",
         "name": "tags",
-        "label": "Solution(s) or Feature(s)",
+        "label": "Legacy Solution(s) or Feature(s)",
         "valueType": "string",
         "rootPath": "/content/cq:tags/exl",
         "description": "Optional - based on Profile Context if no selection is made."
@@ -6224,7 +7601,7 @@
       {
         "component": "multiselect",
         "name": "roles",
-        "label": "Role(s)",
+        "label": "Legacy Role(s)",
         "valueType": "string",
         "description": "Sets the Role(s).",
         "options": [
@@ -6312,6 +7689,70 @@
             "value": "coveo-only"
           }
         ]
+      },
+      {
+        "condition": {
+          "===": [{ "var": "filterProductBy" }, "specific_products"]
+        },
+        "component": "custom-aem-tag",
+        "name": "products-tq",
+        "label": "Product(s) v2",
+        "valueType": "string",
+        "description": "Optional - all are included if no selection is made.",
+        "dataSource": {
+          "type": "action",
+          "config": {
+            "name": "getTQTags",
+            "params": {
+              "taxonomyType": "product"
+            }
+          }
+        },
+        "extensionId": "exl-ue-extension"
+      },
+      {
+        "condition": {
+          "===": [{ "var": "filterProductBy" }, "specific_products"]
+        },
+        "component": "custom-aem-tag",
+        "name": "features-tq",
+        "label": "Feature(s) v2",
+        "valueType": "string",
+        "description": "Optional - all are included if no selection is made.",
+        "dataSource": {
+          "type": "action",
+          "config": {
+            "name": "getTQTags",
+            "params": {
+              "taxonomyType": "feature"
+            }
+          }
+        },
+        "options": {
+          "dependentField": {
+            "name": "products-tq",
+            "taxonomyType": "product"
+          },
+          "requiredTagsToEnable": ["products-tq"]
+        },
+        "extensionId": "exl-ue-extension"
+      },
+      {
+        "component": "custom-aem-tag",
+        "name": "roles-tq",
+        "label": "Role(s) v2",
+        "valueType": "string",
+        "description": "Optional - roles from profile will be picked if no selection is made.",
+        "dataSource": {
+          "type": "action",
+          "config": {
+            "name": "getTQTags",
+            "params": {
+              "taxonomyType": "role"
+            }
+          }
+        },
+        "extensionId": "exl-ue-extension"
       }
     ]
   },
@@ -6397,7 +7838,7 @@
           },
           {
             "name": "On-Demand Event",
-            "value": "event"
+            "value": "Event|On Demand Event"
           },
           {
             "name": "Playlists",
@@ -6447,7 +7888,7 @@
           },
           {
             "name": "On-Demand Event",
-            "value": "event"
+            "value": "Event|On Demand Event"
           },
           {
             "name": "Playlists",
@@ -6467,7 +7908,7 @@
           },
           {
             "name": "Upcoming Event",
-            "value": "upcoming-event"
+            "value": "Event|Upcoming Event"
           }
         ]
       },
@@ -6501,7 +7942,7 @@
           },
           {
             "name": "On-Demand Event",
-            "value": "event"
+            "value": "Event|On Demand Event"
           },
           {
             "name": "Playlists",
@@ -6521,7 +7962,7 @@
           },
           {
             "name": "Upcoming Event",
-            "value": "upcoming-event"
+            "value": "Event|Upcoming Event"
           }
         ]
       },
@@ -6555,7 +7996,7 @@
           },
           {
             "name": "On-Demand Event",
-            "value": "event"
+            "value": "Event|On Demand Event"
           },
           {
             "name": "Playlists",
@@ -6575,7 +8016,7 @@
           },
           {
             "name": "Upcoming Event",
-            "value": "upcoming-event"
+            "value": "Event|Upcoming Event"
           }
         ]
       },
@@ -6609,7 +8050,7 @@
           },
           {
             "name": "On-Demand Event",
-            "value": "event"
+            "value": "Event|On Demand Event"
           },
           {
             "name": "Playlists",
@@ -6629,7 +8070,7 @@
           },
           {
             "name": "Upcoming Event",
-            "value": "upcoming-event"
+            "value": "Event|Upcoming Event"
           }
         ]
       },
@@ -6660,7 +8101,7 @@
         },
         "component": "aem-tag",
         "name": "tags",
-        "label": "Solution(s) or Feature(s)",
+        "label": "Legacy Solution(s) or Feature(s)",
         "valueType": "string",
         "rootPath": "/content/cq:tags/exl",
         "description": "Optional - based on Profile Context if no selection is made."
@@ -6668,7 +8109,7 @@
       {
         "component": "multiselect",
         "name": "roles",
-        "label": "Role(s)",
+        "label": "Legacy Role(s)",
         "valueType": "string",
         "description": "Sets the Role(s).",
         "options": [
@@ -6756,6 +8197,70 @@
             "value": "coveo-only"
           }
         ]
+      },
+      {
+        "condition": {
+          "===": [{ "var": "filterProductBy" }, "specific_products"]
+        },
+        "component": "custom-aem-tag",
+        "name": "product-tq",
+        "label": "Product(s) v2",
+        "valueType": "string",
+        "description": "Optional - all are included if no selection is made.",
+        "dataSource": {
+          "type": "action",
+          "config": {
+            "name": "getTQTags",
+            "params": {
+              "taxonomyType": "product"
+            }
+          }
+        },
+        "extensionId": "exl-ue-extension"
+      },
+      {
+        "condition": {
+          "===": [{ "var": "filterProductBy" }, "specific_products"]
+        },
+        "component": "custom-aem-tag",
+        "name": "feature-tq",
+        "label": "Feature(s) v2",
+        "valueType": "string",
+        "description": "Optional - all are included if no selection is made.",
+        "dataSource": {
+          "type": "action",
+          "config": {
+            "name": "getTQTags",
+            "params": {
+              "taxonomyType": "feature"
+            }
+          }
+        },
+        "options": {
+          "dependentField": {
+            "name": "product-tq",
+            "taxonomyType": "product"
+          },
+          "requiredTagsToEnable": ["product-tq"]
+        },
+        "extensionId": "exl-ue-extension"
+      },
+      {
+        "component": "custom-aem-tag",
+        "name": "role-tq",
+        "label": "Role(s) v2",
+        "valueType": "string",
+        "description": "Optional - roles from profile will be picked if no selection is made.",
+        "dataSource": {
+          "type": "action",
+          "config": {
+            "name": "getTQTags",
+            "params": {
+              "taxonomyType": "role"
+            }
+          }
+        },
+        "extensionId": "exl-ue-extension"
       }
     ]
   },
@@ -6847,7 +8352,7 @@
         "label": "Block options",
         "valueType": "string",
         "required": true,
-        "maxSize": 4,
+        "maxSize": 6,
         "options": [
           {
             "name": "Theme",
@@ -6859,6 +8364,19 @@
               {
                 "name": "Dark",
                 "value": "dark"
+              }
+            ]
+          },
+          {
+            "name": "Size Variant",
+            "children": [
+              {
+                "name": "Small (Default)",
+                "value": "small"
+              },
+              {
+                "name": "Medium",
+                "value": "medium"
               }
             ]
           },
@@ -6877,6 +8395,15 @@
               {
                 "name": "Dismissable",
                 "value": "dismissable"
+              }
+            ]
+          },
+          {
+            "name": "Style Options",
+            "children": [
+              {
+                "name": "Add a background image",
+                "value": "fill-image"
               }
             ]
           },
@@ -6950,6 +8477,28 @@
             ]
           }
         ]
+      },
+      {
+        "condition": {
+          "some": [{ "var": "classes" }, { "===": [{ "var": "" }, "fill-image"] }]
+        },
+        "component": "reference",
+        "valueType": "string",
+        "name": "fileReference",
+        "label": "Image",
+        "description": "The background image",
+        "multi": false
+      },
+      {
+        "condition": {
+          "some": [{ "var": "classes" }, { "===": [{ "var": "" }, "fill-image"] }]
+        },
+        "component": "text",
+        "valueType": "string",
+        "name": "fileReferenceAlt",
+        "value": "",
+        "label": "Image Alt Text",
+        "description": "A descriptive text of the image for accessibility"
       },
       {
         "condition": {
@@ -7844,6 +9393,19 @@
   {
     "id": "playlist-browse",
     "fields": []
+  },
+  {
+    "id": "playlist-embed",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "playlistId",
+        "value": "",
+        "label": "Playlist ID",
+        "description": "Enter the playlist ID."
+      }
+    ]
   },
   {
     "id": "atomic-search",
@@ -8751,6 +10313,549 @@
         "value": "",
         "label": "Slide ID",
         "description": "ID of the slide to render. Use the ID of the slide from the URL."
+      }
+    ]
+  },
+  {
+    "id": "grid-cards",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "eyebrow",
+        "value": "",
+        "label": "Eyebrow",
+        "description": "Sets the small pre-title above the title."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+
+        "name": "title",
+        "value": "",
+        "label": "Title",
+        "description": "Sets the main title of the grid cards."
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "value": "",
+        "label": "Description",
+        "description": "Sets the description for the grid cards."
+      },
+      {
+        "component": "multiselect",
+        "name": "classes",
+        "value": "",
+        "label": "Style",
+        "description": "Sets the style variant for the grid cards.",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Standard Card Variant",
+            "value": "standard"
+          },
+          {
+            "name": "Minimal Card Variant",
+            "value": "minimal"
+          },
+          {
+            "name": "Wide Card Variant",
+            "value": "wide"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "grid-card",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "cardTitle",
+        "value": "",
+        "label": "Title",
+        "description": "Sets the title for the card. Please limit the content to 2 lines."
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "cardDescription",
+        "value": "",
+        "label": "Description",
+        "description": "Sets the description for the card. Please limit the content to 3 lines and 4 lines in case of Wide card variant."
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "fileReference",
+        "label": "Image",
+        "description": "Sets the image for the card.",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "fileReferenceAlt",
+        "value": "",
+        "label": "Image Alt Text",
+        "description": "A descriptive text of the image."
+      },
+      {
+        "component": "select",
+        "name": "cta_Type",
+        "value": "primary",
+        "label": "CTA Type",
+        "description": "'Primary' will render a filled blue CTA, 'Secondary' will render a white CTA with a black border and black text, 'Tertiary' will render a filled black CTA, and 'Custom' will render a CTA with a custom hex color background.",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Primary",
+            "value": "primary"
+          },
+          {
+            "name": "Secondary",
+            "value": "secondary"
+          },
+          {
+            "name": "Tertiary",
+            "value": "tertiary"
+          },
+          {
+            "name": "Custom",
+            "value": "custom"
+          }
+        ]
+      },
+      {
+        "condition": {
+          "===": [{ "var": "cta_Type" }, "custom"]
+        },
+        "component": "select",
+        "name": "cta_customBgColor",
+        "value": "",
+        "label": "CTA Background Color",
+        "description": "Select CTA background color. Select 'Custom Hexcode' to enter the custom color",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Gray",
+            "value": "--spectrum-gray-700"
+          },
+          {
+            "name": "Blue",
+            "value": "--spectrum-blue-700"
+          },
+          {
+            "name": "Green",
+            "value": "--spectrum-green-700"
+          },
+          {
+            "name": "Orange",
+            "value": "--spectrum-orange-700"
+          },
+          {
+            "name": "Red",
+            "value": "--spectrum-red-700"
+          },
+          {
+            "name": "Celery",
+            "value": "--spectrum-celery-700"
+          },
+          {
+            "name": "Chartreuse",
+            "value": "--spectrum-chartreuse-700"
+          },
+          {
+            "name": "Cyan",
+            "value": "--spectrum-cyan-700"
+          },
+          {
+            "name": "Fuchsia",
+            "value": "--spectrum-fuchsia-700"
+          },
+          {
+            "name": "Indigo",
+            "value": "--spectrum-indigo-700"
+          },
+          {
+            "name": "Magenta",
+            "value": "--spectrum-magenta-700"
+          },
+          {
+            "name": "Purple",
+            "value": "--spectrum-purple-700"
+          },
+          {
+            "name": "Seafoam",
+            "value": "--spectrum-seafoam-700"
+          },
+          {
+            "name": "Yellow",
+            "value": "--spectrum-yellow-700"
+          },
+          {
+            "name": "Adobe Red",
+            "value": "--non-spectrum-adobe-red"
+          },
+          {
+            "name": "Custom Hexcode",
+            "value": "custom-hexcode"
+          }
+        ]
+      },
+      {
+        "condition": {
+          "and": [
+            { "===": [{ "var": "cta_customBgColor" }, "custom-hexcode"] },
+            { "===": [{ "var": "cta_Type" }, "custom"] }
+          ]
+        },
+        "component": "text",
+        "valueType": "string",
+        "name": "cta_customBgHexCode",
+        "value": "",
+        "label": "CTA Custom Background Hexcode",
+        "description": "Enter the custom hex code, such as FFFFFF (without the # symbol). Please ensure to follow the Adobe style guides when selecting CTA Colors"
+      },
+      {
+        "condition": {
+          "===": [{ "var": "cta_Type" }, "custom"]
+        },
+        "component": "select",
+        "valueType": "string",
+        "name": "cta_textColor",
+        "value": "white",
+        "label": "CTA Text Color",
+        "description": "Select the text color",
+        "options": [
+          {
+            "name": "White",
+            "value": "white"
+          },
+          {
+            "name": "Black",
+            "value": "black"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "cta_linkText",
+        "value": "",
+        "label": "CTA Text",
+        "description": "Text to be shown inside button."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "cta_link",
+        "value": "",
+        "label": "CTA Link",
+        "description": "What link to open when clicking the button."
+      }
+    ]
+  },
+  {
+    "id": "sticky-nav",
+    "fields": []
+  },
+  {
+    "id": "sticky-nav-section",
+    "fields": [
+      {
+        "component": "select",
+        "name": "style",
+        "value": "",
+        "label": "Style",
+        "description": "The section style",
+        "valueType": "string",
+        "hidden": true,
+        "options": []
+      }
+    ]
+  },
+  {
+    "title": "Sticky Nav Item",
+    "id": "sticky-nav-item",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "sectionId",
+        "value": "",
+        "label": "Section ID",
+        "description": "The ID of the section this nav item navigates to. Must match the Section ID set on the target section."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "navLabel",
+        "value": "",
+        "label": "Nav Label",
+        "description": "The label displayed in the sticky navigation bar for this item."
+      }
+    ]
+  },
+  {
+    "id": "premium-learning-browse-cards",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "value": "",
+        "label": "Title",
+        "description": "Sets the title for the Premium learning browse cards block."
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "titleType",
+        "value": "h3",
+        "label": "Title Heading Type",
+        "options": [
+          {
+            "name": "H1",
+            "value": "h1"
+          },
+          {
+            "name": "H2",
+            "value": "h2"
+          },
+          {
+            "name": "H3",
+            "value": "h3"
+          },
+          {
+            "name": "H4",
+            "value": "h4"
+          },
+          {
+            "name": "H5",
+            "value": "h5"
+          },
+          {
+            "name": "H6",
+            "value": "h6"
+          }
+        ]
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "value": "",
+        "label": "Long Description",
+        "description": "Sets the description of Premium learning browse cards block."
+      },
+      {
+        "component": "multiselect",
+        "valueType": "string",
+        "name": "contentType",
+        "value": "premium-learning-course",
+        "label": "Learning Type",
+        "description": "Select which premium learning learning type(s) to display",
+        "required": true,
+        "options": [
+          {
+            "name": "Premium Learning Course",
+            "value": "premium-learning-course"
+          },
+          {
+            "name": "Premium Learning Cohort",
+            "value": "premium-learning-cohort"
+          }
+        ]
+      },
+      {
+        "component": "custom-aem-tag",
+        "name": "pl-tq-product",
+        "label": "Product(s) v2",
+        "valueType": "string",
+        "description": "Select the product for which courses/cohorts should be displayed. Optional - all are included if no selection is made.",
+        "dataSource": {
+          "type": "action",
+          "config": {
+            "name": "getTQTags",
+            "params": {
+              "taxonomyType": "product"
+            }
+          }
+        },
+        "extensionId": "exl-ue-extension"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "cta_linkText",
+        "value": "",
+        "label": "View More Text",
+        "description": "Text to be shown as the link."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "cta_link",
+        "value": "",
+        "label": "View More Link",
+        "description": "This link will be displayed only if the selected product has more than 4 results"
+      }
+    ]
+  },
+  {
+    "id": "premium-learning-bookmarks",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "heading",
+        "value": "",
+        "label": "Heading"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "headingType",
+        "value": "h3",
+        "label": "Heading Type",
+        "options": [
+          {
+            "name": "H1",
+            "value": "h1"
+          },
+          {
+            "name": "H2",
+            "value": "h2"
+          },
+          {
+            "name": "H3",
+            "value": "h3"
+          },
+          {
+            "name": "H4",
+            "value": "h4"
+          },
+          {
+            "name": "H5",
+            "value": "h5"
+          },
+          {
+            "name": "H6",
+            "value": "h6"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "premium-learning-active-content",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "value": "",
+        "label": "Title",
+        "description": "Sets the title for the Premium learning Active cohorts block."
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "titleType",
+        "value": "h3",
+        "label": "Title Heading Type",
+        "options": [
+          {
+            "name": "H1",
+            "value": "h1"
+          },
+          {
+            "name": "H2",
+            "value": "h2"
+          },
+          {
+            "name": "H3",
+            "value": "h3"
+          },
+          {
+            "name": "H4",
+            "value": "h4"
+          },
+          {
+            "name": "H5",
+            "value": "h5"
+          },
+          {
+            "name": "H6",
+            "value": "h6"
+          }
+        ]
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "value": "",
+        "label": "Long Description",
+        "description": "Sets the description of Premium learning browse cards block."
+      }
+    ]
+  },
+  {
+    "id": "premium-learning-profile-badges",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "value": "",
+        "label": "Title",
+        "description": "Sets the title for the Premium learning Profile badges block."
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "titleType",
+        "value": "",
+        "label": "Title Heading Type",
+        "options": [
+          {
+            "name": "H1",
+            "value": "h1"
+          },
+          {
+            "name": "H2",
+            "value": "h2"
+          },
+          {
+            "name": "H3",
+            "value": "h3"
+          },
+          {
+            "name": "H4",
+            "value": "h4"
+          },
+          {
+            "name": "H5",
+            "value": "h5"
+          },
+          {
+            "name": "H6",
+            "value": "h6"
+          }
+        ]
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "value": "",
+        "label": "Long Description",
+        "description": "Sets the description text for the Premium Learning Profile Badges block."
       }
     ]
   }

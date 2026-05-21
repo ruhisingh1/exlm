@@ -1,0 +1,262 @@
+/**
+ * Premium learning Browse Card Styles
+ * Specialized styles for Premium learning browse cards
+ * Includes courses and cohorts (learning programs)
+ */
+
+.browse-cards-block {
+  min-height: auto;
+}
+
+/* ==========================================================================
+   Base Card Styles
+   ========================================================================== */
+
+.browse-card.premium-learning-browse-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: 0;
+  overflow: visible;
+  transition: none;
+  color: var(--spectrum-gray-900);
+  min-height: auto;
+}
+
+.browse-card.premium-learning-browse-card:hover {
+  box-shadow: none;
+  transform: none;
+}
+
+/* ==========================================================================
+   Thumbnail Section
+   ========================================================================== */
+
+.browse-card.premium-learning-browse-card .premium-learning-card-figure {
+  position: relative;
+  width: 100%;
+  height: 197px;
+  min-height: 197px;
+  max-height: 197px;
+  overflow: visible;
+  border-radius: 8px;
+  background-color: var(--color-gray-100);
+}
+
+.browse-card.premium-learning-browse-card .premium-learning-card-figure > img {
+  width: 100%;
+  height: 197px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Thumbnail not loaded state */
+.browse-card.premium-learning-browse-card.premium-learning-thumbnail-not-loaded .premium-learning-card-figure {
+  height: 197px;
+  min-height: 197px;
+  max-height: 197px;
+  background: linear-gradient(135deg, var(--spectrum-gray-200) 0%, var(--spectrum-gray-300) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.browse-card.premium-learning-browse-card.premium-learning-thumbnail-not-loaded .premium-learning-card-figure::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 42px;
+  height: 42px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23999'%3E%3Cpath d='M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.4;
+  z-index: 0;
+}
+
+.browse-card.premium-learning-browse-card .premium-learning-card-start-label-container {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  display: flex;
+  gap: 6px;
+  z-index: 2;
+  background-color: var(--spectrum-gray-900);
+  padding: 2px 4px;
+  border-radius: 7px;
+}
+
+.browse-card.premium-learning-browse-card .premium-learning-card-start-label-container .icon {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+}
+
+.browse-card.premium-learning-browse-card .premium-learning-card-start-label {
+  font-size: 12px;
+  color: var(--spectrum-gray-50);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.browse-card.premium-learning-browse-card .premium-learning-card-tags-container {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+.browse-card.premium-learning-browse-card .premium-learning-card-tag {
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 16px;
+  margin: 0;
+}
+
+.browse-card.premium-learning-browse-card .premium-learning-card-new-tag {
+  background-color: var(--non-spectrum-warm-yellow);
+  color: var(--spectrum-gray-50);
+}
+
+.browse-card.premium-learning-browse-card .premium-learning-card-format-tag {
+  background-color: var(--background-color);
+}
+
+/* Rating Overlay */
+.browse-card.premium-learning-browse-card .premium-learning-card-rating-overlay {
+  position: absolute;
+  bottom: 10px;
+  right: 12px;
+  display: flex;
+  gap: 6px;
+  z-index: 2;
+  color: var(--background-color);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.browse-card.premium-learning-browse-card .premium-learning-card-rating-overlay .rating-star {
+  font-size: 20px;
+  color: var(--color-white);
+}
+
+/* ==========================================================================
+   User Actions Overlay (Bookmark & Copy)
+   ========================================================================== */
+
+.browse-card.premium-learning-browse-card .premium-learning-card-actions {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  gap: 8px;
+  z-index: 2;
+}
+
+.browse-card.premium-learning-browse-card .premium-learning-card-actions .user-actions button .icon {
+  height: 20px;
+  width: 20px;
+}
+
+.browse-card.premium-learning-browse-card .premium-learning-card-actions .user-action {
+  background: rgb(255 255 255 / 95%);
+  border-radius: 4px;
+  padding: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.browse-card.premium-learning-browse-card .premium-learning-card-actions .user-actions button:hover .icon {
+  background-color: transparent;
+}
+
+/* ==========================================================================
+   Content Section
+   ========================================================================== */
+
+.browse-card.premium-learning-browse-card .premium-learning-card-content {
+  padding-top: var(--spectrum-spacing-75);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.browse-card.premium-learning-browse-card .premium-learning-card-title {
+  margin: 0;
+  font-size: var(--spectrum-font-size-400);
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--color-gray-900);
+  text-align: left;
+}
+
+/* ==========================================================================
+   Meta Information (Duration, Level, Rating)
+   ========================================================================== */
+
+.browse-card.premium-learning-browse-card .premium-learning-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.browse-card.premium-learning-browse-card .premium-learning-card-meta-text {
+  margin: 0;
+  font-size: 14px;
+  color: var(--spectrum-gray-600);
+  display: flex;
+  align-items: center;
+}
+
+/* ==========================================================================
+   Footer Section (CTAs)
+   ========================================================================== */
+
+.browse-card.premium-learning-browse-card .premium-learning-card-footer {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--spectrum-gray-200);
+}
+
+.browse-card.premium-learning-browse-card .premium-learning-card-instances {
+  display: flex;
+  gap: 8px;
+}
+
+.browse-card.premium-learning-browse-card .premium-learning-card-instance {
+  font-size: 12px;
+  padding: 0 8px;
+  border-radius: 5px;
+  background-color: var(--spectrum-gray-200);
+}
+
+@media (min-width: 600px) {
+  .browse-card.premium-learning-browse-card .premium-learning-card-content {
+    padding-top: var(--spectrum-spacing-300);
+  }
+}
+
+@media (min-width: 900px) {
+  .browse-cards-block-content:has(.premium-learning-browse-card) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 25px;
+    min-height: auto;
+    margin-bottom: var(--spectrum-spacing-300);
+  }
+
+  .browse-cards-block-content:has(.premium-learning-browse-card) > div {
+    flex: 0 0 calc((100% - 75px) / 4);
+    max-width: calc((100% - 75px) / 4);
+    box-sizing: border-box;
+  }
+}

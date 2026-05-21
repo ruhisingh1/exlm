@@ -314,6 +314,19 @@
   --non-spectrum-link: #0268e3;
   --non-spectrum-navy-blue: #1473e6;
   --non-spectrum-dark-navy-blue: #0265dc;
+  --non-spectrum-navy-blue-alpha: rgb(20 115 230 / 25%);
+
+  /* ── Brand Concierge ──────────────────────────────────────────────────── */
+
+  /* Gradient palette — derived from the concierge-icon.svg brand gradient. */
+  --bc-gradient-start: #ff6a54;
+  --bc-gradient-end: #5d4ada;
+  --bc-gradient-blue: #b5deff;
+
+  /* User message bubble background — #5258E3 at 15% opacity. */
+  --bc-user-bubble: #5258e326;
+
+   /* ── Brand Concierge ──────────────────────────────────────────────────── */
   --non-spectrum-article-light-gray: #d3d3d3;
   --non-spectrum-article-dark-gray: #505050;
   --non-spectrum-bg: #fafafa;
@@ -358,6 +371,8 @@
   --non-spectrum-smoke: #686868;
   --non-spectrum-pass-green: #2d9d78;
   --non-spectrum-rose-red: #ffc0c0;
+  --non-spectrum-warm-yellow: #F5C700;
+  --non-spectrum-darker-gray: #292929;
 
   /* Max-width values  */
   --default-max-width: 1280px;
@@ -372,6 +387,8 @@
 
   /* exlm default fonts definition - Mobile */
   --exlm-font-size-h1: var(--spectrum-heading-size-xl);
+  --exlm-font-size-h1-plus: var(--spectrum-font-size-1000);
+  --exlm-font-size-h1-max: var(--spectrum-font-size-1100);
   --exlm-font-size-h2: var(--spectrum-heading-size-l);
   --exlm-font-size-h3: var(--spectrum-heading-size-m);
   --exlm-font-size-h4: var(--spectrum-heading-size-s);
@@ -521,6 +538,8 @@ strong:not(a strong) {
   /* exlm default fonts definition - Desktop Large */
   :root {
     --exlm-font-size-h1: var(--spectrum-heading-size-xxl);
+    --exlm-font-size-h1-plus: var(--spectrum-font-size-1200);
+    --exlm-font-size-h1-max: var(--spectrum-font-size-1300);
     --exlm-font-size-h2: var(--spectrum-heading-size-xl);
     --exlm-font-size-h3: var(--spectrum-heading-size-l);
     --exlm-font-size-h4: var(--spectrum-heading-size-m);
@@ -1069,6 +1088,24 @@ body[class^="browse-"] .browse-filters-full-container .browse-filters-one-pg-res
 .hidden {
   display: none;
 }
+
+.glass-bg {
+  border: 2px solid rgb(255 255 255 / 60%);
+  background: rgb(255 255 255 / 50%);
+  box-shadow: 0 0 8px 0 rgb(0 0 0 / 25%);
+  backdrop-filter: blur(12px);
+}
+
+.block-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spectrum-spacing-100);
+  text-align: center;
+  max-width: 846px;
+  margin: 0 auto;
+  align-items: center;
+}
+
 
 @media (min-width: 600px) {
   body[class^="browse-"] .browse-filters-full-container .browse-filters-pagination,

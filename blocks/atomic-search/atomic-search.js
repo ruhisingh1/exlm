@@ -11,13 +11,20 @@ import atomicPagerHandler from './components/atomic-search-pager.js';
 import atomicNoResultHandler from './components/atomic-search-no-results.js';
 import atomicNotificationHandler from './components/atomic-search-notification.js';
 import getCoveoAtomicMarkup from './components/atomic-search-template.js';
-import { CUSTOM_EVENTS, debounce, generateAdobeTrackingData } from './components/atomic-search-utils.js';
+import {
+  CUSTOM_EVENTS,
+  debounce,
+  generateAdobeTrackingData,
+  resolveBlockLevelSkeleton,
+} from './components/atomic-search-utils.js';
 import { isMobile } from '../header/header-utils.js';
+import { COVEO_SEARCH_CUSTOM_EVENTS } from '../../scripts/search/search-utils.js';
 import createAtomicSkeleton from './components/atomic-search-skeleton.js';
 import atomicSearchBoxHandler from './components/atomic-search-box.js';
 import atomicResultPageHandler from './components/atomic-search-results-per-page.js';
 import loadCoveoToken from '../../scripts/data-service/coveo/coveo-token-service.js';
 import { pushPageDataLayer } from '../../scripts/analytics/lib-analytics.js';
+import { buildCaptionElContentTypeResourceBundle } from './components/atomic-facet-engine-helpers.js';
 
 let placeholders = {};
 
@@ -81,6 +88,14 @@ export default function decorate(block) {
   const handleAtomicLibLoad = async () => {
     await customElements.whenDefined('atomic-search-interface');
     const searchInterface = block.querySelector('atomic-search-interface');
+
+    const customEvent = new CustomEvent(COVEO_SEARCH_CUSTOM_EVENTS.SEARCH_DOM_READY, {
+      detail: {
+        searchInterface,
+        block,
+      },
+    });
+    document.dispatchEvent(customEvent);
     const { coveoOrganizationId } = getConfig();
     let { lang: languageCode } = getPathDetails();
 
@@ -100,13 +115,25 @@ export default function decorate(block) {
       accessToken: coveoToken,
       organizationId: coveoOrganizationId,
       analytics: { analyticsMode: 'legacy' },
+      preprocessRequest: (request, clientOrigin, metadata) => {
+        const { body } = request;
+        const bodyJSON = JSON.parse(body || '{}');
+        const preProcessEvent = new CustomEvent(COVEO_SEARCH_CUSTOM_EVENTS.PREPROCESS, {
+          detail: {
+            method: metadata?.method,
+            body: bodyJSON,
+          },
+        });
+        document.dispatchEvent(preProcessEvent);
+        return request;
+      },
     });
 
     // Trigger a first search
     searchInterface.executeFirstSearch();
 
     const commonActionHandler = () => {
-      atomicFacetHandler(block, placeholders);
+      atomicFacetHandler(block, placeholders, searchInterface);
       atomicSearchBoxHandler(block);
       atomicResultHandler(block, placeholders);
       atomicSortDropdownHandler(block.querySelector('atomic-sort-dropdown'));
@@ -151,42 +178,11 @@ export default function decorate(block) {
       resizeObserver.observe(searchInterface);
 
       searchInterface.language = languageCode;
-      searchInterface.i18n.addResourceBundle(languageCode, 'caption-el_contenttype', {
-        Community: placeholders.searchContentTypeCommunityLabel || 'Community',
-        Documentation: placeholders.searchContentTypeDocumentationLabel || 'Documentation',
-        Troubleshooting: placeholders.searchContentTypeTroubleshootingLabel || 'Troubleshooting',
-        Tutorial: placeholders.searchContentTypeTutorialLabel || 'Tutorial',
-        Event: placeholders.searchContentTypeEventLabel || 'Event',
-        Playlist: placeholders.searchContentTypePlaylistLabel || 'Playlist',
-        Course: placeholders.searchContentTypeCourseLabel || 'Course',
-        'upcoming-event': placeholders.searchContentTypeUpcomingEventLabel || 'Upcoming Event',
-        Perspective: placeholders.searchContentTypePerspectiveLabel || 'Perspective',
-        Certification: placeholders.searchContentTypeCertificationLabel || 'Certification',
-        Blogs: placeholders.searchContentTypeCommunityBlogsLabel || 'Blogs',
-        Discussions: placeholders.searchContentTypeCommunityDiscussionsLabel || 'Discussions',
-        Ideas: placeholders.searchContentTypeCommunityIdeasLabel || 'Ideas',
-        Questions: placeholders.searchContentTypeCommunityQuestionsLabel || 'Questions',
-        'Community|Questions': placeholders.searchContentTypeCommunityQuestionsLabel || 'Questions',
-        'Community|Blogs': placeholders.searchContentTypeCommunityBlogsLabel || 'Blogs',
-        'Community|Discussions': placeholders.searchContentTypeCommunityDiscussionsLabel || 'Discussions',
-        'Community|Ideas': placeholders.searchContentTypeCommunityIdeasLabel || 'Ideas',
-        'Community|Groups': placeholders.searchContentTypeCommunityGroupsLabel || 'Groups',
-        'Community|Releases': placeholders.searchContentTypeCommunityReleasesLabel || 'Releases',
-        'Community|Community Resources': placeholders.searchContentTypeCommunityResourcesLabel || 'Community Resources',
-        'Community|Community Pulse': placeholders.searchContentTypeCommunityPulseLabel || 'Community Pulse',
-        'Community|Conversations': placeholders.searchContentTypeCommunityConversationsLabel || 'Conversations',
-        'Community;Community|Questions': placeholders.searchContentTypeCommunityQuestionsLabel || 'Questions',
-        'Community;Community|Blogs': placeholders.searchContentTypeCommunityBlogsLabel || 'Blogs',
-        'Community;Community|Discussions': placeholders.searchContentTypeCommunityDiscussionsLabel || 'Discussions',
-        'Community;Community|Ideas': placeholders.searchContentTypeCommunityIdeasLabel || 'Ideas',
-        'Community;Community|Releases': placeholders.searchContentTypeCommunityReleasesLabel || 'Releases',
-        'Community;Community|Community Resources':
-          placeholders.searchContentTypeCommunityResourcesLabel || 'Community Resources',
-        'Community;Community|Groups': placeholders.searchContentTypeCommunityGroupsLabel || 'Groups',
-        'Community;Community|Community Pulse': placeholders.searchContentTypeCommunityPulseLabel || 'Community Pulse',
-        'Community;Community|Conversations':
-          placeholders.searchContentTypeCommunityConversationsLabel || 'Conversations',
-      });
+      searchInterface.i18n.addResourceBundle(
+        languageCode,
+        'caption-el_contenttype',
+        buildCaptionElContentTypeResourceBundle(placeholders),
+      );
 
       searchInterface.i18n.addResourceBundle(languageCode, 'caption-el_role', {
         Admin: placeholders.searchRoleAdminLabel || 'Admin',
@@ -198,8 +194,6 @@ export default function decorate(block) {
       searchInterface.i18n.addResourceBundle(languageCode, 'caption-el_status', {
         true: placeholders.searchResolvedLabel || 'Resolved',
         false: placeholders.searchUnresolvedLabel || 'Unresolved',
-        Solved: placeholders.searchResolvedLabel || 'Solved',
-        Unsolved: placeholders.searchUnresolvedLabel || 'Unsolved',
       });
 
       searchInterface.i18n.addResourceBundle(languageCode, 'translation', {
@@ -222,10 +216,7 @@ export default function decorate(block) {
       document.addEventListener(
         CUSTOM_EVENTS.FACET_LOADED,
         () => {
-          const skeleton = block.querySelector('.atomic-search-load-skeleton');
-          if (skeleton) {
-            block.removeChild(skeleton);
-          }
+          resolveBlockLevelSkeleton(block);
         },
         { once: true },
       );

@@ -1,18 +1,21 @@
 /* On demand event css */
 
-.browse-cards-block-content:has(.event-card) {
+.browse-cards-block-content:has(.event-card),
+.browse-cards-block-content:has(.event-on-demand-event-card) {
   min-height: 450px;
   display: grid;
   gap: 32px;
   margin-bottom: 84px;
 }
 
-.browse-card.event-card {
+.browse-card.event-card,
+.browse-card.event-on-demand-event-card {
   min-height: 450px;
   background-color: var(--spectrum-gray-50);
 }
 
-.browse-card.event-card .browse-card-figure {
+.browse-card.event-card .browse-card-figure,
+.browse-card.event-on-demand-event-card .browse-card-figure {
   max-height: none;
   position: relative;
   display: flex;
@@ -23,7 +26,8 @@
   background-color: var(--spectrum-gray-150);
 }
 
-.browse-card.event-card .browse-card-figure .event-series-banner {
+.browse-card.event-card .browse-card-figure .event-series-banner,
+.browse-card.event-on-demand-event-card .browse-card-figure .event-series-banner {
   position: relative;
   padding: 10px 0;
   margin: 30px 0 20px;
@@ -39,7 +43,9 @@
 }
 
 .browse-card.event-card .browse-card-figure .event-series-banner::before,
-.browse-card.event-card .browse-card-figure .event-series-banner::after {
+.browse-card.event-card .browse-card-figure .event-series-banner::after,
+.browse-card.event-on-demand-event-card .browse-card-figure .event-series-banner::before,
+.browse-card.event-on-demand-event-card .browse-card-figure .event-series-banner::after {
   content: '';
   position: absolute;
   height: 8px;
@@ -47,40 +53,126 @@
   background-color: var(--non-spectrum-adobe-red);
 }
 
-.browse-card.event-card .browse-card-figure .event-series-banner::before {
+.browse-card.event-card .browse-card-figure .event-series-banner::before,
+.browse-card.event-on-demand-event-card .browse-card-figure .event-series-banner::before {
   top: -5px;
   left: 0;
   width: 90%;
 }
 
-.browse-card.event-card .browse-card-figure .event-series-banner::after {
+.browse-card.event-card .browse-card-figure .event-series-banner::after,
+.browse-card.event-on-demand-event-card .browse-card-figure .event-series-banner::after {
   bottom: -5px;
   right: 0;
   width: 90%;
 }
 
 .browse-card.event-card .browse-card-description-text,
-.browse-card.event-card .browse-card-description-text * {
+.browse-card.event-card .browse-card-description-text *,
+.browse-card.event-on-demand-event-card .browse-card-description-text,
+.browse-card.event-on-demand-event-card .browse-card-description-text * {
   max-height: none;
   -webkit-line-clamp: 2;
 }
 
-body[class^='browse-'] .browse-card.event-card .browse-card-figure .event-series-banner {
+body[class^='browse-'] .browse-card.event-card .browse-card-figure .event-series-banner,
+body[class^='browse-'] .browse-card.event-on-demand-event-card .browse-card-figure .event-series-banner {
   font-size: var(--spectrum-font-size-700);
 }
 
 @media only screen and (min-width: 1024px) {
-  .browse-card.event-card .browse-card-figure .event-series-banner {
+  .browse-card.event-card .browse-card-figure .event-series-banner,
+  .browse-card.event-on-demand-event-card .browse-card-figure .event-series-banner {
     font-size: 24px;
   }
 }
 
 @media only screen and (min-width: 1440px) {
-  .browse-card.event-card .browse-card-figure .event-series-banner {
+  .browse-card.event-card .browse-card-figure .event-series-banner,
+  .browse-card.event-on-demand-event-card .browse-card-figure .event-series-banner {
     font-size: var(--spectrum-font-size-700);
   }
 
-  body[class^='browse-'] .browse-card.event-card .browse-card-figure .event-series-banner {
+  body[class^='browse-'] .browse-card.event-card .browse-card-figure .event-series-banner,
+  body[class^='browse-'] .browse-card.event-on-demand-event-card .browse-card-figure .event-series-banner {
     font-size: 24px;
+  }
+}
+
+/* List view styles: align on-demand cards with upcoming-event list layout */
+@media only screen and (min-width: 900px) {
+  .list .browse-cards-block-content > div .browse-card.event-card,
+  .list .browse-cards-block-content > div .browse-card.event-on-demand-event-card {
+    min-height: auto;
+    flex-direction: row;
+    background-color: var(--spectrum-gray-50);
+  }
+
+  .list .browse-card.event-card .browse-card-figure,
+  .list .browse-card.event-on-demand-event-card .browse-card-figure {
+    flex: 0 0 23.34%;
+    border: unset;
+    border-radius: var(--spectrum-spacing-300) 0 0 var(--spectrum-spacing-300);
+    max-height: unset;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .list .browse-card.event-card .browse-card-content,
+  .list .browse-card.event-on-demand-event-card .browse-card-content {
+    padding: var(--spectrum-spacing-500);
+  }
+
+  .list .browse-card.event-card .browse-card-footer,
+  .list .browse-card.event-on-demand-event-card .browse-card-footer {
+    padding: var(--spectrum-spacing-500);
+    flex: 0 0 18.52%;
+    position: relative;
+    align-self: stretch;
+    flex-direction: column;
+    justify-content: unset;
+    border-radius: var(--spectrum-spacing-300);
+  }
+
+  .list .browse-card.event-card .browse-card-footer::before,
+  .list .browse-card.event-on-demand-event-card .browse-card-footer::before {
+    content: '';
+    position: absolute;
+    top: var(--spectrum-spacing-500);
+    bottom: var(--spectrum-spacing-500);
+    left: 0;
+    width: 1px;
+    background-color: var(--non-spectrum-divider-gray);
+  }
+
+  .list .browse-card.event-card .browse-card-footer .browse-card-cta-element,
+  .list .browse-card.event-on-demand-event-card .browse-card-footer .browse-card-cta-element {
+    margin-block: calc(var(--spectrum-spacing-300) + var(--spectrum-spacing-75));
+    margin-inline: 0;
+    background-color: var(--spectrum-blue-900);
+    border-radius: var(--spectrum-spacing-300);
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    font-size: var(--spectrum-font-size-100);
+    line-height: var(--spectrum-line-height-xs);
+    color: var(--spectrum-gray-50);
+    width: 100%;
+    height: var(--spectrum-spacing-500);
+    justify-content: center;
+    align-items: center;
+  }
+
+  .list .browse-card.event-card .browse-card-footer .browse-card-cta-element .icon,
+  .list .browse-card.event-on-demand-event-card .browse-card-footer .browse-card-cta-element .icon {
+    display: none;
+  }
+
+  .list .browse-card.event-card .browse-card-figure .event-series-banner,
+  .list .browse-card.event-on-demand-event-card .browse-card-figure .event-series-banner {
+    font-size: var(--spectrum-font-size-100);
+    letter-spacing: 0;
+    line-height: 1.4;
   }
 }

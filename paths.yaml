@@ -13,6 +13,7 @@ mmappings:
   - /content/exlm-ruhis/languages:/languages.json
   - /content/exlm-ruhis/qualtrics:/qualtrics.json
   - /content/exlm-ruhis/featured-card-products:/featured-card-products.json
+  - /content/exlm-ruhis/exlm-config:/exlm-config.json
   # taxonomy
   - /content/exlm-ruhis/taxonomy/features:/features.json
   - /content/exlm-ruhis/taxonomy/roles:/roles.json

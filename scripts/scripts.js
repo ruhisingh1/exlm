@@ -168,6 +168,12 @@ export const isBrowsePage = matchesAnyTheme(/^browse-.*/);
 export const isSignUpPage = matchesAnyTheme(/^signup.*/);
 export const isCourseStep = matchesAnyTheme(/course-step/);
 export const isOnDemandEventPage = matchesAnyTheme(/on-demand-event/);
+export const isLiveGradientBgPage = matchesAnyTheme(/page-bg-gradient/);
+export const isHomePage = (() => {
+  const { pathname } = window.location;
+  const lang = document.querySelector('html').lang || 'en';
+  return pathname === '/' || pathname === `/${lang}` || pathname === `/${lang}/`;
+})();
 
 export const isCertificatePage = () => !!document.querySelector('.course-completion'); // Checking for presence of course-completion block
 
@@ -430,7 +436,7 @@ export const decorateLinksWithinSection = (main) => {
 
     links?.forEach((link) => {
       const href = link.getAttribute('href');
-      if (href && !href.startsWith('#') && !link.hasAttribute('target')) {
+      if (href && !href.startsWith('#')) {
         link.setAttribute('target', '_blank');
         if (link.hostname !== window.location.hostname) {
           link.setAttribute('rel', 'noopener noreferrer');
@@ -801,23 +807,18 @@ export function getConfig() {
   );
   const cdnHost = currentEnv?.cdn || defaultEnv.cdn;
   const communityHost = currentEnv?.community || defaultEnv.community;
-  let cdnOrigin = `https://${cdnHost}`;
+  const cdnOrigin = `https://${cdnHost}`;
+  const premiumLearningAuthAPI = `${cdnOrigin}/api/v1/web/alm/authentication`;
   const lang = document.querySelector('html').lang || 'en';
+  // Premium Learning is not offered for nl/sv locales; use English PL home until those languages are deprecated.
+  const premiumHomeLang = lang === 'nl' || lang === 'sv' ? 'en' : lang;
   // Locale param for Community page URL
   const communityLocale = communityLangsMap.get(lang) || 'en';
   // Lang param for Adobe account URL
   const adobeAccountLang = adobeAccountLangsMap.get(lang) || 'en';
   const prodAssetsCdnOrigin = 'https://cdn.experienceleague.adobe.com';
-  let isProd = currentEnv?.env === 'PROD' || currentEnv?.authorUrl === 'author-p122525-e1219150.adobeaemcloud.com';
+  const isProd = currentEnv?.env === 'PROD' || currentEnv?.authorUrl === 'author-p122525-e1219150.adobeaemcloud.com';
   const isStage = currentEnv?.env === 'STAGE' || currentEnv?.authorUrl === 'author-p122525-e1219192.adobeaemcloud.com';
-  // EXLM-4452 - Temporary solution to update the IMS configuration to Prod for Premium Learning site in the Dev environment.
-  const urlParams = new URLSearchParams(window.location.search);
-  const isImsProd = !isProd && (urlParams?.get('ims') === 'prod' || sessionStorage.getItem('alm_access_token'));
-
-  if (isImsProd) {
-    isProd = true;
-    cdnOrigin = `https://experienceleague.adobe.com`;
-  }
   const ppsOrigin = isProd ? 'https://pps.adobe.io' : 'https://pps-stage.adobe.io';
   const ims = {
     client_id: 'ExperienceLeague',
@@ -830,6 +831,18 @@ export function getConfig() {
   else if (isStage)
     launchScriptSrc = 'https://assets.adobedtm.com/d4d114c60e50/9f881954c8dc/launch-102059c3cf0a-staging.min.js';
   else launchScriptSrc = 'https://assets.adobedtm.com/d4d114c60e50/9f881954c8dc/launch-caabfb728852-development.js';
+  let plPrivateCatalogIds;
+  let plPublicCatalogIds;
+  if (isProd) {
+    plPrivateCatalogIds = ['208912'];
+    plPublicCatalogIds = ['208913'];
+  } else if (isStage) {
+    plPrivateCatalogIds = ['208426'];
+    plPublicCatalogIds = ['208427'];
+  } else {
+    plPrivateCatalogIds = ['208424'];
+    plPublicCatalogIds = ['208425'];
+  }
   const signUpFlowConfigDate = '2024-08-15T00:00:00.762Z';
   const modalReDisplayDuration = '3'; // in months
 
@@ -848,6 +861,7 @@ export function getConfig() {
     modalReDisplayDuration,
     cookieConsentName,
     targetCriteriaIds,
+    premiumLearningAuthAPI,
     quizPassingCriteria: 0.65, // 65% passing criteria for quizzes
     khorosProfileUrl: `${cdnOrigin}/api/action/khoros/profile-menu-list?platform=gainsight`,
     khorosProfileDetailsUrl: `${cdnOrigin}/api/action/khoros/profile-details?platform=gainsight`,
@@ -859,6 +873,9 @@ export function getConfig() {
       : 'https://adobesystemsincorporatednonprod1.org.coveo.com/rest/search/v2',
     coveoOrganizationId: isProd ? 'adobev2prod9e382h1q' : 'adobesystemsincorporatednonprod1',
     upcomingEventsUrl: `${prodAssetsCdnOrigin}/thumb/upcoming-events.json`,
+    plPrivateCatalogIds,
+    plPublicCatalogIds,
+    plApiBaseUrl: 'https://learningmanager.adobe.com/primeapi/v2',
     adlsUrl: 'https://learning.adobe.com/courses.result.json',
     industryUrl: `${cdnOrigin}/api/industries?page_size=200&sort=Order&lang=${lang}`,
     articleUrl: `${cdnOrigin}/api/articles`,
@@ -887,6 +904,16 @@ export function getConfig() {
     mpcApiBase: `https://api.tv.adobe.com/videos`,
     // Events Page URL
     eventsURL: `${cdnOrigin}/${lang}/events`,
+    // Premium Learning home (for premium learner nav link)
+    premiumHomeUrl: `${cdnOrigin}/${premiumHomeLang}/premium/home`,
+    // Brand Concierge
+    bcDatastreamId: '87ae6de9-a49c-4734-a88a-17ec707ded09',
+    bcOrgId: 'E4722728699EC56A0A495CA2@AdobeOrg',
+    bcAlloySdkUrl: 'https://cdn1.adoberesources.net/alloy/2.31.1/alloy.min.js',
+    bcWebClientUrl:
+      'https://experience.adobe.net/solutions/experience-platform-brand-concierge-web-agent/static-assets/main.js',
+    bcEdgeDomain: 'edge.adobedc.net',
+    bcAuthRequired: true,
   };
   return window.exlm.config;
 }
@@ -934,6 +961,9 @@ export const URL_SPECIAL_CASE_LOCALES = new Map([
   ['zh-hant', 'zh-TW'],
 ]);
 
+// TODO: Move loadIms() out of scripts.js into a dedicated  utility .
+// and import it from there. Its current location causes a cyclic dependency because
+// premium-learning-utils.js → profile.js → scripts.js → premium-learning-utils.js.
 export async function loadIms() {
   // if adobe IMS was loaded already, return. Especially useful when embedding this code outside this site.
   // eg. embedding header in community which has it's own IMS setup.
@@ -968,7 +998,7 @@ const loadMartech = async (headerPromise, footerPromise) => {
   // eslint-disable-next-line import/no-cycle
   const libAnalyticsPromise = import('./analytics/lib-analytics.js');
   libAnalyticsPromise.then(async (libAnalyticsModule) => {
-    const { pushPageDataLayer, pushLinkClick, setupComponentImpressions } = libAnalyticsModule;
+    const { pushPageDataLayer, pushLinkClick, handleComponentClick, setupComponentImpressions } = libAnalyticsModule;
     const { lang } = getPathDetails();
 
     try {
@@ -988,9 +1018,23 @@ const loadMartech = async (headerPromise, footerPromise) => {
     Promise.allSettled([headerPromise, footerPromise]).then(() => {
       const linkClicked = document.querySelectorAll('a,.view-more-less span, .language-selector-popover span');
       const clickHandler = (e) => {
-        if (e.target.tagName === 'A' || e.target.tagName === 'SPAN') pushLinkClick(e);
+        if (e.target.tagName === 'A' || e.target.tagName === 'SPAN') {
+          // Check if click is within a component (block)
+          const component = e.target.closest('[data-block-name]');
+          if (component) {
+            // Fire componentClick for block clicks
+            handleComponentClick(e);
+          } else {
+            // Fire linkClick for non-component clicks (header, footer, text links, etc)
+            pushLinkClick(e);
+          }
+        }
       };
       linkClicked.forEach((e) => e.addEventListener('click', clickHandler));
+      const headerEl = document.querySelector('exl-header');
+      headerEl?.shadowRoot?.addEventListener('click', clickHandler);
+      const footerEl = document.querySelector('exl-footer');
+      footerEl?.shadowRoot?.addEventListener('click', clickHandler);
     });
   });
 
@@ -1084,6 +1128,9 @@ async function loadLazy(doc) {
   // disable martech if martech=off is in the query string, this is used for testing ONLY
   if (window.location.search?.indexOf('martech=off') === -1) loadMartech(headerPromise, footerPromise);
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
+  if (isLiveGradientBgPage) {
+    loadDefaultModule('./page-bg-gradient/page-bg-gradient.js');
+  }
   loadFonts();
 }
 
@@ -1426,58 +1473,91 @@ export function setMetadata(name, content) {
 }
 
 /**
- * Update TQ Tags metadata directly in meta tags
+ * Update Legacy and TQ Tags metadata when isV2TagsEnabled FF is enabled
  * @param {Document} document
  */
-export function updateTQTagsForCoveo() {
-  const keyMapping = {
-    'tq-roles': 'role',
-    'tq-levels': 'level',
-    'tq-products': 'coveo-solution',
-    'tq-features': 'feature',
-    'tq-subfeatures': 'sub-feature',
-    'tq-industries': 'industry',
-    'tq-topics': 'topic',
+export function updateLegacyAndV2Tags() {
+  // First, migrate legacy tags to _v1
+  const legacyToV1Mapping = {
+    role: 'role_v1',
+    level: 'level_v1',
+    'coveo-solution': 'product_v1',
+    feature: 'feature_v1',
+    'sub-feature': 'subfeature_v1',
+    industry: 'industry_v1',
+    topic: 'topic_v1',
   };
 
-  Object.entries(keyMapping).forEach(([originalName, metaName]) => {
-    const metaTag = document.querySelector(`meta[name="${originalName}"]`);
-    if (!metaTag) return;
-
-    try {
-      const decoded = decodeHtmlEntities(metaTag.content);
-      const parsed = JSON.parse(decoded);
-
-      if (Array.isArray(parsed)) {
-        const separator = originalName === 'tq-products' ? ';' : ',';
-        const labels = [...new Set(parsed.map((item) => item.label?.trim()).filter(Boolean))].join(separator);
-
-        if (labels) {
-          setMetadata(metaName, labels);
-        }
-      }
-    } catch (e) {
-      console.error(`Failed to parse metadata for ${originalName}:`, e, metaTag);
+  Object.entries(legacyToV1Mapping).forEach(([legacyKey, v1Key]) => {
+    const value = getMetadata(legacyKey);
+    if (value) {
+      setMetadata(v1Key, value);
     }
+  });
+
+  // Then, migrate _v2 tags to legacy (without suffix)
+  const v2ToLegacyMapping = {
+    role_v2: 'role',
+    level_v2: 'level',
+    product_v2: 'coveo-solution',
+    feature_v2: 'feature',
+    subfeature_v2: 'sub-feature',
+    industry_v2: 'industry',
+    topic_v2: 'topic',
+  };
+
+  Object.entries(v2ToLegacyMapping).forEach(([sourceKey, targetKey]) => {
+    const value = getMetadata(sourceKey);
+    if (!value) return;
+
+    let formatted = value.trim();
+
+    // Only product needs different separator
+    if (sourceKey === 'product_v2') {
+      formatted = formatted
+        .split(',')
+        .map((item) => item.trim())
+        .filter(Boolean)
+        .join(';');
+    }
+
+    setMetadata(targetKey, formatted);
+  });
+
+  // Remove _v2 tags after processing
+  const v2TagsToRemove = [
+    'role_v2',
+    'level_v2',
+    'product_v2',
+    'feature_v2',
+    'subfeature_v2',
+    'industry_v2',
+    'topic_v2',
+  ];
+
+  v2TagsToRemove.forEach((tag) => {
+    const metaTags = document.head.querySelectorAll(`meta[name="${tag}"]`);
+    metaTags.forEach((metaTag) => metaTag.remove());
   });
 }
 
 /**
  * Update TQ Tags metadata
+ * Converts JSON metadata -> label-only metadata
  * @param {Document} document
  */
 export function updateTQTagsMetadata() {
-  const keysToUpdate = [
-    'tq-roles',
-    'tq-levels',
-    'tq-products',
-    'tq-features',
-    'tq-subfeatures',
-    'tq-industries',
-    'tq-topics',
-  ];
+  const keyMapping = {
+    'tq-roles': 'role_v2',
+    'tq-levels': 'level_v2',
+    'tq-products': 'product_v2',
+    'tq-features': 'feature_v2',
+    'tq-subfeatures': 'subfeature_v2',
+    'tq-industries': 'industry_v2',
+    'tq-topics': 'topic_v2',
+  };
 
-  keysToUpdate.forEach((key) => {
+  Object.entries(keyMapping).forEach(([key, newKey]) => {
     const metaTag = getMetadata(key);
     if (!metaTag) return;
 
@@ -1486,26 +1566,47 @@ export function updateTQTagsMetadata() {
       const parsed = JSON.parse(decoded);
 
       if (Array.isArray(parsed)) {
-        const updatedTags = parsed
-          .map((item) => (item.uri && item.label ? `${item.uri}|${item.label}` : null))
+        const labels = parsed
+          .map((item) => item?.label)
           .filter(Boolean)
           .join(', ');
-        if (updatedTags) {
-          setMetadata(`${key}`, updatedTags);
-          // Extract labels (the part after |) and join by comma
-          const labels = updatedTags
-            .split(',')
-            .map((tag) => tag.split('|')[1]?.trim())
-            .filter(Boolean)
-            .join(', ');
 
-          setMetadata(`${key}-labels`, labels);
+        if (labels) {
+          setMetadata(newKey, labels);
         }
       }
     } catch (e) {
-      console.error(`Failed to parse metadata for ${key}:`, e);
+      console.error(`Failed to parse metadata for ${key}:`, e, metaTag);
     }
   });
+}
+
+/**
+ * Extracts and returns a comma-separated string of label values from a JSON-encoded tag string.
+ * @param {string} tag - A JSON string (possibly HTML-encoded) representing an array of objects with `label` properties.
+ * @returns {string} A comma-separated string of labels, or an empty string if parsing fails or input is invalid.
+ */
+export function getv2TagLabels(tag) {
+  if (!tag) return '';
+
+  let labels = '';
+
+  try {
+    const decoded = decodeHtmlEntities(tag);
+    const parsed = JSON.parse(decoded);
+
+    if (Array.isArray(parsed)) {
+      labels = parsed
+        .map((item) => item?.label)
+        .filter(Boolean)
+        .join(', ');
+    }
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.error('Failed to parse tag:', e, tag);
+  }
+
+  return labels;
 }
 
 /**
@@ -1519,7 +1620,7 @@ export async function fetchJson(url, fallbackUrl) {
 }
 
 export function xssSanitizeQueryParamValue(value) {
-  return value?.replace(/[^a-zA-Z0-9\s.]/g, '');
+  return value?.replace(/[^a-zA-Z0-9\s.|]/g, '');
 }
 
 export function getCookie(cookieName) {
@@ -1625,6 +1726,10 @@ async function loadPage() {
     decodeAemCqMetaTags();
     updateTQTagsMetadata();
     decodeAemPageMetaTags();
+
+    if (isFeatureEnabled('isV2TagsEnabled')) {
+      updateLegacyAndV2Tags();
+    }
   }
 
   const { suffix: currentPagePath, lang } = getPathDetails();
@@ -1661,6 +1766,37 @@ async function loadPage() {
     } else {
       const signedIn = await isUserSignedIn();
       if (signedIn) {
+        // Non-blocking — timeout is handled inside isPLEligible().
+        import('./utils/premium-learning-utils.js')
+          .then(({ isPLEligible }) => isPLEligible(signedIn))
+          .then(async (plMember) => {
+            // Only fetch enrollments if user is BOTH a PL member AND on profile page
+            if (plMember && isProfilePage) {
+              // TODO: Guard this fetch behind a check that the PL blocks are actually present
+              // in the DOM before firing — avoids an unnecessary API call on profile pages
+              // that have no PL content blocks.
+              const { fetchUserEnrollments } = await import('./data-service/premium-learning-data-service.js');
+              const config = getConfig();
+              const enrollmentData = await fetchUserEnrollments(config, 'learningProgram', 10);
+              const hasEnrollments = enrollmentData?.data?.length > 0;
+
+              const activeContentBlock = document.querySelector('.premium-learning-active-content');
+              const suggestedContentBlock = document.querySelector('.premium-learning-suggested-content');
+
+              if (hasEnrollments) {
+                // User has enrollments - remove suggested content block wrapper
+                suggestedContentBlock?.parentElement?.remove();
+              } else {
+                // User has no enrollments - remove active content block wrapper
+                activeContentBlock?.parentElement?.remove();
+              }
+            }
+          })
+          .catch((error) => {
+            // eslint-disable-next-line no-console
+            console.error('Error resolving Premium Learning membership:', error);
+          });
+
         loadPage();
         loadTarget(signedIn);
       } else {
@@ -1685,6 +1821,31 @@ async function loadPage() {
   const containsAtomicSearch = !!document.querySelector(`main .atomic-search`);
   if (containsAtomicSearch) {
     initiateCoveoAtomicSearch();
+  }
+  // Initialize Premium Learning auth — fully non-blocking, does not delay loadPage().
+  if (isFeatureEnabled('isPremiumLearningEnabled')) {
+    if (window.hlx.aemRoot || window.location.href.includes('.html')) {
+      // UE Author Mode: fetch PL token anonymously via ?auth=false (no IMS required).
+      import('./utils/premium-learning-utils.js')
+        .then(({ initPLAuthAnonymous }) => initPLAuthAnonymous())
+        .catch((error) => {
+          // eslint-disable-next-line no-console
+          console.error('Error initializing PL auth in UE Author Mode:', error);
+        });
+    } else {
+      // TODO: Remove isUserSignedIn call and move signedIn check to isPLEligible function once cyclic dependency is resolved.
+      isUserSignedIn()
+        .then((signedIn) =>
+          import('./utils/premium-learning-utils.js').then(({ applyPLSectionGating }) =>
+            applyPLSectionGating(signedIn),
+          ),
+        )
+        .catch((error) => {
+          // eslint-disable-next-line no-console
+          console.error('Error initializing Premium Learning authentication:', error);
+          document.querySelectorAll('.premium-learning-section').forEach((s) => s.remove());
+        });
+    }
   }
 
   if (isProfilePage) {

@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-
 export const microsite = /^\/(developer|events|landing|overview|tools|welcome)/.test(window.location.pathname);
 const lang = document.querySelector('html').lang || 'en';
 export const search = window.location.pathname === '/search.html' || window.location.pathname === `/${lang}/search`;
@@ -8,26 +7,37 @@ export const courses = document.querySelector('meta[name="theme"]')?.content.inc
 export const browse = document.querySelector('meta[name="theme"]')?.content.includes('browse-') || false;
 export const browseProduct = document.querySelector('meta[name="theme"]')?.content.includes('browse-product') || false;
 export const playlist = window.location.pathname.indexOf('/playlists') !== -1;
-export const solution = document.querySelector('meta[name="solution"]')?.content?.split(',')[0].toLowerCase() || '';
 export const type = document.querySelector('meta[name="type"]')?.content?.toLowerCase() || '';
 
-const fullSolution = document.querySelector('meta[name="solution"]')?.content || '';
-const feature = document.querySelector('meta[name="feature"]')?.content.toLowerCase() || '';
 const featureAttribute = document.querySelector('meta[name="feature-attribute"]')?.content.toLowerCase() || '';
 const subSolution = document.querySelector('meta[name="sub-solution"]')?.content || '';
 const solutionVersion = document.querySelector('meta[name="version"]')?.content || '';
-const role = document.querySelector('meta[name="role"]')?.content || '';
 const docType = document.querySelector('meta[name="doc-type"]')?.content || '';
 const duration = document.querySelector('meta[name="duration"]')?.content || '';
 
-// TQ Tags
-const productV2 = document.querySelector('meta[name="tq-products-labels"]')?.content || '';
-const subFeatureV2 = document.querySelector('meta[name="tq-subfeatures-labels"]')?.content.toLowerCase() || '';
-const featureV2 = document.querySelector('meta[name="tq-features-labels"]')?.content.toLowerCase() || '';
-const roleV2 = document.querySelector('meta[name="tq-roles-labels"]')?.content || '';
-const levelV2 = document.querySelector('meta[name="tq-levels-labels"]')?.content || '';
-const topicV2 = document.querySelector('meta[name="tq-topics-labels"]')?.content || '';
-const industryV2 = document.querySelector('meta[name="tq-industries-labels"]')?.content || '';
+/**
+ * Helper function to get meta tag content
+ * @param {string} name - The name attribute of the meta tag
+ * @returns {string} The content of the meta tag or empty string
+ */
+const getMetaContent = (name) => document.querySelector(`meta[name="${name}"]`)?.content || '';
+
+// TODO: Once the legacy tags are decommissioned, the V2 keys will need to be removed.
+const solution = getMetaContent('solution')?.split(',')[0].toLowerCase() || '';
+const fullSolution = getMetaContent('solution');
+const feature = getMetaContent('feature')?.toLowerCase() || '';
+const role = getMetaContent('role');
+const subFeature = getMetaContent('sub-feature')?.toLowerCase() || '';
+const level = getMetaContent('level');
+const topic = getMetaContent('topic');
+const industry = getMetaContent('industry');
+const productV2 = getMetaContent('product_v2');
+const subFeatureV2 = getMetaContent('subfeature_v2')?.toLowerCase() || '';
+const featureV2 = getMetaContent('feature_v2')?.toLowerCase() || '';
+const roleV2 = getMetaContent('role_v2');
+const levelV2 = getMetaContent('level_v2');
+const topicV2 = getMetaContent('topic_v2');
+const industryV2 = getMetaContent('industry_v2');
 
 const UEFilters = {
   Role: '',
@@ -300,6 +310,12 @@ export async function pushPageDataLayer(language, searchTrackingData) {
       fullSolution,
       feature,
       featureAttribute,
+      subFeature,
+      role,
+      level,
+      topic,
+      industry,
+      // TODO: Once the legacy tags are decommissioned, the V2 keys will need to be removed.
       productV2,
       subFeatureV2,
       featureV2,
@@ -362,7 +378,7 @@ export function pushComponentClick(data) {
     event: 'componentClick',
     component: data.component || '',
     componentID: data.componentID || '',
-
+    sectionID: data.sectionID || '',
     link: {
       contentType: data.contentType || '',
       destinationDomain: data.destinationDomain || '',
@@ -386,8 +402,6 @@ export function pushComponentClick(data) {
 export async function pushLinkClick(e) {
   window.adobeDataLayer = window.adobeDataLayer || [];
 
-  const component = e.target.closest('[data-block-name]');
-
   const viewMoreLess = e.target.parentElement?.classList?.contains('view-more-less');
   const isCourseStartCTA = e.target.closest('.course-breakdown-header-start-button');
 
@@ -398,7 +412,7 @@ export async function pushLinkClick(e) {
     linkLocation = 'toc';
   } else if (e.target.closest('.header')) {
     linkLocation = 'header';
-  } else if (e.target.closest('.footer')) {
+  } else if (e.target.closest('.footer-container')) {
     linkLocation = 'footer';
   } else if (e.target.closest('main') && docs) {
     linkLocation = 'body';
@@ -462,23 +476,11 @@ export async function pushLinkClick(e) {
       interactionType: '',
     },
   });
+}
 
-  let headerText = '';
-
-  let currentElement = e.target;
-  while (currentElement && currentElement !== component) {
-    const closestHeader = currentElement.querySelector('h1,h2,h3,h4');
-    if (closestHeader) {
-      headerText = closestHeader.innerText.trim();
-      break;
-    }
-    currentElement = currentElement.parentElement;
-  }
-
+export function handleComponentClick(e) {
+  const component = e.target.closest('[data-block-name]');
   if (!component) return;
-
-  const componentName = component.dataset.blockName;
-  const componentID = generateComponentID(component, componentName);
 
   // Check if the component is browse card
   const hasBrowseCardClass = (element) => {
@@ -487,15 +489,45 @@ export async function pushLinkClick(e) {
     return hasBrowseCardClass(element.parentElement);
   };
 
-  // Only trigger componentClick here for non-browse-card components
+  // Only trigger componentClick for non-browse-card components
   if (!hasBrowseCardClass(component) && !hasBrowseCardClass(e.target)) {
-    pushComponentClick({
+    let headerText = '';
+    let currentElement = e.target;
+    while (currentElement && currentElement !== component) {
+      const closestHeader = currentElement.querySelector('h1,h2,h3,h4');
+      if (closestHeader) {
+        headerText = closestHeader.innerText.trim();
+        break;
+      }
+      currentElement = currentElement.parentElement;
+    }
+
+    const componentName = component.dataset.blockName;
+    const componentID = generateComponentID(component, componentName);
+    const gridCard = e.target.closest('.grid-card');
+    const cardPosition = gridCard?.dataset?.cardPosition;
+    const linkTitle = e.target.innerHTML || '';
+    const destinationDomain = e.target.href;
+
+    // Find the section ID that this component belongs to
+    const section = component.closest('.section');
+    const sectionID = section?.dataset?.sectionId || '';
+
+    const componentClickData = {
       component: componentName,
       componentID,
+      sectionID,
       linkTitle,
       linkType: headerText,
       destinationDomain,
-    });
+    };
+
+    // Only add position for grid-cards component
+    if (componentName === 'grid-cards' && cardPosition) {
+      componentClickData.position = cardPosition;
+    }
+
+    pushComponentClick(componentClickData);
   }
 }
 
@@ -977,15 +1009,22 @@ export function pushCourseStartEvent(courseData) {
  * Pushes a browse card click event to the Adobe Data Layer.
  * This event is fired whenever a user clicks on any part of a browse card.
  *
- * @param {string} eventName - The name of the event to be pushed (e.g., "browseCardClicked").
+ * @param {string} eventName - The name of the event to be pushed. For bookmark events, can be 'add' or 'remove' which will be mapped to the appropriate event names.
  * @param {Object} cardData - The data object representing the browse card.
  * @param {string} [cardData.contentType] - The type of content represented by the card (e.g., "article", "video").
  * @param {string} [cardData.viewLink] - The destination URL or domain the card points to.
  * @param {string} [cardData.title] - The display title of the card.
  * @param {string} cardHeader - The header or category associated with the card (used as `linkType`).
  * @param {number} cardPosition - The index or position of the card within the list/grid.
+ * @param {string} [source] - The origin context of the event (e.g., `'docs'`, `'browse-card'`). Conditionally added to `link.source` when provided.
  */
-export function pushBrowseCardClickEvent(eventName, cardData, cardHeader, cardPosition) {
+export function pushBrowseCardClickEvent(eventName, cardData, cardHeader, cardPosition, source) {
+  // Map action shortcuts to event names
+  const eventNameMap = {
+    add: 'bookmarkLinkBrowseCard',
+    remove: 'browseCardRemoveBookmark',
+  };
+  const finalEventName = eventNameMap[eventName] || eventName;
   window.adobeDataLayer = window.adobeDataLayer || [];
   const product = cardData?.product;
   const cardFullSolution = Array.isArray(product) ? product.join(',') : product || '';
@@ -1003,7 +1042,7 @@ export function pushBrowseCardClickEvent(eventName, cardData, cardHeader, cardPo
   }
 
   const dataLayerEntry = {
-    event: eventName,
+    event: finalEventName,
     link: {
       contentType: cardData?.contentType?.toLowerCase().trim() || '',
       fullSolution: cardFullSolution,
@@ -1015,6 +1054,10 @@ export function pushBrowseCardClickEvent(eventName, cardData, cardHeader, cardPo
       position: cardPosition,
     },
   };
+
+  if (source) {
+    dataLayerEntry.link.source = source;
+  }
 
   // Deprecated browseCardClicked event (using componentClick instead); other browseCard events(copy,bookmark,toggles) remain active
   if (eventName !== 'browseCardClicked') {
@@ -1035,7 +1078,11 @@ export function pushBrowseCardClickEvent(eventName, cardData, cardHeader, cardPo
 
     const componentID = generateComponentID(browseCardElement, componentName);
 
-    pushComponentClick({
+    // Find the section ID that this component belongs to
+    const section = browseCardElement?.closest('.section');
+    const sectionID = section?.dataset?.sectionId;
+
+    const componentClickData = {
       component: componentName,
       componentID,
       linkTitle: cardData?.title || '',
@@ -1045,7 +1092,13 @@ export function pushBrowseCardClickEvent(eventName, cardData, cardHeader, cardPo
       solution: cardSolution || '',
       fullSolution: cardFullSolution || '',
       position: cardPosition,
-    });
+    };
+
+    if (sectionID) {
+      componentClickData.sectionID = sectionID;
+    }
+
+    pushComponentClick(componentClickData);
   }
 }
 
@@ -1342,5 +1395,17 @@ export function setupComponentImpressions() {
     } else {
       observer.observe(component);
     }
+  });
+}
+
+export function pushTopNavSearchEvent(contentTypeDropDown, searchTerm) {
+  window.adobeDataLayer = window.adobeDataLayer || [];
+
+  window.adobeDataLayer.push({
+    event: 'topNavSearch',
+    search: {
+      contentTypeDropDown: contentTypeDropDown || '',
+      searchTerm: searchTerm || '',
+    },
   });
 }

@@ -3,12 +3,14 @@
 /* TODO - Remove events-v2 scope during clean */
 
 .events-v2 {
-  .browse-cards-block-content .browse-card.upcoming-event-card {
+  .browse-cards-block-content .browse-card.upcoming-event-card,
+  .browse-cards-block-content .browse-card.event-upcoming-event-card {
     background-color: var(--spectrum-gray-50);
     min-height: 450px;
   }
 
-  .browse-card.upcoming-event-card .browse-card-figure {
+  .browse-card.upcoming-event-card .browse-card-figure,
+  .browse-card.event-upcoming-event-card .browse-card-figure {
     background-color: var(--spectrum-gray-900);
     max-height: none;
     position: relative;
@@ -19,12 +21,14 @@
     flex: 0 0 45%;
   }
 
-  .browse-card.upcoming-event-card .browse-card-banner {
+  .browse-card.upcoming-event-card .browse-card-banner,
+  .browse-card.event-upcoming-event-card .browse-card-banner {
     background-color: var(--non-spectrum-adobe-red) !important;
     letter-spacing: 0.2px;
   }
 
-  .browse-card.upcoming-event-card .browse-card-figure .event-series-banner-no-speakers {
+  .browse-card.upcoming-event-card .browse-card-figure .event-series-banner-no-speakers,
+  .browse-card.event-upcoming-event-card .browse-card-figure .event-series-banner-no-speakers {
     position: relative;
     padding: 10px 0;
     margin: 30px 0 20px;
@@ -40,7 +44,9 @@
   }
 
   .browse-card.upcoming-event-card .browse-card-figure .event-series-banner-no-speakers::before,
-  .browse-card.upcoming-event-card .browse-card-figure .event-series-banner-no-speakers::after {
+  .browse-card.upcoming-event-card .browse-card-figure .event-series-banner-no-speakers::after,
+  .browse-card.event-upcoming-event-card .browse-card-figure .event-series-banner-no-speakers::before,
+  .browse-card.event-upcoming-event-card .browse-card-figure .event-series-banner-no-speakers::after {
     content: '';
     position: absolute;
     height: 8px;
@@ -48,19 +54,22 @@
     background-color: var(--non-spectrum-adobe-red);
   }
 
-  .browse-card.upcoming-event-card .browse-card-figure .event-series-banner-no-speakers::before {
+  .browse-card.upcoming-event-card .browse-card-figure .event-series-banner-no-speakers::before,
+  .browse-card.event-upcoming-event-card .browse-card-figure .event-series-banner-no-speakers::before {
     top: -5px;
     left: 0;
     width: 90%;
   }
 
-  .browse-card.upcoming-event-card .browse-card-figure .event-series-banner-no-speakers::after {
+  .browse-card.upcoming-event-card .browse-card-figure .event-series-banner-no-speakers::after,
+  .browse-card.event-upcoming-event-card .browse-card-figure .event-series-banner-no-speakers::after {
     bottom: -5px;
     right: 0;
     width: 90%;
   }
 
-  .browse-card.upcoming-event-card .location-type {
+  .browse-card.upcoming-event-card .location-type,
+  .browse-card.event-upcoming-event-card .location-type {
     position: absolute;
     top: 13px;
     right: 0;
@@ -74,18 +83,21 @@
     letter-spacing: 0.2px;
   }
 
-  .browse-filters:not(:has(.list)) .browse-card.upcoming-event-card .location-type span {
+  .browse-filters:not(:has(.list)) .browse-card.upcoming-event-card .location-type span,
+  .browse-filters:not(:has(.list)) .browse-card.event-upcoming-event-card .location-type span {
     display: none;
   }
 
-  .browse-card.upcoming-event-card .event-speakers-container {
+  .browse-card.upcoming-event-card .event-speakers-container,
+  .browse-card.event-upcoming-event-card .event-speakers-container {
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 40px 0 20px;
   }
 
-  .browse-card.upcoming-event-card .speaker-profile-container {
+  .browse-card.upcoming-event-card .speaker-profile-container,
+  .browse-card.event-upcoming-event-card .speaker-profile-container {
     width: 70px;
     height: 70px;
     border-radius: 50%;
@@ -94,17 +106,20 @@
     box-shadow: 0 2px 4px rgb(0 0 0 / 20%);
   }
 
-  .browse-card.upcoming-event-card .speaker-profile-container:last-child {
+  .browse-card.upcoming-event-card .speaker-profile-container:last-child,
+  .browse-card.event-upcoming-event-card .speaker-profile-container:last-child {
     margin-right: 0;
   }
 
-  .browse-card.upcoming-event-card .speaker-profile-image {
+  .browse-card.upcoming-event-card .speaker-profile-image,
+  .browse-card.event-upcoming-event-card .speaker-profile-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  .browse-card.upcoming-event-card .event-series-banner {
+  .browse-card.upcoming-event-card .event-series-banner,
+  .browse-card.event-upcoming-event-card .event-series-banner {
     color: var(--spectrum-gray-50);
     font-size: var(--spectrum-font-size-100);
     font-weight: var(--font-weight-bold);
@@ -115,231 +130,279 @@
   }
 
   .browse-card.upcoming-event-card .browse-card-description-text,
-  .browse-card.upcoming-event-card .browse-card-description-text * {
+  .browse-card.upcoming-event-card .browse-card-description-text *,
+  .browse-card.event-upcoming-event-card .browse-card-description-text,
+  .browse-card.event-upcoming-event-card .browse-card-description-text * {
     max-height: none;
     -webkit-line-clamp: 2;
   }
 
-  .browse-card.upcoming-event-card .browse-card-footer {
+  .browse-card.upcoming-event-card .browse-card-footer,
+  .browse-card.event-upcoming-event-card .browse-card-footer {
     justify-content: flex-end;
   }
 
-  .browse-card.upcoming-event-card .browse-card-footer .footer-speakers-section {
+  .browse-card.upcoming-event-card .browse-card-footer .footer-speakers-section,
+  .browse-card.event-upcoming-event-card .browse-card-footer .footer-speakers-section {
     display: none;
   }
 
   .browse-card.upcoming-event-card .card-figure-date,
+  .browse-card.upcoming-event-card .browse-card-footer .browse-card-event-info,
+  .browse-card.event-upcoming-event-card .card-figure-date,
+  .browse-card.event-upcoming-event-card .browse-card-footer .browse-card-event-info,
   .browse-filters-results .browse-card.upcoming-event-card .show-more,
   .browse-filters-results .browse-card.upcoming-event-card .show-less,
+  .browse-filters-results .browse-card.event-upcoming-event-card .show-more,
+  .browse-filters-results .browse-card.event-upcoming-event-card .show-less,
   .browse-cards-block-content > div .browse-card.upcoming-event-card .show-more,
   .browse-cards-block-content > div .browse-card.upcoming-event-card .show-less,
-  .browse-card.upcoming-event-card .browse-card-footer .browse-card-event-info {
+  .browse-cards-block-content > div .browse-card.event-upcoming-event-card .show-more,
+  .browse-cards-block-content > div .browse-card.event-upcoming-event-card .show-less {
     display: none;
   }
 }
 
 /** List view styles start **/
 
-.list .browse-card.upcoming-event-card .browse-card-figure .event-speakers-container {
+.list .browse-card.upcoming-event-card .browse-card-figure .event-speakers-container,
+.list .browse-card.event-upcoming-event-card .browse-card-figure .event-speakers-container {
   display: flex;
 }
 
 .list .browse-card.upcoming-event-card .location-type,
-.browse-card.upcoming-event-card .browse-card-footer .location-type {
+.browse-card.upcoming-event-card .browse-card-footer .location-type,
+.list .browse-card.event-upcoming-event-card .location-type,
+.browse-card.event-upcoming-event-card .browse-card-footer .location-type {
   display: none;
 }
 
-body[class^='browse-'] .browse-card.upcoming-event-card .browse-card-figure .event-series-banner-no-speakers {
+body[class^='browse-'] .browse-card.upcoming-event-card .browse-card-figure .event-series-banner-no-speakers,
+body[class^='browse-'] .browse-card.event-upcoming-event-card .browse-card-figure .event-series-banner-no-speakers {
   font-size: var(--spectrum-font-size-700);
 }
 
 @media only screen and (min-width: 600px) {
   .events-v2 {
-    .browse-card.upcoming-event-card .browse-card-figure .event-series-banner-no-speakers {
-      font-size: 24px;
+    .browse-card.upcoming-event-card .browse-card-figure .event-series-banner-no-speakers,
+    .browse-card.event-upcoming-event-card .browse-card-figure .event-series-banner-no-speakers {
+      font-size: calc(var(--spectrum-font-size-500) + var(--spectrum-spacing-50));
     }
   }
 }
 
 @media only screen and (min-width: 900px) {
   .events-v2 {
-    .browse-card.upcoming-event-card {
+    .browse-card.upcoming-event-card,
+    .browse-card.event-upcoming-event-card {
       text-align: left;
     }
   }
 
   /** List view styles start **/
 
-  .list .browse-card.upcoming-event-card {
+  .list .browse-card.upcoming-event-card,
+  .list .browse-card.event-upcoming-event-card {
     background-color: var(--spectrum-gray-50);
   }
 
-  .list .browse-card.upcoming-event-card .browse-card-banner {
-    top: 16px;
-    height: 22px;
+  .list .browse-card.upcoming-event-card .browse-card-banner,
+  .list .browse-card.event-upcoming-event-card .browse-card-banner {
+    top: var(--spectrum-spacing-300);
+    height: calc(2 * var(--spectrum-spacing-200) - var(--spectrum-spacing-50));
     font-style: normal;
     font-variant: normal;
     font-weight: var(--font-weight-heavy);
-    font-size: 11px;
-    line-height: 17px;
+    font-size: var(--spectrum-font-size-50);
+    line-height: var(--spectrum-line-height-xs);
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  .list .browse-card.upcoming-event-card .browse-card-figure .icon-calendar img {
-    width: 32px;
-    height: 32px;
+  .list .browse-card.upcoming-event-card .browse-card-figure .icon-calendar img,
+  .list .browse-card.event-upcoming-event-card .browse-card-figure .icon-calendar img {
+    width: var(--spectrum-spacing-500);
+    height: var(--spectrum-spacing-500);
   }
 
-  .list .browse-card.upcoming-event-card .browse-card-figure {
+  .list .browse-card.upcoming-event-card .browse-card-figure,
+  .list .browse-card.event-upcoming-event-card .browse-card-figure {
     flex: 0 0 23.34%;
     border: unset;
-    border-radius: 16px 0 0 16px;
+    border-radius: var(--spectrum-spacing-300) 0 0 var(--spectrum-spacing-300);
     max-height: unset;
     height: auto;
     align-items: center;
     justify-content: center;
   }
 
-  .list .browse-card.upcoming-event-card .browse-card-figure .card-figure-date {
+  .list .browse-card.upcoming-event-card .browse-card-figure .card-figure-date,
+  .list .browse-card.event-upcoming-event-card .browse-card-figure .card-figure-date {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
-    margin-top: 50px;
-    margin-bottom: 10px;
+    gap: var(--spectrum-spacing-75);
+    margin-top: calc(var(--spectrum-spacing-700) + var(--spectrum-spacing-50));
+    margin-bottom: calc(var(--spectrum-spacing-100) + var(--spectrum-spacing-50));
   }
 
-  .list .browse-card.upcoming-event-card .browse-card-figure .card-figure-date .date-display {
+  .list .browse-card.upcoming-event-card .browse-card-figure .card-figure-date .date-display,
+  .list .browse-card.event-upcoming-event-card .browse-card-figure .card-figure-date .date-display {
     font-style: normal;
     font-variant: normal;
     font-weight: bold;
-    font-size: 28px;
-    line-height: 36px;
+    font-size: var(--spectrum-font-size-800);
+    line-height: var(--spectrum-line-height-xxl);
     letter-spacing: 0;
     color: var(--spectrum-gray-50);
     opacity: 1;
   }
 
-  .list .browse-card.upcoming-event-card .browse-card-figure .card-figure-date .time-display {
+  .list .browse-card.upcoming-event-card .browse-card-figure .card-figure-date .time-display,
+  .list .browse-card.event-upcoming-event-card .browse-card-figure .card-figure-date .time-display {
     text-align: left;
     font-style: normal;
     font-variant: normal;
     font-weight: normal;
-    font-size: 16px;
-    line-height: 24px;
+    font-size: var(--spectrum-font-size-200);
+    line-height: 1.5;
     letter-spacing: 0;
     color: var(--spectrum-gray-50);
     opacity: 1;
   }
 
-  .list .browse-card.upcoming-event-card .browse-card-content {
-    padding: 32px;
+  .list .browse-card.upcoming-event-card .browse-card-content,
+  .list .browse-card.event-upcoming-event-card .browse-card-content {
+    padding: var(--spectrum-spacing-500);
   }
 
-  .list .browse-card.upcoming-event-card .browse-card-footer .browse-card-event-info {
+  .list .browse-card.upcoming-event-card .browse-card-footer .browse-card-event-info,
+  .list .browse-card.event-upcoming-event-card .browse-card-footer .browse-card-event-info {
     order: 0;
     margin: 0;
     align-self: flex-start;
-    margin-bottom: 16.5px;
+    margin-bottom: var(--spectrum-spacing-300);
     display: flex;
   }
 
   .list .browse-card.upcoming-event-card .browse-card-content .browse-card-event-info,
-  .list .browse-card.upcoming-event-card .browse-card-figure .event-speakers-container {
+  .list .browse-card.upcoming-event-card .browse-card-figure .event-speakers-container,
+  .list .browse-card.event-upcoming-event-card .browse-card-content .browse-card-event-info,
+  .list .browse-card.event-upcoming-event-card .browse-card-figure .event-speakers-container {
     display: none;
   }
 
-  .list .browse-card.upcoming-event-card .browse-card-footer {
-    padding: 32px;
+  .list .browse-card.upcoming-event-card .browse-card-footer,
+  .list .browse-card.event-upcoming-event-card .browse-card-footer {
+    padding: var(--spectrum-spacing-500);
     flex: 0 0 18.52%;
     position: relative;
     align-self: stretch;
     flex-direction: column;
     justify-content: unset;
-    border-radius: 16px;
+    border-radius: var(--spectrum-spacing-300);
   }
 
-  .list .browse-card.upcoming-event-card .browse-card-footer .browse-card-event-info .browse-card-event-time h6 {
+  .list .browse-card.upcoming-event-card .browse-card-footer .browse-card-event-info .browse-card-event-time h6,
+  .list .browse-card.event-upcoming-event-card .browse-card-footer .browse-card-event-info .browse-card-event-time h6 {
     color: var(--non-spectrum-dark-charcoal);
     font-weight: bold;
     white-space: nowrap;
     overflow: hidden;
   }
 
-  .list .browse-card.upcoming-event-card .browse-card-footer .browse-card-event-info .icon {
-    width: 18px;
-    height: 18px;
+  .list .browse-card.upcoming-event-card .browse-card-footer .browse-card-event-info .icon,
+  .list .browse-card.event-upcoming-event-card .browse-card-footer .browse-card-event-info .icon {
+    width: calc(var(--spectrum-spacing-300) + var(--spectrum-spacing-50));
+    height: calc(var(--spectrum-spacing-300) + var(--spectrum-spacing-50));
   }
 
-  .list .browse-card.upcoming-event-card .browse-card-footer .browse-card-cta-element {
+  .list .browse-card.upcoming-event-card .browse-card-footer .browse-card-cta-element,
+  .list .browse-card.event-upcoming-event-card .browse-card-footer .browse-card-cta-element {
     order: 3;
-    margin: 20px 0;
+    margin-block: calc(var(--spectrum-spacing-300) + var(--spectrum-spacing-75));
+    margin-inline: 0;
     background: var(--spectrum-blue-900) 0% 0% no-repeat padding-box;
-    border-radius: 16px;
+    border-radius: var(--spectrum-spacing-300);
     text-align: left;
     font-style: normal;
     font-variant: normal;
     font-weight: normal;
-    font-size: 14px;
-    line-height: 17px;
+    font-size: var(--spectrum-font-size-100);
+    line-height: var(--spectrum-line-height-xs);
     letter-spacing: 0;
     color: var(--spectrum-gray-50);
     width: 100%;
-    height: 32px;
+    height: var(--spectrum-spacing-500);
     justify-content: center;
     align-items: center;
   }
 
-  .list .browse-card.upcoming-event-card .browse-card-footer .browse-card-cta-element .icon.icon-new-tab-blue {
+  .list .browse-card.upcoming-event-card .browse-card-footer .browse-card-cta-element .icon.icon-new-tab-blue,
+  .list .browse-card.event-upcoming-event-card .browse-card-footer .browse-card-cta-element .icon.icon-new-tab-blue {
     display: none;
   }
 
-  .list .browse-card.upcoming-event-card .browse-card-footer::before {
+  .list .browse-card.upcoming-event-card .browse-card-footer::before,
+  .list .browse-card.event-upcoming-event-card .browse-card-footer::before {
     content: '';
     position: absolute;
-    top: 32px;
-    bottom: 32px;
+    top: var(--spectrum-spacing-500);
+    bottom: var(--spectrum-spacing-500);
     left: 0;
     width: 1px;
     background-color: var(--non-spectrum-divider-gray);
   }
 
-  .list .browse-cards-block-content > div .browse-card.upcoming-event-card {
+  .list .browse-cards-block-content > div .browse-card.upcoming-event-card,
+  .list .browse-cards-block-content > div .browse-card.event-upcoming-event-card {
     min-height: auto;
     flex-direction: row;
   }
 
-  .list .browse-cards-block-content > div .browse-card.upcoming-event-card .browse-card-description-text.text-expanded {
+  .list .browse-cards-block-content > div .browse-card.upcoming-event-card .browse-card-description-text.text-expanded,
+  .list
+    .browse-cards-block-content
+    > div
+    .browse-card.event-upcoming-event-card
+    .browse-card-description-text.text-expanded {
     -webkit-line-clamp: 2;
     max-height: unset;
     display: -webkit-box;
   }
 
   .list .browse-cards-block-content > div .browse-card.upcoming-event-card .show-more,
-  .list .browse-cards-block-content > div .browse-card.upcoming-event-card.expanded .show-less {
+  .list .browse-cards-block-content > div .browse-card.upcoming-event-card.expanded .show-less,
+  .list .browse-cards-block-content > div .browse-card.event-upcoming-event-card .show-more,
+  .list .browse-cards-block-content > div .browse-card.event-upcoming-event-card.expanded .show-less {
     text-align: left;
     display: block;
     text-decoration: underline;
     font-style: normal;
     font-variant: normal;
     font-weight: normal;
-    font-size: 17px;
-    line-height: 21px;
+    font-size: calc(var(--spectrum-font-size-200) + var(--spectrum-spacing-50));
+    line-height: var(--spectrum-line-height-s);
     letter-spacing: 0;
     color: var(--spectrum-blue-900);
     opacity: 1;
-    margin-top: 8px;
+    margin-top: var(--spectrum-spacing-100);
   }
 
-  .list .browse-cards-block-content > div .browse-card.upcoming-event-card.expanded .show-more {
+  .list .browse-cards-block-content > div .browse-card.upcoming-event-card.expanded .show-more,
+  .list .browse-cards-block-content > div .browse-card.event-upcoming-event-card.expanded .show-more {
     display: none;
   }
 
   .list
     .browse-cards-block-content
     .browse-card.upcoming-event-card
+    .browse-card-description-text.text-expanded
+    .show-more,
+  .list
+    .browse-cards-block-content
+    .browse-card.event-upcoming-event-card
     .browse-card-description-text.text-expanded
     .show-more {
     display: none;
@@ -349,14 +412,20 @@ body[class^='browse-'] .browse-card.upcoming-event-card .browse-card-figure .eve
     .browse-cards-block-content
     > div
     .browse-card.upcoming-event-card.expanded
+    .browse-card-description-text.text-expanded,
+  .list
+    .browse-cards-block-content
+    > div
+    .browse-card.event-upcoming-event-card.expanded
     .browse-card-description-text.text-expanded {
     -webkit-line-clamp: unset;
   }
 
-  .list .browse-card.upcoming-event-card .browse-card-footer .location-type {
+  .list .browse-card.upcoming-event-card .browse-card-footer .location-type,
+  .list .browse-card.event-upcoming-event-card .browse-card-footer .location-type {
     display: flex;
     align-items: center;
-    margin-bottom: 16.5px;
+    margin-bottom: var(--spectrum-spacing-300);
     position: unset;
     align-self: flex-start;
     padding: 0;
@@ -367,29 +436,36 @@ body[class^='browse-'] .browse-card.upcoming-event-card .browse-card-figure .eve
     gap: var(--spectrum-spacing-75);
   }
 
-  .list .browse-card.upcoming-event-card .browse-card-footer .location-type span::first-letter {
+  .list .browse-card.upcoming-event-card .browse-card-footer .location-type span::first-letter,
+  .list .browse-card.event-upcoming-event-card .browse-card-footer .location-type span::first-letter {
     text-transform: uppercase;
   }
 
-  .list .browse-card.upcoming-event-card .browse-card-footer .location-type .icon {
-    width: 18px;
-    height: 18px;
+  .list .browse-card.upcoming-event-card .browse-card-footer .location-type .icon,
+  .list .browse-card.event-upcoming-event-card .browse-card-footer .location-type .icon {
+    width: calc(var(--spectrum-spacing-300) + var(--spectrum-spacing-50));
+    height: calc(var(--spectrum-spacing-300) + var(--spectrum-spacing-50));
   }
 
   .list .browse-card.upcoming-event-card .browse-card-figure .event-series-banner,
-  .list .browse-card.upcoming-event-card .browse-card-figure .event-series-banner-no-speakers {
+  .list .browse-card.upcoming-event-card .browse-card-figure .event-series-banner-no-speakers,
+  .list .browse-card.event-upcoming-event-card .browse-card-figure .event-series-banner,
+  .list .browse-card.event-upcoming-event-card .browse-card-figure .event-series-banner-no-speakers {
     text-align: center;
     font-size: var(--spectrum-font-size-100);
     color: var(--spectrum-gray-50);
     opacity: 1;
     position: relative;
-    padding: 10px 10%;
+    padding-block: calc(var(--spectrum-spacing-100) + var(--spectrum-spacing-50));
+    padding-inline: 10%;
     margin: 0;
     order: 1;
   }
 
   .list .browse-card.upcoming-event-card .browse-card-figure .event-series-banner-no-speakers::before,
-  .list .browse-card.upcoming-event-card .browse-card-figure .event-series-banner::before {
+  .list .browse-card.upcoming-event-card .browse-card-figure .event-series-banner::before,
+  .list .browse-card.event-upcoming-event-card .browse-card-figure .event-series-banner-no-speakers::before,
+  .list .browse-card.event-upcoming-event-card .browse-card-figure .event-series-banner::before {
     content: '';
     position: absolute;
     top: 0;
@@ -401,32 +477,37 @@ body[class^='browse-'] .browse-card.upcoming-event-card .browse-card-figure .eve
     transform: translateX(-50%);
   }
 
-  .list .browse-card.upcoming-event-card .browse-card-figure .event-series-banner-no-speakers::after {
+  .list .browse-card.upcoming-event-card .browse-card-figure .event-series-banner-no-speakers::after,
+  .list .browse-card.event-upcoming-event-card .browse-card-figure .event-series-banner-no-speakers::after {
     display: none;
   }
 
-  .list .browse-card.upcoming-event-card .browse-card-description-text {
+  .list .browse-card.upcoming-event-card .browse-card-description-text,
+  .list .browse-card.event-upcoming-event-card .browse-card-description-text {
     display: block;
     -webkit-line-clamp: unset;
   }
 
-  .list .browse-card.upcoming-event-card .browse-card-footer .footer-speakers-section {
+  .list .browse-card.upcoming-event-card .browse-card-footer .footer-speakers-section,
+  .list .browse-card.event-upcoming-event-card .browse-card-footer .footer-speakers-section {
     order: 4;
     align-self: flex-start;
     width: 100%;
     display: block;
   }
 
-  .list .browse-card.upcoming-event-card .browse-card-footer .footer-speakers-section .speakers-heading {
+  .list .browse-card.upcoming-event-card .browse-card-footer .footer-speakers-section .speakers-heading,
+  .list .browse-card.event-upcoming-event-card .browse-card-footer .footer-speakers-section .speakers-heading {
     font-size: var(--spectrum-font-size-200);
     font-weight: var(--font-weight-bold);
-    margin-bottom: 15px;
+    margin-bottom: var(--spectrum-spacing-300);
     color: #000;
     position: relative;
-    padding-bottom: 8px;
+    padding-bottom: var(--spectrum-spacing-100);
   }
 
-  .list .browse-card.upcoming-event-card .browse-card-footer .footer-speakers-section .speakers-heading::after {
+  .list .browse-card.upcoming-event-card .browse-card-footer .footer-speakers-section .speakers-heading::after,
+  .list .browse-card.event-upcoming-event-card .browse-card-footer .footer-speakers-section .speakers-heading::after {
     content: '';
     position: absolute;
     bottom: 0;
@@ -436,38 +517,44 @@ body[class^='browse-'] .browse-card.upcoming-event-card .browse-card-figure .eve
     background-color: var(--non-spectrum-unicorn-silver);
   }
 
-  .list .browse-card.upcoming-event-card .browse-card-footer .footer-speakers-section .speakers-list {
+  .list .browse-card.upcoming-event-card .browse-card-footer .footer-speakers-section .speakers-list,
+  .list .browse-card.event-upcoming-event-card .browse-card-footer .footer-speakers-section .speakers-list {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: calc(var(--spectrum-spacing-300) - var(--spectrum-spacing-50));
   }
 
-  .list .browse-card.upcoming-event-card .browse-card-footer .footer-speakers-section .speaker-item {
+  .list .browse-card.upcoming-event-card .browse-card-footer .footer-speakers-section .speaker-item,
+  .list .browse-card.event-upcoming-event-card .browse-card-footer .footer-speakers-section .speaker-item {
     display: flex;
     align-items: flex-start;
-    gap: 10px;
+    gap: calc(var(--spectrum-spacing-100) + var(--spectrum-spacing-50));
   }
 
-  .list .browse-card.upcoming-event-card .browse-card-footer .footer-speakers-section .speaker-img-container {
-    width: 50px;
-    height: 50px;
+  .list .browse-card.upcoming-event-card .browse-card-footer .footer-speakers-section .speaker-img-container,
+  .list .browse-card.event-upcoming-event-card .browse-card-footer .footer-speakers-section .speaker-img-container {
+    width: calc(var(--spectrum-spacing-700) + var(--spectrum-spacing-50));
+    height: calc(var(--spectrum-spacing-700) + var(--spectrum-spacing-50));
     border-radius: 50%;
     overflow: hidden;
     flex-shrink: 0;
   }
 
-  .list .browse-card.upcoming-event-card .browse-card-footer .footer-speakers-section .speaker-img-container img {
+  .list .browse-card.upcoming-event-card .browse-card-footer .footer-speakers-section .speaker-img-container img,
+  .list .browse-card.event-upcoming-event-card .browse-card-footer .footer-speakers-section .speaker-img-container img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  .list .browse-card.upcoming-event-card .browse-card-footer .footer-speakers-section .speaker-info {
+  .list .browse-card.upcoming-event-card .browse-card-footer .footer-speakers-section .speaker-info,
+  .list .browse-card.event-upcoming-event-card .browse-card-footer .footer-speakers-section .speaker-info {
     display: flex;
     flex-direction: column;
   }
 
-  .list .browse-card.upcoming-event-card .browse-card-footer .footer-speakers-section .speaker-name {
+  .list .browse-card.upcoming-event-card .browse-card-footer .footer-speakers-section .speaker-name,
+  .list .browse-card.event-upcoming-event-card .browse-card-footer .footer-speakers-section .speaker-name {
     font-size: var(--spectrum-font-size-75);
     font-weight: var(--font-weight-bold);
     color: var(--non-spectrum-dark-gray);
@@ -476,18 +563,21 @@ body[class^='browse-'] .browse-card.upcoming-event-card .browse-card-figure .eve
 
 @media only screen and (min-width: 1024px) {
   .events-v2 {
-    .browse-card.upcoming-event-card .browse-card-figure .event-series-banner-no-speakers {
+    .browse-card.upcoming-event-card .browse-card-figure .event-series-banner-no-speakers,
+    .browse-card.event-upcoming-event-card .browse-card-figure .event-series-banner-no-speakers {
       font-size: var(--spectrum-font-size-700);
     }
   }
 
-  .list .browse-card.upcoming-event-card .browse-card-figure .event-series-banner-no-speakers {
+  .list .browse-card.upcoming-event-card .browse-card-figure .event-series-banner-no-speakers,
+  .list .browse-card.event-upcoming-event-card .browse-card-figure .event-series-banner-no-speakers {
     font-size: var(--spectrum-font-size-100);
   }
 }
 
 @media only screen and (min-width: 1440px) {
-  body[class^='browse-'] .browse-card.upcoming-event-card .browse-card-figure .event-series-banner-no-speakers {
-    font-size: 24px;
+  body[class^='browse-'] .browse-card.upcoming-event-card .browse-card-figure .event-series-banner-no-speakers,
+  body[class^='browse-'] .browse-card.event-upcoming-event-card .browse-card-figure .event-series-banner-no-speakers {
+    font-size: calc(var(--spectrum-font-size-500) + var(--spectrum-spacing-50));
   }
 }

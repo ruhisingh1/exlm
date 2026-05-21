@@ -59,7 +59,12 @@ export class MPCListener {
   onMessage(event) {
     if (!this.active) return;
     if (event?.data?.type === 'mpcStatus') {
-      this.emit(event.data.state, event.data);
+      // Only emit if message is from a playlist player iframe
+      const playlistIframes = document.querySelectorAll('[data-playlist-player] iframe');
+      const isFromPlaylist = [...playlistIframes].some((iframe) => iframe.contentWindow === event.source);
+      if (isFromPlaylist) {
+        this.emit(event.data.state, event.data);
+      }
     }
   }
 
@@ -87,9 +92,11 @@ export class Playlist {
   description = '';
 
   constructor(options) {
-    this.options = options || { autoplayNext: true };
-    const playlistId = window.location.pathname.split('/').join('-');
-    this.localStorageKey = `playlist-${playlistId}`;
+    this.options = { autoplayNext: true, ...options };
+    const pathBasedId = window.location.pathname.split('/').join('-');
+    // If playlistId is provided in options, append it to make key unique per playlist
+    const uniqueId = options?.playlistId ? `${pathBasedId}-${options.playlistId}` : pathBasedId;
+    this.localStorageKey = `playlist-${uniqueId}`;
     let storedPlaylist = {
       videos: [],
     };

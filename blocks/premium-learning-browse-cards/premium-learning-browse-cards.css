@@ -1,0 +1,56 @@
+@import '../../scripts/browse-card/browse-cards-block.css';
+@import '../../scripts/browse-card/browse-card-premium-learning.css';
+
+/* Block Header */
+.premium-learning-browse-cards .premium-learning-browse-cards-header-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.premium-learning-browse-cards .premium-learning-browse-cards-header-text .premium-learning-browse-cards-title {
+  margin-bottom: 8px;
+}
+
+.premium-learning-browse-cards .premium-learning-browse-cards-header-text .premium-learning-browse-cards-title * {
+  margin: 0;
+}
+
+.premium-learning-browse-cards-description {
+  font-size: var(--spectrum-font-size-200);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.5;
+  color: var(--non-spectrum-dark-gray);
+}
+
+/* Link Styling */
+.premium-learning-browse-cards .premium-learning-browse-cards-link {
+  display: block;
+  margin: 0 0 var(--spectrum-spacing-100) 0;
+  line-height: var(--spectrum-line-height-s);
+}
+
+.premium-learning-browse-cards .premium-learning-browse-cards-link.hidden {
+  display: none;
+}
+
+.premium-learning-browse-cards.browse-cards-block {
+  margin-bottom: 56px;
+}
+
+.premium-learning-browse-cards.browse-cards-block .browse-cards-block-content {
+  justify-content: flex-start;
+  min-height: auto;
+  margin-top: 32px;
+  margin-bottom: 0;
+}
+
+/* Desktop styles */
+@media (min-width: 600px) {
+  .premium-learning-browse-cards .premium-learning-browse-cards-header-content {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}

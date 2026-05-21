@@ -13,6 +13,7 @@
     "/content/exlm-ruhis/languages:/languages.json",
     "/content/exlm-ruhis/qualtrics:/qualtrics.json",
     "/content/exlm-ruhis/featured-card-products:/featured-card-products.json",
+    "/content/exlm-ruhis/exlm-config:/exlm-config.json:",
     "/content/exlm-ruhis/taxonomy/features:/features.json",
     "/content/exlm-ruhis/taxonomy/roles:/roles.json",
     "/content/exlm-ruhis/taxonomy/levels:/levels.json",
