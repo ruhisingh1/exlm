@@ -1,5 +1,5 @@
 import BrowseCardsDelegate from '../../scripts/browse-card/browse-cards-delegate.js';
-import { htmlToElement } from '../../scripts/scripts.js';
+import { fetchLanguagePlaceholders, htmlToElement } from '../../scripts/scripts.js';
 import { buildCard } from '../../scripts/browse-card/browse-card.js';
 import BrowseCardShimmer from '../../scripts/browse-card/browse-card-shimmer.js';
 import { CONTENT_TYPES } from '../../scripts/data-service/coveo/coveo-exl-pipeline-constants.js';
@@ -7,6 +7,14 @@ import BrowseCardViewSwitcher from '../../scripts/browse-card/browse-cards-view-
 import { loadCSS } from '../../scripts/lib-franklin.js';
 
 export default async function decorate(block) {
+  let placeholders = {};
+  try {
+    placeholders = await fetchLanguagePlaceholders();
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('Error fetching placeholders:', err);
+  }
+
   const [headingElement, descriptionElement] = [...block.children].map((row) => row.firstElementChild);
 
   // Clear the block content
@@ -40,6 +48,15 @@ export default async function decorate(block) {
   const buildCardsShimmer = new BrowseCardShimmer();
   buildCardsShimmer.addShimmer(block);
 
+  const renderNoResults = () => {
+    const noResultsText =
+      placeholders.noResultsTextBrowse ||
+      'We are sorry, no results found matching the criteria. Try adjusting your search to view more content.';
+    const noResultsMsg = htmlToElement(`<div class="event-no-results">${noResultsText}</div>`);
+    contentDiv.appendChild(noResultsMsg);
+    block.appendChild(contentDiv);
+  };
+
   const parameters = {
     contentType: [CONTENT_TYPES.UPCOMING_EVENT_V2.MAPPING_KEY],
     sortCriteria: 'date ascending',
@@ -49,7 +66,10 @@ export default async function decorate(block) {
     .then((results) => {
       buildCardsShimmer.removeShimmer();
 
-      if (!results?.length) return;
+      if (!results?.length) {
+        renderNoResults();
+        return;
+      }
 
       results.forEach((cardData) => {
         const cardDiv = document.createElement('div');
@@ -62,5 +82,6 @@ export default async function decorate(block) {
       buildCardsShimmer.removeShimmer();
       // eslint-disable-next-line no-console
       console.error('Error loading upcoming event cards:', err);
+      renderNoResults();
     });
 }
