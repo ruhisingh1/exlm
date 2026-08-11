@@ -3,6 +3,7 @@ import {
   createTag,
   htmlToElement,
   getv2TagLabels,
+  isV2TagFormat,
   getPathDetails,
   fetchLanguagePlaceholders,
   matchesAnyTheme,
@@ -403,8 +404,15 @@ function handleUriHash(isInitialLoad) {
         const ddObject = getObjectById(dropdownOptions, keyName);
         const { name } = ddObject;
         facetValues.forEach((facetValueString) => {
+          // Some facet values are opaque strings that contain a literal '|' (e.g. the
+          // isEventsV2 content types 'Event|On Demand Event', 'Event|Upcoming Event') and
+          // must match a checkbox by their full value. Others (e.g. Community sub-facets)
+          // encode multiple hash entries that all map back to one checkbox keyed by the
+          // segment before the '|'. Try the exact value first, then fall back to the key.
           const [facetValue] = facetValueString.split('|');
-          const inputEl = filterOptionEl.querySelector(`input[value="${facetValue}"]`);
+          const inputEl =
+            filterOptionEl.querySelector(`input[value="${facetValueString}"]`) ||
+            filterOptionEl.querySelector(`input[value="${facetValue}"]`);
           if (inputEl && !inputEl.checked) {
             const label = inputEl.dataset.label || '';
             inputEl.checked = true;
@@ -414,20 +422,18 @@ function handleUriHash(isInitialLoad) {
                 id: keyName,
                 name,
                 label,
-                value: facetValue,
+                value: inputEl.value,
               },
               'handleUriHash',
             );
           }
         });
         const btnEl = filterOptionEl.querySelector(':scope > button');
-        const selectedCount = facetValues.reduce((acc, curr) => {
-          const [key] = curr.split('|');
-          if (!acc.includes(key)) {
-            acc.push(key);
-          }
-          return acc;
-        }, []).length;
+        // Base the count on checkboxes actually applied above, not the raw hash values —
+        // a facet value from the hash may not exist for the current locale (e.g. right
+        // after a locale switch), which previously left the count out of sync with the
+        // (empty) selection shown below it.
+        const selectedCount = filterOptionEl.querySelectorAll('.custom-checkbox input[type="checkbox"]:checked').length;
         ddObject.selected = selectedCount;
         btnEl.firstChild.textContent = selectedCount === 0 ? name : `${name} (${selectedCount})`;
       }
@@ -1499,25 +1505,45 @@ function decorateBrowseTopics(block) {
   const { lang } = getPathDetails();
   const allDivs = [...block.children].map((row) => row.firstElementChild);
 
-  // Handle both new blocks (with v2 elements) and already authored blocks (without v2 elements)
-  if (allDivs.length <= 6) {
-    allDivs.splice(4, 0, ...Array(3));
-  } else if (allDivs.length === 7) {
-    // Old v2 blocks authored before featuresv2 was introduced
-    allDivs.splice(5, 0, undefined);
-  }
+  // Check if block has v1 tags by finding any element that starts with "exl:"
+  const hasExlTag = allDivs.some((el) => el?.textContent?.trim().startsWith('exl:'));
 
-  // 'customElement' can either be a Form Element or localized tag values returned by the converter.
-  const [
-    solutionsElement,
-    headingElement,
-    topicsElement,
-    contentTypeElement,
-    solutionsv2Element,
-    featuresv2Element,
-    topicsv2Element,
-    customElement,
-  ] = allDivs;
+  // Case 1 : block authored before v2 was introduced — has only v1 tags
+  // Case 2 : block authored after v2 was introduced — has both v1 and v2 tags
+  // Case 3 : block authored after v1 cutover — has only v2 tags
+  const hasV1Tags = hasExlTag || allDivs.length >= 8 || allDivs.length < 6;
+
+  let solutionsElement;
+  let headingElement;
+  let topicsElement;
+  let contentTypeElement;
+  let solutionsv2Element;
+  let featuresv2Element;
+  let topicsv2Element;
+  let customElement;
+
+  if (hasV1Tags) {
+    if (allDivs.length >= 8) {
+      // Case 2: both v1 and v2 tags
+      [
+        solutionsElement,
+        headingElement,
+        topicsElement,
+        contentTypeElement,
+        solutionsv2Element,
+        featuresv2Element,
+        topicsv2Element,
+        customElement,
+      ] = allDivs;
+    } else {
+      // Case 1: legacy — only v1 tags
+      [solutionsElement, headingElement, topicsElement, contentTypeElement, customElement] = allDivs;
+    }
+  } else {
+    // Case 3: current — only v2 tags
+    [headingElement, contentTypeElement, solutionsv2Element, featuresv2Element, topicsv2Element, customElement] =
+      allDivs;
+  }
 
   const solutionsContent = solutionsElement?.textContent?.trim() ?? '';
   const headingContent = headingElement?.textContent?.trim() ?? '';
@@ -1530,14 +1556,16 @@ function decorateBrowseTopics(block) {
   const localizedTopicsContent = isFormElement ? '' : customElement?.textContent?.trim() ?? '';
   let allSolutionsTags;
   let allTopicsTags;
-  // When TQ tags are authored and FF is enabled.
-  if (isFeatureEnabled('isV2TagsEnabled') && solutionsv2Content) {
-    const solutionsv2Labels = getv2TagLabels(solutionsv2Content);
+
+  // If new format (no v1 tags), always use v2 tags
+  // If old format, use v2 tags if FF enabled, otherwise use v1 tags
+  if (!hasV1Tags || isV2TagFormat(solutionsv2Content)) {
+    const solutionsv2Labels = isV2TagFormat(solutionsv2Content) ? getv2TagLabels(solutionsv2Content) : '';
     allSolutionsTags = solutionsv2Labels ? solutionsv2Labels.split(',').map((p) => p.trim()) : [];
 
     // Handle features v2 and topics v2 logic
-    const featuresv2Labels = featuresv2Content ? getv2TagLabels(featuresv2Content) : '';
-    const topicsv2Labels = topicsv2Content ? getv2TagLabels(topicsv2Content) : '';
+    const featuresv2Labels = isV2TagFormat(featuresv2Content) ? getv2TagLabels(featuresv2Content) : '';
+    const topicsv2Labels = isV2TagFormat(topicsv2Content) ? getv2TagLabels(topicsv2Content) : '';
 
     // Merge features and topics v2 tags; Set deduplicates if both fields contain overlapping labels.
     const featuresv2Array = featuresv2Labels ? featuresv2Labels.split(',').map((p) => p.trim()) : [];
@@ -1572,7 +1600,7 @@ function decorateBrowseTopics(block) {
 
   const supportedProducts = [];
   if (allSolutionsTags.length) {
-    if (isFeatureEnabled('isV2TagsEnabled') && solutionsv2Content) {
+    if (solutionsv2Content) {
       // V2 tags are plain text labels, construct query directly
       const productsQuery = allSolutionsTags.map((product) => `@el_product="${product}"`).join(' OR ');
       window.headlessBaseSolutionQuery = `(${window.headlessBaseSolutionQuery} AND (${productsQuery}))`;
@@ -1611,7 +1639,7 @@ function decorateBrowseTopics(block) {
   const browseFiltersSection = document.querySelector('.browse-filters-form');
 
   if (allTopicsTags.length > 0) {
-    const isV2Enabled = isFeatureEnabled('isV2TagsEnabled') && (featuresv2Content || topicsv2Content);
+    const isV2Enabled = !!(featuresv2Content || topicsv2Content);
     const stripParens = (s) => s.replace(/\s*\([^)]+\)\s*$/, '').trim();
     let v2LocalizedMap = {};
     if (isV2Enabled) {

@@ -16,6 +16,7 @@ import {
   debounce,
   generateAdobeTrackingData,
   resolveBlockLevelSkeleton,
+  normalizeContentTypeFilterValue,
 } from './components/atomic-search-utils.js';
 import { isMobile } from '../header/header-utils.js';
 import { COVEO_SEARCH_CUSTOM_EVENTS } from '../../scripts/search/search-utils.js';
@@ -25,10 +26,51 @@ import atomicResultPageHandler from './components/atomic-search-results-per-page
 import loadCoveoToken from '../../scripts/data-service/coveo/coveo-token-service.js';
 import { pushPageDataLayer } from '../../scripts/analytics/lib-analytics.js';
 import { buildCaptionElContentTypeResourceBundle } from './components/atomic-facet-engine-helpers.js';
+import { COVEO_EXCLUDE_STALE_UPCOMING_AQ } from '../../scripts/browse-card/browse-cards-constants.js';
 
 let placeholders = {};
 
+/**
+ * Some search entry points (e.g. the community platform's native search box) send Coveo's raw
+ * "Parent;Parent|Child" indexing notation, which is never a valid filter — sanitize it here too.
+ */
+function normalizeContentTypeHash() {
+  const hash = window.location.hash.slice(1);
+  if (!hash) return;
+
+  let changed = false;
+  const updatedSegments = hash.split('&').map((segment) => {
+    const eqIndex = segment.indexOf('=');
+    if (eqIndex === -1) return segment;
+    const key = segment.slice(0, eqIndex);
+    const rawValue = segment.slice(eqIndex + 1);
+    if (key !== 'f-el_contenttype' || !rawValue) return segment;
+
+    const normalizedValue = rawValue
+      .split(',')
+      .map((item) => {
+        try {
+          return encodeURIComponent(normalizeContentTypeFilterValue(decodeURIComponent(item)));
+        } catch {
+          // Malformed percent-encoding in an externally-constructed URL — leave this value as-is
+          // rather than let decorate() throw and take down the whole block's render.
+          return item;
+        }
+      })
+      .join(',');
+
+    if (normalizedValue === rawValue) return segment;
+    changed = true;
+    return `${key}=${normalizedValue}`;
+  });
+
+  if (!changed) return;
+  const newHash = updatedSegments.join('&');
+  window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}#${newHash}`);
+}
+
 export default function decorate(block) {
+  normalizeContentTypeHash();
   const renderAtomicShimmer = (insertBefore) => {
     const skeletonWrapper = htmlToElement(`<div class="atomic-search-load-skeleton">
       <div class="atomic-load-skeleton-head">
@@ -125,6 +167,16 @@ export default function decorate(block) {
           },
         });
         document.dispatchEvent(preProcessEvent);
+
+        // Drop stale Upcoming Events at query time (same rule as Events Hub).
+        if (metadata?.method === 'search') {
+          const existingAq = (bodyJSON.aq || '').trim();
+          bodyJSON.aq = existingAq
+            ? `(${existingAq}) AND (${COVEO_EXCLUDE_STALE_UPCOMING_AQ})`
+            : COVEO_EXCLUDE_STALE_UPCOMING_AQ;
+          request.body = JSON.stringify(bodyJSON);
+        }
+
         return request;
       },
     });

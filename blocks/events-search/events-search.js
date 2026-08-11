@@ -1,7 +1,7 @@
 import { decorateIcons, loadCSS } from '../../scripts/lib-franklin.js';
 import { createTag, fetchLanguagePlaceholders } from '../../scripts/scripts.js';
-import { BASE_COVEO_ADVANCED_QUERY_UPCOMING_EVENT } from '../../scripts/browse-card/browse-cards-constants.js';
-import BrowseCardsDelegate, {
+import { BASE_COVEO_ADVANCED_QUERY_EVENTS } from '../../scripts/browse-card/browse-cards-constants.js';
+import {
   normalizeOnDemandEventModel,
   normalizeUpcomingEventModel,
 } from '../../scripts/browse-card/browse-cards-delegate.js';
@@ -16,22 +16,261 @@ import {
   getBrowseFiltersResultCount,
   handleCoverSearchSubmit,
 } from '../browse-filters/browse-filter-utils.js';
+import { pushEventsFilterSearchEvent, pushEventsClearFiltersEvent } from '../../scripts/analytics/lib-analytics.js';
 
 const FACET_CONTROLLER_MAP = {
   el_product: 'headlessProductFacet',
   el_event_series: 'headlessEventSeriesFacet',
   el_contenttype: 'headlessTypeFacet',
 };
-const INITIAL_VISIBLE_FILTER_OPTIONS = 5;
-/** Literal token authors enter in placeholders.json for dynamic counts. */
-// eslint-disable-next-line no-template-curly-in-string -- not a JS template; matches placeholders.json text
+// Tracks active render pass per block; queues the next subscription fire instead of running two renders at once.
+const headlessSubscriptionSyncDepth = new WeakMap();
+/** Literal tokens authors enter in placeholders for dynamic counts. */
+/* eslint-disable no-template-curly-in-string -- not JS templates; match placeholders sheet text */
 const PLACEHOLDER_COUNT_TOKEN = '${count}';
+const PLACEHOLDER_PG_COUNT_TOKEN = '${pgCount}';
+/* eslint-enable no-template-curly-in-string */
 const RESULTS_SCROLL_ADJUSTMENT_OFFSET = -12;
+const MAX_VISIBLE_FILTER_OPTIONS = 11;
 
-/** Fills count slots in CMS strings: `${count}`, `{}`, `{count}` (see PLACEHOLDER_COUNT_TOKEN). */
+// Filter UI helpers
+
+/**
+ * Caps the options list height to MAX_VISIBLE_FILTER_OPTIONS rows using the actual rendered row
+ * height (measured from the DOM rather than assumed via CSS) so the scrollbar kicks in at the
+ * right point regardless of font metrics. Only measurable while the group is expanded/visible.
+ */
+function applyFilterOptionsScrollCap(groupEl) {
+  const optionsList = groupEl?.querySelector('.events-search-filter-options-list');
+  if (!optionsList) return;
+  const options = optionsList.querySelectorAll('.events-search-filter-option');
+  if (options.length <= MAX_VISIBLE_FILTER_OPTIONS) {
+    optionsList.style.maxHeight = '';
+    return;
+  }
+  if (optionsList.offsetParent === null) return;
+  const listTop = optionsList.getBoundingClientRect().top;
+  const lastVisibleBottom = options[MAX_VISIBLE_FILTER_OPTIONS - 1].getBoundingClientRect().bottom;
+  const capHeight = lastVisibleBottom - listTop;
+  if (capHeight > 0) optionsList.style.maxHeight = `${Math.ceil(capHeight)}px`;
+}
+
+function recalcExpandedFilterScrollCaps(block) {
+  block.querySelectorAll('.events-search-filter-group.is-expanded').forEach((groupEl) => {
+    applyFilterOptionsScrollCap(groupEl);
+  });
+}
+
+function removeFilterGroupOptionsShimmer(optionsContainer) {
+  optionsContainer?.querySelector('.events-search-filter-options-shimmer')?.remove();
+}
+
+function hasFilterGroupOptionsShimmer(optionsContainer) {
+  return Boolean(optionsContainer?.querySelector('.events-search-filter-options-shimmer'));
+}
+
+function renderFilterGroupOptionsShimmer(optionsContainer, rowCount = 5) {
+  if (!optionsContainer) return;
+  removeFilterGroupOptionsShimmer(optionsContainer);
+  const shimmerRoot = createTag('div', { class: 'events-search-filter-options-shimmer', 'aria-hidden': 'true' });
+  for (let i = 0; i < rowCount; i += 1) {
+    shimmerRoot.append(createTag('div', { class: 'events-search-filter-option-shimmer' }));
+  }
+  optionsContainer.append(shimmerRoot);
+}
+
+function renderFilterOptionCountShimmer(optionEl) {
+  const checkbox = optionEl?.querySelector('input[type="checkbox"]');
+  const optionLabelEl = optionEl?.querySelector('.events-search-filter-option-label');
+  if (!checkbox || !optionLabelEl) return;
+  const optionLabel = checkbox.getAttribute('data-label') || checkbox.value;
+  optionLabelEl.replaceChildren(
+    document.createTextNode(String(optionLabel ?? '')),
+    createTag('span', {
+      class: 'events-search-filter-option-count events-search-filter-count-shimmer',
+      'aria-hidden': 'true',
+    }),
+  );
+}
+
+function updateFilterOptionCount(optionEl, count, optionLabel) {
+  const checkbox = optionEl?.querySelector('input[type="checkbox"]');
+  const optionLabelEl = optionEl?.querySelector('.events-search-filter-option-label');
+  if (!checkbox || !optionLabelEl) return;
+  if (typeof count === 'number' && count >= 0) {
+    checkbox.setAttribute('data-count', String(count));
+    const countEl = createTag('span', { class: 'events-search-filter-option-count' });
+    countEl.textContent = ` (${count})`;
+    optionLabelEl.replaceChildren(document.createTextNode(String(optionLabel ?? '')), countEl);
+  } else {
+    checkbox.removeAttribute('data-count');
+    optionLabelEl.textContent = String(optionLabel ?? '');
+  }
+}
+
+function buildFilterOptionRow({ groupId, item, index }) {
+  const optionValue = item.value || item.title;
+  const optionLabel = item.title || item.value;
+  const optionId = `${groupId}-${index + 1}-${String(optionValue).replace(/[^a-zA-Z0-9_-]/g, '-')}`;
+  const optionEl = createTag('div', {
+    class: `events-search-filter-option${item.selected ? ' checked' : ''}`,
+  });
+  const checkbox = document.createElement('input');
+  checkbox.type = 'checkbox';
+  checkbox.id = optionId;
+  checkbox.value = String(optionValue ?? '');
+  checkbox.checked = Boolean(item.selected);
+  checkbox.setAttribute('data-label', String(optionLabel ?? ''));
+  if (item.count != null) checkbox.setAttribute('data-count', String(item.count));
+  const optionLabelEl = createTag('label', { class: 'events-search-filter-option-label', for: optionId });
+  const labelText = document.createTextNode(String(optionLabel ?? ''));
+  if (item.count != null) {
+    const countEl = createTag('span', { class: 'events-search-filter-option-count' });
+    countEl.textContent = ` (${item.count})`;
+    optionLabelEl.append(labelText, countEl);
+  } else {
+    optionLabelEl.append(labelText);
+  }
+  optionEl.append(checkbox, optionLabelEl);
+  return optionEl;
+}
+
+// Dynamic facets (Headless v2)
+const DYNAMIC_FACET_FIELDS = ['el_product', 'el_event_series'];
+
+// Fills count value into a placeholder string
 function fillPlaceholderCount(template, value) {
   const s = String(value);
-  return String(template).replaceAll(PLACEHOLDER_COUNT_TOKEN, s).replaceAll('{}', s).replaceAll('{count}', s);
+  return String(template)
+    .replaceAll(PLACEHOLDER_COUNT_TOKEN, s)
+    .replaceAll(PLACEHOLDER_PG_COUNT_TOKEN, s)
+    .replaceAll('{}', s)
+    .replaceAll('{count}', s);
+}
+
+function sortItemsAlphabetically(a, b) {
+  const titleA = (a.title || '').toLowerCase();
+  const titleB = (b.title || '').toLowerCase();
+  return titleA.localeCompare(titleB, document.documentElement.lang || 'en');
+}
+
+function getEventsSearchHeadlessFacetOverrides() {
+  return {
+    el_product: { numberOfValues: 500, options: { filterFacetCount: true, sortCriteria: 'alphanumeric' } },
+    el_event_series: { numberOfValues: 100, options: { filterFacetCount: true, sortCriteria: 'alphanumeric' } },
+  };
+}
+
+function showDynamicFilterGroupShimmers(block, { refreshCountsOnly = false } = {}) {
+  DYNAMIC_FACET_FIELDS.forEach((field) => {
+    const groupEl = block.querySelector(`.events-search-filter-group[data-filter-type="${field}"]`);
+    const optionsContainer = groupEl?.querySelector('.events-search-filter-options');
+    if (!groupEl || !optionsContainer) return;
+    if (refreshCountsOnly && groupEl.querySelector('.events-search-filter-option')) {
+      groupEl.classList.add('is-filter-loading');
+      return;
+    }
+    if (!groupEl.querySelector('.events-search-filter-option') && !hasFilterGroupOptionsShimmer(optionsContainer)) {
+      renderFilterGroupOptionsShimmer(optionsContainer);
+    }
+  });
+}
+
+function renderDynamicGroupOptions(groupEl, group) {
+  const optionsContainer = groupEl.querySelector('.events-search-filter-options');
+  if (!optionsContainer) return;
+  removeFilterGroupOptionsShimmer(optionsContainer);
+  optionsContainer.innerHTML = '';
+  const optionsList = createTag('div', { class: 'events-search-filter-options-list' });
+  group.items.forEach((item, index) => {
+    optionsList.append(buildFilterOptionRow({ groupId: group.id, item, index }));
+  });
+  optionsContainer.append(optionsList);
+  decorateIcons(optionsContainer);
+}
+
+function syncDynamicFacetGroup(block, group) {
+  const groupEl = block.querySelector(`.events-search-filter-group[data-filter-type="${group.id}"]`);
+  if (!groupEl) return;
+  const optionsContainer = groupEl.querySelector('.events-search-filter-options');
+  const controller = window[FACET_CONTROLLER_MAP[group.id]];
+  const items = (controller?.state?.values ?? [])
+    .filter((v) => v.state === 'selected' || (v.numberOfResults ?? 0) > 0)
+    .map((v) => ({
+      id: v.value,
+      value: v.value,
+      title: v.value.split('|').join(' | '),
+      count: v.numberOfResults ?? 0,
+      selected: v.state === 'selected',
+    }))
+    .sort(sortItemsAlphabetically);
+
+  if (!items.length) {
+    removeFilterGroupOptionsShimmer(optionsContainer);
+    groupEl.classList.remove('is-filter-loading');
+    groupEl.style.display = 'none';
+    return;
+  }
+
+  groupEl.style.display = '';
+  const wasExpanded = groupEl.classList.contains('is-expanded');
+  group.items = items;
+  renderDynamicGroupOptions(groupEl, group);
+  groupEl.classList.remove('is-filter-loading');
+  if (wasExpanded) {
+    groupEl.classList.add('is-expanded');
+    groupEl.querySelector('.events-search-filter-group-header')?.setAttribute('aria-expanded', 'true');
+    applyFilterOptionsScrollCap(groupEl);
+  }
+}
+
+function syncEventTypeFilterCounts(block) {
+  const controller = window[FACET_CONTROLLER_MAP.el_contenttype];
+  const groupEl = block.querySelector('.events-search-filter-group[data-filter-type="el_contenttype"]');
+  if (!controller || !groupEl) return;
+  const facetValues = controller.state?.values ?? [];
+  let visibleCount = 0;
+  groupEl.querySelectorAll('.events-search-filter-option').forEach((optionEl) => {
+    const checkbox = optionEl.querySelector('input[type="checkbox"]');
+    if (!checkbox) return;
+    const facetValue = facetValues.find((fv) => fv.value === checkbox.value);
+    const count = facetValue?.numberOfResults ?? 0;
+    updateFilterOptionCount(optionEl, count, checkbox.getAttribute('data-label') || checkbox.value);
+    const isVisible = checkbox.checked || count > 0;
+    optionEl.style.display = isVisible ? '' : 'none';
+    if (isVisible) visibleCount += 1;
+  });
+  groupEl.style.display = visibleCount > 0 ? '' : 'none';
+  groupEl.classList.remove('is-filter-loading');
+}
+
+// Skips facet UI updates triggered before the search response arrives, preventing stale counts.
+const lastSyncedSearchResponseId = new WeakMap();
+
+function syncDynamicFacetGroupsFromHeadless(block, groups) {
+  if (!(window.headlessStatusControllers?.state?.firstSearchExecuted ?? false)) return;
+
+  // Only sync facet UI when a new search response has arrived.
+  const searchResponseId = window.headlessSearchEngine?.state?.search?.searchResponseId;
+  if (searchResponseId && lastSyncedSearchResponseId.get(block) === searchResponseId) return;
+  if (searchResponseId) lastSyncedSearchResponseId.set(block, searchResponseId);
+
+  const totalResults = window.headlessSearchEngine?.state?.search?.response?.totalCount ?? 0;
+  block.classList.toggle('has-no-results', !totalResults);
+  groups.forEach((group) => {
+    if (DYNAMIC_FACET_FIELDS.includes(group.id)) syncDynamicFacetGroup(block, group);
+  });
+  syncEventTypeFilterCounts(block);
+}
+
+/** Builds the composite key used to identify a filter in pendingRemovals and callout data-key attributes. */
+const toCompositeKey = (filterType, value) => `${filterType}:${value}`;
+
+/** Splices the tag out of activeTags and registers it in pendingRemovals (browse-filters removeFromTags pattern). */
+function removeActiveTag(activeTags, pendingRemovals, filterType, value) {
+  const tagIndex = activeTags.findIndex((t) => t.filterType === filterType && t.value === value);
+  if (tagIndex !== -1) activeTags.splice(tagIndex, 1);
+  pendingRemovals.add(toCompositeKey(filterType, value));
 }
 
 const viewSwitcherInstances = new WeakMap();
@@ -39,6 +278,114 @@ const viewSwitcherInstances = new WeakMap();
 const eventsSearchLoadingUiCleanups = new WeakMap();
 /** Per-block AbortController for open sort dropdown document listeners (click-outside + Escape). */
 const eventsSearchSortDropdownOpenAbort = new WeakMap();
+/** Per-block filter state: { tags: [], pendingRemovals: Set, isClearing: boolean }. */
+const eventsSearchActiveTags = new WeakMap();
+/**
+ * Per-block analytics intent captured at click time.
+ * { pendingType: 'filter'|'search'|null, lastSearchId: string|null, intent: { byFilterType, term }|null }.
+ */
+const eventsSearchAnalyticsState = new WeakMap();
+
+function getFilterState(block) {
+  let state = eventsSearchActiveTags.get(block);
+  if (!state) {
+    state = { tags: [], pendingRemovals: new Set(), isClearing: false };
+    eventsSearchActiveTags.set(block, state);
+  }
+  return state;
+}
+
+function getEventsSearchAnalyticsState(block) {
+  let state = eventsSearchAnalyticsState.get(block);
+  if (!state) {
+    state = { pendingType: null, lastSearchId: null, intent: null };
+    eventsSearchAnalyticsState.set(block, state);
+  }
+  return state;
+}
+
+const ANALYTICS_FILTER_TYPE_TO_KEY = {
+  el_product: 'product',
+  el_contenttype: 'eventType',
+  el_event_series: 'series',
+};
+
+/** Values of the currently checked checkboxes for a filter group. */
+function getCheckedFilterValues(block, filterType) {
+  const groupEl = block.querySelector(`.events-search-filter-group[data-filter-type="${filterType}"]`);
+  return [...(groupEl?.querySelectorAll('input[type="checkbox"]:checked') ?? [])].map((cb) => cb.value);
+}
+
+/**
+ * Captures the user's selection at click time — before the headless subscription can revert the
+ * checkboxes to the lagging controller state (syncFilterUIFromHeadlessState overwrites checkbox
+ * .checked from Coveo state, which trails the click by one response-commit). This immutable snapshot
+ * is what we later match committed responses against, so the analytics payload reflects the actual
+ * interaction rather than the previous committed state.
+ */
+function captureEventsSearchIntent(block) {
+  const byFilterType = {};
+  Object.keys(ANALYTICS_FILTER_TYPE_TO_KEY).forEach((filterType) => {
+    byFilterType[filterType] = getCheckedFilterValues(block, filterType);
+  });
+  const term = String(block.querySelector('.events-search-keyword-input')?.value ?? '').trim();
+  return { byFilterType, term };
+}
+
+/**
+ * True once the engine state has settled onto the captured intent: every facet controller's selected
+ * values (per group) and the executed query equal the snapshot. The controllers and the search
+ * response commit together but trail each interaction by one commit, so intermediate subscription
+ * fires still show the previous selection; this gate rejects those until the controllers catch up to
+ * the snapshot, at which point response.totalCount is the matching count (browse-filters pattern).
+ */
+function responseMatchesEventsSearchIntent(intent) {
+  const search = window.headlessSearchEngine?.state?.search;
+  if (!search?.response || !intent) return false;
+  const filtersMatch = Object.keys(ANALYTICS_FILTER_TYPE_TO_KEY).every((filterType) => {
+    const want = intent.byFilterType[filterType] ?? [];
+    const controller = window[FACET_CONTROLLER_MAP[filterType]];
+    const got = (controller?.state?.values ?? []).filter((v) => v.state === 'selected').map((v) => v.value);
+    if (want.length !== got.length) return false;
+    const wantSet = new Set(want);
+    return got.every((v) => wantSet.has(v));
+  });
+  if (!filtersMatch) return false;
+  return String(search.queryExecuted ?? '').trim() === intent.term;
+}
+
+/** Reads the current sort selection, normalizing the UI's "Relevance" label to the spec's "relevancy". */
+function getEventsSearchSortBy(block) {
+  const rawSort = (block.querySelector('.sort-drop-btn-value')?.textContent || '').trim().toLowerCase();
+  return !rawSort || rawSort === 'relevance' ? 'relevancy' : rawSort;
+}
+
+/**
+ * Fires the eventsFilterSearch data layer event once per interaction, only when a filter or keyword
+ * interaction is pending and the committed response matches the captured intent. The count comes from
+ * that same matching response; the filter values come from the immutable intent snapshot. Guarded by
+ * searchResponseId so duplicate post-commit subscription fires are ignored.
+ */
+function fireEventsFilterSearchAnalytics(block, searchResponseId) {
+  const state = getEventsSearchAnalyticsState(block);
+  if (!state.pendingType || !state.intent || !searchResponseId || state.lastSearchId === searchResponseId) return;
+  if (!responseMatchesEventsSearchIntent(state.intent)) return;
+  state.lastSearchId = searchResponseId;
+  const { pendingType, intent } = state;
+  state.pendingType = null;
+  state.intent = null;
+  const filter = {
+    product: intent.byFilterType.el_product ?? [],
+    eventType: intent.byFilterType.el_contenttype ?? [],
+    series: intent.byFilterType.el_event_series ?? [],
+  };
+  const count = window.headlessSearchEngine?.state?.search?.response?.totalCount ?? 0;
+  const linkMeta =
+    pendingType === 'search'
+      ? { linkTitle: 'search events', linkType: 'search text box' }
+      : { linkTitle: 'events filter apply', linkType: 'filter' };
+  pushEventsFilterSearchEvent({ ...linkMeta, count, filter, sortBy: getEventsSearchSortBy(block), term: intent.term });
+}
 
 function getBaseFilterGroups(placeholders) {
   return [
@@ -49,15 +396,15 @@ function getBaseFilterGroups(placeholders) {
       selected: 0,
     },
     {
-      id: 'el_event_series',
-      name: placeholders.eventSearchFilterEventSeriesLabel || 'Series',
-      items: [],
+      id: 'el_contenttype',
+      name: placeholders.eventSearchFilterEventTypeLabel || 'Event Type',
+      items: eventTypeOptions.items.map((item) => ({ ...item })).sort(sortItemsAlphabetically),
       selected: 0,
     },
     {
-      id: 'el_contenttype',
-      name: placeholders.eventSearchFilterEventTypeLabel || 'Event Type',
-      items: eventTypeOptions.items.map((item) => ({ ...item })),
+      id: 'el_event_series',
+      name: placeholders.eventSearchFilterEventSeriesLabel || 'Series',
+      items: [],
       selected: 0,
     },
   ];
@@ -99,7 +446,17 @@ function createLayout(block, placeholders) {
         }" aria-label="${
           placeholders.eventSearchKeywordAriaLabel || placeholders.eventSearchKeywordPlaceholder || 'Search events'
         }" />
+        <span
+          title="${placeholders.eventSearchClearSearchLabel || 'Clear search'}"
+          class="icon icon-clear events-search-keyword-clear"
+          role="button"
+          tabindex="0"
+          aria-label="${placeholders.eventSearchClearSearchLabel || 'Clear search'}"
+        ></span>
       </div>
+      <div class="events-search-active-filters" hidden role="group" aria-label="${
+        placeholders.eventSearchActiveFiltersAriaLabel || 'Active filters'
+      }"></div>
       <div class="events-search-meta-row">
         <div
           class="events-search-results-count"
@@ -119,9 +476,7 @@ function createLayout(block, placeholders) {
       </div>
     </div>
     <div class="events-search-results-body browse-cards-block">
-      <div class="events-search-no-results" hidden role="status">${
-        placeholders.eventSearchNoResults || 'No Results'
-      }</div>
+      <div class="events-search-no-results" hidden role="status" aria-live="polite"></div>
       <div class="events-search-results-grid browse-cards-block-content"></div>
       <div class="events-search-pagination">
         <button class="nav-arrow" type="button" aria-label="${
@@ -212,66 +567,19 @@ function bindSortDropdownToggle(block) {
   });
 }
 
-function getShowMoreLabel(count, placeholders) {
-  const template = placeholders.eventSearchShowMoreLabel;
-  if (!template) {
-    return `Show ${count} more`;
-  }
-  return fillPlaceholderCount(template, count);
-}
-
-function getShowLessLabel(placeholders) {
-  return placeholders.eventSearchShowLessLabel || 'Show less';
-}
-
-function updateShowMoreButtonState(groupEl, placeholders) {
-  const showMoreButton = groupEl.querySelector('.events-search-filter-show-more');
-  if (!showMoreButton) return;
-
-  const totalOptions = groupEl.querySelectorAll('.events-search-filter-option').length;
-  if (totalOptions <= INITIAL_VISIBLE_FILTER_OPTIONS) {
-    showMoreButton.setAttribute('hidden', '');
-    return;
-  }
-
-  const hiddenOptionsCount = groupEl.querySelectorAll('.events-search-filter-option.is-overflow-hidden').length;
-  const labelEl = showMoreButton.querySelector('.events-search-filter-show-more-label');
-
-  showMoreButton.removeAttribute('hidden');
-  if (hiddenOptionsCount > 0) {
-    showMoreButton.classList.remove('is-show-less');
-    const nextText = getShowMoreLabel(hiddenOptionsCount, placeholders);
-    if (labelEl) {
-      labelEl.textContent = nextText;
-    } else {
-      showMoreButton.textContent = nextText;
-    }
-  } else {
-    showMoreButton.classList.add('is-show-less');
-    if (labelEl) {
-      labelEl.textContent = getShowLessLabel(placeholders);
-    } else {
-      showMoreButton.textContent = getShowLessLabel(placeholders);
-    }
-  }
-}
-
-function renderFilterGroups(block, groups, placeholders) {
+function renderFilterGroups(block, groups) {
   const groupsRoot = block.querySelector('.events-search-filter-groups');
   if (!groupsRoot) return;
 
   groupsRoot.innerHTML = '';
   groups.forEach((group, groupIndex) => {
-    const isInitiallyExpanded = groupIndex === 0;
     const groupEl = createTag('section', {
-      class: `events-search-filter-group${isInitiallyExpanded ? ' is-expanded' : ''}`,
+      class: 'events-search-filter-group',
       'data-filter-type': group.id,
     });
     const groupOptionsRegionId = `${group.id}-options-${groupIndex}`;
     groupEl.innerHTML = `
-      <button class="events-search-filter-group-header" type="button" aria-expanded="${
-        isInitiallyExpanded ? 'true' : 'false'
-      }" aria-controls="${groupOptionsRegionId}">
+      <button class="events-search-filter-group-header" type="button" aria-expanded="false" aria-controls="${groupOptionsRegionId}">
         <span class="events-search-filter-group-title">${group.name}</span>
         <span class="events-search-filter-group-count"></span>
         <span class="icon icon-chevron"></span>
@@ -280,35 +588,20 @@ function renderFilterGroups(block, groups, placeholders) {
     `;
 
     const optionsContainer = groupEl.querySelector('.events-search-filter-options');
-    group.items.forEach((item, index) => {
-      const optionValue = item.value || item.title;
-      const optionLabel = item.title || item.value;
-      const optionId = `${group.id}-${index + 1}`;
-      const overflowClass = index >= INITIAL_VISIBLE_FILTER_OPTIONS ? ' is-overflow-hidden' : '';
-      const optionEl = createTag('div', { class: `events-search-filter-option${overflowClass}` });
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.id = optionId;
-      checkbox.value = String(optionValue ?? '');
-      checkbox.setAttribute('data-label', String(optionLabel ?? ''));
-      const optionLabelEl = createTag('label', {
-        class: 'events-search-filter-option-label',
-        for: optionId,
-      });
-      optionLabelEl.textContent = String(optionLabel ?? '');
-      optionEl.append(checkbox, optionLabelEl);
-      optionsContainer.append(optionEl);
-    });
+    const isDynamicFacetGroup = DYNAMIC_FACET_FIELDS.includes(group.id);
 
-    if (group.items.length > INITIAL_VISIBLE_FILTER_OPTIONS) {
-      const remainingCount = group.items.length - INITIAL_VISIBLE_FILTER_OPTIONS;
-      const showMoreButton = createTag('button', { class: 'events-search-filter-show-more', type: 'button' });
-      const showMoreLabel = createTag('span', { class: 'events-search-filter-show-more-label' });
-      showMoreLabel.textContent = getShowMoreLabel(remainingCount, placeholders);
-      const showMoreIcon = createTag('span', { class: 'icon icon-arrow', 'aria-hidden': 'true' });
-      showMoreButton.append(showMoreLabel, showMoreIcon);
-      optionsContainer.append(showMoreButton);
-      updateShowMoreButtonState(groupEl, placeholders);
+    if (isDynamicFacetGroup && group.items.length === 0) {
+      renderFilterGroupOptionsShimmer(optionsContainer);
+    } else {
+      const optionsList = createTag('div', { class: 'events-search-filter-options-list' });
+      group.items.forEach((item, index) => {
+        const optionRow = buildFilterOptionRow({ groupId: group.id, item, index });
+        if (group.id === 'el_contenttype') {
+          renderFilterOptionCountShimmer(optionRow);
+        }
+        optionsList.append(optionRow);
+      });
+      optionsContainer.append(optionsList);
     }
 
     groupsRoot.append(groupEl);
@@ -338,6 +631,8 @@ function updateClearFiltersButtonState(block) {
 }
 
 function syncFilterUIFromHeadlessState(block, groups) {
+  const { tags: activeTags, pendingRemovals } = getFilterState(block);
+
   Object.entries(FACET_CONTROLLER_MAP).forEach(([groupId, controllerName]) => {
     const controller = window[controllerName];
     const groupEl = block.querySelector(`.events-search-filter-group[data-filter-type="${groupId}"]`);
@@ -348,11 +643,29 @@ function syncFilterUIFromHeadlessState(block, groups) {
     );
 
     const checkboxes = groupEl.querySelectorAll('.events-search-filter-option input[type="checkbox"]');
+
     checkboxes.forEach((checkbox) => {
-      checkbox.checked = selectedValues.has(checkbox.value);
+      const compositeKey = toCompositeKey(groupId, checkbox.value);
+      const isSelected = selectedValues.has(checkbox.value) && !pendingRemovals.has(compositeKey);
+      checkbox.checked = isSelected;
+
+      // Mirror checkbox state into ordered tags array (browse-filters handleUriHash/appendTag pattern).
+      // This ensures callouts appear correctly when filters are restored from URL on page load.
+      const existingIndex = activeTags.findIndex((t) => t.filterType === groupId && t.value === checkbox.value);
+      if (isSelected && existingIndex === -1 && !pendingRemovals.has(compositeKey)) {
+        activeTags.push({
+          filterType: groupId,
+          value: checkbox.value,
+          label: checkbox.getAttribute('data-label') || checkbox.value,
+        });
+      } else if (!isSelected) {
+        if (existingIndex !== -1) activeTags.splice(existingIndex, 1);
+        pendingRemovals.delete(compositeKey);
+      }
+      checkbox.closest('.events-search-filter-option')?.classList.toggle('checked', checkbox.checked);
     });
 
-    const selectedCount = selectedValues.size;
+    const selectedCount = groupEl.querySelectorAll('input[type="checkbox"]:checked').length;
     const targetGroup = groups.find((group) => group.id === groupId);
     if (targetGroup) {
       targetGroup.selected = selectedCount;
@@ -500,12 +813,25 @@ function bindEventsSearchLoadingUI(block) {
   const onPreprocess = (e) => {
     const { method = '' } = e.detail ?? {};
     if (method !== 'search' || !block.isConnected) return;
+
+    // scroll to results only if they're not currently visible
     if (resultsTop && hasCompletedInitialSearchResponse) {
-      resultsTop.scrollIntoView({ behavior: 'auto', block: 'start' });
-      window.scrollBy({ top: RESULTS_SCROLL_ADJUSTMENT_OFFSET });
+      const rect = resultsTop.getBoundingClientRect();
+      const isResultsVisible = rect.top >= 0 && rect.top <= window.innerHeight;
+
+      // Only scroll if results are not visible
+      if (!isResultsVisible) {
+        resultsTop.scrollIntoView({ behavior: 'auto', block: 'start' });
+        window.scrollBy({ top: RESULTS_SCROLL_ADJUSTMENT_OFFSET });
+      }
     }
+
     shimmer.addShimmer(resultsBody);
     placeShimmerBeforeGrid();
+    showDynamicFilterGroupShimmers(block, { refreshCountsOnly: hasCompletedInitialSearchResponse });
+    block
+      .querySelector('.events-search-filter-group[data-filter-type="el_contenttype"]')
+      ?.classList.add('is-filter-loading');
     grid.style.display = 'none';
     pagination.style.display = 'none';
     if (noResults) {
@@ -597,30 +923,129 @@ function findFacetValueInController(controller, value) {
   );
 }
 
-/**
- * Sync a checkbox with Coveo. Prefer a real facet value from controller state; when the value is
- * missing from the current facet slice (common after another facet narrows results), fall back to
- * an explicit selection object (browse-filters pattern) so multi-filter selection works.
- */
-function toggleFacetSelection(filterType, value, isChecked) {
+function getFacetController(filterType) {
   const controllerName = FACET_CONTROLLER_MAP[filterType];
-  if (!controllerName) return;
-  const controller = window[controllerName];
-  if (!controller || value === '' || value == null) return;
+  return controllerName ? window[controllerName] : null;
+}
 
+function applyCoveoFacetValueSelection(controller, value, shouldSelect) {
   const facetValue = findFacetValueInController(controller, value);
   if (facetValue) {
     const selected = facetValue.state === 'selected';
-    if (selected !== isChecked) {
+    if (selected !== shouldSelect) {
       controller.toggleSelect(facetValue);
     }
     return;
   }
+  if (shouldSelect) {
+    controller.toggleSelect({ value, state: 'selected' });
+  }
+}
 
-  controller.toggleSelect({
-    value,
-    state: isChecked ? 'selected' : 'idle',
+function toggleFacetSelection(filterType, value, isChecked) {
+  const controller = getFacetController(filterType);
+  if (!controller || value === '' || value == null) return;
+
+  applyCoveoFacetValueSelection(controller, value, isChecked);
+}
+
+function renderActiveFilterCallouts(block) {
+  const container = block.querySelector('.events-search-active-filters');
+  if (!container) return;
+
+  // Use the ordered tags array (browse-filters pattern) so callouts reflect user selection order.
+  const { tags: activeTags, pendingRemovals } = getFilterState(block);
+
+  // Skip full DOM teardown if the ordered set of selected filters hasn't changed.
+  const currentValues = [...container.querySelectorAll('.events-search-active-filter-tag')].map((t) => t.dataset.key);
+  const newValues = activeTags.map((tag) => toCompositeKey(tag.filterType, tag.value));
+  const unchanged = currentValues.length === newValues.length && currentValues.every((v, i) => v === newValues[i]);
+  if (unchanged) return;
+
+  // Save focused callout composite key before teardown so focus can be restored after rebuild.
+  const focusedTag = container.querySelector('.events-search-active-filter-tag-remove:focus');
+  const focusedKey = focusedTag?.closest('.events-search-active-filter-tag')?.dataset.key ?? null;
+
+  container.innerHTML = '';
+
+  if (!activeTags.length) {
+    container.hidden = true;
+    if (focusedKey) {
+      block.querySelector('.events-search-keyword-input')?.focus();
+    }
+    return;
+  }
+
+  activeTags.forEach((tag) => {
+    const { filterType, value, label } = tag;
+    const callout = createTag('span', {
+      class: 'events-search-active-filter-tag',
+      'data-value': value,
+      'data-key': toCompositeKey(filterType, value),
+    });
+    const calloutLabel = createTag('span', { class: 'events-search-active-filter-tag-label' });
+    calloutLabel.textContent = label;
+
+    const calloutRemove = createTag('button', {
+      class: 'events-search-active-filter-tag-remove',
+      type: 'button',
+      'aria-label': `Remove filter: ${label}`,
+    });
+    const calloutRemoveIcon = createTag('span', { class: 'icon icon-close-events', 'aria-hidden': 'true' });
+    calloutRemove.append(calloutRemoveIcon);
+
+    const handleRemove = () => {
+      // Uncheck the corresponding checkbox in the filter panel (browse-filters removeFromTags pattern).
+      const matchedCheckbox = [
+        ...block.querySelectorAll(
+          `.events-search-filter-group[data-filter-type="${filterType}"] input[type="checkbox"]`,
+        ),
+      ].find((cb) => cb.value === value);
+      if (matchedCheckbox) matchedCheckbox.checked = false;
+
+      // Snapshot intent with the removed checkbox now unchecked, before toggleFacetSelection
+      // dispatches and the subscription re-syncs checkboxes from the lagging controller state.
+      const analyticsState = getEventsSearchAnalyticsState(block);
+      analyticsState.pendingType = 'filter';
+      analyticsState.intent = captureEventsSearchIntent(block);
+
+      // Remove from ordered tags array and register as pending removal to prevent the Coveo
+      // subscription from re-adding the tag before Coveo state catches up.
+      removeActiveTag(activeTags, pendingRemovals, filterType, value);
+
+      toggleFacetSelection(filterType, value, false);
+      const groupEl = block.querySelector(`.events-search-filter-group[data-filter-type="${filterType}"]`);
+      if (groupEl) {
+        const newCount = groupEl.querySelectorAll('input[type="checkbox"]:checked').length;
+        updateGroupSelectionCount(block, filterType, newCount);
+      }
+      if (window.headlessPager) {
+        window.headlessPager.selectPage(1);
+      }
+      executeSearch();
+      renderActiveFilterCallouts(block);
+      updateClearFiltersButtonState(block);
+    };
+
+    calloutRemove.addEventListener('click', handleRemove, { once: true });
+
+    callout.append(calloutLabel, calloutRemove);
+    container.append(callout);
   });
+
+  decorateIcons(container);
+  container.hidden = false;
+
+  // Restore focus to the adjacent × button (same index position after removal), or the search input if none remain.
+  if (focusedKey) {
+    const tags = [...container.querySelectorAll('.events-search-active-filter-tag')];
+    const removedIndex = currentValues.indexOf(focusedKey);
+    const nextTag = tags[removedIndex] ?? tags[tags.length - 1];
+    const nextFocus =
+      nextTag?.querySelector('.events-search-active-filter-tag-remove') ??
+      block.querySelector('.events-search-keyword-input');
+    nextFocus?.focus();
+  }
 }
 
 function updateResultsCount(block, totalCount = 0, placeholders = {}) {
@@ -689,48 +1114,72 @@ async function renderResults(block, results = [], searchResponseId = '') {
   }
 }
 
+function updateNoResultsMessage(block, placeholders) {
+  const noResultsEl = block.querySelector('.events-search-no-results');
+  if (!noResultsEl || noResultsEl.hasAttribute('hidden')) return;
+  const query = String(window.headlessSearchBox?.state?.value || '').trim();
+  noResultsEl.innerHTML = '';
+  const msgEl = createTag('p', { class: 'events-search-no-results-message' });
+  if (query) {
+    msgEl.append(
+      `${placeholders.eventSearchNoResultsPrefix || 'Sorry, no results were found for'} `,
+      Object.assign(createTag('strong', {}), { textContent: `"${query}"` }),
+    );
+  } else {
+    msgEl.textContent = placeholders.eventSearchNoResultsMessage || 'Sorry, no results were found.';
+  }
+  const clearBtn = createTag('a', { href: '#', class: 'events-search-no-results-clear' });
+  clearBtn.textContent = placeholders.eventSearchClearSearchLabel || 'Clear search';
+  clearBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    block.querySelector('.events-search-clear-filters')?.click();
+  });
+  noResultsEl.append(msgEl, clearBtn);
+}
+
 async function handleSearchEngineSubscription(block, groups, placeholders) {
   if (!window.headlessSearchEngine || window.headlessStatusControllers?.state?.isLoading) return;
+
+  const state = getFilterState(block);
+  if (state.isClearing) return;
+
+  const syncDepth = headlessSubscriptionSyncDepth.get(block) ?? 0;
+  if (syncDepth > 0) {
+    headlessSubscriptionSyncDepth.set(block, -1);
+    return;
+  }
+  headlessSubscriptionSyncDepth.set(block, 1);
   try {
+    syncDynamicFacetGroupsFromHeadless(block, groups);
     syncFilterUIFromHeadlessState(block, groups);
     const search = window.headlessSearchEngine.state.search || {};
     const { results = [], searchResponseId = '', response = {} } = search;
+    fireEventsFilterSearchAnalytics(block, searchResponseId);
     updateResultsCount(block, response.totalCount || 0, placeholders);
+    renderActiveFilterCallouts(block);
     await renderResults(block, results, searchResponseId);
+    if (!response.totalCount) updateNoResultsMessage(block, placeholders);
   } catch (err) {
-    // Coveo invokes this subscriber without awaiting; uncaught rejections from renderResults/buildCard would be unhandled.
     // eslint-disable-next-line no-console
     console.error('events-search: search engine subscription callback failed', err);
+  } finally {
+    const needsRerun = headlessSubscriptionSyncDepth.get(block) === -1;
+    headlessSubscriptionSyncDepth.set(block, 0);
+    if (needsRerun) {
+      handleSearchEngineSubscription(block, groups, placeholders);
+    }
   }
 }
 
-function bindFilterInteractions(block, groups, placeholders) {
+function bindFilterInteractions(block, groups) {
   const panel = block.querySelector('.events-search-filters-panel');
   if (!panel) return;
 
+  // Recompute the scroll cap on resize so it stays accurate across breakpoints.
+  const resizeObserver = new ResizeObserver(() => recalcExpandedFilterScrollCaps(block));
+  resizeObserver.observe(panel);
+
   panel.addEventListener('click', (event) => {
-    const showMoreButton = event.target.closest('.events-search-filter-show-more');
-    if (showMoreButton) {
-      const groupEl = showMoreButton.closest('.events-search-filter-group');
-      if (!groupEl) return;
-
-      if (showMoreButton.classList.contains('is-show-less')) {
-        const options = groupEl.querySelectorAll('.events-search-filter-option');
-        options.forEach((option, index) => {
-          if (index >= INITIAL_VISIBLE_FILTER_OPTIONS) {
-            option.classList.add('is-overflow-hidden');
-          }
-        });
-      } else {
-        const hiddenOptions = groupEl.querySelectorAll('.events-search-filter-option.is-overflow-hidden');
-        hiddenOptions.forEach((option) => {
-          option.classList.remove('is-overflow-hidden');
-        });
-      }
-      updateShowMoreButtonState(groupEl, placeholders);
-      return;
-    }
-
     const groupHeader = event.target.closest('.events-search-filter-group-header');
     if (!groupHeader) return;
 
@@ -738,6 +1187,7 @@ function bindFilterInteractions(block, groups, placeholders) {
     const isExpanded = groupEl.classList.contains('is-expanded');
     groupEl.classList.toggle('is-expanded', !isExpanded);
     groupHeader.setAttribute('aria-expanded', isExpanded ? 'false' : 'true');
+    if (!isExpanded) applyFilterOptionsScrollCap(groupEl);
   });
 
   panel.addEventListener('change', (event) => {
@@ -748,29 +1198,70 @@ function bindFilterInteractions(block, groups, placeholders) {
     const filterType = groupEl?.dataset.filterType;
     if (!filterType) return;
 
+    // Skip processing if we're in the middle of a clear all operation
+    const state = getFilterState(block);
+    if (state.isClearing) {
+      return;
+    }
+
+    // Maintain ordered tags array (browse-filters appendTag/removeFromTags pattern).
+    const { tags: activeTags, pendingRemovals } = state;
+    if (checkbox.checked) {
+      pendingRemovals.delete(toCompositeKey(filterType, checkbox.value));
+      const alreadyTracked = activeTags.some((t) => t.filterType === filterType && t.value === checkbox.value);
+      if (!alreadyTracked) {
+        activeTags.push({
+          filterType,
+          value: checkbox.value,
+          label: checkbox.getAttribute('data-label') || checkbox.value,
+        });
+      }
+    } else {
+      removeActiveTag(activeTags, pendingRemovals, filterType, checkbox.value);
+    }
+
     const selectedCount = groupEl.querySelectorAll('input[type="checkbox"]:checked').length;
     const targetGroup = groups.find((group) => group.id === filterType);
     if (targetGroup) {
       targetGroup.selected = selectedCount;
     }
     updateGroupSelectionCount(block, filterType, selectedCount);
+    // Snapshot intent while the checkboxes still reflect the click — toggleFacetSelection dispatches
+    // synchronously and the subscription reverts checkbox state to the lagging controller state.
+    const analyticsState = getEventsSearchAnalyticsState(block);
+    analyticsState.pendingType = 'filter';
+    analyticsState.intent = captureEventsSearchIntent(block);
     toggleFacetSelection(filterType, checkbox.value, checkbox.checked);
     if (window.headlessPager) {
       window.headlessPager.selectPage(1);
     }
     executeSearch();
+    renderActiveFilterCallouts(block);
     updateClearFiltersButtonState(block);
   });
+}
+
+function updateKeywordClearIconVisibility(block) {
+  const input = block.querySelector('.events-search-keyword-input');
+  const clearIcon = block.querySelector('.events-search-keyword-clear');
+  clearIcon?.classList.toggle('is-visible', Boolean(input?.value));
 }
 
 function bindTopbarSearch(block) {
   const input = block.querySelector('.events-search-keyword-input');
   const keywordRow = block.querySelector('.events-search-keyword');
+  const clearIcon = block.querySelector('.events-search-keyword-clear');
   if (!input) return;
 
   const submitSearch = () => {
     if (!window.headlessSearchBox) return;
     const query = input.value.trim();
+    // Snapshot intent before updateText dispatches (which can re-sync the UI from lagging state).
+    if (query) {
+      const analyticsState = getEventsSearchAnalyticsState(block);
+      analyticsState.pendingType = 'search';
+      analyticsState.intent = captureEventsSearchIntent(block);
+    }
     window.headlessSearchBox.updateText(query);
     if (window.headlessPager) {
       window.headlessPager.selectPage(1);
@@ -781,7 +1272,12 @@ function bindTopbarSearch(block) {
   };
 
   input.addEventListener('input', () => {
+    updateKeywordClearIconVisibility(block);
     updateClearFiltersButtonState(block);
+    // Refresh results as soon as the prompt is fully deleted, without waiting for Enter.
+    if (input.value === '') {
+      submitSearch();
+    }
   });
 
   keywordRow?.addEventListener('click', (event) => {
@@ -796,6 +1292,22 @@ function bindTopbarSearch(block) {
       submitSearch();
     }
   });
+
+  const clearSearch = () => {
+    input.value = '';
+    updateKeywordClearIconVisibility(block);
+    submitSearch();
+    input.focus();
+  };
+
+  clearIcon?.addEventListener('click', clearSearch);
+  clearIcon?.addEventListener('keydown', (event) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    event.preventDefault();
+    clearSearch();
+  });
+
+  updateKeywordClearIconVisibility(block);
 }
 
 function bindClearFilters(block, groups) {
@@ -803,36 +1315,60 @@ function bindClearFilters(block, groups) {
   if (!clearBtn) return;
 
   clearBtn.addEventListener('click', () => {
-    const checkboxes = block.querySelectorAll('.events-search-filter-option input[type="checkbox"]:checked');
-    checkboxes.forEach((checkbox) => {
-      const groupEl = checkbox.closest('.events-search-filter-group');
-      const filterType = groupEl?.dataset.filterType;
-      toggleFacetSelection(filterType, checkbox.value, false);
+    const state = getFilterState(block);
+    const { tags: activeTags, pendingRemovals } = state;
+
+    // Uncheck all checkboxes without per-checkbox Headless toggles
+    block.querySelectorAll('.events-search-filter-option input[type="checkbox"]').forEach((checkbox) => {
       checkbox.checked = false;
+      checkbox.closest('.events-search-filter-option')?.classList.remove('checked');
     });
+
+    // Reset ordered tags array (browse-filters clearAllSelectedTag pattern).
+    activeTags.length = 0;
+    pendingRemovals.clear();
     groups.forEach((group) => {
       group.selected = 0;
       updateGroupSelectionCount(block, group.id, 0);
     });
+
+    state.isClearing = true;
+
+    // deselect all Headless facet controllers.
+    ['el_product', 'el_event_series', 'el_contenttype'].forEach((filterType) => {
+      getFacetController(filterType)?.deselectAll?.();
+    });
+
     if (window.headlessSearchBox) {
       window.headlessSearchBox.updateText('');
       const searchInput = block.querySelector('.events-search-keyword-input');
       if (searchInput) {
         searchInput.value = '';
       }
+      updateKeywordClearIconVisibility(block);
     }
-    const hashBeforeClear = window.location.hash;
-    handleCoverSearchSubmit('');
+
+    state.isClearing = false;
+
     if (window.headlessPager) {
       window.headlessPager.selectPage(1);
     }
-    // `handleCoverSearchSubmit` updates `location.hash`; Coveo `urlManager` listens on `hashchange`
-    // and synchronizes (typically issuing a search). Avoid a second `executeSearch` when the hash
-    // actually changed; if it did not, still dispatch so facet + keyword clears take effect.
+
+    const hashBeforeClear = window.location.hash;
+    const [currentSearchString] = hashBeforeClear.match(/\bq=([^&#]*)/) || [];
+    if (currentSearchString) {
+      let updatedHash = hashBeforeClear.replace(currentSearchString, '');
+      if (updatedHash.slice(1).startsWith('&')) {
+        updatedHash = `#${updatedHash.slice(2)}`;
+      }
+      window.location.hash = updatedHash;
+    }
     if (window.location.hash === hashBeforeClear) {
       executeSearch();
     }
+    renderActiveFilterCallouts(block);
     updateClearFiltersButtonState(block);
+    pushEventsClearFiltersEvent();
   });
 }
 
@@ -859,20 +1395,6 @@ function bindMobileFilterToggle(block) {
   );
 }
 
-async function loadDynamicFacetValues(groups) {
-  const facetDetails = await BrowseCardsDelegate.fetchCoveoFacetFields(['el_event_series', 'el_product']);
-  groups.forEach((group) => {
-    if (group.id !== 'el_event_series' && group.id !== 'el_product') return;
-    const groupValues = facetDetails[group.id] || [];
-    group.items = groupValues.map((item) => ({
-      id: item,
-      value: item,
-      title: item.split('|').join(' | '),
-      description: '',
-    }));
-  });
-}
-
 async function initHeadlessSearch(block, groups, placeholders) {
   const { default: initiateCoveoHeadlessSearch } = await import('../../scripts/coveo-headless/index.js');
   const renderPageNumbers = () => renderEventsSearchPageNumbers(block, placeholders);
@@ -880,6 +1402,9 @@ async function initHeadlessSearch(block, groups, placeholders) {
     handleSearchEngineSubscription: () => handleSearchEngineSubscription(block, groups, placeholders),
     renderPageNumbers,
     numberOfResults: getBrowseFiltersResultCount(),
+    facetOverrides: getEventsSearchHeadlessFacetOverrides(),
+    hideAqFromUrl: true,
+    baseAdvancedQuery: BASE_COVEO_ADVANCED_QUERY_EVENTS,
     renderSearchQuerySummary: () => {
       const totalCount = window.headlessQuerySummary?.state?.total || 0;
       updateResultsCount(block, totalCount, placeholders);
@@ -890,6 +1415,7 @@ async function initHeadlessSearch(block, groups, placeholders) {
       if (input.value !== window.headlessSearchBox.state.value) {
         input.value = window.headlessSearchBox.state.value || '';
       }
+      updateKeywordClearIconVisibility(block);
       updateClearFiltersButtonState(block);
     },
   });
@@ -897,11 +1423,8 @@ async function initHeadlessSearch(block, groups, placeholders) {
   bindEventsSearchLoadingUI(block);
   bindEventsSearchPagination(block);
 
-  if (window.headlessQueryActionCreators && window.headlessSearchEngine) {
-    const action = window.headlessQueryActionCreators.updateAdvancedSearchQueries({
-      aq: BASE_COVEO_ADVANCED_QUERY_UPCOMING_EVENT,
-    });
-    window.headlessSearchEngine.dispatch(action);
+  // aq is now set up-front via baseAdvancedQuery and reasserted on every hash change.
+  if (window.headlessSearchEngine) {
     executeSearch();
   }
   renderPageNumbers();
@@ -918,17 +1441,11 @@ export default async function decorate(block) {
     console.error('Error fetching placeholders:', err);
   }
   const groups = getBaseFilterGroups(placeholders);
-  try {
-    await loadDynamicFacetValues(groups);
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('Error fetching event facets:', error);
-  }
 
   createLayout(block, placeholders);
   decorateIcons(block);
-  renderFilterGroups(block, groups, placeholders);
-  bindFilterInteractions(block, groups, placeholders);
+  renderFilterGroups(block, groups);
+  bindFilterInteractions(block, groups);
   bindTopbarSearch(block);
   bindClearFilters(block, groups);
   bindMobileFilterToggle(block);

@@ -103,6 +103,8 @@
       "block-quote",
       "callout",
       "featured-authors",
+      "featured-advocates",
+      "champion-detail",
       "inline-survey",
       "featured-content",
       "browse-filters",
@@ -515,6 +517,10 @@
   {
     "id": "accordion",
     "components": ["accordion"]
+  },
+  {
+    "id": "champion-content",
+    "components": ["champion-content"]
   },
   {
     "id": "authorable-card",

@@ -12,9 +12,7 @@ const communityLocalesMap = new Map([
   ['es', 'es'],
   ['pt-br', 'pt'],
   ['ko', 'ko'],
-  ['sv', 'en'],
-  ['nl', 'en'],
-  ['it', 'en'],
+  ['it', 'it'],
   ['zh-hans', 'zh'],
   ['zh-hant', 'zh'],
 ]);
@@ -71,6 +69,8 @@ export default class ProfileMenu extends HTMLElement {
 
     if (this.decoratorOptions.getProfilePicture) {
       this.decoratorOptions.getProfilePicture().then((profilePicture) => {
+        // keep the default profile icon when there is no picture
+        if (!profilePicture) return;
         const profileToggle = profile.querySelector('.profile-toggle');
         profileToggle.replaceChildren(
           htmlToElement(`<img class="profile-picture" src="${profilePicture}" alt="profile picture" />`),
@@ -226,10 +226,7 @@ export default class ProfileMenu extends HTMLElement {
           communitySection.remove();
         });
     } else {
-      const isProfileMenu = document.querySelector('.profile-menu');
-      if (isProfileMenu) {
-        document.querySelector('nav').removeChild(isProfileMenu);
-      }
+      this.remove();
     }
   }
 

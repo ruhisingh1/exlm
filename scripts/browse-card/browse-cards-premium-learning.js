@@ -71,19 +71,7 @@ function getPremiumLearningBlockHeader(card) {
  * @returns {HTMLElement} Thumbnail figure element
  * @private
  */
-function buildPLThumbnail({
-  thumbnail,
-  title,
-  id,
-  viewLink,
-  copyLink,
-  card,
-  startLabel,
-  isNew,
-  loFormat,
-  isCourseCard,
-  contentType,
-}) {
+function buildPLThumbnail({ thumbnail, title, id, viewLink, copyLink, card, startLabel, typeLabel, contentType }) {
   const cardFigure = document.createElement('div');
   cardFigure.className = 'premium-learning-card-figure';
 
@@ -139,25 +127,14 @@ function buildPLThumbnail({
     cardFigure.appendChild(startLabelContainer);
   }
 
-  // Show New label only for cohorts
-  // Show loFormat label only for courses
-  if (isNew || (isCourseCard && loFormat)) {
+  if (typeLabel) {
     const tagsContainer = document.createElement('div');
     tagsContainer.className = 'premium-learning-card-tags-container';
 
-    if (isNew && !isCourseCard) {
-      const newTagElement = document.createElement('p');
-      newTagElement.className = 'premium-learning-card-tag premium-learning-card-new-tag';
-      newTagElement.textContent = placeholders.premiumLearningBrowseCardNewTag || 'New';
-      tagsContainer.appendChild(newTagElement);
-    }
-
-    if (isCourseCard && loFormat) {
-      const formatTagElement = document.createElement('p');
-      formatTagElement.className = 'premium-learning-card-tag premium-learning-card-format-tag';
-      formatTagElement.innerHTML = loFormat;
-      tagsContainer.appendChild(formatTagElement);
-    }
+    const typeLabelElement = document.createElement('p');
+    typeLabelElement.className = 'premium-learning-card-tag premium-learning-card-type-label';
+    typeLabelElement.textContent = typeLabel;
+    tagsContainer.appendChild(typeLabelElement);
 
     cardFigure.appendChild(tagsContainer);
   }
@@ -166,13 +143,12 @@ function buildPLThumbnail({
 }
 
 /**
- * Builds meta information section (duration, level, rating)
+ * Builds meta information section (rating, duration, level) for both cohorts and courses
  * @param {Object} meta - Metadata object from card model
- * @param {boolean} isCourseCar - Whether this is a course card (not cohort)
  * @returns {HTMLElement} Meta information container
  * @private
  */
-function buildPLMetaInfo(meta, isCourseCard = false) {
+function buildPLMetaInfo(meta) {
   const metaContainer = document.createElement('div');
   metaContainer.className = 'premium-learning-card-meta';
   const metaParts = [];
@@ -180,12 +156,20 @@ function buildPLMetaInfo(meta, isCourseCard = false) {
   // Collect available metadata
   if (meta?.duration) metaParts.push(meta.duration);
   if (meta?.level) metaParts.push(meta.level);
+  if (typeof meta?.rating?.average === 'number' && meta.rating.average > 0) {
+    metaParts.push(`${meta.rating.average.toFixed(1)} ★`);
+  }
 
   // Create meta text element if we have data
   if (metaParts.length > 0) {
     const metaElement = document.createElement('p');
     metaElement.className = 'premium-learning-card-meta-text';
-    metaElement.textContent = metaParts.join(' • ');
+    // Wrap each part in a span for CSS dot styling
+    metaParts.forEach((part) => {
+      const span = document.createElement('span');
+      span.textContent = part;
+      metaElement.appendChild(span);
+    });
     metaContainer.appendChild(metaElement);
   }
 
@@ -214,9 +198,6 @@ export async function buildPLCard(element, model) {
   const card = document.createElement('div');
   card.className = `browse-card premium-learning-browse-card ${type}-card ${failedToLoad ? 'browse-card-frozen' : ''}`;
 
-  // Determine if this is a course card
-  const isCourseCard = type === 'premium-learning-course';
-
   // Build thumbnail section
   const cardFigure = buildPLThumbnail({
     thumbnail,
@@ -226,19 +207,9 @@ export async function buildPLCard(element, model) {
     copyLink: model.copyLink,
     card,
     startLabel: meta?.startLabel,
-    isNew: meta?.isNew,
-    loFormat: meta?.loFormat,
-    isCourseCard,
+    typeLabel: meta?.typeLabel,
     contentType,
   });
-
-  // Add rating overlay to thumbnail for both courses and cohorts
-  if (typeof meta?.rating?.average === 'number' && meta.rating.average > 0) {
-    const ratingOverlay = document.createElement('div');
-    ratingOverlay.className = 'premium-learning-card-rating-overlay';
-    ratingOverlay.innerHTML = `${meta.rating.average.toFixed(1)} <span class="rating-star">★</span>`;
-    cardFigure.appendChild(ratingOverlay);
-  }
 
   card.appendChild(cardFigure);
 
@@ -252,6 +223,12 @@ export async function buildPLCard(element, model) {
     titleElement.className = 'premium-learning-card-title';
     titleElement.innerHTML = title;
     cardContent.appendChild(titleElement);
+  }
+
+  // Add metadata below title for both cohorts and courses
+  const metaInfo = buildPLMetaInfo(meta);
+  if (metaInfo.querySelector('.premium-learning-card-meta-text')) {
+    cardContent.appendChild(metaInfo);
   }
 
   card.appendChild(cardContent);

@@ -13,6 +13,7 @@
    ========================================================================== */
 
 .browse-card.premium-learning-browse-card {
+  width: 238px;
   display: flex;
   flex-direction: column;
   background: var(--color-white);
@@ -37,8 +38,7 @@
   position: relative;
   width: 100%;
   height: 197px;
-  min-height: 197px;
-  max-height: 197px;
+  flex-grow: unset;
   overflow: visible;
   border-radius: 8px;
   background-color: var(--color-gray-100);
@@ -108,6 +108,7 @@
   right: 12px;
   display: flex;
   gap: 8px;
+  max-width: 150px;
 }
 
 .browse-card.premium-learning-browse-card .premium-learning-card-tag {
@@ -119,12 +120,7 @@
   margin: 0;
 }
 
-.browse-card.premium-learning-browse-card .premium-learning-card-new-tag {
-  background-color: var(--non-spectrum-warm-yellow);
-  color: var(--spectrum-gray-50);
-}
-
-.browse-card.premium-learning-browse-card .premium-learning-card-format-tag {
+.browse-card.premium-learning-browse-card .premium-learning-card-type-label {
   background-color: var(--background-color);
 }
 
@@ -177,6 +173,10 @@
   background-color: transparent;
 }
 
+.browse-card.premium-learning-browse-card .premium-learning-card-actions .action-tooltip {
+  z-index: 10;
+}
+
 /* ==========================================================================
    Content Section
    ========================================================================== */
@@ -190,11 +190,17 @@
 
 .browse-card.premium-learning-browse-card .premium-learning-card-title {
   margin: 0;
-  font-size: var(--spectrum-font-size-400);
+  font-size: var(--spectrum-font-size-200);
   font-weight: 700;
   line-height: 1.3;
   color: var(--color-gray-900);
   text-align: left;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-height: calc(2 * 1.3em);
 }
 
 /* ==========================================================================
@@ -209,10 +215,24 @@
 
 .browse-card.premium-learning-browse-card .premium-learning-card-meta-text {
   margin: 0;
-  font-size: 14px;
-  color: var(--spectrum-gray-600);
+  font-size: var(--spectrum-font-size-75);
+  color: var(--non-spectrum-ash-gray);
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spectrum-spacing-100);
+  line-height: 1.5;
+}
+
+.browse-card.premium-learning-browse-card .premium-learning-card-meta-text > *:not(:first-child)::before {
+  content: '';
+  display: inline-block;
+  width: var(--spectrum-spacing-75);
+  height: var(--spectrum-spacing-75);
+  border-radius: 50%;
+  background-color: var(--non-spectrum-ash-gray);
+  margin-right: var(--spectrum-spacing-100);
+  vertical-align: middle;
 }
 
 /* ==========================================================================
@@ -237,26 +257,31 @@
   background-color: var(--spectrum-gray-200);
 }
 
+.browse-cards-block-content:has(.premium-learning-browse-card) {
+  justify-content: flex-start;
+  min-height: auto;
+}
+
 @media (min-width: 600px) {
   .browse-card.premium-learning-browse-card .premium-learning-card-content {
     padding-top: var(--spectrum-spacing-300);
   }
 }
 
-@media (min-width: 900px) {
+@container browse-cards-block (min-width: 600px) {
   .browse-cards-block-content:has(.premium-learning-browse-card) {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 25px;
-    min-height: auto;
-    margin-bottom: var(--spectrum-spacing-300);
+    grid-template-columns: repeat(2, auto);
   }
+}
 
-  .browse-cards-block-content:has(.premium-learning-browse-card) > div {
-    flex: 0 0 calc((100% - 75px) / 4);
-    max-width: calc((100% - 75px) / 4);
-    box-sizing: border-box;
+@container browse-cards-block (min-width: 820px) {
+  .browse-cards-block-content:has(.premium-learning-browse-card) {
+    grid-template-columns: repeat(3, auto);
+  }
+}
+
+@container browse-cards-block (min-width: 1024px) {
+  .browse-cards-block-content:has(.premium-learning-browse-card) {
+    grid-template-columns: repeat(auto-fit, minmax(200px, auto));
   }
 }

@@ -98,12 +98,10 @@ export default class PLDataService {
    * Creates an instance of PLDataService.
    * @param {PLQueryParams} queryParams - Query parameters for premium-learning API request
    * @param {Object} config - Config object (from getConfig())
-   * @param {Object} pathDetails - Path details object (from getPathDetails())
    */
-  constructor(queryParams, config, pathDetails) {
+  constructor(queryParams, config) {
     this.queryParams = queryParams;
     this.config = config;
-    this.pathDetails = pathDetails;
   }
 
   /**
@@ -267,7 +265,6 @@ export default class PLDataService {
   buildSuggestedContentUrlParams() {
     const { noOfResults, contentType } = this.queryParams;
     const { plPublicCatalogIds } = this.config ?? {};
-    const { lang } = this.pathDetails;
     const params = new URLSearchParams();
 
     // Resolve loTypes from contentType; fall back to learningProgram (cohort)
@@ -279,7 +276,6 @@ export default class PLDataService {
     params.set('page[limit]', noOfResults || 10);
     params.set('filter.loTypes', loTypes.join(','));
     params.set('sort', PLDataService.DEFAULT_SORT);
-    params.set('language', lang || 'en');
     params.set('enforcedFields[learningObject]', 'products');
     params.set('filter.ignoreEnhancedLP', 'false');
     params.set('filter.learnerState', 'notenrolled');
@@ -345,9 +341,6 @@ export default class PLDataService {
     }
 
     if (hasQuery) {
-      const { lang } = this.pathDetails;
-      const languageCode = lang || 'en-US';
-
       Object.assign(body, {
         autoCorrectMode: true,
         query: q || '',
@@ -356,7 +349,6 @@ export default class PLDataService {
         stemmed: true,
         'filter.ignoreHigherOrderLOEnrollments': false,
         'filter.snippetTypes': PLDataService.SNIPPET_TYPES,
-        language: [languageCode],
       });
     }
 
@@ -403,7 +395,7 @@ export default class PLDataService {
       'page[limit]': '10',
       sort: '-recommendationScore',
       'enforcedFields[learningObject]': 'products,roles,extensionOverrides,effectivenessData',
-      include: 'instances.loResources.resources',
+      include: 'instances.loResources.resources,skills.skillLevel.skill',
     });
   }
 
@@ -488,7 +480,7 @@ export default class PLDataService {
           'page[limit]': String(noOfResults || PLDataService.DEFAULT_SEARCH_RESULTS_COUNT),
           sort: '-recommendationScore',
           'enforcedFields[learningObject]': 'products,roles,extensionOverrides,effectivenessData',
-          include: 'instances.loResources.resources',
+          include: 'instances.loResources.resources,skills.skillLevel.skill',
         });
         const headers = {
           Authorization: `oauth ${token}`,
@@ -726,6 +718,7 @@ export async function fetchCohortProgress(cohortId, config) {
         'subLOs.instances',
         'instances.loResources.resources',
         'subLOs.instances.loResources.resources',
+        'skills.skillLevel',
       ].join(','),
     );
 
@@ -795,6 +788,37 @@ export async function fetchBoardPosts(boardId, config) {
     return response.ok ? response.json() : null;
   } catch {
     return null;
+  }
+}
+
+/**
+ * Checks if user has any active (non-completed) enrollments by paginating through all pages
+ * @param {Object} config - Config object (from getConfig())
+ * @returns {Promise<boolean>} True if user has active enrollments, false otherwise
+ */
+export async function hasActiveEnrollments(config) {
+  try {
+    let result = await fetchUserEnrollments(config, 'learningProgram', 10, null, 'Active');
+
+    while (result) {
+      const nonCompleted = (result.data || []).filter((enrollment) => enrollment.attributes?.state !== 'COMPLETED');
+
+      if (nonCompleted.length > 0) {
+        return true; // Found at least one active enrollment
+      }
+
+      const nextUrl = result.links?.next;
+      if (!nextUrl) break;
+
+      // eslint-disable-next-line no-await-in-loop
+      result = await fetchNextEnrollmentPage(nextUrl);
+    }
+
+    return false; // No active enrollments found after checking all pages
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Error checking active enrollments:', error);
+    return false;
   }
 }
 

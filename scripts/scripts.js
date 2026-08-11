@@ -22,6 +22,7 @@ import {
 } from './lib-franklin.js';
 import { initiateCoveoAtomicSearch } from './load-atomic-search-scripts.js';
 import isFeatureEnabled from './utils/feature-flag-utils.js';
+import { PLAYLIST_EMBED_BODY_CLASS } from './utils/playlist-embed-utils.js';
 
 /**
  * please do not import any other modules here, as this file is used in the critical path.
@@ -176,6 +177,7 @@ export const isHomePage = (() => {
 })();
 
 export const isCertificatePage = () => !!document.querySelector('.course-completion'); // Checking for presence of course-completion block
+export const isUEMode = window.hlx?.aemRoot || window.location.href.includes('.html');
 
 /**
  * add a section for the left rail when on a browse page.
@@ -475,18 +477,6 @@ export function htmlToElement(html) {
   return template.content.firstElementChild;
 }
 
-/** @param {HTMLElement} block  */
-export const decorateNewTabLinks = (block) => {
-  const links = block.querySelectorAll('a[target="_blank"]');
-  links.forEach((link) => {
-    link.setAttribute('rel', 'noopener noreferrer');
-    // insert before first text child node
-    const icon = htmlToElement('<span class="icon icon-link-out"></span>');
-    link.firstChild.after(icon);
-    decorateIcons(link);
-  });
-};
-
 const encodeHTML = (str) => str.replace(/[\u00A0-\u9999<>&]/g, (i) => `&#${i.charCodeAt(0)};`);
 
 /**
@@ -708,10 +698,22 @@ export function decorateMain(main, isFragment = false) {
  * @param {Element} doc The container element
  */
 async function loadEager(doc) {
+  // Apply embed chrome before appear/LCP wait so product iframes never flash ExL header.
+  // Cheap substring gate; authoritative match is isPlaylistPath() in playlist-embed-utils.
+  let embedMode = false;
+  if (window.location.pathname.toLowerCase().includes('/playlists')) {
+    const { isPlaylistPath, isPlaylistEmbedMode } = await import('./utils/playlist-embed-utils.js');
+    if (isPlaylistPath(window.location.pathname) && isPlaylistEmbedMode()) {
+      embedMode = true;
+      doc.body.classList.add(PLAYLIST_EMBED_BODY_CLASS);
+    }
+  }
+
   decorateTemplateAndTheme();
   const main = doc.querySelector('main');
   if (main) {
-    buildPreMain(main);
+    // Site-wide banner is global chrome — skip in product embed iframes.
+    if (!embedMode) buildPreMain(main);
     decorateMain(main);
     document.body.classList.add('appear');
     await waitForLCPonMain(LCP_BLOCKS);
@@ -770,21 +772,17 @@ export function getConfig() {
 
   const communityLangsMap = new Map([
     ...baseLocalesMap,
-    ['sv', 'en'],
-    ['nl', 'en'],
     ['zh-hans', 'zh'],
     ['zh-hant', 'zh'],
     ['pt-br', 'pt'],
     ['ja', 'ja'],
     ['ko', 'ko'],
     ['en', 'en'],
-    ['it', 'en'],
+    ['it', 'it'],
   ]);
 
   const adobeAccountLangsMap = new Map([
     ...baseLocalesMap,
-    ['sv', 'sv'],
-    ['nl', 'nl'],
     ['zh-hant', 'zh-Hant'],
     ['zh-hans', 'zh-Hans'],
     ['pt-br', 'pt'],
@@ -793,6 +791,20 @@ export function getConfig() {
     ['en', 'en'],
     ['it', 'it'],
   ]);
+
+  const plCommunityLangsMap = new Map([
+    ['en-US', 'en'],
+    ['de-DE', 'de'],
+    ['es-ES', 'es'],
+    ['fr-FR', 'fr'],
+    ['it-IT', 'it'],
+    ['ja-JP', 'ja'],
+    ['pt-PT', 'pt'],
+    ['ko-KR', 'ko'],
+    ['zh-CN', 'zh-hans'],
+    ['zh-TW', 'zh-hant'],
+  ]);
+
   const cookieConsentName = 'OptanonConsent';
   const targetCriteriaIds = {
     mostPopular: 'exl-hp-auth-recs-2',
@@ -809,9 +821,10 @@ export function getConfig() {
   const communityHost = currentEnv?.community || defaultEnv.community;
   const cdnOrigin = `https://${cdnHost}`;
   const premiumLearningAuthAPI = `${cdnOrigin}/api/v1/web/alm/authentication`;
-  const lang = document.querySelector('html').lang || 'en';
-  // Premium Learning is not offered for nl/sv locales; use English PL home until those languages are deprecated.
-  const premiumHomeLang = lang === 'nl' || lang === 'sv' ? 'en' : lang;
+  const rawLang = document.querySelector('html').lang || 'en';
+  const lang = window.location.hostname.includes(communityHost)
+    ? plCommunityLangsMap.get(rawLang) || rawLang.split('-')[0]
+    : rawLang;
   // Locale param for Community page URL
   const communityLocale = communityLangsMap.get(lang) || 'en';
   // Lang param for Adobe account URL
@@ -905,7 +918,7 @@ export function getConfig() {
     // Events Page URL
     eventsURL: `${cdnOrigin}/${lang}/events`,
     // Premium Learning home (for premium learner nav link)
-    premiumHomeUrl: `${cdnOrigin}/${premiumHomeLang}/premium/home`,
+    premiumHomeUrl: `${cdnOrigin}/${lang}/premium/home`,
     // Brand Concierge
     bcDatastreamId: '87ae6de9-a49c-4734-a88a-17ec707ded09',
     bcOrgId: 'E4722728699EC56A0A495CA2@AdobeOrg',
@@ -913,7 +926,6 @@ export function getConfig() {
     bcWebClientUrl:
       'https://experience.adobe.net/solutions/experience-platform-brand-concierge-web-agent/static-assets/main.js',
     bcEdgeDomain: 'edge.adobedc.net',
-    bcAuthRequired: true,
   };
   return window.exlm.config;
 }
@@ -950,8 +962,6 @@ export const locales = new Map([
   ['pt-br', 'pt_BR'],
   ['zh-hans', 'zh_HANS'],
   ['zh-hant', 'zh_HANT'],
-  ['nl', 'nl_NL'],
-  ['sv', 'sv_SE'],
 ]);
 
 export const URL_SPECIAL_CASE_LOCALES = new Map([
@@ -1106,6 +1116,19 @@ async function loadDefaultModule(jsPath) {
  */
 
 async function loadLazy(doc) {
+  let embedMode = false;
+  if (window.location.pathname.toLowerCase().includes('/playlists')) {
+    const { isPlaylistPath, isPlaylistEmbedMode } = await import('./utils/playlist-embed-utils.js');
+    if (isPlaylistPath(window.location.pathname)) {
+      embedMode = isPlaylistEmbedMode();
+      if (embedMode) {
+        doc.body.classList.add(PLAYLIST_EMBED_BODY_CLASS);
+      } else {
+        doc.body.classList.remove(PLAYLIST_EMBED_BODY_CLASS);
+      }
+    }
+  }
+
   const main = doc.querySelector('main');
   const preMain = doc.body.querySelector(':scope > aside');
   loadIms(); // start it early, asyncronously
@@ -1117,16 +1140,19 @@ async function loadLazy(doc) {
   loadDefaultModule('./data-service/coveo/coveo-token-prefetch.js');
 
   await loadThemes();
-  if (preMain) await loadBlocks(preMain);
+  if (preMain && !embedMode) await loadBlocks(preMain);
   await loadBlocks(main);
 
   const { hash } = window.location;
   const element = hash ? doc.getElementById(hash.substring(1)) : false;
   if (hash && element) element.scrollIntoView();
-  const headerPromise = loadHeader(doc.querySelector('header'));
-  const footerPromise = loadFooter(doc.querySelector('footer'));
-  // disable martech if martech=off is in the query string, this is used for testing ONLY
-  if (window.location.search?.indexOf('martech=off') === -1) loadMartech(headerPromise, footerPromise);
+
+  if (!embedMode) {
+    const headerPromise = loadHeader(doc.querySelector('header'));
+    const footerPromise = loadFooter(doc.querySelector('footer'));
+    // disable martech if martech=off is in the query string, this is used for testing ONLY
+    if (window.location.search?.indexOf('martech=off') === -1) loadMartech(headerPromise, footerPromise);
+  }
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   if (isLiveGradientBgPage) {
     loadDefaultModule('./page-bg-gradient/page-bg-gradient.js');
@@ -1218,6 +1244,9 @@ export async function loadArticles() {
 }
 
 async function showSignupDialog() {
+  // Product-iframe playlist embed must stay chrome-less (no signup wizard overlay).
+  if (document.body.classList.contains(PLAYLIST_EMBED_BODY_CLASS)) return;
+
   const isSignedIn = window?.adobeIMS?.isSignedInUser();
   if (!isSignedIn) return;
 
@@ -1473,7 +1502,7 @@ export function setMetadata(name, content) {
 }
 
 /**
- * Update Legacy and TQ Tags metadata when isV2TagsEnabled FF is enabled
+ * Update Legacy and TQ Tags metadata
  * @param {Document} document
  */
 export function updateLegacyAndV2Tags() {
@@ -1582,6 +1611,17 @@ export function updateTQTagsMetadata() {
 }
 
 /**
+ * Checks if content is valid v2 tag format (JSON)
+ * @param {string} content - Content to check
+ * @returns {boolean} True if content is valid JSON format
+ */
+export function isV2TagFormat(content) {
+  if (!content) return false;
+  const trimmed = content.trim();
+  return trimmed.startsWith('[{') || trimmed.startsWith('{');
+}
+
+/**
  * Extracts and returns a comma-separated string of label values from a JSON-encoded tag string.
  * @param {string} tag - A JSON string (possibly HTML-encoded) representing an array of objects with `label` properties.
  * @returns {string} A comma-separated string of labels, or an empty string if parsing fails or input is invalid.
@@ -1620,7 +1660,7 @@ export async function fetchJson(url, fallbackUrl) {
 }
 
 export function xssSanitizeQueryParamValue(value) {
-  return value?.replace(/[^a-zA-Z0-9\s.|]/g, '');
+  return value?.replace(/[^a-zA-Z0-9\s.|-]/g, '');
 }
 
 export function getCookie(cookieName) {
@@ -1700,7 +1740,7 @@ async function loadPage() {
   await loadLazy(document);
   loadDelayed();
   await showSignupDialog();
-  if (window.hlx.aemRoot || window.location.href.includes('.html')) {
+  if (isUEMode) {
     loadDefaultModule(`${window.hlx.codeBasePath}/scripts/editor-support-seo.js`);
   }
   if (isDocPage) {
@@ -1722,14 +1762,12 @@ async function loadPage() {
   if (window.hlx.DO_NOT_LOAD_PAGE) return;
 
   // For AEM Author mode, decode the tags value
-  if (window.hlx.aemRoot || window.location.href.includes('.html')) {
+  if (isUEMode) {
     decodeAemCqMetaTags();
     updateTQTagsMetadata();
     decodeAemPageMetaTags();
 
-    if (isFeatureEnabled('isV2TagsEnabled')) {
-      updateLegacyAndV2Tags();
-    }
+    updateLegacyAndV2Tags();
   }
 
   const { suffix: currentPagePath, lang } = getPathDetails();
@@ -1775,19 +1813,18 @@ async function loadPage() {
               // TODO: Guard this fetch behind a check that the PL blocks are actually present
               // in the DOM before firing — avoids an unnecessary API call on profile pages
               // that have no PL content blocks.
-              const { fetchUserEnrollments } = await import('./data-service/premium-learning-data-service.js');
+              const { hasActiveEnrollments } = await import('./data-service/premium-learning-data-service.js');
               const config = getConfig();
-              const enrollmentData = await fetchUserEnrollments(config, 'learningProgram', 10);
-              const hasEnrollments = enrollmentData?.data?.length > 0;
+              const hasEnrollments = await hasActiveEnrollments(config);
 
               const activeContentBlock = document.querySelector('.premium-learning-active-content');
               const suggestedContentBlock = document.querySelector('.premium-learning-suggested-content');
 
               if (hasEnrollments) {
-                // User has enrollments - remove suggested content block wrapper
+                // User has active enrollments - remove suggested content block wrapper
                 suggestedContentBlock?.parentElement?.remove();
               } else {
-                // User has no enrollments - remove active content block wrapper
+                // User has no active enrollments - remove active content block wrapper
                 activeContentBlock?.parentElement?.remove();
               }
             }
@@ -1824,7 +1861,13 @@ async function loadPage() {
   }
   // Initialize Premium Learning auth — fully non-blocking, does not delay loadPage().
   if (isFeatureEnabled('isPremiumLearningEnabled')) {
-    if (window.hlx.aemRoot || window.location.href.includes('.html')) {
+    if (isUEMode) {
+      // getConfig() must be called before the import resolves. In non-UE mode this is
+      // guaranteed by isUserSignedIn() → loadIms() → getConfig(). In UE mode there is
+      // no such gate, so a cached module import can resolve before loadLazy() ever calls
+      // getConfig(), leaving window.exlm.config undefined and causing exchangePLToken to
+      // silently no-op. Calling it here is synchronous and idempotent — no effect on non-UE.
+      getConfig();
       // UE Author Mode: fetch PL token anonymously via ?auth=false (no IMS required).
       import('./utils/premium-learning-utils.js')
         .then(({ initPLAuthAnonymous }) => initPLAuthAnonymous())

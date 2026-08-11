@@ -1,3 +1,19 @@
+body.browse-all .section.premium-learning-section {
+  margin: 30px 16px;
+}
+
+body.browse-all .section.premium-learning-section .premium-learning-suggested-content.browse-cards-block,
+body.browse-all .section.premium-learning-section .premium-learning-recommended-content.browse-cards-block {
+  margin-bottom: 56px;
+}
+
+@media (min-width: 600px) {
+  body.browse-all .section.premium-learning-section {
+    margin: 3em 3.5em;
+    padding: 32px;
+  }
+}
+
 @media (width >= 1440px) {
   body.browse-all main {
     max-width: 1440px;
@@ -19,5 +35,10 @@
   body.browse-all .section.browse-filters-container {
     padding-top: 0;
     padding-bottom: 0;
+  }
+
+  body.browse-all main > div.section.premium-learning-section {
+    padding-left: 32px;
+    margin: 30px 32px 30px 56px;
   }
 }

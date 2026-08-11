@@ -10,12 +10,13 @@ import {
   getConfig,
   getLink,
   getPathDetails,
-  fetchGlobalFragment,
+  fetchWithFallback,
   fetchLanguagePlaceholders,
 } from '../../scripts/scripts.js';
 import getProducts from '../../scripts/utils/product-utils.js';
 import { isSignedInUser } from '../../scripts/auth/profile.js';
 import { isPLEligible } from '../../scripts/utils/premium-learning-utils.js';
+import isFeatureEnabled from '../../scripts/utils/feature-flag-utils.js';
 import {
   decoratorState,
   isMobile,
@@ -29,6 +30,7 @@ import {
 import { decorateIcons, getMetadata } from '../../scripts/lib-franklin.js';
 import LanguageBlock from '../language/language.js';
 import ProfileMenu from './profile-menu.js';
+import { isDomainAllowed } from '../../scripts/utils/exlm-config-utils.js';
 
 /**
  *  @typedef {Object} CommunityOptions
@@ -55,6 +57,15 @@ import ProfileMenu from './profile-menu.js';
  */
 
 const HEADER_CSS = `/blocks/header/exl-header.css`;
+
+/** fetch the header fragment relative to /${lang}/global-fragments/, ignoring any page metadata override */
+async function fetchHeaderFragment(fragmentPath, lang) {
+  const fragmentUrl = fragmentPath.replace('/en/', `/${lang}/`);
+  const path = `${window.hlx.codeBasePath}${fragmentUrl}.plain.html`;
+  const fallbackPath = `${window.hlx.codeBasePath}${fragmentPath}.plain.html`;
+  const response = await fetchWithFallback(path, fallbackPath);
+  return response.text();
+}
 
 let searchElementPromise = null;
 const { khorosProfileUrl, communityHost } = getConfig();
@@ -84,8 +95,7 @@ async function loadSearchElement() {
   if (solutionTag) {
     window.headlessSolutionProductKey = solutionTag;
   }
-  searchElementPromise =
-    searchElementPromise ?? import('../../scripts/search/search.js').then((mod) => mod.default ?? mod);
+  searchElementPromise = searchElementPromise ?? import('../../scripts/search/search.js');
   return searchElementPromise;
 }
 
@@ -323,7 +333,11 @@ const buildNavItems = (ul, level = 0) => {
   if (level === 0) {
     // add search link (visible on mobile only excluding Search page)
     if (!document.body.classList.contains('search')) {
-      ul.appendChild(htmlToElement(`<li class="nav-item-mobile">${decoratorState.searchLinkHtml}</li>`));
+      const mobileSearchLi = htmlToElement(`<li class="nav-item-mobile">${decoratorState.searchLinkHtml}</li>`);
+      ul.appendChild(mobileSearchLi);
+      mobileSearchLi.querySelector('a')?.addEventListener('click', (e) => {
+        decoratorState.headerSearchIconClick?.(e);
+      });
     }
     const addMobileLangSelector = async () => {
       // add language select (visible on mobile only)
@@ -453,11 +467,9 @@ const searchDecorator = async (searchBlock, decoratorOptions) => {
   const placeholders = decoratorOptions.placeholders ?? {};
   // save this for later use in mobile nav.
   const searchLink = getCell(searchBlock, 1, 1)?.firstChild;
-  decoratorState.searchLinkHtml = searchLink.outerHTML;
+  decoratorState.searchLinkHtml = searchLink?.outerHTML ?? '';
 
-  // get search placeholder
-  const searchPlaceholder = getCell(searchBlock, 2, 1)?.firstChild;
-  // build search options
+  // build search options (used for default / contextual content-type filter on redirect)
   const searchOptions = getCell(searchBlock, 3, 1)?.firstElementChild?.children || [];
   const options = [...searchOptions].map((option) => option.textContent);
 
@@ -465,62 +477,31 @@ const searchDecorator = async (searchBlock, decoratorOptions) => {
   const searchWrapper = htmlToElement(
     `<div class="search-wrapper">
       <div class="search-short">
-        <a href="${searchLink?.href}" aria-label="Search">
+        <a href="${searchLink?.href || '#'}" aria-label="Search">
           <span title="${placeholders?.search || 'Search'}" class="icon icon-search"></span>
         </a>
       </div>
-      <div class="search-full">
-        <div class="search-container">
-          <span title="${placeholders?.search || 'Search'}" class="icon icon-search"></span>
-          <input autocomplete="off" class="search-input" type="text" aria-label="top-nav-combo-search" aria-expanded="false" title="${
-            placeholders?.searchPlaceholderTitle || 'Insert a query. Press enter to send'
-          }" role="combobox" placeholder="${searchPlaceholder.textContent}">
-          <span title="${placeholders?.searchClearLabel || 'Clear'}" class="icon icon-clear search-clear-icon"></span>
-          <div class="search-suggestions-popover">
-            <ul role="listbox">
-            </ul>
-          </div>
-        </div>
-        <button type="button" class="search-picker-button" aria-haspopup="true" aria-controls="search-picker-popover">
-          <span class="search-picker-label" data-filter-value="${options[0].split(':')[1]}">${
-            options[0].split(':')[0] || ''
-          }</span>
-        </button>
-        <div class="search-picker-popover" id="search-picker-popover">
-          <ul role="listbox">
-            ${options
-              .map(
-                (option, index) =>
-                  `<li tabindex="0" role="option" class="search-picker-label" data-filter-value="${
-                    option.split(':')[1]
-                  }">${
-                    index === 0
-                      ? `<span class="icon icon-checkmark"></span> <span data-filter-value="${option.split(':')[1]}">${
-                          option.split(':')[0]
-                        }</span>`
-                      : `<span data-filter-value="${option.split(':')[1]}">${option.split(':')[0]}</span>`
-                  }</li>`,
-              )
-              .join('')}
-          </ul>
-        </div>
-      <div>
-    </div>
-  `,
+    </div>`,
   );
 
-  const Search = await loadSearchElement();
-  searchBlock.append(searchWrapper);
-
-  const searchItem = new Search({ searchBlock, searchUrl: searchLink?.href });
-  searchItem.configureAutoComplete({
-    searchOptions: options,
-    showSearchSuggestions: true,
+  const searchModule = await loadSearchElement();
+  const { redirectToSearchPage, getHeaderSearchFilterValue } = searchModule;
+  const filterValue = getHeaderSearchFilterValue(options, {
+    preferCommunity: Boolean(decoratorOptions?.community?.active),
   });
+  const searchUrl = searchLink?.href;
 
-  if (decoratorOptions?.community?.active) {
-    searchItem.setSelectedSearchOption('Community');
+  if (searchUrl) {
+    decoratorState.headerSearchIconClick = (e) => {
+      e.preventDefault();
+      redirectToSearchPage(searchUrl, '', filterValue);
+    };
+    searchWrapper.querySelector('.search-short a')?.addEventListener('click', decoratorState.headerSearchIconClick);
+  } else {
+    decoratorState.headerSearchIconClick = null;
   }
+
+  searchBlock.append(searchWrapper);
   decorateIcons(searchBlock);
   return searchBlock;
 };
@@ -761,9 +742,8 @@ class ExlHeader extends HTMLElement {
   }
 
   async decorate() {
-    const headerMeta = 'header-fragment';
-    const fallback = '/en/global-fragments/header';
-    const headerFragment = await fetchGlobalFragment(headerMeta, fallback, this.decoratorOptions.lang);
+    const fragmentPath = '/en/global-fragments/header';
+    const headerFragment = await fetchHeaderFragment(fragmentPath, this.decoratorOptions.lang);
     if (headerFragment) {
       loadSearchElement();
 
@@ -840,13 +820,20 @@ class ExlHeader extends HTMLElement {
   }
 }
 
-customElements.define('exl-header', ExlHeader);
-
 /**
  * Create header web component and attach to the DOM
  * @param {HTMLHeadElement} headerBlock
  */
 export default async function decorate(headerBlock, options = {}) {
+  // TODO: Cleanup FF once Top Nav(Header v2) is live.
+  if (isFeatureEnabled('isHeaderV2') || (await isDomainAllowed('headerv2allowedDomains'))) {
+    const { default: decorateV2 } = await import('./header-v2.js');
+    return decorateV2(headerBlock, options);
+  }
+  if (!customElements.get('exl-header')) {
+    customElements.define('exl-header', ExlHeader);
+  }
   const exlHeader = new ExlHeader(options);
   headerBlock.replaceChildren(exlHeader);
+  return undefined;
 }

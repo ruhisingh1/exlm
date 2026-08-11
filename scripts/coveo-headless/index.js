@@ -122,12 +122,27 @@ export const fragment = () => window.location.hash.slice(1);
 
 const hashURL = fragment();
 
+function buildHeadlessFacet(module, searchEngine, field, defaults = {}, overrides = {}) {
+  const fieldOverrides = overrides[field] || {};
+  const { numberOfValues: overrideCount, options: overrideOptions = {} } = fieldOverrides;
+  return module.buildFacet(searchEngine, {
+    options: {
+      field,
+      numberOfValues: overrideCount ?? defaults.numberOfValues ?? 8,
+      ...overrideOptions,
+    },
+  });
+}
+
 export default async function initiateCoveoHeadlessSearch({
   handleSearchEngineSubscription,
   renderPageNumbers,
   numberOfResults,
   renderSearchQuerySummary,
   handleSearchBoxSubscription,
+  facetOverrides = {},
+  hideAqFromUrl = false,
+  baseAdvancedQuery = '',
 }) {
   return new Promise((resolve, reject) => {
     // eslint-disable-next-line import/no-relative-packages
@@ -141,7 +156,7 @@ export default async function initiateCoveoHeadlessSearch({
           searchEngine: headlessSearchEngine,
           searchHub: 'Experience League Learning Hub',
           contextObject: null,
-          advancedQueryRule: '',
+          advancedQueryRule: baseAdvancedQuery,
         });
 
         const headlessSearchBox = module.buildSearchBox(headlessSearchEngine, {
@@ -151,47 +166,41 @@ export default async function initiateCoveoHeadlessSearch({
           },
         });
 
-        const headlessTypeFacet = module.buildFacet(headlessSearchEngine, {
-          options: {
-            field: 'el_contenttype',
-          },
-          numberOfValues: 8,
-        });
+        const headlessTypeFacet = buildHeadlessFacet(
+          module,
+          headlessSearchEngine,
+          'el_contenttype',
+          {},
+          facetOverrides,
+        );
 
-        const headlessRoleFacet = module.buildFacet(headlessSearchEngine, {
-          options: {
-            field: 'el_role',
-          },
-          numberOfValues: 8,
-        });
+        const headlessRoleFacet = buildHeadlessFacet(module, headlessSearchEngine, 'el_role', {}, facetOverrides);
 
-        const headlessExperienceFacet = module.buildFacet(headlessSearchEngine, {
-          options: {
-            field: 'el_level',
-          },
-          numberOfValues: 8,
-        });
+        const headlessExperienceFacet = buildHeadlessFacet(
+          module,
+          headlessSearchEngine,
+          'el_level',
+          {},
+          facetOverrides,
+        );
 
-        const headlessProductFacet = module.buildFacet(headlessSearchEngine, {
-          options: {
-            field: 'el_product',
-          },
-          numberOfValues: 8,
-        });
+        const headlessProductFacet = buildHeadlessFacet(module, headlessSearchEngine, 'el_product', {}, facetOverrides);
 
-        const headlessAuthorTypeFacet = module.buildFacet(headlessSearchEngine, {
-          options: {
-            field: 'author_type',
-          },
-          numberOfValues: 8,
-        });
+        const headlessAuthorTypeFacet = buildHeadlessFacet(
+          module,
+          headlessSearchEngine,
+          'author_type',
+          {},
+          facetOverrides,
+        );
 
-        const headlessEventSeriesFacet = module.buildFacet(headlessSearchEngine, {
-          options: {
-            field: 'el_event_series',
-          },
-          numberOfValues: 8,
-        });
+        const headlessEventSeriesFacet = buildHeadlessFacet(
+          module,
+          headlessSearchEngine,
+          'el_event_series',
+          {},
+          facetOverrides,
+        );
 
         const headlessPager = module.buildPager(headlessSearchEngine, {
           initialState: {
@@ -216,8 +225,32 @@ export default async function initiateCoveoHeadlessSearch({
           initialState: { fragment: fragment() },
         });
 
+        if (hideAqFromUrl && !baseAdvancedQuery) {
+          // eslint-disable-next-line no-console
+          console.warn(
+            'initiateCoveoHeadlessSearch: hideAqFromUrl is enabled without baseAdvancedQuery — aq will be cleared (and never reapplied) on every hash change.',
+          );
+        }
+
+        // Used by events-search to keep its static aq out of the URL.
+        function visibleHash() {
+          const rawFragment = urlManager.state.fragment;
+          const visibleFragment = hideAqFromUrl
+            ? rawFragment
+                .split('&')
+                .filter((param) => param && !param.startsWith('aq='))
+                .join('&')
+            : rawFragment;
+          return visibleFragment ? `#${visibleFragment}` : window.location.pathname + window.location.search;
+        }
+
+        function currentVisibleUrl() {
+          return window.location.hash || window.location.pathname + window.location.search;
+        }
+
         urlManager.subscribe(() => {
-          const hash = `#${urlManager.state.fragment}`;
+          const hash = visibleHash();
+          if (hash === currentVisibleUrl()) return;
           if (!statusControllers.state.firstSearchExecuted) {
             window.history.replaceState(null, document.title, hash);
             return;
@@ -239,10 +272,28 @@ export default async function initiateCoveoHeadlessSearch({
           }
         });
 
+        function rerunSearch() {
+          const logSubmit = logSearchboxSubmit;
+          headlessSearchEngine.dispatch(
+            headlessSearchActionCreators.executeSearch(typeof logSubmit === 'function' ? logSubmit() : undefined),
+          );
+        }
+
+        // synchronize() restores aq from the (aq-less) URL and searches with it, so reassert the real aq and rerun the search right after.
+        function reapplyBaseAdvancedQuery({ rerunSearch: shouldRerunSearch = false } = {}) {
+          if (!hideAqFromUrl || !baseAdvancedQuery) return;
+          headlessSearchEngine.dispatch(
+            headlessQueryActionCreators.updateAdvancedSearchQueries({ aq: baseAdvancedQuery }),
+          );
+          if (shouldRerunSearch) rerunSearch();
+        }
+
         urlManager.synchronize(fragment());
+        reapplyBaseAdvancedQuery();
 
         function onHashChange() {
           urlManager.synchronize(fragment());
+          reapplyBaseAdvancedQuery({ rerunSearch: true });
         }
         window.addEventListener('hashchange', onHashChange);
 

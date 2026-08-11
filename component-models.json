@@ -1757,60 +1757,6 @@
         ]
       },
       {
-        "component": "aem-tag",
-        "name": "tags",
-        "label": "Legacy Solution(s) or Feature(s)",
-        "valueType": "string",
-        "rootPath": "/content/cq:tags/exl",
-        "description": "Optional - all are included if no selection is made."
-      },
-      {
-        "component": "multiselect",
-        "name": "roles",
-        "label": "Legacy Role(s)",
-        "valueType": "string",
-        "description": "Sets the Role(s).",
-        "options": [
-          {
-            "name": "Admin",
-            "value": "Admin"
-          },
-          {
-            "name": "Developer",
-            "value": "Developer"
-          },
-          {
-            "name": "Leader",
-            "value": "Leader"
-          },
-          {
-            "name": "User",
-            "value": "User"
-          }
-        ]
-      },
-      {
-        "component": "multiselect",
-        "name": "experienceLevels",
-        "label": "Legacy Experience Level(s)",
-        "valueType": "string",
-        "description": "Sets the Experience Level(s).",
-        "options": [
-          {
-            "name": "Beginner",
-            "value": "Beginner"
-          },
-          {
-            "name": "Intermediate",
-            "value": "Intermediate"
-          },
-          {
-            "name": "Experienced",
-            "value": "Experienced"
-          }
-        ]
-      },
-      {
         "component": "select",
         "valueType": "string",
         "name": "authorType",
@@ -4409,14 +4355,6 @@
     "id": "browse-filters",
     "fields": [
       {
-        "component": "aem-tag",
-        "name": "solutions",
-        "label": "Results legacy solution filter",
-        "valueType": "string",
-        "rootPath": "/content/cq:tags/exl/solution",
-        "description": "Optional - filter results to specific solution(s)."
-      },
-      {
         "component": "text",
         "valueType": "string",
         "name": "heading",
@@ -4456,14 +4394,6 @@
             "value": "h6"
           }
         ]
-      },
-      {
-        "component": "aem-tag",
-        "name": "tags",
-        "label": "Legacy Topics buttons",
-        "valueType": "string",
-        "rootPath": "/content/cq:tags/exl",
-        "description": "Select up to 15 topics or features."
       },
       {
         "component": "multiselect",
@@ -5019,14 +4949,6 @@
         "value": "",
         "label": "Link URL",
         "description": "Sets the text url."
-      },
-      {
-        "component": "aem-tag",
-        "name": "tags",
-        "label": "Legacy Solution(s)",
-        "valueType": "string",
-        "rootPath": "/content/cq:tags/exl/solution",
-        "description": "Optional - all are included if no selection is made."
       },
       {
         "component": "custom-aem-tag",
@@ -5734,6 +5656,14 @@
         "placeholder": "YYYY-MM-DD HH:mm:ss"
       },
       {
+        "component": "text",
+        "valueType": "string",
+        "name": "cq:translationMethod",
+        "label": "Page Translation method",
+        "description": "Displays the translation method applied to this page.",
+        "readOnly": true
+      },
+      {
         "component": "aem-content",
         "valueType": "string",
         "name": "signout-redirect-url",
@@ -5764,38 +5694,6 @@
         "validation": {
           "rootPath": "/content/exlm/global/en/perspectives/authors"
         }
-      },
-      {
-        "component": "aem-tag",
-        "valueType": "string",
-        "name": "coveo-solution",
-        "label": "Legacy Solution(s)",
-        "rootPath": "/content/cq:tags/exl/solution",
-        "description": "Sets the Coveo Solution(s) in page meta."
-      },
-      {
-        "component": "aem-tag",
-        "valueType": "string",
-        "name": "feature",
-        "label": "Legacy Feature(s)",
-        "rootPath": "/content/cq:tags/exl/feature",
-        "description": "Sets the Coveo Feature(s) in page meta."
-      },
-      {
-        "component": "aem-tag",
-        "name": "role",
-        "label": "Legacy Role(s)",
-        "valueType": "string",
-        "rootPath": "/content/cq:tags/exl/role",
-        "description": "Sets the role(s) in page meta."
-      },
-      {
-        "component": "aem-tag",
-        "name": "level",
-        "label": "Legacy Experience Level(s)",
-        "valueType": "string",
-        "rootPath": "/content/cq:tags/exl/experience-level",
-        "description": "Sets the level(s) in page meta."
       },
       {
         "component": "custom-aem-tag",
@@ -5956,6 +5854,14 @@
         "placeholder": "YYYY-MM-DD HH:mm:ss"
       },
       {
+        "component": "text",
+        "valueType": "string",
+        "name": "cq:translationMethod",
+        "label": "Page Translation method",
+        "description": "Displays the translation method applied to this page.",
+        "readOnly": true
+      },
+      {
         "component": "aem-content",
         "valueType": "string",
         "name": "signout-redirect-url",
@@ -5963,6 +5869,15 @@
         "validation": {
           "rootPath": "/content/exlm/global"
         }
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "redpen-properties",
+        "label": "RedPen Properties",
+        "description": "Full RedPen score API response for this page, set automatically when scoring is run from the RedPen panel.",
+        "readOnly": true,
+        "hidden": true
       }
     ]
   },
@@ -6000,38 +5915,6 @@
         }
       },
       {
-        "component": "aem-tag",
-        "valueType": "string",
-        "name": "coveo-solution",
-        "label": "Legacy Solution(s)",
-        "rootPath": "/content/cq:tags/exl/solution",
-        "description": "Sets the Coveo Solution(s) in page meta."
-      },
-      {
-        "component": "aem-tag",
-        "valueType": "string",
-        "name": "feature",
-        "label": "Legacy Feature(s)",
-        "rootPath": "/content/cq:tags/exl/feature",
-        "description": "Sets the Coveo Feature(s) in page meta."
-      },
-      {
-        "component": "aem-tag",
-        "name": "role",
-        "label": "Legacy Role(s)",
-        "valueType": "string",
-        "rootPath": "/content/cq:tags/exl/role",
-        "description": "Sets the role(s) in page meta."
-      },
-      {
-        "component": "aem-tag",
-        "name": "level",
-        "label": "Legacy Experience Level(s)",
-        "valueType": "string",
-        "rootPath": "/content/cq:tags/exl/experience-level",
-        "description": "Sets the level(s) in page meta."
-      },
-      {
         "component": "custom-aem-tag",
         "name": "tq-products",
         "label": "Product(s) v2",
@@ -6190,6 +6073,14 @@
         "placeholder": "YYYY-MM-DD HH:mm:ss"
       },
       {
+        "component": "text",
+        "valueType": "string",
+        "name": "cq:translationMethod",
+        "label": "Page Translation method",
+        "description": "Displays the translation method applied to this page.",
+        "readOnly": true
+      },
+      {
         "component": "aem-content",
         "valueType": "string",
         "name": "signout-redirect-url",
@@ -6217,6 +6108,14 @@
         "label": "Custom Last Updated Date",
         "description": "Overrides the last content update date of the page in page metadata.",
         "placeholder": "YYYY-MM-DD HH:mm:ss"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "cq:translationMethod",
+        "label": "Page Translation method",
+        "description": "Displays the translation method applied to this page.",
+        "readOnly": true
       },
       {
         "component": "aem-content",
@@ -7588,46 +7487,6 @@
         ]
       },
       {
-        "condition": {
-          "===": [{ "var": "filterProductBy" }, "specific_products"]
-        },
-        "component": "aem-tag",
-        "name": "tags",
-        "label": "Legacy Solution(s) or Feature(s)",
-        "valueType": "string",
-        "rootPath": "/content/cq:tags/exl",
-        "description": "Optional - based on Profile Context if no selection is made."
-      },
-      {
-        "component": "multiselect",
-        "name": "roles",
-        "label": "Legacy Role(s)",
-        "valueType": "string",
-        "description": "Sets the Role(s).",
-        "options": [
-          {
-            "name": "Profile Context",
-            "value": "profile_context"
-          },
-          {
-            "name": "Admin",
-            "value": "Admin"
-          },
-          {
-            "name": "Developer",
-            "value": "Developer"
-          },
-          {
-            "name": "Leader",
-            "value": "Leader"
-          },
-          {
-            "name": "User",
-            "value": "User"
-          }
-        ]
-      },
-      {
         "component": "radio-group",
         "name": "sortBy",
         "value": "",
@@ -8092,46 +7951,6 @@
           {
             "name": "Specific Products",
             "value": "specific_products"
-          }
-        ]
-      },
-      {
-        "condition": {
-          "===": [{ "var": "filterProductBy" }, "specific_products"]
-        },
-        "component": "aem-tag",
-        "name": "tags",
-        "label": "Legacy Solution(s) or Feature(s)",
-        "valueType": "string",
-        "rootPath": "/content/cq:tags/exl",
-        "description": "Optional - based on Profile Context if no selection is made."
-      },
-      {
-        "component": "multiselect",
-        "name": "roles",
-        "label": "Legacy Role(s)",
-        "valueType": "string",
-        "description": "Sets the Role(s).",
-        "options": [
-          {
-            "name": "Profile Context",
-            "value": "profile_context"
-          },
-          {
-            "name": "Admin",
-            "value": "Admin"
-          },
-          {
-            "name": "Developer",
-            "value": "Developer"
-          },
-          {
-            "name": "Leader",
-            "value": "Leader"
-          },
-          {
-            "name": "User",
-            "value": "User"
           }
         ]
       },
@@ -10330,11 +10149,43 @@
       {
         "component": "text",
         "valueType": "string",
-
         "name": "title",
         "value": "",
         "label": "Title",
         "description": "Sets the main title of the grid cards."
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "titleType",
+        "value": "h3",
+        "label": "Title Type",
+        "options": [
+          {
+            "name": "H1",
+            "value": "h1"
+          },
+          {
+            "name": "H2",
+            "value": "h2"
+          },
+          {
+            "name": "H3",
+            "value": "h3"
+          },
+          {
+            "name": "H4",
+            "value": "h4"
+          },
+          {
+            "name": "H5",
+            "value": "h5"
+          },
+          {
+            "name": "H6",
+            "value": "h6"
+          }
+        ]
       },
       {
         "component": "richtext",
@@ -10378,6 +10229,39 @@
         "value": "",
         "label": "Title",
         "description": "Sets the title for the card. Please limit the content to 2 lines."
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "cardTitleType",
+        "value": "h3",
+        "label": "Card Title Type",
+        "options": [
+          {
+            "name": "H1",
+            "value": "h1"
+          },
+          {
+            "name": "H2",
+            "value": "h2"
+          },
+          {
+            "name": "H3",
+            "value": "h3"
+          },
+          {
+            "name": "H4",
+            "value": "h4"
+          },
+          {
+            "name": "H5",
+            "value": "h5"
+          },
+          {
+            "name": "H6",
+            "value": "h6"
+          }
+        ]
       },
       {
         "component": "richtext",
@@ -10807,55 +10691,188 @@
   },
   {
     "id": "premium-learning-profile-badges",
+    "fields": []
+  },
+  {
+    "id": "featured-advocates",
+    "fields": []
+  },
+  {
+    "id": "champion-detail",
     "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "fileReference",
+        "label": "Champion Image",
+        "required": true
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "fileReferenceAlt",
+        "value": "",
+        "label": "Champion Image Description",
+        "description": "A descriptive text of the image will be shown as tooltip."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "championName",
+        "value": "",
+        "label": "Champion Name",
+        "required": true
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "jobTitle",
+        "value": "",
+        "label": "Title",
+        "required": true
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "quoteBio",
+        "value": "",
+        "label": "Quote",
+        "description": "Optional. Authors may include quotation marks if desired."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "communityProfileUrl",
+        "value": "",
+        "label": "Community Profile URL",
+        "description": "URL of the Champion's Community profile. The Champion name links to this URL.",
+        "required": true
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "productDesignation",
+        "value": "",
+        "label": "Product Designation",
+        "required": true
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "colorSelection",
+        "value": "",
+        "label": "Color Selection",
+        "required": true,
+        "description": "The color coding for each program is intentional and is used in several places throughout the experience. Yellow for Adobe Champion, purple for Community Advisor, and blue for User Group Leader.",
+        "options": [
+          {
+            "name": "Yellow - Adobe Champion",
+            "value": "yellow"
+          },
+          {
+            "name": "Purple - Community Advisor",
+            "value": "purple"
+          },
+          {
+            "name": "Blue - User Group Leader",
+            "value": "blue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "champion-content",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "eyebrowIcon",
+        "label": "Eyebrow Icon",
+        "description": "Small icon shown beside the Content Type label.",
+        "required": true
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "eyebrowIconAlt",
+        "value": "",
+        "label": "Eyebrow Icon Description",
+        "description": "A descriptive text of the icon will be shown as tooltip."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "contentType",
+        "value": "",
+        "label": "Content Type",
+        "required": true
+      },
       {
         "component": "text",
         "valueType": "string",
         "name": "title",
         "value": "",
         "label": "Title",
-        "description": "Sets the title for the Premium learning Profile badges block."
-      },
-      {
-        "component": "select",
-        "valueType": "string",
-        "name": "titleType",
-        "value": "",
-        "label": "Title Heading Type",
-        "options": [
-          {
-            "name": "H1",
-            "value": "h1"
-          },
-          {
-            "name": "H2",
-            "value": "h2"
-          },
-          {
-            "name": "H3",
-            "value": "h3"
-          },
-          {
-            "name": "H4",
-            "value": "h4"
-          },
-          {
-            "name": "H5",
-            "value": "h5"
-          },
-          {
-            "name": "H6",
-            "value": "h6"
-          }
-        ]
+        "required": true
       },
       {
         "component": "richtext",
         "valueType": "string",
         "name": "description",
         "value": "",
-        "label": "Long Description",
-        "description": "Sets the description text for the Premium Learning Profile Badges block."
+        "label": "Description",
+        "description": "Optional."
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "showByline",
+        "label": "Show Byline?",
+        "description": "Displays \"By {Champion Name}\" just above the footer text."
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "footerIcon",
+        "label": "Footer Icon",
+        "description": "Small icon shown beside the Footer Text.",
+        "required": true
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "footerIconAlt",
+        "value": "",
+        "label": "Footer Icon Description",
+        "description": "A descriptive text of the icon will be shown as tooltip."
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "footerText",
+        "value": "",
+        "label": "Footer Text",
+        "description": "e.g. \"5 min read\", \"Solved by {name}\"",
+        "required": true
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "linkText",
+        "value": "",
+        "label": "CTA Text",
+        "description": "Text to be shown for the CTA link.",
+        "required": true
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "link",
+        "value": "",
+        "label": "CTA Link",
+        "description": "URL to open when the CTA is clicked.",
+        "required": true
       }
     ]
   }

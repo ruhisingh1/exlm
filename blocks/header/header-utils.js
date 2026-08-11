@@ -1,14 +1,8 @@
-export class Deferred {
-  constructor() {
-    this.promise = new Promise((resolve, reject) => {
-      this.reject = reject;
-      this.resolve = resolve;
-    });
-  }
-}
-
 export const decoratorState = {
-  languages: new Deferred(),
+  /** @type {import('../language/language.js').Language[]} populated by languageDecorator */
+  languages: [],
+  /** @type {((e: Event) => void) | null} Same handler for desktop search-short and mobile nav search link */
+  headerSearchIconClick: null,
 };
 
 /**
@@ -20,8 +14,8 @@ export const decoratorState = {
 export const getCell = (block, row, cell) =>
   block.querySelector(`:scope > div:nth-child(${row}) > div:nth-child(${cell})`);
 
-// Mobile Only (Until 1024px)
-export const isMobile = () => window.matchMedia('(max-width: 1023px)').matches;
+// Mobile Only (Until 1200px)
+export const isMobile = () => window.matchMedia('(max-width: 1199px)').matches;
 
 /**
  * debounce fn execution

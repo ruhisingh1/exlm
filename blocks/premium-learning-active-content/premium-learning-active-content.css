@@ -93,6 +93,10 @@
 
 /* Card Styling */
 
+.premium-learning-active-content .cohort-card-wrapper .browse-card.premium-learning-browse-card {
+  width: auto;
+}
+
 .premium-learning-active-content
   .cohort-card-wrapper
   .browse-card.premium-learning-browse-card
@@ -106,7 +110,9 @@
 }
 
 .premium-learning-active-content .cohort-progress-label {
-  width: 70px;
+  width: auto;
+  max-width: 100px;
+  padding: 0 8px;
   height: 24px;
   background-color: var(--spectrum-gray-900);
   color: var(--spectrum-gray-50);
@@ -153,31 +159,26 @@
   .browse-card.premium-learning-browse-card
   .premium-learning-card-meta-text {
   font-size: var(--spectrum-font-size-75);
-  line-height: 1.25;
+  line-height: 1.5;
+  color: var(--non-spectrum-ash-gray);
   display: flex;
   align-items: center;
-  gap: var(--spectrum-spacing-200);
+  gap: var(--spectrum-spacing-100);
 }
 
 .premium-learning-active-content
   .cohort-card-wrapper
   .browse-card.premium-learning-browse-card
   .premium-learning-card-meta-text
-  .meta-bullet {
+  > *:not(:first-child)::before {
+  content: '';
   display: inline-block;
-  width: 4px;
-  height: 4px;
-  background-color: var(--spectrum-gray-600);
+  width: var(--spectrum-spacing-75);
+  height: var(--spectrum-spacing-75);
   border-radius: 50%;
-  overflow: hidden;
-}
-
-.premium-learning-active-content
-  .cohort-card-wrapper
-  .browse-card.premium-learning-browse-card
-  .premium-learning-card-meta-text
-  .rating-star {
-  color: var(--non-spectrum-darker-gray);
+  background-color: var(--non-spectrum-ash-gray);
+  margin-right: var(--spectrum-spacing-100);
+  vertical-align: middle;
 }
 
 .premium-learning-active-content .cohort-card-wrapper .premium-learning-card-rating-overlay {
@@ -287,7 +288,7 @@
 }
 
 .premium-learning-active-content .user-actions .action-tooltip::after {
-  left: 20%;
+  left: 30%;
 }
 
 /* Desktop styles */
@@ -382,4 +383,18 @@
   .premium-learning-active-content .browse-card.premium-learning-browse-card .premium-learning-card-figure > img {
     object-position: 100% center;
   }
+
+  .premium-learning-active-content .user-actions .action-tooltip {
+    transform: none;
+    left: -2px;
+  }
+
+  .premium-learning-active-content .user-actions .action-tooltip::after {
+    left: 12px;
+  }
+}
+
+/* Hide type label (Cohort/VILT/On-Demand) in active content block */
+.premium-learning-active-content .premium-learning-card-type-label {
+  display: none;
 }

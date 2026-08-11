@@ -48,6 +48,10 @@ npx skills experimental_install
 
 To update skills to the latest versions run `npm run setup:skills`, which re-runs the install and updates `skills-lock.json`.
 
+### ExL dev team skills
+
+Custom skills for the Experience League **development team** ship from [AdobeEXL/exl-dev-ai](https://github.com/AdobeEXL/exl-dev-ai) and are pinned in [skills-lock.json](skills-lock.json) alongside Adobe EDS skills. Refresh with `npm run setup:skills`.
+
 ## Project structure (high level)
 
 ```
@@ -103,6 +107,17 @@ Progressive loading follows the same **eager / lazy / delayed** model as standar
 - Run **`npm run quality`** before opening a PR; CI runs the same via [.github/workflows/quality-action.yaml](.github/workflows/quality-action.yaml).
 - If you change **`paths.yaml`**, update **`paths.json`** to match (or vice versa)—`validate-paths.js` enforces parity.
 - For previews, use `curl` against the local dev server or published preview URLs; see [Keeping it 100](https://www.aem.live/developer/keeping-it-100) for performance expectations.
+
+### Self-review before commit
+
+Before running `git add` / `git commit`, **run the `code-review` skill on your staged changes**. This applies to everyone — AI agents and humans driving an AI assistant.
+
+- **How to run it**: in Cursor / Claude Code / Copilot Chat, type `/code-review` in the AI panel. The skill operates in **self-review mode** on uncommitted changes in the working directory and checks lint compliance, EDS patterns, performance, accessibility, secrets, CSS scoping, and `eslint-disable` justifications.
+- **Prerequisite**: the skill ships with this repo via `skills-lock.json` — run `npx skills experimental_install` once after cloning to install it.
+- **AI agents (Cursor, Claude Code, Copilot, etc.)**: do not run `git commit` without first invoking `/code-review` on the staged diff and resolving any blocking findings.
+- **Manual fallback** (no AI tool available): review `git diff --staged` for the common issues called out under _Code style_ — debug `console.*`, unscoped CSS selectors, `!important` without justification, hardcoded config, secrets, CSS-in-JS, and changes to `scripts/lib-franklin.js`.
+
+This is a **soft** convention — the husky `pre-commit` hook only prints a reminder and never blocks. Hard enforcement remains `lint-staged` + `npm run quality` in CI.
 
 ## Pull requests
 

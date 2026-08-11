@@ -5,8 +5,6 @@ import loadGainsight from './gainsight/gainsight.js';
 import loadQualtrics from './qualtrics.js';
 import { sendCoveoPageViewEvent } from './coveo-analytics.js';
 import { loadPrism } from './utils/prism-utils.js';
-// eslint-disable-next-line import/no-cycle
-import { getConfig, loadIms } from './scripts.js';
 
 // add more delayed functionality here
 
@@ -15,20 +13,17 @@ loadCSS(`${window.hlx.codeBasePath}/styles/print/print.css`);
 loadPrism(document);
 
 // disable martech if martech=off is in the query string, this is used for testing ONLY
-if (window.location.search?.indexOf('martech=off') === -1) {
-  loadGainsight();
-  loadQualtrics();
-  sendCoveoPageViewEvent();
-}
+const martechOff = window.location.search?.indexOf('martech=off') !== -1;
+const embedMode = window.location.pathname.toLowerCase().includes('/playlists')
+  ? (await import('./utils/playlist-embed-utils.js')).isPlaylistEmbedMode()
+  : false;
 
-async function isAdobeEmployee() {
-  if (!window.adobeIMS?.isSignedInUser()) return false;
-  try {
-    const profile = await window.adobeIMS.getProfile();
-    return profile?.email?.toLowerCase().endsWith('@adobe.com') === true;
-  } catch {
-    return false;
+if (!martechOff) {
+  if (!embedMode) {
+    loadGainsight();
+    loadQualtrics();
   }
+  sendCoveoPageViewEvent();
 }
 
 /** Paths like /en/support, /fr/premium (communities use a separate origin). */
@@ -41,16 +36,9 @@ function isBrandConciergeExcludedPath() {
  * Loads Brand Concierge on eligible page types.
  * Guards:
  *   - hidden on Support and Premium Learning routes
- *   - bcAuthRequired → when true, user must be signed in AND be an @adobe.com employee
  */
 async function loadBrandConcierge() {
-  if (isBrandConciergeExcludedPath()) return;
-
-  const { bcAuthRequired } = getConfig();
-  if (bcAuthRequired) {
-    await loadIms();
-    if (!(await isAdobeEmployee())) return;
-  }
+  if (embedMode || isBrandConciergeExcludedPath()) return;
 
   const { default: initBrandConcierge } = await import('./brand-concierge/brand-concierge.js');
   await initBrandConcierge();
