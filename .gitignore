@@ -11,6 +11,10 @@ helix-importer-ui
 .aio
 .env
 
+# Local block test artifacts (developer-machine only)
+drafts/tmp/
+test/tmp/
+
 # Local AI skill artifacts (developer-machine only)
 .agents/
 .skills/
